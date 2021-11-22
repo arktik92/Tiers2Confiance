@@ -64,7 +64,7 @@ public class View_Profil extends AppCompatActivity {
 
     }
 
-
+/**
     public void display_profil_data() {
 
         noteCollectionRef.get();
@@ -77,7 +77,7 @@ public class View_Profil extends AppCompatActivity {
 
                             /** For Each document (Snapshoot) of the list **/
 
-                            ModelItem contentProfil = documentSnapshot.toObject(ModelItem.class);
+                          /**  ModelItem contentProfil = documentSnapshot.toObject(ModelItem.class);
 
                             contentProfil.setDocumentId(documentSnapshot.getId());
 
@@ -92,6 +92,6 @@ public class View_Profil extends AppCompatActivity {
 
                         tvName.setText(mname);
 
-    }
+    }**/
 
 }
