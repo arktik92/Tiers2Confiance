@@ -39,23 +39,25 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         list.add("Filleul4");
         list.add("Filleul5");
 
-        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list );
-        //lvResultat.setAdapter(adapter);
-
-
         // Liaison des variables svTextSearch et lvResultat avec les éléments du graphique
         svTextSearch = findViewById(R.id.svTextSearch);
         lvResultat = findViewById(R.id.lvResultat);
 
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list );
+        lvResultat.setAdapter(adapter);
+
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
+            public boolean onQueryTextSubmit(String query) {
                 // Si le résultat est trouvé, on l'affiche
-
-                // Sinon, on fait un toast
-                Toast.makeText(LierParrainFilleulActivity.this, "Aucun utilisateur trouvé avec ce pseudo",Toast.LENGTH_LONG).show();
-                return false;
+                if (list.contains(query)){
+                    adapter.getFilter().filter(query);
+                }else{
+                    // Sinon, on fait un toast
+                    Toast.makeText(LierParrainFilleulActivity.this, "Aucun utilisateur trouvé avec ce pseudo",Toast.LENGTH_LONG).show();
+                }
+             return false;
             }
 
             @Override
