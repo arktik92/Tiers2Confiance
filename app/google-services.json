@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "743573713158",
+    "project_id": "tiers2confiance-21525",
+    "storage_bucket": "tiers2confiance-21525.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743573713158:android:5917046c491bb92b982e87",
+        "android_client_info": {
+          "package_name": "com.tiesr2confiance.tiers2confiance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743573713158-mcirbdgkuc511t2idqa97n4it1ggrggb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr5jRlDYnouszmix0Wuq06zM7CAM4pyLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743573713158-mcirbdgkuc511t2idqa97n4it1ggrggb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
