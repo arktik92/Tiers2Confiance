@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "743573713158",
+    "firebase_url": "https://tiers2confiance-21525-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "tiers2confiance-21525",
     "storage_bucket": "tiers2confiance-21525.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "743573713158-nuk057795stdrag1r90ve0hn11otoc2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tiesr2confiance.tiers2confiance",
+            "certificate_hash": "5c7a4a4f41ef4e58e832cae5b98e58868c5f0520"
+          }
+        },
         {
           "client_id": "743573713158-mcirbdgkuc511t2idqa97n4it1ggrggb.apps.googleusercontent.com",
           "client_type": 3

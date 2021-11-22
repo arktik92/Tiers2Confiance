@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tiers2Confiance</string>
+    <string name="facebook_app_id">1098237297647638</string> <string name="fb_login_protocol_scheme">fb1098237297647638</string>
+
 </resources>
