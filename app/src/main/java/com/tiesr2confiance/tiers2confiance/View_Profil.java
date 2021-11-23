@@ -244,7 +244,7 @@ public class View_Profil extends AppCompatActivity {
 
                             /** Adapter recyclerView à l'adapter **/
 
-                            recyclerViewHobbies.setAdapter(adapterHobbieItem);
+                           //TODO recyclerViewHobbies.setAdapter(adapterHobbieItem);
 
                         } else {
                             Toast.makeText(View_Profil.this, "Any Hobbies Document", Toast.LENGTH_SHORT).show();
