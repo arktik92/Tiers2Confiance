@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -81,7 +82,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e(TAG, "onQueryTextSubmit : " + query);
                if (usersArrayList.contains(query)){
                    adapterUser.getFilter().filter(query);
                     //lvResultat.setVisibility(View.VISIBLE);

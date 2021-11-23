@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,9 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParrainFilleulAdapterItem.ItemViewHolder> {
+public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParrainFilleulAdapterItem.ItemViewHolder> implements Filterable {
 
-    private static final String TAG = "Lier Parrain Filleul ADAPTER :";
+    private static final String TAG = "Lier P/F ADAPTER :";
     private Context context;
     private ArrayList<ModelUsers> usersArrayList;
 
@@ -54,12 +55,12 @@ public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParr
         String us_nickname = currentUser.getUs_nickname();
         String us_city = currentUser.getUs_city();
 
-        Log.e(TAG, us_nickname);
+        //Log.e(TAG, us_nickname);
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
-        //TODO Insérer Glide quand il faudra ajouter la photo, pour l'instant pas de gestion de imageUrl
+        //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
         // Utilisation de glide pour afficher les images,
         RequestOptions options = new RequestOptions().centerCrop().error(R.mipmap.ic_launcher).placeholder(R.mipmap.ic_launcher);
         Context context = holder.iv_photo_profil.getContext();
@@ -75,9 +76,8 @@ public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParr
         return usersArrayList.size();
     }
 
-
-    public Filter getFilter()
-    {
+    @Override
+    public Filter getFilter() {
         return new Filter()
         {
             @Override
@@ -95,14 +95,18 @@ public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParr
                 {
                     ArrayList<HashMap<String,String>> filterResultsData = new ArrayList<HashMap<String,String>>();
 
+                    Log.e(TAG,"ca passe AVANT");
                     for(HashMap<String,String> data : originalData)
                     {
+
+                        Log.e(TAG,"ca passe boucle FOR");
                         //In this loop, you'll filter through originalData and compare each item to charSequence.
                         //If you find a match, add it to your new ArrayList
-                        //I'm not sure how you're going to do comparison, so you'll need to fill out this conditional
-                        //if(data matches your filter criteria)
+                        //I'm not sure how you're going to do comparison,Filleule 1
+                        // so you'll need to fill out this conditional
                         if(1==1)
                         {
+                            Log.e(TAG,"ca passe BOUCLE");
                             filterResultsData.add(data);
                         }
                     }
@@ -122,6 +126,7 @@ public class LierParrainFilleulAdapterItem extends RecyclerView.Adapter<LierParr
             }
         };
     }
+
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
