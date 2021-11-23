@@ -68,6 +68,12 @@ public class ModelUsers {
         this.us_photos = us_photos;
     }
 
+    // Camille - Constructeur simplifié pour tester l'affichage des utilisateurs dans Lier Parrain Filleul
+    public ModelUsers(String us_nickname, String us_city) {
+        this.us_nickname = us_nickname;
+        this.us_city = us_city;
+    }
+
 
     /******************** SETTERS ************************************/
     public void setId(int id) {

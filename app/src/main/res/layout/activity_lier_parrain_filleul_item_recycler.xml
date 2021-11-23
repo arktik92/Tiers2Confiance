@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TextView"
-                    android:textSize="34sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/tv_city"
@@ -47,12 +47,6 @@
                     android:text="TextView"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="TextView" />
             </LinearLayout>
 
         </LinearLayout>
