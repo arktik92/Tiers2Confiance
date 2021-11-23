@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TextView"
-                    android:textSize="24sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tv_city"
@@ -45,7 +45,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_birth_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="TextView" />
 
             </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import java.util.Date;
+
 public class ModelUsers {
     public int	    id	;
     public  String	us_nickname	;
@@ -7,11 +9,11 @@ public class ModelUsers {
     public  String	us_email	;
     public  String	us_first_name	;
     public  String	us_second_name	;
-    public  long	us_registered_date	;
-    public  long	us_last_connexion_date	;
+    public  Date    us_registered_date	;
+    public  Date	us_last_connexion_date	;
     public  int	    us_role	;
     public  int	    us_balance	;
-    public  long	us_birth_date	;
+    public  Date	us_birth_date	;
     public  int	    us_postal_code	;
     public  String	us_city	;
     public  int	    us_gender	;
@@ -36,7 +38,7 @@ public class ModelUsers {
     public ModelUsers() {
     }
 
-    public ModelUsers(int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, long us_registered_date, long us_last_connexion_date, int us_role, int us_balance, long us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
+    public ModelUsers(int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, Date us_registered_date, Date us_last_connexion_date, int us_role, int us_balance, Date us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
         this.id = id;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -100,11 +102,11 @@ public class ModelUsers {
         this.us_second_name = us_second_name;
     }
 
-    public void setUs_registered_date(long us_registered_date) {
+    public void setUs_registered_date(Date us_registered_date) {
         this.us_registered_date = us_registered_date;
     }
 
-    public void setUs_last_connexion_date(long us_last_connexion_date) {
+    public void setUs_last_connexion_date(Date us_last_connexion_date) {
         this.us_last_connexion_date = us_last_connexion_date;
     }
 
@@ -116,7 +118,7 @@ public class ModelUsers {
         this.us_balance = us_balance;
     }
 
-    public void setUs_birth_date(long us_birth_date) {
+    public void setUs_birth_date(Date us_birth_date) {
         this.us_birth_date = us_birth_date;
     }
 
@@ -191,6 +193,8 @@ public class ModelUsers {
     public void setUs_photos(String us_photos) {
         this.us_photos = us_photos;
     }
+
+
     /******************** GETTERS ************************************/
     public int getId() {
         return id;
@@ -216,11 +220,11 @@ public class ModelUsers {
         return us_second_name;
     }
 
-    public long getUs_registered_date() {
+    public Date getUs_registered_date() {
         return us_registered_date;
     }
 
-    public long getUs_last_connexion_date() {
+    public Date getUs_last_connexion_date() {
         return us_last_connexion_date;
     }
 
@@ -232,7 +236,7 @@ public class ModelUsers {
         return us_balance;
     }
 
-    public long getUs_birth_date() {
+    public Date getUs_birth_date() {
         return us_birth_date;
     }
 
