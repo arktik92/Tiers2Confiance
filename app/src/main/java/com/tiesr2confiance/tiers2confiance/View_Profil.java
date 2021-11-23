@@ -2,6 +2,7 @@ package com.tiesr2confiance.tiers2confiance;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.bumptech.glide.request.RequestOptions;
+
+import java.util.ArrayList;
 
 public class View_Profil extends AppCompatActivity {
 
@@ -50,6 +53,14 @@ public class View_Profil extends AppCompatActivity {
     private TextView tvHobbiesname;
 
 
+    private ArrayList<ModelUsers> itemArrayListHobbie;
+
+
+    /*** ADapterHobbies ***/
+    private AdapterHobbieItem adapterHobbieItem;
+    private RecyclerView recyclerViewHobbies;
+
+
     /*** BDD ***/
     private FirebaseFirestore db;
     /**
@@ -71,6 +82,10 @@ public class View_Profil extends AppCompatActivity {
         tvHobbies = findViewById(R.id.tvHobbies);
 
         tvHobbiesname = findViewById(R.id.tvHobbiesName);
+
+
+        itemArrayListHobbie = new ArrayList<>();
+
 
         /** Glide image **/
 
@@ -182,6 +197,9 @@ public class View_Profil extends AppCompatActivity {
 
     public void hobbies() {
 
+        itemArrayListHobbie = new ArrayList<>();
+
+
         /** BDD, Connexion FIreStore ***/
         db = FirebaseFirestore.getInstance();
 
@@ -210,19 +228,23 @@ public class View_Profil extends AppCompatActivity {
 
                             String hobbies_list[] = chaine.split(split_key);
 
-                                for (int i = 0; i <= hobbiesname.length(); i++) {
+                            for (int i = 0; i <= hobbiesname.length(); i++) {
 
-                                    String hobbieID = documentSnapshot.getId();
+                                String hobbieID = documentSnapshot.getId();
 
-                                    TextView tv = new TextView(getApplicationContext());
-                                    tv.setText(hobbieID);
-                                    Toast.makeText(View_Profil.this, hobbiesname.length() + "////" + hobbieID, Toast.LENGTH_SHORT).show();
+                                TextView tv = new TextView(getApplicationContext());
+                                tv.setText(hobbieID);
+                                Toast.makeText(View_Profil.this, hobbiesname.length() + "////" + hobbieID, Toast.LENGTH_SHORT).show();
 
-                                }
+                                //itemArrayListHobbie.add(new ModelUsersHobbies(hobbieID));
+                                //TODO boolean add = itemArrayListHobbie.add(new ModelUsers());
+                            }
 
+                            adapterHobbieItem = new AdapterHobbieItem(getApplicationContext(), itemArrayListHobbie); // il atteint le context et un ArrayList
 
+                            /** Adapter recyclerView à l'adapter **/
 
-
+                            recyclerViewHobbies.setAdapter(adapterHobbieItem);
 
                         } else {
                             Toast.makeText(View_Profil.this, "Any Hobbies Document", Toast.LENGTH_SHORT).show();

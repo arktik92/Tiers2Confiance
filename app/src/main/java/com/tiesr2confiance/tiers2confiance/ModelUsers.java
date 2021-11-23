@@ -1,6 +1,11 @@
 package com.tiesr2confiance.tiers2confiance;
 
-public class ModelUsers {
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class ModelUsers extends RecyclerView.ViewHolder {
     public int	    id	;
     public  String	us_nickname	;
     public  String	us_pwd	;
@@ -32,11 +37,15 @@ public class ModelUsers {
     public String	us_photos	;
 
 
+
+
     /****** CONSTRUCTORS ********************/
-    public ModelUsers() {
+    public ModelUsers(@NonNull View itemView) {
+        super(itemView);
     }
 
-    public ModelUsers(int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, long us_registered_date, long us_last_connexion_date, int us_role, int us_balance, long us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
+    public ModelUsers(@NonNull View itemView, int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, long us_registered_date, long us_last_connexion_date, int us_role, int us_balance, long us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
+        super(itemView);
         this.id = id;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -67,7 +76,6 @@ public class ModelUsers {
         this.us_hobbies = us_hobbies;
         this.us_photos = us_photos;
     }
-
 
     /******************** SETTERS ************************************/
     public void setId(int id) {

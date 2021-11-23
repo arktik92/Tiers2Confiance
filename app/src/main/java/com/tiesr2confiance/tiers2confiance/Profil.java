@@ -70,7 +70,7 @@ public class Profil extends AppCompatActivity {
     public void updateNote(View v) {
         String mName = myName.getText().toString().trim();
 
-        ModelItem contentProfil = new ModelItem(mName);
+        ModelViewProfilItem contentProfil = new ModelViewProfilItem(mName);
 
         noteCollectionRef.add(contentProfil)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
