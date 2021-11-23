@@ -9,7 +9,7 @@
     <string name="btn_next">Suivant</string>
     <string name="btn_back">Retour</string>
     <string name="btn_search">Chercher</string>
-    <string name="btn_request">Envoyer</string>
+    <string name="btn_request">Envoyer une demande</string>
     <string name="btn_ok">Valider</string>
     <string name="btn_modify">Modifer</string>
     <string name="btn_save">Sauvegarder</string>
