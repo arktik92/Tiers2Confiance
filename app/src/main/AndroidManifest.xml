@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LierParrainFilleulActivity"
+            android:name=".LierParrainFilleul.LierParrainFilleulActivity"
             android:exported="false"></activity>
         <activity
             android:name=".View_Profil"
