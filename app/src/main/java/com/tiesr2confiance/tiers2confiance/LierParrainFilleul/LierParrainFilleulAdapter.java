@@ -25,7 +25,7 @@ import com.tiesr2confiance.tiers2confiance.R;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUsers, LierParrainFilleulAdapter.ItemViewHolder> implements Filterable {
+public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUsers, LierParrainFilleulAdapter.ItemViewHolder> {
 
     private static final String TAG = "Lier P/F ADAPTER :";
     private Context context;
@@ -62,12 +62,15 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         String us_nickname = model.getUs_nickname();
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
+        Long us_role = model.getUs_role();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
+
+        holder.tv_role.setText(String.valueOf(us_role));
 
         //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
         // Utilisation de glide pour afficher les images,
@@ -90,59 +93,10 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
     }
 
 
-    @Override
-    public Filter getFilter() {
-        return new Filter()
-        {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence)
-            {
-                FilterResults results = new FilterResults();
-
-                //If there's nothing to filter on, return the original data for your list
-                if(charSequence == null || charSequence.length() == 0)
-                {
-                    results.values = originalData;
-                    results.count = originalData.size();
-                }
-                else
-                {
-                    ArrayList<ModelUsers> filterResultsData = new ArrayList<>();
-
-                    for(ModelUsers data : originalData)
-                    {
-                        //In this loop, you'll filter through originalData and compare each item to charSequence.
-                        //If you find a match, add it to your new ArrayList
-                        //I'm not sure how you're going to do comparison,Filleule 1
-                        // so you'll need to fill out this conditional
-                        if(data.us_nickname == "Filleule 1")
-                        {
-                            Log.e(TAG, "ca passe Condition");
-                            filterResultsData.add(data);
-                        }
-                    }
-
-                    results.values = filterResultsData;
-                    results.count = filterResultsData.size();
-                    Log.e(TAG, "ca passe avec " + results.count);
-                }
-
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults)
-            {
-                filteredData = (ArrayList<ModelUsers>)filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
-
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tv_nickname, tv_city, tv_birth_day;
+        public TextView tv_nickname, tv_city, tv_birth_day, tv_role;
         public ImageView iv_photo_profil;
 
         public ItemViewHolder(@NonNull View itemView) {
@@ -150,11 +104,10 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
             tv_nickname = itemView.findViewById(R.id.tv_nickname);
             tv_city = itemView.findViewById(R.id.tv_city);
             tv_birth_day = itemView.findViewById(R.id.tv_birth_day);
+            tv_role = itemView.findViewById(R.id.tv_role);
             iv_photo_profil = itemView.findViewById(R.id.iv_photo_profil);
 
         }
     }
-
-
 
 }

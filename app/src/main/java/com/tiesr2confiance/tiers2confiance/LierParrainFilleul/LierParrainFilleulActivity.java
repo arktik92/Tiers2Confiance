@@ -1,24 +1,36 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.SignInActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LierParrainFilleulActivity extends AppCompatActivity {
 
@@ -72,20 +84,35 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                //      if (users.contains(query)){
-                //          adapterUser.getFilter().filter(query);
-                //        }else{
-                // Sinon, on fait un toast
-                //             Toast.makeText(LierParrainFilleulActivity.this, "Aucun utilisateur trouvé avec ce pseudo",Toast.LENGTH_LONG).show();
-                //         }
+            public boolean onQueryTextSubmit(String querytext) {
+                CollectionReference collectionUsers = db.collection("users");
+                collectionUsers.get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()){
+                            Log.d(TAG, "C'est vide");
+                            return;
+                        }else {
+                            for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                                String nomBase = (String) documentSnapshot.get("us_nickname");
+                                if ( nomBase.contains(querytext) ) {
+                                    Log.d(TAG, "Ca match : " + nomBase);
+                                }
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
+                    }
+                });
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapterUser.getFilter().filter(newText);
-
                 return false;
             }
         });

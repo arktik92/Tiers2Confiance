@@ -11,7 +11,7 @@ public class ModelUsers {
     public  String	us_second_name	;
     public  Date    us_registered_date	;
     public  Date	us_last_connexion_date	;
-    public  int	    us_role	;
+    public  Long	us_role	;
     public  int	    us_balance	;
     public  Date	us_birth_date	;
     public  int	    us_postal_code	;
@@ -38,7 +38,7 @@ public class ModelUsers {
     public ModelUsers() {
     }
 
-    public ModelUsers(int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, Date us_registered_date, Date us_last_connexion_date, int us_role, int us_balance, Date us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
+    public ModelUsers(int id, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_second_name, Date us_registered_date, Date us_last_connexion_date, Long us_role, int us_balance, Date us_birth_date, int us_postal_code, String us_city, int us_gender, int us_sexual_orientation, int us_marital_status, int us_has_kids, String us_profession, int us_height, int us_shape, int us_ethnic_group, int us_hair_color, int us_hair_length, int us_eye_color, int us_smoker, String us_personnality, String us_sports, String us_hobbies, String us_photos) {
         this.id = id;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -68,12 +68,6 @@ public class ModelUsers {
         this.us_sports = us_sports;
         this.us_hobbies = us_hobbies;
         this.us_photos = us_photos;
-    }
-
-    // Camille - Constructeur simplifié pour tester l'affichage des utilisateurs dans Lier Parrain Filleul
-    public ModelUsers(String us_nickname, String us_city) {
-        this.us_nickname = us_nickname;
-        this.us_city = us_city;
     }
 
 
@@ -110,7 +104,7 @@ public class ModelUsers {
         this.us_last_connexion_date = us_last_connexion_date;
     }
 
-    public void setUs_role(int us_role) {
+    public void setUs_role(Long us_role) {
         this.us_role = us_role;
     }
 
@@ -228,7 +222,7 @@ public class ModelUsers {
         return us_last_connexion_date;
     }
 
-    public int getUs_role() {
+    public Long getUs_role() {
         return us_role;
     }
 
