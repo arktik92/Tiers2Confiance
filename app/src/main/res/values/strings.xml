@@ -1,5 +1,24 @@
 <resources>
-    <string name="app_name">Tiers2Confiance</string>
-    <string name="facebook_app_id">1098237297647638</string> <string name="fb_login_protocol_scheme">fb1098237297647638</string>
 
+    <string name="facebook_app_id">1098237297647638</string> <string name="fb_login_protocol_scheme">fb1098237297647638</string>
+    <string name="app_name">Tiers 2 Confiance</string>
+
+    <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
+    <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
+    <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
+    <string name="Lier_pf_pseudo">Saisir son pseudo : </string>
+
+    <!-- Texte boutons -->
+    <string name="btn_next">Suivant</string>
+    <string name="btn_back">Retour</string>
+    <string name="btn_search">Chercher</string>
+    <string name="btn_request">Envoyer</string>
+    <string name="btn_ok">Valider</string>
+    <string name="btn_modify">Modifer</string>
+    <string name="btn_save">Sauvegarder</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="btn_send">Envoyer</string>
+    <string name="btn_paid">Payer</string>
+    <string name="btn_refuse">Refuser</string>
+    <string name="btn_accept">Accepter</string>
 </resources>
