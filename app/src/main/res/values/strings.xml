@@ -1,8 +1,5 @@
 <resources>
 
-    <string name="facebook_app_id">1098237297647638</string> <string name="fb_login_protocol_scheme">fb1098237297647638</string>
-    <string name="app_name">Tiers 2 Confiance</string>
-
     <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
     <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
     <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
