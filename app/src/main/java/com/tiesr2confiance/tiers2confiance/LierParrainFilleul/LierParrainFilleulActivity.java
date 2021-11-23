@@ -39,6 +39,8 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     private static final String TAG = "Lier Parrain Filleul :";
     SearchView svTextSearch;
     RecyclerView rvResultat;
+    public int role_inverse;
+
 
     private RecyclerView recyclerView;
     private LierParrainFilleulAdapter adapterUser;
@@ -62,13 +64,15 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
         //TODO ici, il faudra determiné le rôle de l'utilisateur connecté
         // Si l'user connecté est un filleul
+            role_inverse = 1;
         setTitle(getString(R.string.Lier_pf_titre_filleul));
         // Si l'user connecté est un parrain
+            role_inverse = 2;
         setTitle(getString(R.string.Lier_pf_titre_parrain));
 
 
         /** Récupération de la collection Users dans Firestore **/
-        Query query = db.collection("users");
+        Query query = db.collection("users").whereEqualTo("us_role", role_inverse);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
@@ -88,7 +92,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String querytext) {
                 onStop();
-                Query query = db.collection("users").whereGreaterThan("us_nickname", querytext);
+                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).whereGreaterThan("us_nickname", querytext);
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
                                 .setQuery(query, ModelUsers.class)
@@ -103,7 +107,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 onStop();
-                Query query = db.collection("users").whereGreaterThan("us_nickname", newText);
+                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).whereGreaterThan("us_nickname", newText);
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
                                 .setQuery(query, ModelUsers.class)
