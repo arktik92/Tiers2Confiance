@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
                         .build();
 
         adapterUser = new LierParrainFilleulAdapter(users);
+
         recyclerView.setAdapter(adapterUser);
         //lvResultat.setVisibility(View.INVISIBLE);
 
@@ -85,34 +87,31 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String querytext) {
-                CollectionReference collectionUsers = db.collection("users");
-                collectionUsers.get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()){
-                            Log.d(TAG, "C'est vide");
-                            return;
-                        }else {
-                            for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                String nomBase = (String) documentSnapshot.get("us_nickname");
-                                if ( nomBase.contains(querytext) ) {
-                                    Log.d(TAG, "Ca match : " + nomBase);
-                                }
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
-                    }
-                });
+                onStop();
+                Query query = db.collection("users").whereGreaterThan("us_nickname", querytext);
+                FirestoreRecyclerOptions<ModelUsers> users =
+                        new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                .setQuery(query, ModelUsers.class)
+                                .build();
+
+                adapterUser = new LierParrainFilleulAdapter(users);
+                recyclerView.setAdapter(adapterUser);
+                onStart();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                onStop();
+                Query query = db.collection("users").whereGreaterThan("us_nickname", newText);
+                FirestoreRecyclerOptions<ModelUsers> users =
+                        new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                .setQuery(query, ModelUsers.class)
+                                .build();
+
+                adapterUser = new LierParrainFilleulAdapter(users);
+                recyclerView.setAdapter(adapterUser);
+                onStart();
                 return false;
             }
         });
@@ -120,7 +119,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     }
 
 
-    // CYCLE DE VIE
+    // ****************************************** CYCLE DE VIE ***********************************************
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
