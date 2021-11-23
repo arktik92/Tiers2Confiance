@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    /**  Var globales **/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
