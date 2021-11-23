@@ -3,14 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_lier_parrain_filleul.xml" value="0.25" />
-        <entry key="..\:/Users/esteban/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/shape_btn.xml" value="0.3828125" />
+        <entry key="..\:/Users/Viet_Sok_Nguyen/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/shape_avatar_profil.xml" value="0.25092592592592594" />
         <entry key="..\:/Users/Viet_Sok_Nguyen/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/Viet_Sok_Nguyen/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_profil.xml" value="0.21666666666666667" />
-        <entry key="..\:/Users/Viet_Sok_Nguyen/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_view_profil.xml" value="0.21822916666666667" />
+        <entry key="..\:/Users/Viet_Sok_Nguyen/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_view_profil.xml" value="0.1917808219178082" />
         <entry key="..\:/Users/esteban/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/esteban/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_sign_in.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/esteban/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/shape_btn.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
