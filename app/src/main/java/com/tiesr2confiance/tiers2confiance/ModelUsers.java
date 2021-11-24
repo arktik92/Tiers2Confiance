@@ -3,43 +3,47 @@ package com.tiesr2confiance.tiers2confiance;
 import java.util.Date;
 
 public class ModelUsers {
-    public  String	us_auth_uid	;
-    public  String	us_nickname	;
-    public  String	us_pwd	;
-    public  String	us_email	;
-    public  String	us_first_name	;
-    public  String	us_last_name	;
-    public  Date    us_registered_date	;
-    public  Date	us_last_connexion_date	;
-    public  long	us_role	;
-    public  long	us_balance	;
-    public  String  us_nephews;
-    public  Date	us_birth_date	;
-    public  long    us_postal_code	;
-    public  String	us_city	;
-    public  long	us_gender	;
-    public  long	us_sexual_orientation	;
-    public  long	us_marital_status	;
-    public  long	us_has_kids	;
-    public String	us_profession	;
-    public long	    us_height	;
-    public long	    us_shape	;
-    public long	    us_ethnic_group	;
-    public long	    us_hair_color	;
-    public long	    us_hair_length	;
-    public long	    us_eye_color	;
-    public long	    us_smoker	;
-    public String   us_personality;
-    public String	us_sports	;
-    public String	us_hobbies	;
-    public String	us_photos	;
+    public String us_auth_uid;
+    public String us_nickname;
+    public String us_pwd;
+    public String us_email;
+    public String us_first_name;
+    public String us_last_name;
+    public Date us_registered_date;
+    public Date us_last_connexion_date;
+    public long us_role;
+    public long us_balance;
+    public String us_nephews;
+    public String us_godfather;
+    public Date us_birth_date;
+    public String us_country_lang;
+    public long us_postal_code;
+    public String us_city;
+    public String us_presentation;
+    public long us_gender;
+    public long us_sexual_orientation;
+    public long us_marital_status;
+    public long us_has_kids;
+    public String us_profession;
+    public long us_height;
+    public long us_shape;
+    public long us_ethnic_group;
+    public long us_hair_color;
+    public long us_hair_length;
+    public long us_eye_color;
+    public long us_smoker;
+    public String us_personality;
+    public String us_sports;
+    public String us_hobbies;
+    public String us_avatar;
+    public String us_photos;
 
 
     /****** CONSTRUCTORS ********************/
     public ModelUsers() {
     }
 
-    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, Date us_birth_date, long us_postal_code, String us_city, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_photos) {
+    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_godfather, Date us_birth_date, String us_country_lang, long us_postal_code, String us_city, String us_presentation, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_avatar, String us_photos) {
         this.us_auth_uid = us_auth_uid;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -51,9 +55,12 @@ public class ModelUsers {
         this.us_role = us_role;
         this.us_balance = us_balance;
         this.us_nephews = us_nephews;
+        this.us_godfather = us_godfather;
         this.us_birth_date = us_birth_date;
+        this.us_country_lang = us_country_lang;
         this.us_postal_code = us_postal_code;
         this.us_city = us_city;
+        this.us_presentation = us_presentation;
         this.us_gender = us_gender;
         this.us_sexual_orientation = us_sexual_orientation;
         this.us_marital_status = us_marital_status;
@@ -69,12 +76,12 @@ public class ModelUsers {
         this.us_personality = us_personality;
         this.us_sports = us_sports;
         this.us_hobbies = us_hobbies;
+        this.us_avatar = us_avatar;
         this.us_photos = us_photos;
     }
 
-
     /******************** SETTERS ************************************/
-    public void setus_auth_uid(String us_auth_uid) {
+    public void setUs_auth_uid(String us_auth_uid) {
         this.us_auth_uid = us_auth_uid;
     }
 
@@ -118,8 +125,16 @@ public class ModelUsers {
         this.us_nephews = us_nephews;
     }
 
+    public void setUs_godfather(String us_godfather) {
+        this.us_godfather = us_godfather;
+    }
+
     public void setUs_birth_date(Date us_birth_date) {
         this.us_birth_date = us_birth_date;
+    }
+
+    public void setUs_country_lang(String us_country_lang) {
+        this.us_country_lang = us_country_lang;
     }
 
     public void setUs_postal_code(long us_postal_code) {
@@ -128,6 +143,10 @@ public class ModelUsers {
 
     public void setUs_city(String us_city) {
         this.us_city = us_city;
+    }
+
+    public void setUs_presentation(String us_presentation) {
+        this.us_presentation = us_presentation;
     }
 
     public void setUs_gender(long us_gender) {
@@ -190,6 +209,10 @@ public class ModelUsers {
         this.us_hobbies = us_hobbies;
     }
 
+    public void setUs_avatar(String us_avatar) {
+        this.us_avatar = us_avatar;
+    }
+
     public void setUs_photos(String us_photos) {
         this.us_photos = us_photos;
     }
@@ -238,8 +261,16 @@ public class ModelUsers {
         return us_nephews;
     }
 
+    public String getUs_godfather() {
+        return us_godfather;
+    }
+
     public Date getUs_birth_date() {
         return us_birth_date;
+    }
+
+    public String getUs_country_lang() {
+        return us_country_lang;
     }
 
     public long getUs_postal_code() {
@@ -248,6 +279,10 @@ public class ModelUsers {
 
     public String getUs_city() {
         return us_city;
+    }
+
+    public String getUs_presentation() {
+        return us_presentation;
     }
 
     public long getUs_gender() {
@@ -310,7 +345,12 @@ public class ModelUsers {
         return us_hobbies;
     }
 
+    public String getUs_avatar() {
+        return us_avatar;
+    }
+
     public String getUs_photos() {
         return us_photos;
     }
+    /****************************/
 }
