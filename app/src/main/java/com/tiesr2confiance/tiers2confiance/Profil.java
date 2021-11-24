@@ -17,15 +17,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class Profil extends AppCompatActivity {
 
 
-    private static final String TAG = "Profil";
+    private static final String TAG = "users_test_profil";
     /*** *Clé pour chaque champs de la BDD ***/
 
     private static final String KEY_NAME = "name";
+    private static final String KEY_CITY = "city";
+    private static final String KEY_emails = "email";
 
     /*** Global Variable ***/
 
-    private EditText myName;
 
+    private EditText myName, myCity, myEmail;
     /*** Begin - BDD ***/
     /*** Create BDD ***/
     private FirebaseFirestore db;
@@ -34,6 +36,7 @@ public class Profil extends AppCompatActivity {
     /*** Collection reference ***/
     private CollectionReference noteCollectionRef;
 
+
     /*** end - BDD ***/
 
 
@@ -41,6 +44,8 @@ public class Profil extends AppCompatActivity {
 
 
         myName = findViewById(R.id.etName);
+        myCity = findViewById(R.id.etCIty);
+        myEmail = findViewById(R.id.etEmail);
 
         /* Init BDD */
         /*** BDD Connexion ***/
@@ -69,10 +74,22 @@ public class Profil extends AppCompatActivity {
 
     public void updateNote(View v) {
         String mName = myName.getText().toString().trim();
+        String mCity = myCity.getText().toString().trim();
+        String mEmail = myEmail.getText().toString().trim();
 
+        ModelViewProfilItem content = new ModelViewProfilItem(mName, mCity, mEmail);
+
+
+
+        noteCollectionRef.add(content);
+
+
+
+
+/*
         ModelViewProfilItem contentProfil = new ModelViewProfilItem(mName);
 
-        noteCollectionRef.add(contentProfil)
+         noteCollectionRef.add(contentProfil)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -86,7 +103,7 @@ public class Profil extends AppCompatActivity {
 
                     }
                 });
-
+*/
 
     }
 
