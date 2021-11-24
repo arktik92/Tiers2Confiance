@@ -16,14 +16,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -53,7 +57,7 @@ public class View_Profil extends AppCompatActivity {
     private TextView tvHobbiesname;
 
 
-    private ArrayList<ModelUsers> itemArrayListHobbie;
+    private ArrayList<String> itemArrayListHobbie;
 
 
     /*** ADapterHobbies ***/
@@ -71,7 +75,6 @@ public class View_Profil extends AppCompatActivity {
      * Collection
      **/
     private CollectionReference noteCollectionRef;
-
 
     public void init() {
 
@@ -209,6 +212,33 @@ public class View_Profil extends AppCompatActivity {
         // Add Data
         noteCollectionRef = db.collection("hobbies");
 
+        /*** get all the collection ***/
+
+        noteCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                Log.d(TAG, document.getId() + "=>"+document.getData());
+
+                                itemArrayListHobbie.add(document.getId());
+                            }
+                        }else{
+                            Log.d(TAG, "Error gettings document:", task.getException());
+                        }
+                    }
+                });
+
+
+        for(String element: itemArrayListHobbie)
+        {
+            Log.i(TAG, "=>" + element);
+
+        }
+
+
 
         /**** End - BDD Connexion Firestore *****/
 
@@ -216,6 +246,7 @@ public class View_Profil extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+
 
                         if (documentSnapshot.exists()) {
 
@@ -228,6 +259,15 @@ public class View_Profil extends AppCompatActivity {
 
                             String hobbies_list[] = chaine.split(split_key);
 
+
+                            for(int i = 0; i<= hobbiesname.length(); i++ ){
+                                Log.i(TAG, "ID Collection --->"+noteCollectionRef.getId());
+                                Log.i(TAG, "ID Snapshoot ---->" + documentSnapshot.getId());
+
+                            }
+
+
+                            /*
                             for (int i = 0; i <= hobbiesname.length(); i++) {
 
                                 String hobbieID = documentSnapshot.getId();
@@ -237,14 +277,20 @@ public class View_Profil extends AppCompatActivity {
                                 Toast.makeText(View_Profil.this, hobbiesname.length() + "////" + hobbieID, Toast.LENGTH_SHORT).show();
 
                                 //itemArrayListHobbie.add(new ModelUsersHobbies(hobbieID));
-                                //TODO boolean add = itemArrayListHobbie.add(new ModelUsers());
-                            }
 
-                            adapterHobbieItem = new AdapterHobbieItem(getApplicationContext(), itemArrayListHobbie); // il atteint le context et un ArrayList
+
+
+                                Toast.makeText(View_Profil.this, "ID" + hobbieID, Toast.LENGTH_SHORT).show();
+
+
+                                //itemArrayListHobbie.add(new ModelUsers(hobbieID));
+                            }*/
+
+                           // adapterHobbieItem = new AdapterHobbieItem(getApplicationContext(), itemArrayListHobbie); // il atteint le context et un ArrayList
 
                             /** Adapter recyclerView à l'adapter **/
 
-                            recyclerViewHobbies.setAdapter(adapterHobbieItem);
+                            //recyclerViewHobbies.setAdapter(adapterHobbieItem);
 
                         } else {
                             Toast.makeText(View_Profil.this, "Any Hobbies Document", Toast.LENGTH_SHORT).show();

@@ -34,6 +34,7 @@ public class Profil extends AppCompatActivity {
     /*** Collection reference ***/
     private CollectionReference noteCollectionRef;
 
+
     /*** end - BDD ***/
 
 
