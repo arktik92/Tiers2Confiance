@@ -28,10 +28,12 @@ public class SignInActivity extends AppCompatActivity {
     /** Variables Globales **/
     private static final String TAG = "Main Activity";
     private View baseView;
+    FirebaseUser user;
 
     /** Initialisation des composants **/
     public void init() {
         baseView = findViewById(R.id.mainLayoutSignIn);
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     /** Gestion du clic sur le bouton SIGN UP **/
@@ -56,7 +58,7 @@ public class SignInActivity extends AppCompatActivity {
             //TODO intent a replacer
 
             // Intent vers l'activitée principale
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, CreationProfilActivity.class));
         }
     }
 
@@ -112,5 +114,5 @@ public class SignInActivity extends AppCompatActivity {
 
         signLauncher.launch(signInIntent);
     }
-    //reprendre config fb apres manifest
+
 }
