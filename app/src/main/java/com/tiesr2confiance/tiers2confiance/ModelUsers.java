@@ -40,7 +40,7 @@ public class ModelUsers {
     public ModelUsers() {
     }
 
-    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, Date us_birth_date, long us_postal_code, String us_city, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_photos) {
+    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_godfather, Date us_birth_date, long us_postal_code, String us_city, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_photos) {
         this.us_auth_uid = us_auth_uid;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -52,6 +52,7 @@ public class ModelUsers {
         this.us_role = us_role;
         this.us_balance = us_balance;
         this.us_nephews = us_nephews;
+        this.us_nephews = us_godfather;
         this.us_birth_date = us_birth_date;
         this.us_postal_code = us_postal_code;
         this.us_city = us_city;
@@ -118,6 +119,8 @@ public class ModelUsers {
     public void setUs_nephews(String us_nephews) {
         this.us_nephews = us_nephews;
     }
+
+    public void setUs_godfather(String us_godfather) { this.us_godfather = us_godfather; }
 
     public void setUs_birth_date(Date us_birth_date) {
         this.us_birth_date = us_birth_date;
@@ -238,6 +241,8 @@ public class ModelUsers {
     public String getUs_nephews() {
         return us_nephews;
     }
+
+    public String getUs_godfather() { return us_godfather; }
 
     public Date getUs_birth_date() {
         return us_birth_date;

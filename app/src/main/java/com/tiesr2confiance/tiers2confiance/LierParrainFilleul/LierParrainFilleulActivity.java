@@ -72,7 +72,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
 
         /** Récupération de la collection Users dans Firestore **/
-        Query query = db.collection("users").whereEqualTo("us_role", role_inverse);
+        Query query = db.collection("users").whereEqualTo("us_role", role_inverse).wher;
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
