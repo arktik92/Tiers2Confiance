@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_profil_user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -54,18 +55,12 @@
                     android:gravity="center"
                     android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/tv_role"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-
             </LinearLayout>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_request" />
