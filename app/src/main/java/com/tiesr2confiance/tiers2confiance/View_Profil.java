@@ -247,7 +247,6 @@ public class View_Profil extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-
                         if (documentSnapshot.exists()) {
 
                             String hobbiesname = documentSnapshot.getString(KEY_HOBBIES_NAME);

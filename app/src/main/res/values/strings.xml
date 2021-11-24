@@ -1,8 +1,5 @@
 <resources>
 
-    <string name="facebook_app_id">1098237297647638</string> <string name="fb_login_protocol_scheme">fb1098237297647638</string>
-    <string name="app_name">Tiers 2 Confiance</string>
-
     <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
     <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
     <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
@@ -12,7 +9,7 @@
     <string name="btn_next">Suivant</string>
     <string name="btn_back">Retour</string>
     <string name="btn_search">Chercher</string>
-    <string name="btn_request">Envoyer</string>
+    <string name="btn_request">Envoyer une demande</string>
     <string name="btn_ok">Valider</string>
     <string name="btn_modify">Modifer</string>
     <string name="btn_save">Sauvegarder</string>
@@ -21,4 +18,100 @@
     <string name="btn_paid">Payer</string>
     <string name="btn_refuse">Refuser</string>
     <string name="btn_accept">Accepter</string>
+
+    <!-- Texte Attributs -->
+    <!-- Attribut Role User-->
+    <string name="role_celib_text">Célibataire</string>
+    <string name="role_parrain_text">Parrain</string>
+
+    <!-- Attribut Sexe User-->
+    <string name="sex_male_text">Homme</string>
+    <string name="sex_female_text">Femme</string>
+
+    <!-- Attribut Orientation Sexuelle User-->
+    <string name="sexual_orientation_hetero_text">Hétérosexuel(le)</string>
+    <string name="sexual_orientation_homo_text">Homosexuel(le)</string>
+    <string name="sexual_orientation_bi_text">Bisexuel(le)</string>
+
+    <!-- Attribut Statut Matrimonial User-->
+    <string name="matrimonial_status_celib_text">Célibataire</string>
+    <string name="matrimonial_status_marie_text">Marié(e)</string>
+    <string name="matrimonial_status_divorce_text">Divorcé(e)</string>
+
+    <!-- Attribut Oui/Non pour "a des enfants"-->
+    <string name="oui_text">Oui</string>
+    <string name="non_text">Non</string>
+
+    <!-- Attribut silhouette-->
+    <string name="Silhouette_mince_text">Mince</string>
+    <string name="Silhouette_Normale_text">Normale</string>
+    <string name="Silhouette_petites_rondeurs_text">Petites rondeurs</string>
+    <string name="Silhouette_rondeurs_text">Rondeurs</string>
+    <string name="Silhouette_fort_text">Fort</string>
+    <string name="Silhouette_athletique_text">Athlétique</string>
+    <string name="Silhouette_je_le_garde_pour_moi_text">Je le garde pour moi</string>
+
+    <!-- Attribut Ethnie-->
+    <string name="ethnie_africain_text">Africain</string>
+    <string name="ethnie_arabe_text">Arabe</string>
+    <string name="ethnie_asiatique_text">Asiatique</string>
+    <string name="ethnie_eurasien_text">Eurasien</string>
+    <string name="ethnie_europeen_text">européen</string>
+    <string name="ethnie_hispanique_text">Hispanique</string>
+    <string name="ethnie_indien_text">Indien</string>
+    <string name="ethnie_metis_text">Métis</string>
+
+    <!-- Attribut Couleur Cheveux-->
+    <string name="couleur_cheveux_blanc_text">Blanc</string>
+    <string name="couleur_cheveux_blond_text">Blond</string>
+    <string name="couleur_cheveux_brun_text">Brun</string>
+    <string name="couleur_cheveux_chatain_text">Chatain</string>
+    <string name="couleur_cheveux_poivreetsel_text">Poivre et sel</string>
+    <string name="couleur_cheveux_noir_text">Noir</string>
+    <string name="couleur_cheveux_roux_text">Roux</string>
+
+    <!-- Attribut longeur cheveux-->
+    <string name="longueur_cheveux_chauve_text">Chauve</string>
+    <string name="longueur_cheveux_court_text">Court</string>
+    <string name="longueur_cheveux_long_text">Long</string>
+    <string name="longueur_cheveux_moyen_text">Moyen</string>
+
+    <!-- Attribut Couleur Yeux-->
+    <string name="couleur_yeux_bleu_text">Bleu</string>
+    <string name="couleur_yeux_marron_text">Marron</string>
+    <string name="couleur_yeux_noir_text">Noir</string>
+    <string name="couleur_yeux_vert_text">Vert</string>
+
+    <!-- Attribut Fumeur-->
+    <string name="fumeur_oui_text">Fumeur</string>
+    <string name="fumeur_non_text">Non fumeur</string>
+
+    <!-- Attribut centres interet/hobbies (ho_)-->
+    <string name="ho_artisanat_text">Artisanat</string>
+    <string name="ho_balades_text">Balades</string>
+    <string name="ho_boites_text">Boites de nuit / danser</string>
+    <string name="ho_cafe_text">Café et conversation</string>
+    <string name="ho_charites_text">Charités / Organisations</string>
+    <string name="ho_clubs_text">Clubs de lecture ou de discussion</string>
+    <string name="ho_cuisiner_text">Cuisiner</string>
+    <string name="ho_déguster_text">Déguster du vin / des plats</string>
+    <string name="ho_fairerencontres_text">Faire de nouvelles rencontres</string>
+    <string name="ho_films_text">Films / Cinéma</string>
+    <string name="ho_jardiner_text">Jardiner</string>
+    <string name="ho_jeuxcartes_text">Jeux de cartes / de famille</string>
+    <string name="ho_jeuxvideos_text">Jeux vidéo</string>
+    <string name="ho_medepenser_text">Me dépenser</string>
+    <string name="ho_musique_text">Musique / Concerts</string>
+    <string name="ho_musees_text">Musées / Galeries</string>
+    <string name="ho_pecher_text">Pêcher / Chasser</string>
+    <string name="ho_regarder_text">Regarder le sport</string>
+    <string name="ho_religion_text">Religion / Spirituel</string>
+    <string name="ho_restaurant_text">Restaurant / Recevoir à diner</string>
+    <string name="ho_shopping_text">Shopping / Antiquaires</string>
+    <string name="ho_theatre_text">Théâtre / Spectacles</string>
+    <string name="ho_voyages_text">Voyages / Tourisme</string>
+
+
+    <!-- Attribut xxxxxxx-->
+    <string name="XXXXXX">xxxxxx</string>
 </resources>
