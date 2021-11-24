@@ -39,11 +39,11 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     private LierParrainFilleulAdapter adapterUser;
 
     /** Var Firebase **/
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersCollectionRef = db.collection("users");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersCollectionRef = db.collection("users");
     private FirebaseUser currentUser;
-    private DocumentReference useRef;
-    private Long usRole;
+    private DocumentReference userConnected;
+    private Long usRole = 2L;
 
 
 
@@ -54,15 +54,25 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+
+    /** Récupération de la liste d'utilisateurs depuis la Firestore **/
+    private void getDataFromFirestore() {
+
         // ici on determine le rôle de l'utilisateur connecté et on stock le rôle dans la variable usRole
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        useRef = usersCollectionRef.document(currentUser.getUid());
-        useRef.get()
+
+        assert currentUser != null;
+        userConnected = usersCollectionRef.document(currentUser.getUid());
+        userConnected.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        usRole = documentSnapshot.getLong("us_role");
 
+                        ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                        assert contenuUser != null;
+                        usRole = contenuUser.getUs_role();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -72,23 +82,19 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-
-    /** Récupération de la liste d'utilisateurs depuis la Firestore **/
-    private void getDataFromFirestore() {
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
-
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
-      // if (usRole == (long)1) {
+       if (usRole.equals(1L)) {
+           Log.e(TAG, "Je suis un célibataire, mon role est 1");
             role_inverse = 2;
             setTitle(getString(R.string.Lier_pf_titre_filleul));
-      //  } else {
-            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
-            role_inverse = 1;
+       } else {
+           // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
+           Log.e(TAG, "Je suis un parrain, mon role est 2");
+           role_inverse = 1;
             setTitle(getString(R.string.Lier_pf_titre_parrain));
-       // }
+        }
 
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users").whereEqualTo("us_role", role_inverse);
