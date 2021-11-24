@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -18,7 +19,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
@@ -28,14 +37,21 @@ import java.util.Date;
 public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUsers, LierParrainFilleulAdapter.ItemViewHolder> {
 
     private static final String TAG = "Lier P/F ADAPTER :";
+    // Le context
     private Context context;
+    // Liste basée sur le model ModelUser
     private ArrayList<ModelUsers> usersArrayList;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    // Initialisation de la base de données, récupérations de la collection Users
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference usersCollectionRef = db.collection("users");;
 
-    //Two data sources, the original data and filtered data
-    private ArrayList<ModelUsers> originalData;
-    private ArrayList<ModelUsers> filteredData;
+    //Varaibles pour stocker l'utilisateur connecté
+    private FirebaseUser currentUser;
+    private DocumentReference useRef;
+
+    //Varaibles pour stocker l'utilisateur cliqué (demandé)
+    private String usAuthUidRequested;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -63,14 +79,13 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
         Long us_role = model.getUs_role();
+        String us_auth_uid = model.getUs_auth_uid();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
-
-        holder.tv_role.setText(String.valueOf(us_role));
 
         //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
         // Utilisation de glide pour afficher les images,
@@ -90,24 +105,54 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.iv_photo_profil);
+
+
+        // Récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Association du listener au bouton Envoyer la demande (de parrainage, de filleul)
+        holder.btn_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.btn_request.setVisibility(View.GONE);
+                usAuthUidRequested = us_auth_uid;
+
+                useRef = usersCollectionRef.document(currentUser.getUid());
+                useRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Log.e(TAG, "succes hehe");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "erreur hehe");
+                            }
+                        });
+            }
+        });
     }
 
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tv_nickname, tv_city, tv_birth_day, tv_role;
+        public TextView tv_nickname, tv_city, tv_birth_day;
         public ImageView iv_photo_profil;
+        public Button btn_request;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_nickname = itemView.findViewById(R.id.tv_nickname);
             tv_city = itemView.findViewById(R.id.tv_city);
             tv_birth_day = itemView.findViewById(R.id.tv_birth_day);
-            tv_role = itemView.findViewById(R.id.tv_role);
             iv_photo_profil = itemView.findViewById(R.id.iv_photo_profil);
+            btn_request = itemView.findViewById(R.id.btn_request);
 
         }
     }
+
+
 
 }
