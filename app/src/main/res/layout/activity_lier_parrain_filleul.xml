@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LierParrainFilleulActivity">
+    tools:context=".LierParrainFilleul.LierParrainFilleulActivity">
 
 
     <SearchView
@@ -23,8 +23,8 @@
         app:layout_constraintVertical_bias="0.01999998" />
 
 
-    <ListView
-        android:id="@+id/lvResultat"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvResultat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/svTextSearch"
