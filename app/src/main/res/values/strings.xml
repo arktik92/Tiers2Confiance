@@ -22,6 +22,43 @@
     <string name="btn_refuse">Refuser</string>
     <string name="btn_accept">Accepter</string>
 
+    <!-- Texte noms d'Attributs -->
+    <string name="lbl_pseudo">Pseudo</string>
+    <string name="lbl_mot_de_passe">mot de passe</string>
+    <string name="lbl_email">email</string>
+    <string name="lbl_prenom">Prénom</string>
+    <string name="lbl_nom">Nom</string>
+    <string name="lbl_date_inscription">Date d\'inscription</string>
+    <string name="lbl_date_derniere_connexion">date de dernière connexion</string>
+    <string name="lbl_role">Rôle</string>
+    <string name="lbl_solde">Solde</string>
+    <string name="lbl_filleuls">Filleuls</string>
+    <string name="lbl_parrain">Parrain</string>
+    <string name="lbl_date_naissance">Date de naissance</string>
+
+    <string name="lbl_code_postal">Code Postal</string>
+    <string name="lbl_ville">Ville</string>
+    <string name="lbl_presentation">Présentaion</string>
+    <string name="lbl_genre">Genre</string>
+    <string name="lbl_orientation_sexuelle">Orientation Sexuelle</string>
+    <string name="lbl_statut_matrimonial">Statut Matrimonial</string>
+    <string name="lbl_enfants">Enfants</string>
+    <string name="lbl_profession">Profession</string>
+
+    <string name="lbl_taille">Taille(en cm)</string>
+    <string name="lbl_silhouette">Silhouette</string>
+    <string name="lbl_ethnie">Ethnie</string>
+    <string name="lbl_couleur_cheveux">Couleur des cheveux</string>
+    <string name="lbl_longueur_cheveux">Longueur des cheveux</string>
+    <string name="lbl_couleur_yeux">Couleur des yeux</string>
+    <string name="lbl_fumeur">Fumeur</string>
+
+    <string name="lbl_personnalite">Personnalité</string>
+    <string name="lbl_sports">Sports</string>
+    <string name="lbl_hobbies">Hobbies</string>
+    <string name="lbl_avatar">Avatar</string>
+    <string name="lbl_photos">Photos</string>
+
     <!-- Texte Attributs -->
     <!-- Attribut Role User-->
     <string name="role_celib_text">Célibataire</string>
@@ -110,11 +147,11 @@
     <string name="ho_regarder_text">Regarder le sport</string>
     <string name="ho_religion_text">Religion / Spirituel</string>
     <string name="ho_restaurant_text">Restaurant / Recevoir à diner</string>
-    <string name="ho_shopping_text">Shopping / Antiquaires</string>
-    <string name="ho_theatre_text">Théâtre / Spectacles</string>
-    <string name="ho_voyages_text">Voyages / Tourisme</string>
+    <string name="ho_shopping_text" translatable="false">Shopping / Antiquaires</string>
+    <string name="ho_theatre_text" translatable="false">Théâtre / Spectacles</string>
+    <string name="ho_voyages_text" translatable="false">Voyages / Tourisme</string>
 
 
     <!-- Attribut xxxxxxx-->
-    <string name="XXXXXX">xxxxxx</string>
+    <string name="XXXXXX" translatable="false">xxxxxx</string>
 </resources>
