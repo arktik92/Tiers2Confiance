@@ -21,6 +21,9 @@
         <activity
             android:name=".LierParrainFilleul.LierParrainFilleulActivity"
             android:exported="false"></activity>
+
+
+
         <activity
             android:name=".View_Profil"
         android:exported="true" >
@@ -30,11 +33,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
         <activity
             android:name=".Profil"
-            android:exported="false"></activity>
+            android:exported="true">
+
+
+
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"></activity>

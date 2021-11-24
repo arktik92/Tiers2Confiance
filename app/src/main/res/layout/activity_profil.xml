@@ -19,6 +19,22 @@
             android:hint="Name"
             android:inputType="textPersonName" />
 
+        <EditText
+            android:id="@+id/etCIty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="City"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName" />
+
         <Button
             android:id="@+id/btUpdate"
             android:layout_width="match_parent"
