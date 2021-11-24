@@ -64,10 +64,10 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
         //TODO ici, il faudra determiné le rôle de l'utilisateur connecté
         // Si l'user connecté est un filleul
-            role_inverse = 1;
+            role_inverse = 0;
         setTitle(getString(R.string.Lier_pf_titre_filleul));
         // Si l'user connecté est un parrain
-            role_inverse = 2;
+            role_inverse = 1;
         setTitle(getString(R.string.Lier_pf_titre_parrain));
 
 
@@ -90,9 +90,11 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String querytext) {
+            public boolean onQueryTextSubmit(String queryText) {
+
                 onStop();
-                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).whereGreaterThan("us_nickname", querytext);
+                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).orderBy("us_nickname").startAt(queryText).endAt(queryText+"\uf8ff");
+
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
                                 .setQuery(query, ModelUsers.class)
@@ -107,7 +109,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 onStop();
-                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).whereGreaterThan("us_nickname", newText);
+                Query query = db.collection("users").whereEqualTo("us_role", role_inverse).orderBy("us_nickname").startAt(newText).endAt(newText+"\uf8ff");
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
                                 .setQuery(query, ModelUsers.class)

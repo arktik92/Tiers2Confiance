@@ -14,6 +14,7 @@ public class ModelUsers {
     public  long	us_role	;
     public  long	us_balance	;
     public  String  us_nephews;
+    public  String  us_godfather;
     public  Date	us_birth_date	;
     public  long    us_postal_code	;
     public  String	us_city	;

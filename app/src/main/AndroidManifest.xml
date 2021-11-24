@@ -19,18 +19,17 @@
 
         </activity>
         <activity
-            android:name=".LierParrainFilleulActivity"
-            android:exported="false"></activity>
-        <activity
-            android:name=".View_Profil"
-        android:exported="true" >
+            android:name=".LierParrainFilleul.LierParrainFilleulActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
+        </activity>
+        <activity
+            android:name=".View_Profil"
+        android:exported="false" >
         </activity>
         <activity
             android:name=".Profil"
