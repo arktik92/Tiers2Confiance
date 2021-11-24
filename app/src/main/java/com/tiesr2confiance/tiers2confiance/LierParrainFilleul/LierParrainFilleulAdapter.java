@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +25,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
@@ -44,11 +41,12 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
     // Initialisation de la base de données, récupérations de la collection Users
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersCollectionRef = db.collection("users");;
+    private CollectionReference usersCollectionRef = db.collection("users");
 
     //Varaibles pour stocker l'utilisateur connecté
     private FirebaseUser currentUser;
-    private DocumentReference useRef;
+    private DocumentReference userConnected;
+    private DocumentReference userClicked;
 
     //Varaibles pour stocker l'utilisateur cliqué (demandé)
     private String usAuthUidRequested;
@@ -79,13 +77,15 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
         Long us_role = model.getUs_role();
-        String us_auth_uid = model.getUs_auth_uid();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
+
+        userConnected = usersCollectionRef.document(currentUser.getUid());
+        userClicked = usersCollectionRef.document(getSnapshots().getSnapshot(position).getId());
 
         //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
         // Utilisation de glide pour afficher les images,
@@ -109,31 +109,35 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         // Récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
         // Association du listener au bouton Envoyer la demande (de parrainage, de filleul)
         holder.btn_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.btn_request.setVisibility(View.GONE);
-                usAuthUidRequested = us_auth_uid;
 
-                useRef = usersCollectionRef.document(currentUser.getUid());
-                useRef.get()
+                userConnected.get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Log.e(TAG, "succes hehe");
+
+                                ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                                assert contenuUser != null;
+                                userConnected.update("us_nephews", contenuUser.getUs_nephews() +  ";" + userClicked.getId());
+                                userClicked.update("us_godfather", userConnected.getId());
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.e(TAG, "erreur hehe");
+                                Log.e(TAG, "erreur" + currentUser.getUid());
                             }
                         });
+
             }
         });
     }
-
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
