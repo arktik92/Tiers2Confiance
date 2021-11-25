@@ -37,7 +37,8 @@
                         android:layout_height="65dp"
                         android:layout_margin="8dp"
                         android:background="@drawable/shape_avatar_profil"
-                        tools:srcCompat="@drawable/shape_avatar_profil" />
+                        tools:srcCompat="@drawable/shape_avatar_profil"
+                        android:contentDescription="TODO" />
 
                     <TextView
                         android:id="@+id/tvProfilName"
