@@ -107,6 +107,8 @@
             android:id="@+id/btn_creation_profil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_btn"
+            android:backgroundTint="@color/button"
             android:onClick="creationUser"
             android:text="creer profil" />
 
