@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -52,6 +54,19 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
     //Varaibles pour stocker l'utilisateur cliqué (demandé)
     private String usAuthUidRequested;
+
+    // Variable locale
+    private OnItemClickListener mOnItemClickListener;
+
+    /** #1 Interface **/
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    public void setOnItemCliclListener(OnItemClickListener onItemClickListener){
+        this.mOnItemClickListener = onItemClickListener;
+
+    }
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -157,6 +172,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         public TextView tv_nickname, tv_city, tv_birth_day;
         public ImageView iv_photo_profil;
         public Button btn_request;
+        public CardView cv_profil_user;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -165,6 +181,18 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
             tv_birth_day = itemView.findViewById(R.id.tv_birth_day);
             iv_photo_profil = itemView.findViewById(R.id.iv_photo_profil);
             btn_request = itemView.findViewById(R.id.btn_request);
+            cv_profil_user = itemView.findViewById(R.id.cv_profil_user);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getBindingAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && mOnItemClickListener != null){
+                        DocumentSnapshot userSnapshot = getSnapshots().getSnapshot(position);
+                        mOnItemClickListener.onItemClick(userSnapshot, position);
+                    }
+                }
+            });
 
         }
     }

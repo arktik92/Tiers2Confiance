@@ -27,6 +27,7 @@ import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.SignInActivity;
+import com.tiesr2confiance.tiers2confiance.View_Profil;
 
 import java.util.Objects;
 
@@ -147,6 +148,20 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        adapterUser.setOnItemCliclListener(new LierParrainFilleulAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot snapshot, int position) {
+                snapshot.getReference();
+
+                Log.e(TAG, "TEST CLICK");
+
+                Intent intent = new Intent(LierParrainFilleulActivity.this, View_Profil.class);
+                intent.putExtra("IdUser", snapshot.getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -157,6 +172,8 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lier_parrain_filleul);
         init();
         getDataFromFirestore();
+
+
     }
 
 
