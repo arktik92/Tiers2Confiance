@@ -82,6 +82,9 @@ public class ViewProfil extends AppCompatActivity {
      **/
     private CollectionReference noteCollectionRef;
 
+    String list_hobbies;
+    String hobbies_list[];
+
     public void init() {
 
         tvProfilName = findViewById(R.id.tvProfilName);
@@ -226,9 +229,6 @@ public class ViewProfil extends AppCompatActivity {
 
         /** get specific item into the collection **/
 
-        final String[] list_hobbies = new String[1];
-        final String[][] hobbies_list = {null};
-
         noteCollectionRef = db.collection("user_test_profil");
         noteCollectionRef
                 .get()
@@ -241,19 +241,15 @@ public class ViewProfil extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                list_hobbies[0] = document.getString("us_hobbies");
-                                Log.d(TAG, " List Hobbies ID => " + list_hobbies[0]); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                                list_hobbies = document.getString("us_hobbies");
+                                Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
 
 
-                                hobbies_list[0] = list_hobbies[0].split(split_key);
-                                Log.d(TAG, "hobbies list length: "+ hobbies_list[0].length);
+                                String[] hobbies_list = list_hobbies.split(split_key);
+                                Log.d(TAG, "hobbies list length: "+ hobbies_list.length);
 
 
                                 /****/
-
-for(int i = 0; i < hobbies_list.length; i++ ){
-
-    Log.d(TAG, "i =>" + i +" => "+ hobbies_list[i]);
 
 
 
@@ -291,17 +287,97 @@ for(int i = 0; i < hobbies_list.length; i++ ){
 
 
                             Log.d(TAG, HashmapHobbie.keySet() + " => HashMap: " + HashmapHobbie.get(idHobbie));
+
+
+
+
+
+                            ModelUsers contenuUser = document.toObject(ModelUsers.class);
+
+                            String hobbies_list = contenuUser.us_hobbies;
+
+                            noteCollectionRef = db.collection("user_test_profil");
+                            noteCollectionRef
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                               @Override
+                                                               public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+
+                                                                   String split_key = ";";
+                                                                   if (task.isSuccessful()) {
+                                                                       for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                                                           list_hobbies = document.getString("us_hobbies");
+
+
+                                                                    //       Log.d(TAG, "User Contener hobbies " + hobbies_list);
+
+                                                                       }
+                                                                   }
+                                                               }
+                                                           });
+
+
+
+                            Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+
+
+                            String split_key =";";
+
+                            String listHobbiesItem [] = null;
+
+                            listHobbiesItem = list_hobbies.split(split_key);
+
+                            Log.d(TAG, "lH =>  " + listHobbiesItem.length);
+
+                            String listHobbies ="";
+
+                            for(int k = 0; k < listHobbiesItem.length; k++) {
+                             //   Log.d(TAG, "Hobbies: " + listHobbiesItem[k]);
+
+
+                                listHobbies = listHobbies +listHobbiesItem[k]+"\n";
+
+                                tvHobbiesname.setText(listHobbies);
+                            }
+
+
+
+
+                            /****
+
+
+                            final String split_key = ";";
+
+
+                            String hobbieslist [] = list_hobbies.split(split_key);
+
+
+
+                            for(int i = 0; i <= list_hobbies.length(); i++){
+
+
+                                Log.d(TAG, "Hobbies ID => " + hobbieslist[i]);
+                                // tvHobbiesname.setText(hobbies_list[i]);
+                            }
+
+
+                            ****/
+
+
+
+
                         }
+
+
+
                     } else {
 
                         Log.d(TAG, "Task onComplete Hobbies Item Failure !!!");
                     }
                 }
             });
-
-
-}
-
 
 
 
@@ -332,6 +408,28 @@ for(int i = 0; i < hobbies_list.length; i++ ){
                         }
                     }
                 });
+
+
+
+/**
+
+ final String split_key = ";";
+ final String chaine  = "1;3;5;9;12";
+
+
+ String hobbies_list[] = chaine.split(split_key);
+
+
+
+ for(int i = 0; i <= hobbiesname.length(); i++){
+
+ // tvHobbiesname.setText(hobbies_list[i]);
+ }
+ **/
+
+
+
+
 
 
         /** End **/
@@ -433,22 +531,6 @@ for(int i = 0; i < hobbies_list.length; i++ ){
 
                                     Log.d(TAG, "BDD ===> " + hobbiesname);
 
-
-/**
-
- final String split_key = ";";
- final String chaine  = "1;3;5;9;12";
-
-
- String hobbies_list[] = chaine.split(split_key);
-
-
-
- for(int i = 0; i <= hobbiesname.length(); i++){
-
- // tvHobbiesname.setText(hobbies_list[i]);
- }
- **/
 
                                     /***
                                      for(int i = 0; i <= hobbiesname.length(); i++ ){
