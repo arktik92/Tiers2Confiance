@@ -22,9 +22,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.tiesr2confiance.tiers2confiance.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
-import com.tiesr2confiance.tiers2confiance.SignInActivity;
+import com.tiesr2confiance.tiers2confiance.Login.SignInActivity;
 
 public class LierParrainFilleulActivity extends AppCompatActivity {
 

@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelShapes {
-    public int      sh_id;
-    public String   sh_country;
-    public String   sh_label;
+public class ModelHairLength {
+    public int      hl_id;
+    public String   hl_country;
+    public String   hl_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelShapes() {
+    public ModelHairLength() {
     }
 
-    public ModelShapes(int sh_id, String sh_country, String sh_label) {
-        this.sh_id = sh_id;
-        this.sh_country = sh_country;
-        this.sh_label = sh_label;
+    public ModelHairLength(int hl_id, String hl_country, String hl_label) {
+        this.hl_id = hl_id;
+        this.hl_country = hl_country;
+        this.hl_label = hl_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getSh_id() {
-        return sh_id;
+    public int getHl_id() {
+        return hl_id;
     }
 
-    public String getSh_country() {
-        return sh_country;
+    public String getHl_country() {
+        return hl_country;
     }
 
-    public String getSh_label() {
-        return sh_label;
+    public String getHl_label() {
+        return hl_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

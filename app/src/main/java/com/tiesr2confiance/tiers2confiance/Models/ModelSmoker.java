@@ -1,4 +1,4 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelSmoker {
     public int      sm_id;

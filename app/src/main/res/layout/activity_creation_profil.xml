@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreationProfilActivity">
+    android:background="@color/background"
+    tools:context=".Login.CreationProfilActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_margin="8dp"
+        android:background="@color/cardView"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <EditText
             android:id="@+id/et_creation_nom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Nom"
             android:inputType="textPersonName"
@@ -24,6 +30,7 @@
             android:id="@+id/et_creation_prenom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Prénom"
             android:inputType="textPersonName"
@@ -33,6 +40,7 @@
             android:id="@+id/et_creation_pseudo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Pseudo"
             android:inputType="textPersonName"
@@ -42,6 +50,7 @@
             android:id="@+id/et_creation_date_de_naissance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Date de naissance"
             android:inputType="date"
@@ -51,17 +60,20 @@
         <RadioGroup
             android:id="@+id/rg_radio_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:text="Sexe :" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="8dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -70,6 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_margin="8dp"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical"
                     android:text="Homme" />
@@ -79,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_margin="8dp"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical"
                     android:text="Femme" />
@@ -89,6 +103,7 @@
             android:id="@+id/et_creation_code_postal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Code postal"
             android:inputType="number"
@@ -98,6 +113,7 @@
             android:id="@+id/et_creation_ville"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:ems="10"
             android:hint="Ville"
             android:inputType="textPersonName"
@@ -105,8 +121,10 @@
 
         <Button
             android:id="@+id/btn_creation_profil"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
             android:background="@drawable/shape_btn"
             android:backgroundTint="@color/button"
             android:onClick="creationUser"

@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelEthnicGroup {
-    public int      et_id;
-    public String   et_country;
-    public String   et_label;
+public class ModelOuiNon {
+    public int      ou_id;
+    public String   ou_country;
+    public String   ou_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelEthnicGroup() {
+    public ModelOuiNon() {
     }
 
-    public ModelEthnicGroup(int et_id, String et_country, String et_label) {
-        this.et_id = et_id;
-        this.et_country = et_country;
-        this.et_label = et_label;
+    public ModelOuiNon(int ou_id, String ou_country, String ou_label) {
+        this.ou_id = ou_id;
+        this.ou_country = ou_country;
+        this.ou_label = ou_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getEt_id() {
-        return et_id;
+    public int getOu_id() {
+        return ou_id;
     }
 
-    public String getEt_country() {
-        return et_country;
+    public String getOu_country() {
+        return ou_country;
     }
 
-    public String getEt_label() {
-        return et_label;
+    public String getOu_label() {
+        return ou_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

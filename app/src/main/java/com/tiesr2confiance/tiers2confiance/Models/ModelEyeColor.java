@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelSexualOrientation {
-    public int      se_id;
-    public String   se_country;
-    public String   se_label;
+public class ModelEyeColor {
+    public int      ey_id;
+    public String   ey_country;
+    public String   ey_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelSexualOrientation() {
+    public ModelEyeColor() {
     }
 
-    public ModelSexualOrientation(int se_id, String se_country, String se_label) {
-        this.se_id = se_id;
-        this.se_country = se_country;
-        this.se_label = se_label;
+    public ModelEyeColor(int ey_id, String ey_country, String ey_label) {
+        this.ey_id = ey_id;
+        this.ey_country = ey_country;
+        this.ey_label = ey_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getSe_id() {
-        return se_id;
+    public int getEy_id() {
+        return ey_id;
     }
 
-    public String getSe_country() {
-        return se_country;
+    public String getEy_country() {
+        return ey_country;
     }
 
-    public String getSe_label() {
-        return se_label;
+    public String getEy_label() {
+        return ey_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

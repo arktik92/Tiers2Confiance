@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelMaritalStatus {
-    public int      ma_id;
-    public String   ma_country;
-    public String   ma_label;
+public class ModelShapes {
+    public int      sh_id;
+    public String   sh_country;
+    public String   sh_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelMaritalStatus() {
+    public ModelShapes() {
     }
 
-    public ModelMaritalStatus(int ma_id, String ma_country, String ma_label) {
-        this.ma_id = ma_id;
-        this.ma_country = ma_country;
-        this.ma_label = ma_label;
+    public ModelShapes(int sh_id, String sh_country, String sh_label) {
+        this.sh_id = sh_id;
+        this.sh_country = sh_country;
+        this.sh_label = sh_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getMa_id() {
-        return ma_id;
+    public int getSh_id() {
+        return sh_id;
     }
 
-    public String getMa_country() {
-        return ma_country;
+    public String getSh_country() {
+        return sh_country;
     }
 
-    public String getMa_label() {
-        return ma_label;
+    public String getSh_label() {
+        return sh_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

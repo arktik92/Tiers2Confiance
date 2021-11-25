@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelRoles {
-    public int      ro_id;
-    public String   ro_country;
-    public String   ro_label;
+public class ModelGenders {
+    public int      ge_id;
+    public String   ge_country;
+    public String   ge_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelRoles() {
+    public ModelGenders() {
     }
 
-    public ModelRoles(int ro_id, String ro_country, String ro_label) {
-        this.ro_id = ro_id;
-        this.ro_country = ro_country;
-        this.ro_label = ro_label;
+    public ModelGenders(int ge_id, String ge_country, String ge_label) {
+        this.ge_id = ge_id;
+        this.ge_country = ge_country;
+        this.ge_label = ge_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getRo_id() {
-        return ro_id;
+    public int getGe_id() {
+        return ge_id;
     }
 
-    public String getRo_country() {
-        return ro_country;
+    public String getGe_country() {
+        return ge_country;
     }
 
-    public String getRo_label() {
-        return ro_label;
+    public String getGe_label() {
+        return ge_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

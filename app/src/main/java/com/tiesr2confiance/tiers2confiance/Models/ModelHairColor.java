@@ -1,33 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelGenders {
-    public int      ge_id;
-    public String   ge_country;
-    public String   ge_label;
+public class ModelHairColor {
+    public int      hc_id;
+    public String   hc_country;
+    public String   hc_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelGenders() {
+    public ModelHairColor() {
     }
 
-    public ModelGenders(int ge_id, String ge_country, String ge_label) {
-        this.ge_id = ge_id;
-        this.ge_country = ge_country;
-        this.ge_label = ge_label;
+    public ModelHairColor(int hc_id, String hc_country, String hc_label) {
+        this.hc_id = hc_id;
+        this.hc_country = hc_country;
+        this.hc_label = hc_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getGe_id() {
-        return ge_id;
+    public int getHc_id() {
+        return hc_id;
     }
 
-    public String getGe_country() {
-        return ge_country;
+    public String getHc_country() {
+        return hc_country;
     }
 
-    public String getGe_label() {
-        return ge_label;
+    public String getHc_label() {
+        return hc_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

@@ -1,27 +1,33 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Models;
 
-public class ModelLanguage {
-    public String   la_code;
-    public String   la_label;
+public class ModelEthnicGroup {
+    public int      et_id;
+    public String   et_country;
+    public String   et_label;
 
     /****** CONSTRUCTORS ********************/
-    public ModelLanguage() {
+    public ModelEthnicGroup() {
     }
 
-    public ModelLanguage(String la_code, String la_label) {
-        this.la_code = la_code;
-        this.la_label = la_label;
+    public ModelEthnicGroup(int et_id, String et_country, String et_label) {
+        this.et_id = et_id;
+        this.et_country = et_country;
+        this.et_label = et_label;
     }
 
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public String getLa_code() {
-        return la_code;
+    public int getEt_id() {
+        return et_id;
     }
 
-    public String getLa_label() {
-        return la_label;
+    public String getEt_country() {
+        return et_country;
+    }
+
+    public String getEt_label() {
+        return et_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/
