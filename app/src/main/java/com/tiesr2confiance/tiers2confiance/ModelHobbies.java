@@ -3,7 +3,7 @@ package com.tiesr2confiance.tiers2confiance;
 import java.util.Date;
 
 public class ModelHobbies {
-    public int      ho_id;
+    public long      ho_id;
     public String   ho_country;
     public String   ho_label;
 
@@ -12,7 +12,7 @@ public class ModelHobbies {
     public ModelHobbies() {
     }
 
-    public ModelHobbies(int ho_id, String ho_country, String ho_label) {
+    public ModelHobbies(long ho_id, String ho_country, String ho_label) {
         this.ho_id = ho_id;
         this.ho_country = ho_country;
         this.ho_label = ho_label;
@@ -21,7 +21,7 @@ public class ModelHobbies {
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public int getHo_id() {
+    public long getHo_id() {
         return ho_id;
     }
 

@@ -27,7 +27,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
+import java.util.Objects;
 
 public class ViewProfil extends AppCompatActivity {
 
@@ -220,9 +223,11 @@ public class ViewProfil extends AppCompatActivity {
         noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
 
 
+
         /** get specific item into the collection **/
 
-
+        final String[] list_hobbies = new String[1];
+        final String[][] hobbies_list = {null};
 
         noteCollectionRef = db.collection("user_test_profil");
         noteCollectionRef
@@ -231,33 +236,72 @@ public class ViewProfil extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                        String[] hobbies_list = null;
+
                         String split_key = ";";
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                String list_hobbies = document.getString("us_hobbies");
-                                Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                                list_hobbies[0] = document.getString("us_hobbies");
+                                Log.d(TAG, " List Hobbies ID => " + list_hobbies[0]); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
 
 
-                                hobbies_list = list_hobbies.split(split_key);
-                                Log.d(TAG, "hobbies list length: "+hobbies_list.length);
+                                hobbies_list[0] = list_hobbies[0].split(split_key);
+                                Log.d(TAG, "hobbies list length: "+ hobbies_list[0].length);
 
 
                                 /****/
 
 for(int i = 0; i < hobbies_list.length; i++ ){
 
-    Log.d(TAG, "i =>" + i +" => "+hobbies_list[i]);
+    Log.d(TAG, "i =>" + i +" => "+ hobbies_list[i]);
 
 
+
+    /*********/
+
+    noteCollectionRef = db.collection("hobbies");
+    noteCollectionRef
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            String list_hobbies_item = document.getString("ho_label");
+                            Log.d(TAG, " List Hobbies Item => " + list_hobbies_item); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+
+                        //    String list_hobbies_item_id = document.getString("ho_id");
+                          //  Log.d(TAG, " => Hobbies ID => " + list_hobbies_item_id); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                            ModelHobbies contenuHobbie = document.toObject(ModelHobbies.class);
+
+                            String LlabelHobbie = contenuHobbie.ho_label;
+                            Long idHobbie = contenuHobbie.ho_id;
+
+                           // Long list_hobbies_item_id = Long.valueOf(Objects.requireNonNull(document.getString("ho_id")));
+                           // Log.d(TAG, "list_hobbies_item_id:"+list_hobbies_item_id);
+
+                            HashMap<Long, String> HashmapHobbie = new HashMap<Long, String>();
+
+                            HashmapHobbie.put(idHobbie, LlabelHobbie);
+
+
+                            /**** TODo ****///
+
+
+                            Log.d(TAG, HashmapHobbie.keySet() + " => HashMap: " + HashmapHobbie.get(idHobbie));
+                        }
+                    } else {
+
+                        Log.d(TAG, "Task onComplete Hobbies Item Failure !!!");
+                    }
+                }
+            });
 
 
 }
 
-
-
-                                /****/
 
 
 
