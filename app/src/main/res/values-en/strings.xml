@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Lier_pf_titre_filleul">"Find your Godfather "</string>
+    <string name="Lier_pf_titre_filleul">"Find your Godfather"</string>
     <string name="Lier_pf_titre_parrain">Find a Nephew</string>
     <string name="Lier_pf_pseudo">type nickname</string>
     <string name="btn_next">Next</string>
@@ -92,4 +92,5 @@
     <string name="lbl_photos">Pics</string>
     <string name="Silhouette_petites_rondeurs_text">Some extra pounds</string>
     <string name="Silhouette_rondeurs_text">Not that fat</string>
+    <string name="accepter_demande">Accepter une demande</string>
 </resources>

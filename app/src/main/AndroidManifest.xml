@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance">
         <activity
+            android:name=".LierParrainFilleul.PendingRequestsActivity"
+            android:exported="false" />
             android:name=".Common.NoInternetActivity"
             android:exported="false" />
         <activity
@@ -32,7 +34,9 @@
             android:exported="true" />
         <activity
             android:name=".LierParrainFilleul.LierParrainFilleulActivity"
-            android:exported="false" />
+            android:exported="false"/>
+
+
         <activity
             android:name=".View_Profil"
             android:exported="false" />
