@@ -13,8 +13,10 @@ import android.widget.SearchView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,13 +28,15 @@ import com.tiesr2confiance.tiers2confiance.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.SignInActivity;
 
+import java.util.Objects;
+
 public class LierParrainFilleulActivity extends AppCompatActivity {
 
     /** Variables globales **/
     private static final String TAG = "Lier Parrain Filleul :";
     SearchView svTextSearch;
     RecyclerView rvResultat;
-    public int role_inverse;
+    public int roleInverse;
 
 
     private RecyclerView recyclerView;
@@ -65,39 +69,45 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
-        userConnected.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                        ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
-                        assert contenuUser != null;
-                        usRole = contenuUser.getUs_role();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "erreur sur la récupération de l'utilisateur connecté" + currentUser.toString());
-                    }
-                });
 
+       // Log.e(TAG, "TEST " + userConnected.get().getResult().toObject(ModelUsers.class).getUs_role());
+       // Log.e(TAG, "TEST " + userConnected.get().getResult().toObject(ModelUsers.class).getUs_role());
+
+     //   usRole = userConnected.get().getResult().toObject(ModelUsers.class).getUs_role();
+
+        userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                ModelUsers contenuUser = task.getResult().toObject(ModelUsers.class);
+                assert contenuUser != null;
+                usRole = contenuUser.getUs_role();
+                displayList(usRole);
+
+                adapterUser.startListening();
+
+            }
+        });
+    }
+
+    public void displayList(Long role){
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
        if (usRole.equals(1L)) {
            Log.e(TAG, "Je suis un célibataire, mon role est 1");
-            role_inverse = 2;
+            roleInverse = 2;
             setTitle(getString(R.string.Lier_pf_titre_filleul));
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
            Log.e(TAG, "Je suis un parrain, mon role est 2");
-           role_inverse = 1;
+           roleInverse = 1;
             setTitle(getString(R.string.Lier_pf_titre_parrain));
         }
 
         /** Récupération de la collection Users dans Firestore **/
-        Query query = db.collection("users").whereEqualTo("us_role", role_inverse);
+        Log.e(TAG, "role invers" + roleInverse);
+        Query query = db.collection("users").whereEqualTo("us_role", roleInverse);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
@@ -118,9 +128,9 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                onStop();
+                adapterUser.stopListening();
                 Query query = db.collection("users")
-                        .whereEqualTo("us_role", role_inverse)
+                        .whereEqualTo("us_role", roleInverse)
                         .orderBy("us_nickname")
                         .startAt(newText)
                         .endAt(newText+"\uf8ff");
@@ -133,7 +143,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
                 adapterUser = new LierParrainFilleulAdapter(users);
                 recyclerView.setAdapter(adapterUser);
-                onStart();
+                adapterUser.startListening();
                 return false;
             }
         });
@@ -147,24 +157,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lier_parrain_filleul);
         init();
         getDataFromFirestore();
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser == null){
-            startActivity(new Intent(LierParrainFilleulActivity.this, SignInActivity.class ));
-        } else {
-            adapterUser.startListening();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapterUser.stopListening();
     }
 
 

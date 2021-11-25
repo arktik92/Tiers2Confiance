@@ -79,9 +79,8 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         String us_nickname = model.getUs_nickname();
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
-        Long us_role = model.getUs_role();
-        String us_godfather = model.getUs_godfather();
-        String us_nephews = model.getUs_nephews();
+        String us_godfather_request_from = model.getUs_godfather_request_from();
+        String us_nephews_request_from = model.getUs_nephews_request_from();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
@@ -112,23 +111,11 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.iv_photo_profil);
 
-        // Si on affiche la liste des utilisateurs Célibataires, on cache le bouton d'envoie de demande si celui ci à déjà un parrain.
-        if (us_godfather != ""){
-            holder.btn_request.setVisibility(View.GONE);
-        }
-
-//        if ( us_nephews.contains(userConnected.getId()))
-  //      {
-  //          holder.btn_request.setText("Demande envoyée");
-//        }
-
-
         // Association du listener au bouton Envoyer la demande (de parrainage, de filleul)
         holder.btn_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 userPosition = usersCollectionRef.document(getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
-                //Log.e(TAG, "test" + String.valueOf(holder.getAbsoluteAdapterPosition()));
                 userConnected.get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -136,20 +123,21 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                                 ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                                 assert contenuUser != null;
 
-                                // Si l'utilisateur connecté est un filleul, le role de la personne cliqué est parrain (2)
-                                if (us_role == 2) {
-                                    Log.e(TAG , "je suis un célibataire connecté");
-                                    userConnected.update("us_godfather", userPosition.getId() );
-                                    userPosition.update("us_nephews", contenuUser.getUs_nephews() + userConnected.getId()+  ";");
+                                // Si l'utilisateur connecté est un célibataire, il cherche et demande à des parrains d'être leur filleul
+                                if (contenuUser.getUs_role() == 1) {
+                                    Log.e(TAG , "je suis un célibataire connecté, j'envoi une demande à un parrain");
+                                    userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userPosition.getId() );
+                                    userPosition.update("us_nephews_request_from",   us_nephews_request_from + userConnected.getId()+  ";");
                                 }
 
-                                // Si l'utilisateur connecté est un parrain qui cherche un filleul, le role de la personne cliqué est célibataire (1)
-                                if (us_role == 1) {
-                                    Log.e(TAG , "je suis un parrain connecté");
-                                    userConnected.update("us_nephews", contenuUser.getUs_nephews() + userPosition.getId()+  ";");
-                                    userPosition.update("us_godfather", userConnected.getId());
+                                // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
+                                if (contenuUser.getUs_role() == 2) {
+                                    Log.e(TAG , "je suis un parrain connecté, j'envoie une demande à un célibataire");
+                                    userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userPosition.getId()+  ";");
+                                    userPosition.update("us_godfather_request_from", us_godfather_request_from + userConnected.getId());
                                 }
-                                }
+                                holder.btn_request.setText("Demande envoyée");
+                            }
 
                         })
                         .addOnFailureListener(new OnFailureListener() {
