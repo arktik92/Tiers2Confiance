@@ -151,4 +151,5 @@
 
     <!-- Attribut xxxxxxx-->
     <string name="XXXXXX" translatable="false">xxxxxx</string>
+    <string name="accepter_demande">Accepter une demande</string>
 </resources>

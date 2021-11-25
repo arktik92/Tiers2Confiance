@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 
 
@@ -87,6 +88,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
+        critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;
             setTitle(getString(R.string.Lier_pf_titre_filleul));
@@ -97,7 +99,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             setTitle(getString(R.string.Lier_pf_titre_parrain));
             critere = NephewsList;
        }
-
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
                 .whereEqualTo("us_role", roleInverse)
@@ -106,6 +107,8 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
                         .build();
+
+        Log.e(TAG, "Ca passe avec " + query.toString());
 
         adapterUser = new LierParrainFilleulAdapter(users);
         recyclerView.setAdapter(adapterUser);
