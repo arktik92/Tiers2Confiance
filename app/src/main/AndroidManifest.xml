@@ -13,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance">
         <activity
-            android:name=".LierParrainFilleul.PendingRequestsActivity"
-            android:exported="false" />
             android:name=".Common.NoInternetActivity"
             android:exported="false" />
         <activity
@@ -22,27 +20,31 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Login.CreationProfilActivity"
-            android:exported="false" />
+
         <activity
             android:name=".Login.SignInActivity"
             android:exported="true" />
         <activity
-            android:name=".LierParrainFilleul.LierParrainFilleulActivity"
-            android:exported="false"/>
-
+            android:name=".Login.CreationProfilActivity"
+            android:exported="false" />
 
         <activity
-            android:name=".View_Profil"
+            android:name=".LierParrainFilleul.LierParrainFilleulActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".LierParrainFilleul.PendingRequestsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ViewProfil"
             android:exported="false" />
         <activity
             android:name=".Profil"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
