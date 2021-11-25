@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -287,9 +289,6 @@ public class ViewProfil extends AppCompatActivity {
 
 
                             Log.d(TAG, HashmapHobbie.keySet() + " => HashMap: " + HashmapHobbie.get(idHobbie));
-
-
-
 
 
                             ModelUsers contenuUser = document.toObject(ModelUsers.class);

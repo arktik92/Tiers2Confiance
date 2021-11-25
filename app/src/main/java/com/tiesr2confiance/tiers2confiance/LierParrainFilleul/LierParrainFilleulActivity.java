@@ -22,9 +22,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.tiesr2confiance.tiers2confiance.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
-import com.tiesr2confiance.tiers2confiance.View_Profil;
+import com.tiesr2confiance.tiers2confiance.ViewProfil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,7 +150,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
 
-                Intent intent = new Intent(LierParrainFilleulActivity.this, View_Profil.class);
+                Intent intent = new Intent(LierParrainFilleulActivity.this, ViewProfil.class);
                 intent.putExtra("IdUser", snapshot.getId());
                 startActivity(intent);
             }
