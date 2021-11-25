@@ -65,7 +65,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
     public void setOnItemCliclListener(OnItemClickListener onItemClickListener){
         this.mOnItemClickListener = onItemClickListener;
-
     }
 
     /**
@@ -141,15 +140,17 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                                 // Si l'utilisateur connecté est un célibataire, il cherche et demande à des parrains d'être leur filleul
                                 if (contenuUser.getUs_role() == 1) {
                                     Log.e(TAG , "je suis un célibataire connecté, j'envoi une demande à un parrain");
-                                    userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userPosition.getId() );
+                                    userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userPosition.getId()+  ";" );
                                     userPosition.update("us_nephews_request_from",   us_nephews_request_from + userConnected.getId()+  ";");
+                                    Log.e(TAG, "Demande à un parrain envoyé");
                                 }
 
                                 // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
                                 if (contenuUser.getUs_role() == 2) {
                                     Log.e(TAG , "je suis un parrain connecté, j'envoie une demande à un célibataire");
                                     userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userPosition.getId()+  ";");
-                                    userPosition.update("us_godfather_request_from", us_godfather_request_from + userConnected.getId());
+                                    userPosition.update("us_godfather_request_from", us_godfather_request_from + userConnected.getId()+  ";");
+                                    Log.e(TAG, "Demande à un célibataire envoyé");
                                 }
                                 holder.btn_request.setText("Demande envoyée");
                             }
@@ -165,7 +166,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
             }
         });
     }
-
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -196,7 +196,4 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         }
     }
-
-
-
 }

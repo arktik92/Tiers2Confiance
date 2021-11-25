@@ -13,14 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance">
         <activity
+            android:name=".LierParrainFilleul.PendingRequestsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreationProfilActivity"
             android:exported="false" />
         <activity
             android:name=".SignInActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".LierParrainFilleul.LierParrainFilleulActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

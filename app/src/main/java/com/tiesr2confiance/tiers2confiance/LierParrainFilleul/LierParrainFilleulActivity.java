@@ -29,6 +29,10 @@ import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.SignInActivity;
 import com.tiesr2confiance.tiers2confiance.View_Profil;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class LierParrainFilleulActivity extends AppCompatActivity {
@@ -39,7 +43,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     RecyclerView rvResultat;
     public int roleInverse;
 
-
     private RecyclerView recyclerView;
     private LierParrainFilleulAdapter adapterUser;
 
@@ -49,18 +52,15 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private DocumentReference userConnected;
     private Long usRole = 2L;
-
-
+    private String usGodfatherRequestTo = "";
+    private String usNephewsRequestTo = "";
 
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
     public void init() {
-
         recyclerView = findViewById(R.id.rvResultat);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
-
 
     /** Récupération de la liste d'utilisateurs depuis la Firestore **/
     private void getDataFromFirestore() {
@@ -71,44 +71,47 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
 
-
-       // Log.e(TAG, "TEST " + userConnected.get().getResult().toObject(ModelUsers.class).getUs_role());
-       // Log.e(TAG, "TEST " + userConnected.get().getResult().toObject(ModelUsers.class).getUs_role());
-
-     //   usRole = userConnected.get().getResult().toObject(ModelUsers.class).getUs_role();
-
         userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 ModelUsers contenuUser = task.getResult().toObject(ModelUsers.class);
                 assert contenuUser != null;
                 usRole = contenuUser.getUs_role();
-                displayList(usRole);
+                usGodfatherRequestTo = contenuUser.getUs_godfather_request_to();
+                usNephewsRequestTo = contenuUser.getUs_nephews_request_to();
 
+                Log.e(TAG, " TEST :"  + usGodfatherRequestTo.toString());
+                Log.e(TAG, " TEST :"  + usNephewsRequestTo.toString());
+
+
+                List<String> GodfatherSepareted = new ArrayList<String>(Arrays.asList(usGodfatherRequestTo.split(";")));
+                List<String> NephewSepareted = new ArrayList<String>(Arrays.asList(usNephewsRequestTo.split(";")));
+
+                displayList(usRole, NephewSepareted, GodfatherSepareted );
                 adapterUser.startListening();
-
             }
         });
     }
 
-    public void displayList(Long role){
+    public void displayList(Long role, List NephewsList, List GodfatherList ){
+
+        List<String> Critere = new ArrayList<String>();
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
        if (usRole.equals(1L)) {
-           Log.e(TAG, "Je suis un célibataire, mon role est 1");
             roleInverse = 2;
             setTitle(getString(R.string.Lier_pf_titre_filleul));
+            Critere = GodfatherList;
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
-           Log.e(TAG, "Je suis un parrain, mon role est 2");
            roleInverse = 1;
             setTitle(getString(R.string.Lier_pf_titre_parrain));
-        }
+            Critere = NephewsList;
+       }
 
         /** Récupération de la collection Users dans Firestore **/
-        Log.e(TAG, "role invers" + roleInverse);
-        Query query = db.collection("users").whereEqualTo("us_role", roleInverse);
+        Query query = db.collection("users").whereEqualTo("us_role", roleInverse).whereNotIn("us_auth_uid", Critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
@@ -154,8 +157,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
 
-                Log.e(TAG, "TEST CLICK");
-
                 Intent intent = new Intent(LierParrainFilleulActivity.this, View_Profil.class);
                 intent.putExtra("IdUser", snapshot.getId());
                 startActivity(intent);
@@ -172,8 +173,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lier_parrain_filleul);
         init();
         getDataFromFirestore();
-
-
     }
 
 
