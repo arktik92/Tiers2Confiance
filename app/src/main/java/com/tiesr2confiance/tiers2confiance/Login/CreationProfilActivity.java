@@ -17,10 +17,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.type.DateTime;
 import com.tiesr2confiance.tiers2confiance.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +32,8 @@ public class CreationProfilActivity extends AppCompatActivity {
     /** Variables globales **/
     private static final String TAG = "CreationProfilActivity";
     private EditText etLastName, etFistName, etNickName, etDateOfBirth, etZipCode, etCity;
-    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail,timeStamp,currentTime;
+    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather,  registeredDate,currentTime;
+    private long role;
     private RadioGroup rgRadioGroup;
     private RadioButton rbHomme, rbFemme;
 
@@ -52,6 +56,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
 
+        role = 1;
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
@@ -76,11 +81,19 @@ public class CreationProfilActivity extends AppCompatActivity {
         lastName = etLastName.getText().toString().trim();
         nickName = etNickName.getText().toString().trim();
         zipCode = etZipCode.getText().toString();
-        currentTime = new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
-        if(timeStamp == null) {
-            timeStamp = new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
+        nephewsRequestTo = "";
+        nephewsRequestfrom = "";
+        nephews = "";
+        godfatherRequestTo = "";
+        godfatherRequestFrom= "";
+        godfather = "";
+
+
+        currentTime =  new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
+        if(registeredDate == null) {
+            registeredDate = new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
         } else {
-            timeStamp = timeStamp;
+            registeredDate = registeredDate;
         }
 
         Map<String, Object> userList = new HashMap<>();
@@ -92,9 +105,15 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_last_name", lastName);
         userList.put("us_postal_code", zipCode);
         userList.put("us_nickname", nickName);
-        userList.put("us_registered_date", timeStamp);
+        userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connection_date", currentTime);
-
+        userList.put("us_nephews_request_to",nephewsRequestTo);
+        userList.put("us_nephews_request_from",nephewsRequestfrom);
+        userList.put("us_godfather_request_to",godfatherRequestTo);
+        userList.put("us_godfather_request_from", godfatherRequestFrom);
+        userList.put("us_nephews", nephews);
+        userList.put("us_godfather", godfather);
+        userList.put("us_role", role);
         docRef.set(userList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
