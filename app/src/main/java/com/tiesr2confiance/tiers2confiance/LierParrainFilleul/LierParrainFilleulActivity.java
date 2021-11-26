@@ -152,6 +152,8 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(LierParrainFilleulActivity.this, ViewProfil.class);
                 intent.putExtra("IdUser", snapshot.getId());
+
+                Log.e(TAG, "showProfil: " + snapshot.getId());
                 startActivity(intent);
             }
         });

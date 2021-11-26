@@ -51,8 +51,8 @@ public class ViewProfil extends AppCompatActivity {
 
 
     private static String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
-    private static final String KEY_FS_COLLECTION = "user_test_profil";
-    private static final String KEY_FS_USER_HOBBIE = "user_test_profil_hobbies";
+    private static final String KEY_FS_COLLECTION = "users";
+    private static final String KEY_FS_USER_HOBBIE = "hobbies";
 
     private static final String KEY_HOBBIES_NAME = "ho_name";
 
