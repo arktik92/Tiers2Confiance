@@ -50,7 +50,7 @@ public class ViewProfil extends AppCompatActivity {
     private static final String KEY_HOBBIES = "us_hobbies";
 
 
-    private static final String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
+    private static String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
     private static final String KEY_FS_COLLECTION = "user_test_profil";
     private static final String KEY_FS_USER_HOBBIE = "user_test_profil_hobbies";
 
@@ -130,6 +130,13 @@ public class ViewProfil extends AppCompatActivity {
 
 
     public void showProfil() {
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle.getString("IdUser") != null) {
+            KEY_FS_USER_ID = bundle.getString("IdUser");
+            Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
+        }
 
         noteRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -326,20 +333,50 @@ public class ViewProfil extends AppCompatActivity {
 
                             String listHobbiesItem [] = null;
 
+                            Object hobbie_item = 11;
+
                             listHobbiesItem = list_hobbies.split(split_key);
 
-                            Log.d(TAG, "lH =>  " + listHobbiesItem.length);
 
+                            for (int i = 0; i < listHobbiesItem.length; i++) {
+
+                                Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
+
+                                Log.d(TAG, "hobbie_item: " + hobbie_item);
+
+                                Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
+
+                                Log.d(TAG, "toto: " + HashmapHobbie.get(11));
+                            }
+
+                            tvHobbiesname.setText(HashmapHobbie.get(11));
+
+
+                          //  Log.d(TAG, "lH =>  " + listHobbiesItem.length);
+
+
+
+
+
+
+                            /****
                             String listHobbies ="";
 
+                            String item_hobbie ="";
+
                             for(int k = 0; k < listHobbiesItem.length; k++) {
-                             //   Log.d(TAG, "Hobbies: " + listHobbiesItem[k]);
 
+                                Log.d(TAG, "HASH: " + HashmapHobbie.get(1));
 
-                                listHobbies = listHobbies +listHobbiesItem[k]+"\n";
+                                Log.d(TAG, "Hobbies //////: " + listHobbiesItem[k]);
+
+                                listHobbies = listHobbies +HashmapHobbie.get(listHobbiesItem[k])+"\n";
+
+                              // item_hobbie =  item_hobbie + HashmapHobbie.get(listHobbiesItem[k]);
 
                                 tvHobbiesname.setText(listHobbies);
                             }
+                            ***/
 
 
 
@@ -441,9 +478,7 @@ public class ViewProfil extends AppCompatActivity {
 
         noteCollectionRef
                 .get()
-                .
-
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
