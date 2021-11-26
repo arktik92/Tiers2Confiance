@@ -92,14 +92,10 @@ public class ViewProfil extends AppCompatActivity {
         tvProfilName = findViewById(R.id.tvProfilName);
         tvProfilCity = findViewById(R.id.tvProfilCity);
         tvDescription = findViewById(R.id.tvDescription);
-
         tvHobbies = findViewById(R.id.tvHobbies);
-
         tvHobbiesname = findViewById(R.id.tvHobbiesName);
 
-
         /** Glide image **/
-
         ivProfil = findViewById(R.id.ivProfil);
         ivProfilAvatarShape = findViewById(R.id.ivProfilAvatarShape);
 
@@ -108,13 +104,10 @@ public class ViewProfil extends AppCompatActivity {
 
         // NoteRef
         noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
-
         // Add Data
         noteCollectionRef = db.collection(KEY_FS_COLLECTION);
 
-
         /**** End - BDD Connexion Firestore *****/
-
     }
 
 
@@ -129,12 +122,10 @@ public class ViewProfil extends AppCompatActivity {
             KEY_FS_USER_ID = bundle.getString("IdUser");
             Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
         }
-
         init();
         showProfil();
-      //  hobbies();
+        hobbies();
     }
-
 
     public void showProfil() {
 
@@ -146,14 +137,10 @@ public class ViewProfil extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             String name = documentSnapshot.getString(KEY_NAME);
                             String city = documentSnapshot.getString(KEY_CITY);
-
                             String imgurl = documentSnapshot.getString(KEY_IMG);
                             String imgUrl_avatar = documentSnapshot.getString(KEY_IMG_AVATAR);
-
                             String description = documentSnapshot.getString(KEY_DESCRIPTION);
-
                             String hobbies = documentSnapshot.getString(KEY_HOBBIES);
-
 
                             // Toast.makeText(View_Profil.this, imgUrl_avatar, Toast.LENGTH_LONG).show();
 
@@ -162,17 +149,12 @@ public class ViewProfil extends AppCompatActivity {
                             tvDescription.setText(description);
                             tvHobbies.setText(hobbies);
 
-
                             /** Glide - Add Picture **/
                             Context context = getApplicationContext();
-
-
                             RequestOptions options = new RequestOptions()
                                     .centerCrop()
                                     .error(R.mipmap.ic_launcher)
                                     .placeholder(R.mipmap.ic_launcher);
-
-
                             Glide
                                     .with(context)
                                     .load(imgurl)
@@ -182,8 +164,6 @@ public class ViewProfil extends AppCompatActivity {
 
 
                             /** Loading Avatar **/
-
-
                             Glide
                                     .with(context)
                                     .load(imgUrl_avatar)
@@ -193,10 +173,8 @@ public class ViewProfil extends AppCompatActivity {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
-
                         } else {
                             Toast.makeText(ViewProfil.this, "Any Document", Toast.LENGTH_SHORT).show();
-
                         }
                     }
                 })
@@ -205,36 +183,23 @@ public class ViewProfil extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(ViewProfil.this, e.toString(), Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
-
     }
-
 
     public void hobbies() {
 
         /****   Collection hobbies ******/
-
-
         itemArrayListHobbieDocument = new ArrayList<>();
         itemArrayListHobbieValues = new ArrayList<>();
 
         /** BDD, Connexion FIreStore ***/
-
-
         db = FirebaseFirestore.getInstance();
 
         // NoteRef
         noteRef = db.document(KEY_FS_USER_HOBBIE + "/" + KEY_FS_USER_ID); /**** Hobbies -> Jardinier ****/
-
-
-
         // Add Data
         noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
-
-
 
         /** get specific item into the collection **/
 
@@ -245,7 +210,6 @@ public class ViewProfil extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-
                         String split_key = ";";
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -253,15 +217,10 @@ public class ViewProfil extends AppCompatActivity {
                                 list_hobbies = document.getString("us_hobbies");
                                 Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
 
-
                                 String[] hobbies_list = list_hobbies.split(split_key);
                                 Log.d(TAG, "hobbies list length: "+ hobbies_list.length);
 
-
                                 /****/
-
-
-
     /*********/
 
     noteCollectionRef = db.collection("hobbies");
@@ -277,8 +236,8 @@ public class ViewProfil extends AppCompatActivity {
                             String list_hobbies_item = document.getString("ho_label");
                             Log.d(TAG, " List Hobbies Item => " + list_hobbies_item); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
 
-                        //    String list_hobbies_item_id = document.getString("ho_id");
-                          //  Log.d(TAG, " => Hobbies ID => " + list_hobbies_item_id); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                            //String list_hobbies_item_id = document.getString("ho_id");
+                            //Log.d(TAG, " => Hobbies ID => " + list_hobbies_item_id); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
                             ModelHobbies contenuHobbie = document.toObject(ModelHobbies.class);
 
                             String LlabelHobbie = contenuHobbie.ho_label;
@@ -291,12 +250,9 @@ public class ViewProfil extends AppCompatActivity {
 
                             HashmapHobbie.put(idHobbie, LlabelHobbie);
 
-
                             /**** TODo ****///
 
-
                             Log.d(TAG, HashmapHobbie.keySet() + " => HashMap: " + HashmapHobbie.get(idHobbie));
-
 
                             ModelUsers contenuUser = document.toObject(ModelUsers.class);
 
@@ -308,7 +264,6 @@ public class ViewProfil extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                                @Override
                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
 
                                                                    String split_key = ";";
                                                                    if (task.isSuccessful()) {
@@ -324,10 +279,7 @@ public class ViewProfil extends AppCompatActivity {
                                                                }
                                                            });
 
-
-
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-
 
                             String split_key =";";
 
@@ -337,27 +289,16 @@ public class ViewProfil extends AppCompatActivity {
 
                             listHobbiesItem = list_hobbies.split(split_key);
 
-
                             for (int i = 0; i < listHobbiesItem.length; i++) {
 
                                 Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
-
                                 Log.d(TAG, "hobbie_item: " + hobbie_item);
-
                                 Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
-
                                 Log.d(TAG, "toto: " + HashmapHobbie.get(11));
                             }
 
                             tvHobbiesname.setText(HashmapHobbie.get(11));
-
-
                           //  Log.d(TAG, "lH =>  " + listHobbiesItem.length);
-
-
-
-
-
 
                             /****
                             String listHobbies ="";
@@ -378,22 +319,12 @@ public class ViewProfil extends AppCompatActivity {
                             }
                             ***/
 
-
-
-
                             /****
 
 
                             final String split_key = ";";
-
-
                             String hobbieslist [] = list_hobbies.split(split_key);
-
-
-
                             for(int i = 0; i <= list_hobbies.length(); i++){
-
-
                                 Log.d(TAG, "Hobbies ID => " + hobbieslist[i]);
                                 // tvHobbiesname.setText(hobbies_list[i]);
                             }
@@ -401,12 +332,7 @@ public class ViewProfil extends AppCompatActivity {
 
                             ****/
 
-
-
-
                         }
-
-
 
                     } else {
 
@@ -415,37 +341,18 @@ public class ViewProfil extends AppCompatActivity {
                 }
             });
 
-
-
-
-
-
-
-
-
                                 /****
                                 for (int i = 0; i <= hobbies_list.length; i++) {
                                     Log.d(TAG, " Hobbie " + i + " => " + hobbies_list[i]); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
                                 }
-
-
                                  ****/
 
-
                             }
-
-
-
-
-
                         } else {
-
                             Log.d(TAG, "Task onComplete Failure !!!");
                         }
                     }
                 });
-
-
 
 /**
 
@@ -463,16 +370,9 @@ public class ViewProfil extends AppCompatActivity {
  }
  **/
 
-
-
-
-
-
         /** End **/
 
-
         noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
-
 
         /*** get all the collection ***/
 
@@ -486,24 +386,16 @@ public class ViewProfil extends AppCompatActivity {
 
 
                                         Log.d(TAG, document.getId() + " => " + document.getData()); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-
-
                                         Log.d(TAG, " Adding getID => " + document.getId()); // Ie19kQdquBcoGypUpyWS
-
 
                                         itemArrayListHobbieDocument.add(document.getId());
 
                                         Log.d(TAG, " Adding getData => " + document.getData());
                                         itemArrayListHobbieValues.add(String.valueOf(document.getData()));
 
-
                                         String Value = document.getString("ho_label"); // Jardinier
                                         Log.d(TAG, " Value getString => " + Value);
-
-
                                         Log.d(TAG, " Total Data => " + itemArrayListHobbieDocument.size());
-
-
                                         Log.d(TAG, "******** LIST Document ID *********\n");
 
                                         for (String item : itemArrayListHobbieDocument) {
@@ -514,31 +406,21 @@ public class ViewProfil extends AppCompatActivity {
 
                                             /**** Indexof ***/
                                             Log.d(TAG, " Document " + item + " => " + position);
-
                                             Log.d(TAG, " Data [" + item + "] => " + itemArrayListHobbieValues.get(position));
-
                                             Log.d(TAG, " Document " + item + " ! " + itemArrayListHobbieValues.get(position)); //lastIndexOf("ho_label")); //toString("no_label")); ---> false/true  contains("ho_label")
-
 
                                             String Value2 = document.getString("ho_label");
 
                                             Log.d(TAG, " Value " + Value2); //lastIndexOf("ho_label")); //toString("no_label")); ---> false/true  contains("ho_label")
-
-
                                             tvHobbiesname.setText(Value2);
-
                                         }
-
 
                                         // String Document_id ="Ie19kQdquBcoGypUpyWS"; //8r84uynmKS7rorCaFOJJ
 
-
                                         /****/
-
 
                                         /*****/
                                     }
-
 
                                 } else {
                                     Log.d(TAG, "Error gettings document:", task.getException());
@@ -549,13 +431,10 @@ public class ViewProfil extends AppCompatActivity {
 
         Log.i(TAG, "size =>" + itemArrayListHobbieDocument.size());
 
-
         /**** End - BDD Connexion Firestore *****/
 
         noteRef.get()
-                .
-
-                        addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
@@ -602,19 +481,14 @@ public class ViewProfil extends AppCompatActivity {
 
                                 } else {
                                     Toast.makeText(ViewProfil.this, "Any Hobbies Document", Toast.LENGTH_SHORT).show();
-
                                 }
-
                             }
                         })
-                .
-
-                        addOnFailureListener(new OnFailureListener() {
+                .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
 
                             }
                         });
     }
-
 }
