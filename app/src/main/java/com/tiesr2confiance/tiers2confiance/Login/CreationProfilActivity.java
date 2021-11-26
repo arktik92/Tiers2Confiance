@@ -38,7 +38,7 @@ public class CreationProfilActivity extends AppCompatActivity {
     /** Variables globales **/
     private static final String TAG = "CreationProfilActivity";
     private EditText etLastName, etFistName, etNickName, etDateOfBirth, etZipCode, etCity;
-    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather;
+    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather, image;
     private long role;
     private RadioGroup rgRadioGroup;
     private RadioButton rbHomme, rbFemme;
@@ -101,6 +101,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         nephews = "";
         godfatherRequestTo = "";
         godfatherRequestFrom= "";
+        image = "";
         godfather = "";
         currentDate = Timestamp.now();
         if(registeredDate == null) {
@@ -124,6 +125,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_nephews_request_from",nephewsRequestfrom);
         userList.put("us_godfather_request_to",godfatherRequestTo);
         userList.put("us_godfather_request_from", godfatherRequestFrom);
+        userList.put("us_img",image);
         userList.put("us_nephews", nephews);
         userList.put("us_godfather", godfather);
         userList.put("us_role", role);

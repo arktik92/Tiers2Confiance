@@ -99,6 +99,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
+        Log.e(TAG, "onBindViewHolder: " + "PAGE REGENEERE" );
         holder.btn_request.setText("TEST");
 
         // Récupération de l'utilisateur connecté
@@ -151,8 +152,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                                     userPosition.update("us_godfather_request_from", us_godfather_request_from + userConnected.getId()+  ";");
                                     Log.e(TAG, "Demande à un célibataire envoyé");
                                 }
-                                holder.btn_request.setText("Demande envoyée");
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -161,7 +160,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                                 Log.e(TAG, "erreur" + currentUser.getUid());
                             }
                         });
-
+                holder.btn_request.setText("Demande envoyée");
             }
         });
     }
