@@ -68,12 +68,12 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                 ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                 assert contenuUser != null;
                 usRole = contenuUser.getUs_role();
                 usGodfatherRequestTo = contenuUser.getUs_godfather_request_to();
                 usNephewsRequestTo = contenuUser.getUs_nephews_request_to();
-
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestTo.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestTo.split(";")));
 
@@ -101,8 +101,8 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
-                .whereEqualTo("us_role", roleInverse)
-                .whereNotIn("us_auth_uid", critere);
+                .whereEqualTo("us_role", roleInverse);
+                //.whereNotIn("us_auth_uid", critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)

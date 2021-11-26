@@ -85,10 +85,10 @@ public class PendingRequestsActivity extends AppCompatActivity {
 
                 if (usRole.equals(1L)) {
                     roleInverse = 2;
-                    critere = NephewSepareted;
+                    critere = GodfatherSepareted;
                 } else {
                     roleInverse = 1;
-                    critere = GodfatherSepareted;
+                    critere = NephewSepareted;
                 }
 
                 /** Récupération de la collection Users dans Firestore **/

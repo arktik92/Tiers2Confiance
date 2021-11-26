@@ -109,17 +109,23 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                                 // Si l'utilisateur connecté est un célibataire, il accepte la demande d'un parrain
                                 if (contenuUser.getUs_role() == 1) {
                                     userConnected.update("us_godfather", userPosition.getId() );
-                                    userConnected.update("us_nephews_request_from", "");
+                                    userConnected.update("us_godfather_request_from", ""); // Replace
+
                                     userPosition.update("us_nephews",   us_nephews + userConnected.getId()+  ";");
-                                    Log.e(TAG, "Demande du parrain acceptée par le célibataire");
+                                    userPosition.update("us_nephews_request_to", "" ); // Replace
+                                    Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
+//                                    Log.e(TAG, "Demande du parrain acceptée par le célibataire");
                                 }
 
                                 // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
                                 if (contenuUser.getUs_role() == 2) {
                                     userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userPosition.getId()+  ";");
-                                    userConnected.update("us_godfather_request_to", "" );
-                                    userPosition.update("us_godfather_request_from", userConnected.getId());
-                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
+                                    userConnected.update("us_nephews_request_from", "" );// Replace
+
+                                    userPosition.update("us_godfather", userConnected.getId() );
+                                    userPosition.update("us_godfather_request_to", "");
+                                    Log.i(TAG, "LOGPGO Demande du célibataire acceptée par le parrain");
+//                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
                                 }
                                 holder.btn_request_request.setText("Demande acceptée");
                             }
