@@ -45,7 +45,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
-    private Long usRole = 2L;
+    private Long usRole;
     private String usGodfatherRequestTo = "";
     private String usNephewsRequestTo = "";
 
@@ -149,7 +149,6 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             @Override
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
-
 
                 Intent intent = new Intent(LierParrainFilleulActivity.this, ViewProfil.class);
                 intent.putExtra("IdUser", snapshot.getId());

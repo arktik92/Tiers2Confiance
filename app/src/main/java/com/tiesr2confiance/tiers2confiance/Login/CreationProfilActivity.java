@@ -109,13 +109,8 @@ public class CreationProfilActivity extends AppCompatActivity {
             registeredDate = registeredDate;
         }
 
-
-
-
-
-
         Map<String, Object> userList = new HashMap<>();
-        userList.put("us_auth_id", userId);
+        userList.put("us_auth_uid", userId);
         userList.put("us_email", userEmail);
         userList.put("us_birth_date", dateOfBirth);
         userList.put("us_city", city);
@@ -124,7 +119,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_postal_code", Long.parseLong(zipCode));
         userList.put("us_nickname", nickName);
         userList.put("us_registered_date", registeredDate);
-        userList.put("us_last_connection_date", currentDate);
+        userList.put("us_last_connexion_date", currentDate);
         userList.put("us_nephews_request_to",nephewsRequestTo);
         userList.put("us_nephews_request_from",nephewsRequestfrom);
         userList.put("us_godfather_request_to",godfatherRequestTo);

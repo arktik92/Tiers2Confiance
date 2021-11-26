@@ -99,6 +99,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
+        holder.btn_request.setText("TEST");
 
         // Récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -151,6 +152,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                                     Log.e(TAG, "Demande à un célibataire envoyé");
                                 }
                                 holder.btn_request.setText("Demande envoyée");
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
