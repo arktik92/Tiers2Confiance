@@ -1,8 +1,10 @@
 package com.tiesr2confiance.tiers2confiance.Login;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,14 +15,21 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.type.DateTime;
 import com.tiesr2confiance.tiers2confiance.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +38,13 @@ public class CreationProfilActivity extends AppCompatActivity {
     /** Variables globales **/
     private static final String TAG = "CreationProfilActivity";
     private EditText etLastName, etFistName, etNickName, etDateOfBirth, etZipCode, etCity;
-    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail,timeStamp,currentTime;
+    private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather;
+    private long role;
     private RadioGroup rgRadioGroup;
     private RadioButton rbHomme, rbFemme;
+    private Timestamp currentDate, registeredDate;
+
+
 
     /** Variable Firebase Auth **/
     FirebaseUser user;
@@ -52,6 +65,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
 
+        role = 1;
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
@@ -66,9 +80,15 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     init();
 
+
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void creationUser(View view) {
+
+
+
         userEmail = user.getEmail();
         dateOfBirth = etDateOfBirth.getText().toString().trim();
         city = etCity.getText().toString().trim();
@@ -76,12 +96,23 @@ public class CreationProfilActivity extends AppCompatActivity {
         lastName = etLastName.getText().toString().trim();
         nickName = etNickName.getText().toString().trim();
         zipCode = etZipCode.getText().toString();
-        currentTime = new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
-        if(timeStamp == null) {
-            timeStamp = new SimpleDateFormat("dd/MM/yyyy_HH:mm").format(Calendar.getInstance().getTime());
+        nephewsRequestTo = "";
+        nephewsRequestfrom = "";
+        nephews = "";
+        godfatherRequestTo = "";
+        godfatherRequestFrom= "";
+        godfather = "";
+        currentDate = Timestamp.now();
+        if(registeredDate == null) {
+            registeredDate = Timestamp.now();
         } else {
-            timeStamp = timeStamp;
+            registeredDate = registeredDate;
         }
+
+
+
+
+
 
         Map<String, Object> userList = new HashMap<>();
         userList.put("us_auth_id", userId);
@@ -90,11 +121,17 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_city", city);
         userList.put("us_first_name", firstName);
         userList.put("us_last_name", lastName);
-        userList.put("us_postal_code", zipCode);
+        userList.put("us_postal_code", Long.parseLong(zipCode));
         userList.put("us_nickname", nickName);
-        userList.put("us_registered_date", timeStamp);
-        userList.put("us_last_connection_date", currentTime);
-
+        userList.put("us_registered_date", registeredDate);
+        userList.put("us_last_connection_date", currentDate);
+        userList.put("us_nephews_request_to",nephewsRequestTo);
+        userList.put("us_nephews_request_from",nephewsRequestfrom);
+        userList.put("us_godfather_request_to",godfatherRequestTo);
+        userList.put("us_godfather_request_from", godfatherRequestFrom);
+        userList.put("us_nephews", nephews);
+        userList.put("us_godfather", godfather);
+        userList.put("us_role", role);
         docRef.set(userList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
