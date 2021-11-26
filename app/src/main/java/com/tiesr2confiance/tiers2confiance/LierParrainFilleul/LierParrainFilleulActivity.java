@@ -150,10 +150,9 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
 
+
                 Intent intent = new Intent(LierParrainFilleulActivity.this, ViewProfil.class);
                 intent.putExtra("IdUser", snapshot.getId());
-
-                Log.e(TAG, "showProfil: " + snapshot.getId());
                 startActivity(intent);
             }
         });

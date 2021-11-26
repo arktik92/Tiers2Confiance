@@ -123,20 +123,20 @@ public class ViewProfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profil);
 
-        init();
-        showProfil();
-        hobbies();
-    }
-
-
-    public void showProfil() {
-
         Bundle bundle = getIntent().getExtras();
 
         if(bundle.getString("IdUser") != null) {
             KEY_FS_USER_ID = bundle.getString("IdUser");
             Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
         }
+
+        init();
+        showProfil();
+      //  hobbies();
+    }
+
+
+    public void showProfil() {
 
         noteRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
