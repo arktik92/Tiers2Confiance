@@ -16,12 +16,7 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <FrameLayout
-            layout="@layout/custom_picker"
-            android:id="@+id/picker"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+
 
         <EditText
             android:id="@+id/et_creation_nom"
@@ -95,16 +90,14 @@
             </LinearLayout>
         </RadioGroup>
 
-        <Button
+        <TextView
             android:id="@+id/tv_date_of_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:hint="Date de naissance >"
             android:minHeight="48dp"
-            android:onClick="onClickEtDateOfBirth"
-            android:text="Date de naissance >"
-            android:textSize="20sp"
-            android:focusable="true" />
+            android:textSize="20sp" />
 
 
         <EditText
