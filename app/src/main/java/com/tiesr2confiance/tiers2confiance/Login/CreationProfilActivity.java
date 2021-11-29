@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ColorStateListDrawable;
 import android.os.Build;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.Color;
 import com.google.type.DateTime;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.text.DateFormat;
@@ -133,7 +135,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void creationUser(View view) {
-        userEmail = user.getEmail();
+        userEmail = user.getEmail().trim();
         city = etCity.getText().toString().trim();
         firstName = etFistName.getText().toString().trim();
         lastName = etLastName.getText().toString().trim();
@@ -178,6 +180,7 @@ public class CreationProfilActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
+                        startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -187,5 +190,6 @@ public class CreationProfilActivity extends AppCompatActivity {
                         Log.e(TAG, "onFailure: ", e );
                     }
                 });
+
     }
 }
