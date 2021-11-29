@@ -2,10 +2,14 @@ package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,12 +23,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentPendingRequestsBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class PendingRequestsActivity extends AppCompatActivity {
+
+public class PendingRequestsFragment extends Fragment {
 
 
     /* Décalaration des variables */
@@ -42,7 +48,9 @@ public class PendingRequestsActivity extends AppCompatActivity {
     public int roleInverse;
     ArrayList<String> critere = new ArrayList<>();
 
+    private FragmentPendingRequestsBinding binding;
 
+    /**
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +58,31 @@ public class PendingRequestsActivity extends AppCompatActivity {
         init();
         getDataFromFirestore();
     }
+     **/
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_pending_requests, container, false);
+        init(view);
+        getDataFromFirestore(view);
+        binding = FragmentPendingRequestsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
 
     /** Initialisation des composants  **/
-    public void init() {
-        recyclerView = findViewById(R.id.rvResultatDemand);
+    public void init(View view) {
+        recyclerView = view.findViewById(R.id.rvResultatDemand);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        setTitle(getString(R.string.accepter_demande));
+       // setTitle(getString(R.string.accepter_demande));
     }
 
     /** Récupération de la liste des demandes  **/
-    private void getDataFromFirestore() {
+    private void getDataFromFirestore(View view) {
 
         // ici on determine le rôle de l'utilisateur connecté et on stock le rôle dans la variable usRole
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Compte"
+        android:id="@+id/nav_fragment_1"
+        android:icon="@drawable/ic_menu_04_24">
+    </item>
+
+
+    <item android:title="Chat"
+        android:id="@+id/nav_fragment_8"
+        android:icon="@drawable/ic_menu_04_24">
+    </item>
+
+
+    <group android:checkableBehavior="single">
+        <item android:title="Déconnexion"
+            android:id="@+id/nav_fragment_7"
+            android:icon="@drawable/ic_menu_01_24"/>
+    </group>
+
+    <item android:title="Mon filleul">
+        <menu>
+            <item android:title="Voir"
+                android:id="@+id/nav_fragment_2"
+                android:icon="@drawable/ic_menu_04_24"/>
+            <item android:title="Créditer"
+                android:id="@+id/nav_fragment_3"
+                android:icon="@drawable/ic_menu_05_24"/>
+            <item android:title="Chercher"
+                android:id="@+id/nav_fragment_4"
+                android:icon="@drawable/ic_menu_05_24"/>
+            <item android:title="Demande en attente"
+                android:id="@+id/nav_fragment_5"
+                android:icon="@drawable/ic_menu_05_24"/>
+        </menu>
+    </item>
+
+</menu>

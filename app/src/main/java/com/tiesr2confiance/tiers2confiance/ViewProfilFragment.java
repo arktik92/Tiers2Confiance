@@ -1,12 +1,15 @@
 package com.tiesr2confiance.tiers2confiance;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,20 +30,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Objects;
 
-public class ViewProfil extends AppCompatActivity {
+public class ViewProfilFragment extends Fragment {
 
 
     /***  Global Variables  ***/
 
     private static final String TAG = "View Profile";
-
 
     private static final String KEY_NAME = "us_first_name";
     private static final String KEY_CITY = "us_city";
@@ -87,44 +88,48 @@ public class ViewProfil extends AppCompatActivity {
     String list_hobbies;
     String hobbies_list[];
 
-    public void init() {
+    private FragmentViewProfilBinding binding;
 
-        tvProfilName = findViewById(R.id.tvProfilName);
-        tvProfilCity = findViewById(R.id.tvProfilCity);
-        tvDescription = findViewById(R.id.tvDescription);
-        tvHobbies = findViewById(R.id.tvHobbies);
-        tvHobbiesname = findViewById(R.id.tvHobbiesName);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
+        KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
+        init(view);
+
+      //  Bundle bundle = getIntent().getExtras();
+      //  if(bundle.getString("IdUser") != null) {
+      //      KEY_FS_USER_ID = bundle.getString("IdUser");
+      //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
+      //  }
+
+        showProfil();
+        hobbies();
+        binding = FragmentViewProfilBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+
+    public void init(View view) {
+
+        tvProfilName = view.findViewById(R.id.tvProfilName);
+        tvProfilCity = view.findViewById(R.id.tvProfilCity);
+        tvDescription = view.findViewById(R.id.tvDescription);
+        tvHobbies = view.findViewById(R.id.tvHobbies);
+        tvHobbiesname = view.findViewById(R.id.tvHobbiesName);
 
         /** Glide image **/
-        ivProfil = findViewById(R.id.ivProfil);
-        ivProfilAvatarShape = findViewById(R.id.ivProfilAvatarShape);
+        ivProfil = view.findViewById(R.id.ivProfil);
+        ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
         /** BDD, Connexion FIreStore ***/
         db = FirebaseFirestore.getInstance();
 
         // NoteRef
         noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
-        // Add Data
         noteCollectionRef = db.collection(KEY_FS_COLLECTION);
 
         /**** End - BDD Connexion Firestore *****/
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profil);
-
-        Bundle bundle = getIntent().getExtras();
-
-        if(bundle.getString("IdUser") != null) {
-            KEY_FS_USER_ID = bundle.getString("IdUser");
-            Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
-        }
-        init();
-        showProfil();
-        hobbies();
     }
 
     public void showProfil() {
@@ -133,7 +138,6 @@ public class ViewProfil extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-
                         if (documentSnapshot.exists()) {
                             String name = documentSnapshot.getString(KEY_NAME);
                             String city = documentSnapshot.getString(KEY_CITY);
@@ -150,7 +154,7 @@ public class ViewProfil extends AppCompatActivity {
                             tvHobbies.setText(hobbies);
 
                             /** Glide - Add Picture **/
-                            Context context = getApplicationContext();
+                            Context context = getContext();
                             RequestOptions options = new RequestOptions()
                                     .centerCrop()
                                     .error(R.mipmap.ic_launcher)
@@ -174,7 +178,7 @@ public class ViewProfil extends AppCompatActivity {
                                     .into(ivProfilAvatarShape);
 
                         } else {
-                            Toast.makeText(ViewProfil.this, "Any Document", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -182,7 +186,7 @@ public class ViewProfil extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ViewProfil.this, e.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -480,7 +484,7 @@ public class ViewProfil extends AppCompatActivity {
                                     //recyclerViewHobbies.setAdapter(adapterHobbieItem);
 
                                 } else {
-                                    Toast.makeText(ViewProfil.this, "Any Hobbies Document", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Any Hobbies Document", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })

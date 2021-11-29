@@ -1,13 +1,16 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SearchView;
 
 
@@ -24,14 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
-import com.tiesr2confiance.tiers2confiance.ViewProfil;
+import com.tiesr2confiance.tiers2confiance.ViewProfilFragment;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentLierParrainFilleulBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
-public class LierParrainFilleulActivity extends AppCompatActivity {
+public class LierParrainFilleulFragment extends Fragment {
 
     /** Variables globales **/
     private static final String TAG = "Lier Parrain Filleul :";
@@ -49,15 +52,37 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
     private String usGodfatherRequestTo = "";
     private String usNephewsRequestTo = "";
 
+    private FragmentLierParrainFilleulBinding binding;
+
+
+    // ****************************************** CYCLE DE VIE ***********************************************
+  //  @Override
+  //  protected void onCreate(Bundle savedInstanceState) {
+  //      super.onCreate(savedInstanceState);
+  //      setContentView(R.layout.activity_lier_parrain_filleul);
+  //      init();
+  //      getDataFromFirestore();
+  //  }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_lier_parrain_filleul, container, false);
+        init(view);
+        getDataFromFirestore(view);
+        binding = FragmentLierParrainFilleulBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
-    public void init() {
-        recyclerView = findViewById(R.id.rvResultat);
+    public void init(View view) {
+        recyclerView = view.findViewById(R.id.rvResultat);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     /** Récupération de la liste d'utilisateurs depuis la Firestore **/
-    private void getDataFromFirestore() {
+    private void getDataFromFirestore(View view) {
 
         // ici on determine le rôle de l'utilisateur connecté et on stock le rôle dans la variable usRole
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -78,25 +103,25 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestTo.split(";")));
 
                 // Appel la fonction qui affiche la liste
-                displayList(usRole, NephewSepareted, GodfatherSepareted );
+                displayList(usRole, NephewSepareted, GodfatherSepareted, view );
                 adapterUser.startListening();
             }
         });
     }
 
-    public void displayList(Long role, ArrayList<String> NephewsList, ArrayList<String> GodfatherList ){
+    public void displayList(Long role, ArrayList<String> NephewsList, ArrayList<String> GodfatherList, View view ){
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
         critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;
-            setTitle(getString(R.string.Lier_pf_titre_filleul));
+           // setTitle(getString(R.string.Lier_pf_titre_filleul));
             critere = GodfatherList;
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
             roleInverse = 1;
-            setTitle(getString(R.string.Lier_pf_titre_parrain));
+           // setTitle(getString(R.string.Lier_pf_titre_parrain));
             critere = NephewsList;
        }
         /** Récupération de la collection Users dans Firestore **/
@@ -114,7 +139,7 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapterUser);
 
         // Liaison des variables svTextSearch et lvResultat avec les éléments du graphique
-        svTextSearch = findViewById(R.id.svTextSearch);
+        svTextSearch = view.findViewById(R.id.svTextSearch);
 
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -150,19 +175,11 @@ public class LierParrainFilleulActivity extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
 
-                Intent intent = new Intent(LierParrainFilleulActivity.this, ViewProfil.class);
+                Intent intent = new Intent(getContext(), ViewProfilFragment.class);
                 intent.putExtra("IdUser", snapshot.getId());
                 startActivity(intent);
             }
         });
     }
 
-    // ****************************************** CYCLE DE VIE ***********************************************
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lier_parrain_filleul);
-        init();
-        getDataFromFirestore();
-    }
 }

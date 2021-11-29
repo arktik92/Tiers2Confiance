@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profil"
+            android:icon="@drawable/ic_menu_04_24"
+            android:title="Moi (pseudo)" />
+    </group>
+
+    <group android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:title="Propositions reçues"
+            android:id="@+id/nav_fragment_7"
+            android:icon="@drawable/ic_menu_05_24" />
+    </group>
+
+    <group android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:title="Chat"
+            android:id="@+id/nav_fragment_12"
+            android:icon="@drawable/ic_menu_05_24" />
+    </group>
+
+
+    <item android:title="Mon parrain">
+        <menu>
+            <item android:title="Voir"
+                android:id="@+id/nav_view_profil"
+                android:icon="@drawable/ic_menu_04_24"/>
+            <item android:title="Chercher"
+                android:id="@+id/nav_search_profil_PF"
+                android:icon="@drawable/ic_menu_05_24"/>
+            <item android:title="Demandes en attente"
+                android:id="@+id/nav_pending_request"
+                android:icon="@drawable/ic_menu_05_24"/>
+        </menu>
+    </item>
+
+
+    <group android:id="@+id/group5"
+        android:checkableBehavior="single">
+        <item
+            android:title="Déconnexion"
+            android:id="@+id/nav_fragment_9"
+            android:icon="@drawable/ic_menu_01_24" />
+    </group>
+
+
+</menu>
