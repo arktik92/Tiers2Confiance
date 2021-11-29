@@ -36,7 +36,7 @@ public class SignInActivity extends AppCompatActivity {
 
     /** Variables Globales **/
     private static final String TAG = "Main Activity";
-    private TextInputEditText etPseudo, etEmail, etPassword, etConfirmPassword;
+    private TextInputEditText etEmail, etPassword, etConfirmPassword;
     private String pseudo, email, password, confirmPassword;
 
     /** Variable Firebase **/
@@ -44,7 +44,6 @@ public class SignInActivity extends AppCompatActivity {
 
     /** Initialisation des composants **/
     public void init() {
-        etPseudo = findViewById(R.id.etPseudo);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
@@ -58,19 +57,18 @@ public class SignInActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_sign_in);
         init();
+
     }
 
     public void btnSignupClick(android.view.View view) {
-        pseudo = etPseudo.getText().toString().trim();
         email = etEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
         confirmPassword = etConfirmPassword.getText().toString().trim();
 
         // Les vérifications
         // Si les cases sont vides
-        if (pseudo.equals("")) {
-            etPseudo.setError("Enter pseudo");
-        } else if (email.equals("")) {
+
+        if (email.equals("")) {
             etEmail.setError("Enter Email");
         } else if (password.equals("")) {
             etPassword.setError("Enter password");
@@ -79,7 +77,7 @@ public class SignInActivity extends AppCompatActivity {
         }
         // Les patterns pour vérifier si il s'agit bien d'un email
         else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etPseudo.setError("enter correct email");
+            etEmail.setError("enter correct email");
         }
         // Vérification password identique
         else if (!password.equals(confirmPassword)) {
@@ -113,6 +111,7 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this, NoInternetActivity.class));
             }
         }
+
     }
 
 
