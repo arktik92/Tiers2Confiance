@@ -8,9 +8,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,11 +40,13 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     /** Variables globales **/
     private static final String TAG = "CreationProfilActivity";
-    private EditText etLastName, etFistName, etNickName, etDateOfBirth, etZipCode, etCity;
+    private EditText etLastName, etFistName, etNickName, etZipCode, etCity;
+    private TextView tvDateOfBirth;
     private String lastName,firstName,nickName, dateOfBirth,zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather, image;
     private long role;
     private RadioGroup rgRadioGroup;
     private RadioButton rbHomme, rbFemme;
+    private FrameLayout datePicker;
     private Timestamp currentDate, registeredDate;
 
 
@@ -58,12 +63,13 @@ public class CreationProfilActivity extends AppCompatActivity {
         etLastName = findViewById(R.id.et_creation_nom);
         etFistName = findViewById(R.id.et_creation_prenom);
         etNickName = findViewById(R.id.et_creation_pseudo);
-        etDateOfBirth = findViewById(R.id.et_creation_date_de_naissance);
+        tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
         etZipCode = findViewById(R.id.et_creation_code_postal);
         etCity = findViewById(R.id.et_creation_ville);
         rgRadioGroup =findViewById(R.id.rg_radio_group);
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
+        datePicker = findViewById(R.id.picker);
 
         role = 1;
 
@@ -71,6 +77,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userId = user.getUid();
         db = FirebaseFirestore.getInstance();
         docRef = db.document("users/"+ userId);
+
     }
 
     @Override
@@ -90,7 +97,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
         userEmail = user.getEmail();
-        dateOfBirth = etDateOfBirth.getText().toString().trim();
+        //dateOfBirth = etDateOfBirth.getText().toString().trim();
         city = etCity.getText().toString().trim();
         firstName = etFistName.getText().toString().trim();
         lastName = etLastName.getText().toString().trim();
@@ -145,5 +152,9 @@ public class CreationProfilActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+    /** Methode onClick datePicker **/
+    public void onClickEtDateOfBirth(View view) {
+        datePicker.setVisibility(View.VISIBLE);
     }
 }

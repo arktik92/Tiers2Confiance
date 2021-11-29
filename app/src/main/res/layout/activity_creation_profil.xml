@@ -16,6 +16,13 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
+        <FrameLayout
+            layout="@layout/custom_picker"
+            android:id="@+id/picker"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
         <EditText
             android:id="@+id/et_creation_nom"
             android:layout_width="match_parent"
@@ -46,29 +53,18 @@
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
-        <EditText
-            android:id="@+id/et_creation_date_de_naissance"
+        <TextView
+            android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="Date de naissance"
-            android:inputType="date"
-            android:minHeight="48dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:text="Sexe :" />
 
         <RadioGroup
             android:id="@+id/rg_radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="Sexe :" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,6 +94,18 @@
                     android:text="Femme" />
             </LinearLayout>
         </RadioGroup>
+
+        <Button
+            android:id="@+id/tv_date_of_birth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:minHeight="48dp"
+            android:onClick="onClickEtDateOfBirth"
+            android:text="Date de naissance >"
+            android:textSize="20sp"
+            android:focusable="true" />
+
 
         <EditText
             android:id="@+id/et_creation_code_postal"
