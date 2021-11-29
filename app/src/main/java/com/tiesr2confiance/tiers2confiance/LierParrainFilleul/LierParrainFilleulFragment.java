@@ -38,11 +38,13 @@ public class LierParrainFilleulFragment extends Fragment {
 
     /** Variables globales **/
     private static final String TAG = "Lier Parrain Filleul :";
-    SearchView svTextSearch;
+
+
     public int roleInverse;
     ArrayList<String> critere = new ArrayList<>();
 
-    private RecyclerView recyclerView;
+    private SearchView svTextSearch;
+    private RecyclerView rvResultat;
     private LierParrainFilleulAdapter adapterUser;
 
     /** Var Firebase **/
@@ -53,7 +55,6 @@ public class LierParrainFilleulFragment extends Fragment {
     private String usNephewsRequestTo = "";
 
     private FragmentLierParrainFilleulBinding binding;
-
 
     // ****************************************** CYCLE DE VIE ***********************************************
   //  @Override
@@ -76,9 +77,9 @@ public class LierParrainFilleulFragment extends Fragment {
 
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
     public void init(View view) {
-        recyclerView = view.findViewById(R.id.rvResultat);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvResultat = view.findViewById(R.id.rvResultat);
+        rvResultat.setHasFixedSize(true);
+        rvResultat.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     /** Récupération de la liste d'utilisateurs depuis la Firestore **/
@@ -136,7 +137,7 @@ public class LierParrainFilleulFragment extends Fragment {
         Log.e(TAG, "Ca passe avec " + query.toString());
 
         adapterUser = new LierParrainFilleulAdapter(users);
-        recyclerView.setAdapter(adapterUser);
+        rvResultat.setAdapter(adapterUser);
 
         // Liaison des variables svTextSearch et lvResultat avec les éléments du graphique
         svTextSearch = view.findViewById(R.id.svTextSearch);
@@ -164,7 +165,7 @@ public class LierParrainFilleulFragment extends Fragment {
                                 .build();
 
                 adapterUser = new LierParrainFilleulAdapter(users);
-                recyclerView.setAdapter(adapterUser);
+                rvResultat.setAdapter(adapterUser);
                 adapterUser.startListening();
                 return false;
             }

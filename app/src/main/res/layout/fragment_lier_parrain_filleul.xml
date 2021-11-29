@@ -32,7 +32,9 @@
         android:divider="#ad5"
         android:dividerHeight="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svTextSearch"
-        tools:layout_editor_absoluteX="4dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svTextSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
