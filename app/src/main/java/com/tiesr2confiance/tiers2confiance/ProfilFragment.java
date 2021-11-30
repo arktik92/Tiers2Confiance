@@ -38,9 +38,7 @@ public class ProfilFragment extends Fragment {
     private DocumentReference noteRef;
     /*** Collection reference ***/
     private CollectionReference noteCollectionRef;
-
     private FragmentProfilBinding binding;
-
 
     /*** end - BDD ***/
 
