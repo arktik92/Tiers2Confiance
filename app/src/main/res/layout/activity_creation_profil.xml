@@ -142,7 +142,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="4dp"
             android:background="@drawable/shape_btn"
-            android:backgroundTint="@color/button"
+
             android:onClick="creationUser"
             android:text="creer profil" />
 

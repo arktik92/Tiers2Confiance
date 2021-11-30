@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="colorPrimary">#DC143C</color>
     <color name="colorOnPrimary">#FEFEFE</color>
     <color name="colorPrimaryVariant">#CECECE</color>
@@ -12,4 +12,5 @@
     <color name="cardView">#CECECE</color>
     <color name="buttonPressed">#BB0B0B</color>
     <color name="colorSecondary">#0288D1</color>
+
 </resources>

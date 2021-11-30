@@ -16,8 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
+import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
 import com.tiesr2confiance.tiers2confiance.ProfilFragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     /**
      * Variables globales
      **/
+
+    //********************************* FIREBASE AUTH
+    private FirebaseAuth firebaseAuth;
 
     // ******************************** MENU
     Toolbar toolbar;
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
      * Faire le lien entre les widgets et le design
      **/
     public void initUI() {
+        firebaseAuth = FirebaseAuth.getInstance();
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
@@ -98,6 +104,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         fragmentTransaction.add(R.id.fragment_container, fragment_01);
         // Finalisation de la création du fragment
         fragmentTransaction.commit();
+
+
 
 //        getSupportFragmentManager().
 //                beginTransaction().
@@ -152,7 +160,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
-
+            case R.id.nav_deconnexion_celib:
+                firebaseAuth.signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);
