@@ -93,4 +93,24 @@
     <string name="Silhouette_petites_rondeurs_text">Some extra pounds</string>
     <string name="Silhouette_rondeurs_text">Not that fat</string>
     <string name="accepter_demande">Accepter une demande</string>
+    <string name="ho_artisanat_text">A</string>
+    <string name="ho_balades_text">B</string>
+    <string name="ho_boites_text">C</string>
+    <string name="ho_cafe_text">D</string>
+    <string name="ho_charites_text">E</string>
+    <string name="ho_clubs_text">F</string>
+    <string name="ho_cuisiner_text">G</string>
+    <string name="ho_déguster_text">H</string>
+    <string name="ho_fairerencontres_text">I</string>
+    <string name="ho_films_text">J</string>
+    <string name="ho_jardiner_text">K</string>
+    <string name="ho_jeuxcartes_text">L</string>
+    <string name="ho_jeuxvideos_text">M</string>
+    <string name="ho_medepenser_text">N</string>
+    <string name="ho_musique_text">O</string>
+    <string name="ho_musees_text">P</string>
+    <string name="ho_pecher_text">Q</string>
+    <string name="ho_regarder_text">R</string>
+    <string name="ho_religion_text">S</string>
+    <string name="ho_restaurant_text">T</string>
 </resources>
