@@ -241,7 +241,7 @@ public class ViewProfil extends AppCompatActivity {
                             ModelHobbies contenuHobbie = document.toObject(ModelHobbies.class);
 
                             String LlabelHobbie = contenuHobbie.ho_label;
-                            Long idHobbie = contenuHobbie.ho_id;
+                            long idHobbie = contenuHobbie.ho_id;
 
                            // Long list_hobbies_item_id = Long.valueOf(Objects.requireNonNull(document.getString("ho_id")));
                            // Log.d(TAG, "list_hobbies_item_id:"+list_hobbies_item_id);

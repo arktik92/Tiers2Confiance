@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulActivity;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsActivity;
+import com.tiesr2confiance.tiers2confiance.User.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchPendingRequestsActivity(View v){
         Intent intent = new Intent(MainActivity.this, PendingRequestsActivity.class);
+//        intent.putExtra("IdUser", snapshot.getId());
+        startActivity(intent);
+
+
+    }
+
+    public void launchUserActivity(View v){
+        Intent intent = new Intent(MainActivity.this, UserActivity.class);
 //        intent.putExtra("IdUser", snapshot.getId());
         startActivity(intent);
 

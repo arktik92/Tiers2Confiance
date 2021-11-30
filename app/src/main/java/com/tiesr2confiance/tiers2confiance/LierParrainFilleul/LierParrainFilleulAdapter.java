@@ -93,6 +93,8 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         Date us_birth_day = model.getUs_birth_date();
         String us_godfather_request_from = model.getUs_godfather_request_from();
         String us_nephews_request_from = model.getUs_nephews_request_from();
+        //String us_avatar;
+        String us_avatar    =   model.getUs_avatar();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
@@ -108,6 +110,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
         // Utilisation de glide pour afficher les images,
+
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .error(R.mipmap.ic_launcher)
@@ -119,7 +122,8 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         // puis diskCacheStrategy
         // puis l'emplacement où mettre l'image, dans le holder crée.
         Glide.with(context)
-                .load(R.mipmap.ic_launcher)
+                .load(us_avatar)
+//                 .load(R.mipmap.ic_launcher_round)
                 .apply(options)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
