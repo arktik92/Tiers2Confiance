@@ -1,46 +1,49 @@
 package com.tiesr2confiance.tiers2confiance.Common;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.Context;
+import android.content.res.Resources;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
-import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ListsAttributs extends Application {
 
+    public HashMap<Long, String> globalVarValue;
+    public static Resources res;
+    private static Context mContext;
 
-    // Les listes de valeur des listes déroulantes
-    public HashMap<Long, String> HashmapHobbie = new HashMap<Long, String>();
-
-
-    public HashMap<Long, String> getGlobalVarValue() {
-        return HashmapHobbie;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
     }
 
-    public void setGlobalVarValue(HashMap<Long, String> HashmapHobbie) {
-        HashmapHobbie.put((long)1, getString(R.string.ho_artisanat_text));
-        HashmapHobbie.put((long)2, getString(R.string.ho_balades_text));
-        HashmapHobbie.put((long)3, getString(R.string.ho_boites_text));
-        HashmapHobbie.put((long)4, getString(R.string.ho_cafe_text));
-        HashmapHobbie.put((long)5, getString(R.string.ho_charites_text));
-        HashmapHobbie.put((long)6, getString(R.string.ho_clubs_text));
-        HashmapHobbie.put((long)7, getString(R.string.ho_cuisiner_text));
-        HashmapHobbie.put((long)8, getString(R.string.ho_déguster_text));
-        HashmapHobbie.put((long)9, getString(R.string.ho_fairerencontres_text));
-        HashmapHobbie.put((long)10, getString(R.string.ho_films_text));
-        HashmapHobbie.put((long)11, getString(R.string.ho_jardiner_text));
-        HashmapHobbie.put((long)12, getString(R.string.ho_jeuxcartes_text));
-        HashmapHobbie.put((long)13, getString(R.string.ho_jeuxvideos_text));
+    public static Context getContext(){
+        return mContext;
+    }
+
+    public HashMap<Long, String> getGlobalVarValue(){
+        return globalVarValue;
+    }
+
+    public void setGlobalVarValue(HashMap<Long, String> globalVarValue) {
+
+        globalVarValue.put((long)1, getContext().getString(R.string.ho_artisanat_text));
+        globalVarValue.put((long)2, getContext().getString(R.string.ho_balades_text));
+        globalVarValue.put((long)3, getContext().getString(R.string.ho_boites_text));
+        globalVarValue.put((long)4, getContext().getString(R.string.ho_cafe_text));
+        globalVarValue.put((long)5, getContext().getString(R.string.ho_charites_text));
+        globalVarValue.put((long)6, getContext().getString(R.string.ho_clubs_text));
+        globalVarValue.put((long)7, getContext().getString(R.string.ho_cuisiner_text));
+        globalVarValue.put((long)8, getContext().getString(R.string.ho_déguster_text));
+        globalVarValue.put((long)9, getContext().getString(R.string.ho_fairerencontres_text));
+        globalVarValue.put((long)10, getContext().getString(R.string.ho_films_text));
+        globalVarValue.put((long)11, getContext().getString(R.string.ho_jardiner_text));
+        globalVarValue.put((long)12, getContext().getString(R.string.ho_jeuxcartes_text));
+        globalVarValue.put((long)13, getContext().getString(R.string.ho_jeuxvideos_text));
+
     }
 
 

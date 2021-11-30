@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.ViewProfilFragment;
@@ -160,6 +161,8 @@ public class LierParrainFilleulFragment extends Fragment {
                         .startAt(newText)
                         .endAt(newText+"\uf8ff");
 
+                Log.e(TAG, "onQueryTextChange: " + "TESSS" );
+
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
                                 .setQuery(query, ModelUsers.class)
@@ -177,7 +180,7 @@ public class LierParrainFilleulFragment extends Fragment {
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
 
-                Intent intent = new Intent(getContext(), ViewProfilFragment.class);
+                Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.putExtra("IdUser", snapshot.getId());
                 startActivity(intent);
             }

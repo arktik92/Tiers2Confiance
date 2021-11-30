@@ -6,19 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         navigationView = findViewById(R.id.nav_navigationView);
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +101,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                commit();
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -118,7 +114,34 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
-                getSupportFragmentManager().
+
+                // envoyer les variable sur un autre fragment.
+
+//                String test = "toto";
+//                Bundle b = new Bundle();
+//                b.putString("message", test);
+//                Fragment fragment = new Fragment();
+//                fragment.setArguments(b);
+//                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                //ft.replace(R.id.the_fragg,dv);
+//                ft.commit();
+
+                // recuperer sur un autre fragment
+//                public class Frag2 extends Fragment {
+//
+//                    public View onCreateView(LayoutInflater inflater,
+//                                             ViewGroup containerObject,
+//                                             Bundle savedInstanceState){
+//                        //here is your arguments
+//                        Bundle bundle=getArguments();
+//
+//                        //here is your list array
+//                        String[] myStrings=bundle.getStringArray("elist");
+//                    }
+//                }
+
+
+                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new ViewProfilFragment()).
                         commit();
@@ -140,7 +163,4 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer_layout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
 }

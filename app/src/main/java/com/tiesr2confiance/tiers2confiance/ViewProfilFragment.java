@@ -2,7 +2,6 @@ package com.tiesr2confiance.tiers2confiance;
 
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
-import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_USER_HOBBIE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
@@ -11,7 +10,6 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,24 +24,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.Common.ListsAttributs;
-import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
-import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,17 +42,7 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
-    private ImageView ivProfil, ivProfilAvatarShape;
-
-    /*** Hobbies ***/
-    private TextView tvHobbiesname;
-
-    private ArrayList<String> itemArrayListHobbieValues;
-    private ArrayList<String> itemArrayListHobbieDocument;
-
-    /*** ADapterHobbies ***/
-    private AdapterHobbieItem adapterHobbieItem;
-    private RecyclerView recyclerViewHobbies;
+    private ImageView ivProfilAvatarShape;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -74,7 +54,6 @@ public class ViewProfilFragment extends Fragment {
 
 
     String list_hobbies;
-    ArrayList<ModelHobbies> hobbies;
     public HashMap<Long, String> globalVarValue;
 
     private FragmentViewProfilBinding binding;
@@ -82,6 +61,8 @@ public class ViewProfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+
+        public String arg = getArguments().getString("");
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
 
       //  Bundle bundle = getIntent().getExtras();
@@ -105,7 +86,6 @@ public class ViewProfilFragment extends Fragment {
         tvHobbies = view.findViewById(R.id.tvHobbies);
 
         /** Glide image **/
-        //ivProfil = view.findViewById(R.id.ivProfil);
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
     }
 
@@ -163,8 +143,12 @@ public class ViewProfilFragment extends Fragment {
                             // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
                             String[] hobbies_list = list_hobbies.split(split_key);
 
+//                            ListsAttributs listHobbiesVar = new ListsAttributs();
+//                            listHobbiesVar.setGlobalVarValue( globalVarValue);
+//                            globalVarValue = listHobbiesVar.getGlobalVarValue();
+
                             globalVarValue = new HashMap<Long, String>();
-                            globalVarValue.put((long)1, getString(R.string.ho_artisanat_text));
+                            globalVarValue.put((long)1, getContext().getString(R.string.ho_artisanat_text));
                             globalVarValue.put((long)2, getString(R.string.ho_balades_text));
                             globalVarValue.put((long)3, getString(R.string.ho_boites_text));
                             globalVarValue.put((long)4, getString(R.string.ho_cafe_text));
@@ -178,6 +162,8 @@ public class ViewProfilFragment extends Fragment {
                             globalVarValue.put((long)12, getString(R.string.ho_jeuxcartes_text));
                             globalVarValue.put((long)13, getString(R.string.ho_jeuxvideos_text));
 
+                            Log.e(TAG, "onSuccess SIZE: " + globalVarValue.size() );
+
                             int i;
                             String hobbies_display="--";
                             for (i=0; i< hobbies_list.length;i++) {
@@ -187,13 +173,12 @@ public class ViewProfilFragment extends Fragment {
                                     if (key.equals(hobbies_list[i])) {
                                         Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
 
-                                        hobbies_display = hobbies_display + value + " -- ";
+                                        hobbies_display += value + " -- ";
                                     }
                                 }
                             }
 
                             tvHobbies.setText(hobbies_display);
-
                             // Ici on va chercher les labels correspondants à la liste d'ID récupérée, puis on les affiche
                             //ListsAttributs attrHobies = new ListsAttributs(FirebaseFirestore.getInstance(), "EN");
                             //attrHobies.getHobbiesDataFromFirestore();
@@ -201,7 +186,6 @@ public class ViewProfilFragment extends Fragment {
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
