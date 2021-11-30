@@ -35,15 +35,6 @@
         <activity
             android:name=".Login.CreationProfilActivity"
             android:exported="false" />
-        <activity
-            android:name=".LierParrainFilleul.PendingRequestsFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ViewProfilFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ProfilFragment"
-            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
