@@ -62,7 +62,7 @@ public class ViewProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
 
-        public String arg = getArguments().getString("");
+        //public String arg = getArguments().getString("");
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
 
       //  Bundle bundle = getIntent().getExtras();

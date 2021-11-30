@@ -11,10 +11,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromCelibFragment;
+import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromGodfatherFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                commit();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
+            case R.id.nav_profil_filleul:
 
                 // envoyer les variable sur un autre fragment.
 
@@ -128,7 +133,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
                 // recuperer sur un autre fragment
 //                public class Frag2 extends Fragment {
-//
 //                    public View onCreateView(LayoutInflater inflater,
 //                                             ViewGroup containerObject,
 //                                             Bundle savedInstanceState){
@@ -140,24 +144,41 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                    }
 //                }
 
-
                  getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new ViewProfilFragment()).
                         commit();
                 break;
             case R.id.nav_search_profil_PF:
+            case R.id.nav_search_profil_FP:
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new LierParrainFilleulFragment()).
                         commit();
                 break;
+
+            case R.id.nav_crediter:
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_container, new CreditFromGodfatherFragment()).
+                        commit();
+                break;
+
+            case R.id.nav_crediter_from_celib:
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_container, new CreditFromCelibFragment()).
+                        commit();
+                break;
+
             case R.id.nav_pending_request:
+            case R.id.nav_pending_request_godfather:
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
+
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);

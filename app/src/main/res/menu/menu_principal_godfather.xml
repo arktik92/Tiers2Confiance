@@ -20,16 +20,16 @@
     <item android:title="Mon filleul">
         <menu>
             <item android:title="Voir son profil"
-                android:id="@+id/nav_fragment_2"
+                android:id="@+id/nav_profil_filleul"
                 android:icon="@drawable/ic_godfather_nephews"/>
             <item android:title="Créditer"
-                android:id="@+id/nav_fragment_3"
+                android:id="@+id/nav_crediter"
                 android:icon="@drawable/ic_credit"/>
             <item android:title="Chercher"
-                android:id="@+id/nav_fragment_4"
+                android:id="@+id/nav_search_profil_FP"
                 android:icon="@drawable/ic_search_godfather_nephews"/>
             <item android:title="Demandes en attente"
-                android:id="@+id/nav_fragment_5"
+                android:id="@+id/nav_pending_request_godfather"
                 android:icon="@drawable/ic_pending"/>
         </menu>
     </item>

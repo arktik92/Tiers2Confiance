@@ -153,6 +153,7 @@ public class LierParrainFilleulFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.e(TAG, "onComplete: HHHH "  );
                // adapterUser.stopListening();
                 Query query = db.collection("users")
                         .whereEqualTo("us_role", roleInverse)
