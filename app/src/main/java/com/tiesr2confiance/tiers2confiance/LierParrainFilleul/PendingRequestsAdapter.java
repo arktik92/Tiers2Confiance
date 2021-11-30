@@ -50,7 +50,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
      *
      * @param options
      */
-    public PendingRequestsAdapter(@NonNull FirestoreRecyclerOptions<ModelUsers> options) {
+    public  PendingRequestsAdapter(@NonNull FirestoreRecyclerOptions<ModelUsers> options) {
         super(options);
     }
 
