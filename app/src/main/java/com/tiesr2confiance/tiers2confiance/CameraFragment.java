@@ -9,31 +9,35 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.tiesr2confiance.tiers2confiance.databinding.FragmentSecondBinding;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentFirstBinding;
 
-public class SecondFragment extends Fragment {
+public class CameraFragment extends Fragment {
 
-    private FragmentSecondBinding binding;
+    private FragmentFirstBinding binding;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        binding = FragmentFirstBinding.inflate(inflater, container, false);
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                NavHostFragment.findNavController(CameraFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+
+              //  Intent intent = new Intent(getContext(), LierParrainFilleulFragment.class);
+//        intent.putExtra("IdUser", snapshot.getId());
+             //   startActivity(intent);
             }
         });
     }
@@ -42,6 +46,14 @@ public class SecondFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+
+
+
+    private void takePictureIntent(){
+
+
     }
 
 }
