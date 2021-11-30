@@ -1,5 +1,13 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_USER_HOBBIE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,7 +39,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
-import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
@@ -39,22 +46,7 @@ import java.util.HashMap;
 
 public class ViewProfilFragment extends Fragment {
 
-
-    /***  Global Variables  ***/
-    private static final String TAG = "View Profile";
-
-    private static final String KEY_NAME = "us_first_name";
-    private static final String KEY_CITY = "us_city";
-    private static final String KEY_IMG = "us_img";
-    private static final String KEY_IMG_AVATAR = "us_img_avatar";
-    private static final String KEY_DESCRIPTION = "us_presentation";
-    private static final String KEY_HOBBIES = "us_hobbies";
-
-    private static String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
-    private static final String KEY_FS_COLLECTION = "users";
-    private static final String KEY_FS_USER_HOBBIE = "hobbies";
-
-    private static final String KEY_HOBBIES_NAME = "ho_name";
+    public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfil, ivProfilAvatarShape;
@@ -75,6 +67,8 @@ public class ViewProfilFragment extends Fragment {
     private DocumentReference noteRef, noteHobbies;
     /** Collection **/
     private CollectionReference noteCollectionRef;
+    private String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
+    public final String KEY_FS_COLLECTION = "users";
 
     String list_hobbies;
     String hobbies_list[];
@@ -117,12 +111,9 @@ public class ViewProfilFragment extends Fragment {
     private void getDataIDUser(View view) {
         /** BDD, Connexion FIreStore ***/
         db = FirebaseFirestore.getInstance();
-
-        // NoteRef
+        // NoteRef, récupération de l'utilisateur connecté
         noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
         noteCollectionRef = db.collection(KEY_FS_COLLECTION);
-
-        /**** End - BDD Connexion Firestore *****/
     }
 
     public void showProfil() {
@@ -144,9 +135,7 @@ public class ViewProfilFragment extends Fragment {
                             tvDescription.setText(description);
                             tvHobbies.setText(hobbies);
 
-
                             /** Glide - Add Picture **/
-
                             Context context = getContext();
                             RequestOptions options = new RequestOptions()
                                     .centerCrop()
@@ -197,11 +186,9 @@ public class ViewProfilFragment extends Fragment {
 
         // NoteRef
         noteRef = db.document(KEY_FS_USER_HOBBIE + "/" + KEY_FS_USER_ID); /**** Hobbies -> Jardinier ****/
-        // Add Data
         noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
 
         /** get specific item into the collection **/
-
         noteCollectionRef = db.collection("user_test_profil");
         noteCollectionRef
                 .get()

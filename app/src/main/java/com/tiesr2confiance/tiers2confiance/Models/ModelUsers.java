@@ -43,7 +43,6 @@ public class ModelUsers {
     public String us_avatar;
     public String us_photos;
 
-
     /****** CONSTRUCTORS ********************/
     public ModelUsers() {
     }
