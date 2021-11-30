@@ -10,9 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
@@ -45,10 +45,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private AppBarConfiguration appBarConfiguration;
     private ProfilFragment binding;
 
-
-    // Les listes de valeur des listes déroulantes
-    public HashMap<Long, String> HashmapHobbie = new HashMap<Long, String>();
-
     /**
      * Faire le lien entre les widgets et le design
      **/
@@ -56,29 +52,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
-    }
-
-
-    /**
-     * Créer les listes de valeurs
-     **/
-    public void ListsCreate() {
-
-        HashmapHobbie.put((long)1, getString(R.string.ho_artisanat_text));
-        HashmapHobbie.put((long)2, getString(R.string.ho_balades_text));
-        HashmapHobbie.put((long)3, getString(R.string.ho_boites_text));
-        HashmapHobbie.put((long)4, getString(R.string.ho_cafe_text));
-        HashmapHobbie.put((long)5, getString(R.string.ho_charites_text));
-        HashmapHobbie.put((long)6, getString(R.string.ho_clubs_text));
-        HashmapHobbie.put((long)7, getString(R.string.ho_cuisiner_text));
-        HashmapHobbie.put((long)8, getString(R.string.ho_déguster_text));
-        HashmapHobbie.put((long)9, getString(R.string.ho_fairerencontres_text));
-        HashmapHobbie.put((long)10, getString(R.string.ho_films_text));
-        HashmapHobbie.put((long)11, getString(R.string.ho_jardiner_text));
-        HashmapHobbie.put((long)12, getString(R.string.ho_jeuxcartes_text));
-        HashmapHobbie.put((long)13, getString(R.string.ho_jeuxvideos_text));
 
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +85,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // Force l'affichage du 1er fragment au démarrage
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
-
-
     }
 
     private void addFragment() {

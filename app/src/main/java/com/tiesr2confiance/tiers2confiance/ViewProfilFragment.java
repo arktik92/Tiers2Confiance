@@ -35,14 +35,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tiesr2confiance.tiers2confiance.Common.ListsAttributs;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ViewProfilFragment extends Fragment {
 
@@ -62,16 +65,17 @@ public class ViewProfilFragment extends Fragment {
     private RecyclerView recyclerViewHobbies;
 
     /*** BDD ***/
-    private FirebaseFirestore db, db_hobbies;
+    private FirebaseFirestore db;
     /** ID Document **/
-    private DocumentReference noteRef, noteHobbies;
+    private DocumentReference noteRef;
     /** Collection **/
-    private CollectionReference noteCollectionRef;
-    private String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
+    private String KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
     public final String KEY_FS_COLLECTION = "users";
 
+
     String list_hobbies;
-    String hobbies_list[];
+    ArrayList<ModelHobbies> hobbies;
+    public HashMap<Long, String> globalVarValue;
 
     private FragmentViewProfilBinding binding;
 
@@ -79,7 +83,6 @@ public class ViewProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
-        KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
 
       //  Bundle bundle = getIntent().getExtras();
       //  if(bundle.getString("IdUser") != null) {
@@ -89,7 +92,6 @@ public class ViewProfilFragment extends Fragment {
 
         getDataIDUser(view);
         showProfil();
-        hobbies();
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -101,7 +103,6 @@ public class ViewProfilFragment extends Fragment {
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
-        tvHobbiesname = view.findViewById(R.id.tvHobbiesName);
 
         /** Glide image **/
         //ivProfil = view.findViewById(R.id.ivProfil);
@@ -113,7 +114,6 @@ public class ViewProfilFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         // NoteRef, récupération de l'utilisateur connecté
         noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
-        noteCollectionRef = db.collection(KEY_FS_COLLECTION);
     }
 
     public void showProfil() {
@@ -133,8 +133,6 @@ public class ViewProfilFragment extends Fragment {
                             tvProfilCity.setText(city);
                             tvProfilName.setText(name);
                             tvDescription.setText(description);
-                            tvHobbies.setText(hobbies);
-
                             /** Glide - Add Picture **/
                             Context context = getContext();
                             RequestOptions options = new RequestOptions()
@@ -149,7 +147,6 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfil);
                                  */
-
                             /** Loading Avatar **/
                             Glide
                                     .with(context)
@@ -160,13 +157,53 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
+                            list_hobbies = documentSnapshot.getString("us_hobbies");
+                            Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                            String split_key = ";";
+                            // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
+                            String[] hobbies_list = list_hobbies.split(split_key);
+
+                            globalVarValue = new HashMap<Long, String>();
+                            globalVarValue.put((long)1, getString(R.string.ho_artisanat_text));
+                            globalVarValue.put((long)2, getString(R.string.ho_balades_text));
+                            globalVarValue.put((long)3, getString(R.string.ho_boites_text));
+                            globalVarValue.put((long)4, getString(R.string.ho_cafe_text));
+                            globalVarValue.put((long)5, getString(R.string.ho_charites_text));
+                            globalVarValue.put((long)6, getString(R.string.ho_clubs_text));
+                            globalVarValue.put((long)7, getString(R.string.ho_cuisiner_text));
+                            globalVarValue.put((long)8, getString(R.string.ho_déguster_text));
+                            globalVarValue.put((long)9, getString(R.string.ho_fairerencontres_text));
+                            globalVarValue.put((long)10, getString(R.string.ho_films_text));
+                            globalVarValue.put((long)11, getString(R.string.ho_jardiner_text));
+                            globalVarValue.put((long)12, getString(R.string.ho_jeuxcartes_text));
+                            globalVarValue.put((long)13, getString(R.string.ho_jeuxvideos_text));
+
+                            int i;
+                            String hobbies_display="--";
+                            for (i=0; i< hobbies_list.length;i++) {
+                                for (Map.Entry<Long, String> entry : globalVarValue.entrySet()) {
+                                    String key = entry.getKey().toString();
+                                    String value = entry.getValue();
+                                    if (key.equals(hobbies_list[i])) {
+                                        Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
+
+                                        hobbies_display = hobbies_display + value + " -- ";
+                                    }
+                                }
+                            }
+
+                            tvHobbies.setText(hobbies_display);
+
+                            // Ici on va chercher les labels correspondants à la liste d'ID récupérée, puis on les affiche
+                            //ListsAttributs attrHobies = new ListsAttributs(FirebaseFirestore.getInstance(), "EN");
+                            //attrHobies.getHobbiesDataFromFirestore();
+
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
 
                     }
                 })
-
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -175,305 +212,6 @@ public class ViewProfilFragment extends Fragment {
                 });
     }
 
-    public void hobbies() {
 
-        /****   Collection hobbies ******/
-        itemArrayListHobbieDocument = new ArrayList<>();
-        itemArrayListHobbieValues = new ArrayList<>();
 
-        /** BDD, Connexion FIreStore ***/
-        db = FirebaseFirestore.getInstance();
-
-        // NoteRef
-        noteRef = db.document(KEY_FS_USER_HOBBIE + "/" + KEY_FS_USER_ID); /**** Hobbies -> Jardinier ****/
-        noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
-
-        /** get specific item into the collection **/
-        noteCollectionRef = db.collection("user_test_profil");
-        noteCollectionRef
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        String split_key = ";";
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                list_hobbies = document.getString("us_hobbies");
-                                Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-
-                                String[] hobbies_list = list_hobbies.split(split_key);
-                                Log.d(TAG, "hobbies list length: "+ hobbies_list.length);
-
-                                /****/
-
-    noteCollectionRef = db.collection("hobbies");
-    noteCollectionRef
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-
-                            String list_hobbies_item = document.getString("ho_label");
-                            Log.d(TAG, " List Hobbies Item => " + list_hobbies_item); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-
-                            //String list_hobbies_item_id = document.getString("ho_id");
-                            //Log.d(TAG, " => Hobbies ID => " + list_hobbies_item_id); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-                            ModelHobbies contenuHobbie = document.toObject(ModelHobbies.class);
-
-                            String LlabelHobbie = contenuHobbie.ho_label;
-                            Long idHobbie = contenuHobbie.ho_id;
-
-                           // Long list_hobbies_item_id = Long.valueOf(Objects.requireNonNull(document.getString("ho_id")));
-                           // Log.d(TAG, "list_hobbies_item_id:"+list_hobbies_item_id);
-
-                            HashMap<Long, String> HashmapHobbie = new HashMap<Long, String>();
-
-                            HashmapHobbie.put(idHobbie, LlabelHobbie);
-
-                            /**** TODo ****///
-
-                            Log.d(TAG, HashmapHobbie.keySet() + " => HashMap: " + HashmapHobbie.get(idHobbie));
-
-                            ModelUsers contenuUser = document.toObject(ModelUsers.class);
-
-                            String hobbies_list = contenuUser.us_hobbies;
-
-                            noteCollectionRef = db.collection("user_test_profil");
-                            noteCollectionRef
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                               @Override
-                                                               public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                                                                   String split_key = ";";
-                                                                   if (task.isSuccessful()) {
-                                                                       for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                                                           list_hobbies = document.getString("us_hobbies");
-
-
-                                                                    //       Log.d(TAG, "User Contener hobbies " + hobbies_list);
-
-                                                                       }
-                                                                   }
-                                                               }
-                                                           });
-
-                            Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-
-                            String split_key =";";
-
-                            String listHobbiesItem [] = null;
-
-                            Object hobbie_item = 11;
-
-                            listHobbiesItem = list_hobbies.split(split_key);
-
-                            for (int i = 0; i < listHobbiesItem.length; i++) {
-
-                                Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
-                                Log.d(TAG, "hobbie_item: " + hobbie_item);
-                                Log.d(TAG, "listhobbies: " + listHobbiesItem[0]);
-                                Log.d(TAG, "toto: " + HashmapHobbie.get(11));
-                            }
-
-                            tvHobbiesname.setText(HashmapHobbie.get(11));
-                          //  Log.d(TAG, "lH =>  " + listHobbiesItem.length);
-
-                            /****
-                            String listHobbies ="";
-
-                            String item_hobbie ="";
-
-                            for(int k = 0; k < listHobbiesItem.length; k++) {
-
-                                Log.d(TAG, "HASH: " + HashmapHobbie.get(1));
-
-                                Log.d(TAG, "Hobbies //////: " + listHobbiesItem[k]);
-
-                                listHobbies = listHobbies +HashmapHobbie.get(listHobbiesItem[k])+"\n";
-
-                              // item_hobbie =  item_hobbie + HashmapHobbie.get(listHobbiesItem[k]);
-
-                                tvHobbiesname.setText(listHobbies);
-                            }
-                            ***/
-
-                            /****
-
-
-                            final String split_key = ";";
-                            String hobbieslist [] = list_hobbies.split(split_key);
-                            for(int i = 0; i <= list_hobbies.length(); i++){
-                                Log.d(TAG, "Hobbies ID => " + hobbieslist[i]);
-                                // tvHobbiesname.setText(hobbies_list[i]);
-                            }
-
-
-                            ****/
-
-                        }
-
-                    } else {
-
-                        Log.d(TAG, "Task onComplete Hobbies Item Failure !!!");
-                    }
-                }
-            });
-
-                                /****
-                                for (int i = 0; i <= hobbies_list.length; i++) {
-                                    Log.d(TAG, " Hobbie " + i + " => " + hobbies_list[i]); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-                                }
-                                 ****/
-
-                            }
-                        } else {
-                            Log.d(TAG, "Task onComplete Failure !!!");
-                        }
-                    }
-                });
-
-/**
-
- final String split_key = ";";
- final String chaine  = "1;3;5;9;12";
-
-
- String hobbies_list[] = chaine.split(split_key);
-
-
-
- for(int i = 0; i <= hobbiesname.length(); i++){
-
- // tvHobbiesname.setText(hobbies_list[i]);
- }
- **/
-
-        /** End **/
-
-        noteCollectionRef = db.collection(KEY_FS_USER_HOBBIE); //hobbies
-
-        /*** get all the collection ***/
-
-        noteCollectionRef
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-
-                                        Log.d(TAG, document.getId() + " => " + document.getData()); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
-                                        Log.d(TAG, " Adding getID => " + document.getId()); // Ie19kQdquBcoGypUpyWS
-
-                                        itemArrayListHobbieDocument.add(document.getId());
-
-                                        Log.d(TAG, " Adding getData => " + document.getData());
-                                        itemArrayListHobbieValues.add(String.valueOf(document.getData()));
-
-                                        String Value = document.getString("ho_label"); // Jardinier
-                                        Log.d(TAG, " Value getString => " + Value);
-                                        Log.d(TAG, " Total Data => " + itemArrayListHobbieDocument.size());
-                                        Log.d(TAG, "******** LIST Document ID *********\n");
-
-                                        for (String item : itemArrayListHobbieDocument) {
-                                            Log.d(TAG, " Document ID => " + item);
-
-
-                                            int position = itemArrayListHobbieDocument.indexOf(item);
-
-                                            /**** Indexof ***/
-                                            Log.d(TAG, " Document " + item + " => " + position);
-                                            Log.d(TAG, " Data [" + item + "] => " + itemArrayListHobbieValues.get(position));
-                                            Log.d(TAG, " Document " + item + " ! " + itemArrayListHobbieValues.get(position)); //lastIndexOf("ho_label")); //toString("no_label")); ---> false/true  contains("ho_label")
-
-                                            String Value2 = document.getString("ho_label");
-
-                                            Log.d(TAG, " Value " + Value2); //lastIndexOf("ho_label")); //toString("no_label")); ---> false/true  contains("ho_label")
-                                            tvHobbiesname.setText(Value2);
-                                        }
-
-                                        // String Document_id ="Ie19kQdquBcoGypUpyWS"; //8r84uynmKS7rorCaFOJJ
-
-                                        /****/
-
-                                        /*****/
-                                    }
-
-                                } else {
-                                    Log.d(TAG, "Error gettings document:", task.getException());
-                                }
-                            }
-                        });
-
-
-        Log.i(TAG, "size =>" + itemArrayListHobbieDocument.size());
-
-        /**** End - BDD Connexion Firestore *****/
-
-        noteRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                                if (documentSnapshot.exists()) {
-
-                                    String hobbiesname = documentSnapshot.getString("users");
-
-                                    Log.d(TAG, "BDD ===> " + hobbiesname);
-
-
-                                    /***
-                                     for(int i = 0; i <= hobbiesname.length(); i++ ){
-                                     Log.i(TAG, "ID Collection --->"+noteCollectionRef.getId());
-                                     Log.i(TAG, "ID Snapshoot ---->" + documentSnapshot.getId());
-
-                                     }
-                                     ***/
-
-
-                            /*
-                            for (int i = 0; i <= hobbiesname.length(); i++) {
-
-                                String hobbieID = documentSnapshot.getId();
-
-                                TextView tv = new TextView(getApplicationContext());
-                                tv.setText(hobbieID);
-                                Toast.makeText(View_Profil.this, hobbiesname.length() + "////" + hobbieID, Toast.LENGTH_SHORT).show();
-
-                                //itemArrayListHobbie.add(new ModelUsersHobbies(hobbieID));
-
-
-
-                                Toast.makeText(View_Profil.this, "ID" + hobbieID, Toast.LENGTH_SHORT).show();
-
-
-                                //itemArrayListHobbie.add(new ModelUsers(hobbieID));
-                            }*/
-
-                                    // adapterHobbieItem = new AdapterHobbieItem(getApplicationContext(), itemArrayListHobbie); // il atteint le context et un ArrayList
-
-                                    /** Adapter recyclerView à l'adapter **/
-
-                                    //recyclerViewHobbies.setAdapter(adapterHobbieItem);
-
-                                } else {
-                                    Toast.makeText(getContext(), "Any Hobbies Document", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        })
-                .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-    }
 }

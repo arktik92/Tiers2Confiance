@@ -19,21 +19,6 @@ public class NodesNames {
     public static final String KEY_MARITAL_STATUS = "us_marital_status";
     public static final String KEY_HAS_KID = "us_has_kids";
 
-    public String us_profession;
-    public long us_height;
-    public long us_shape;
-    public long us_ethnic_group;
-    public long us_hair_color;
-    public long us_hair_length;
-    public long us_eye_color;
-    public long us_smoker;
-    public String us_personality;
-    public String us_sports;
-    public String us_hobbies;
-    public String us_avatar;
-    public String us_photos;
-
-
 
 
     public static final String KEY_FS_USER_HOBBIE = "hobbies";
