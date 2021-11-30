@@ -165,4 +165,6 @@
     <!-- String pour la decription pour l'aide aux déficients visuels   -->
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+    <string name="getImageGallery">Importer Gallerie</string>
+    <string name="getImageCamera">Importer depuis Caméra</string>
 </resources>
