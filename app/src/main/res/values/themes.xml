@@ -17,7 +17,16 @@
         <item name="android:textColor">@color/background</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="Theme.Tiers2Confiance.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Tiers2Confiance.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Tiers2Confiance.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

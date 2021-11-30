@@ -93,4 +93,7 @@
     <string name="Silhouette_petites_rondeurs_text">Some extra pounds</string>
     <string name="Silhouette_rondeurs_text">Not that fat</string>
     <string name="accepter_demande">Accepter une demande</string>
+    <!-- String pour la decription pour l'aide aux déficients visuels   -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
