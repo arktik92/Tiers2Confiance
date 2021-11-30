@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +41,6 @@ public class ViewProfilFragment extends Fragment {
 
 
     /***  Global Variables  ***/
-
     private static final String TAG = "View Profile";
 
     private static final String KEY_NAME = "us_first_name";
@@ -50,13 +50,11 @@ public class ViewProfilFragment extends Fragment {
     private static final String KEY_DESCRIPTION = "us_presentation";
     private static final String KEY_HOBBIES = "us_hobbies";
 
-
     private static String KEY_FS_USER_ID = "4coBi7nRA1Np1KGQpI1b";
     private static final String KEY_FS_COLLECTION = "users";
     private static final String KEY_FS_USER_HOBBIE = "hobbies";
 
     private static final String KEY_HOBBIES_NAME = "ho_name";
-
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfil, ivProfilAvatarShape;
@@ -64,25 +62,18 @@ public class ViewProfilFragment extends Fragment {
     /*** Hobbies ***/
     private TextView tvHobbiesname;
 
-
     private ArrayList<String> itemArrayListHobbieValues;
     private ArrayList<String> itemArrayListHobbieDocument;
-
 
     /*** ADapterHobbies ***/
     private AdapterHobbieItem adapterHobbieItem;
     private RecyclerView recyclerViewHobbies;
 
-
     /*** BDD ***/
     private FirebaseFirestore db, db_hobbies;
-    /**
-     * ID Document
-     **/
+    /** ID Document **/
     private DocumentReference noteRef, noteHobbies;
-    /**
-     * Collection
-     **/
+    /** Collection **/
     private CollectionReference noteCollectionRef;
 
     String list_hobbies;
@@ -95,7 +86,6 @@ public class ViewProfilFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
         KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
-        init(view);
 
       //  Bundle bundle = getIntent().getExtras();
       //  if(bundle.getString("IdUser") != null) {
@@ -103,15 +93,16 @@ public class ViewProfilFragment extends Fragment {
       //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
       //  }
 
+        getDataIDUser(view);
         showProfil();
         hobbies();
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-
-    public void init(View view) {
-
+    /** Initialisation des composants  **/
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         tvProfilName = view.findViewById(R.id.tvProfilName);
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
@@ -119,9 +110,11 @@ public class ViewProfilFragment extends Fragment {
         tvHobbiesname = view.findViewById(R.id.tvHobbiesName);
 
         /** Glide image **/
-        ivProfil = view.findViewById(R.id.ivProfil);
+        //ivProfil = view.findViewById(R.id.ivProfil);
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
+    }
 
+    private void getDataIDUser(View view) {
         /** BDD, Connexion FIreStore ***/
         db = FirebaseFirestore.getInstance();
 
@@ -146,26 +139,27 @@ public class ViewProfilFragment extends Fragment {
                             String description = documentSnapshot.getString(KEY_DESCRIPTION);
                             String hobbies = documentSnapshot.getString(KEY_HOBBIES);
 
-                            // Toast.makeText(View_Profil.this, imgUrl_avatar, Toast.LENGTH_LONG).show();
-
                             tvProfilCity.setText(city);
                             tvProfilName.setText(name);
                             tvDescription.setText(description);
                             tvHobbies.setText(hobbies);
 
+
                             /** Glide - Add Picture **/
+
                             Context context = getContext();
                             RequestOptions options = new RequestOptions()
                                     .centerCrop()
                                     .error(R.mipmap.ic_launcher)
                                     .placeholder(R.mipmap.ic_launcher);
+                            /*
                             Glide
                                     .with(context)
                                     .load(imgurl)
                                     .apply(options)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfil);
-
+                                 */
 
                             /** Loading Avatar **/
                             Glide
@@ -180,6 +174,7 @@ public class ViewProfilFragment extends Fragment {
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 })
 
@@ -225,7 +220,6 @@ public class ViewProfilFragment extends Fragment {
                                 Log.d(TAG, "hobbies list length: "+ hobbies_list.length);
 
                                 /****/
-    /*********/
 
     noteCollectionRef = db.collection("hobbies");
     noteCollectionRef
