@@ -3,7 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.1828125" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/_activity_temp_genders.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_creation_profil.xml" value="0.371875" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_lier_parrain_filleul.xml" value="0.20885416666666667" />
@@ -11,16 +10,10 @@
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_profil.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_sign_in.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/row_gender.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/activity_creation_profil.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.26944444444444443" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16770833333333332" />
-        <entry key="app/src/main/res/layout/activity_pending_requests.xml" value="0.16770833333333332" />
-        <entry key="app/src/main/res/layout/activity_pending_requests_adapter.xml" value="0.16770833333333332" />
-        <entry key="app/src/main/res/layout/activity_pending_requests_item_recycler.xml" value="0.16770833333333332" />
-        <entry key="app/src/main/res/layout/activity_profil.xml" value="0.16770833333333332" />
-        <entry key="app/src/main/res/layout/activity_reset_password.xml" value="0.153125" />
-        <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.26944444444444443" />
-        <entry key="app/src/main/res/layout/activity_view_profil.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/content_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
