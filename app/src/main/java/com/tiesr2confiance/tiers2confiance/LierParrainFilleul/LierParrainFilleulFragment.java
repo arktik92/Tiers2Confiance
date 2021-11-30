@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,14 +70,14 @@ public class LierParrainFilleulFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_lier_parrain_filleul, container, false);
-        init(view);
         getDataFromFirestore(view);
         binding = FragmentLierParrainFilleulBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
-    public void init(View view) {
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         rvResultat = view.findViewById(R.id.rvResultat);
         rvResultat.setHasFixedSize(true);
         rvResultat.setLayoutManager(new LinearLayoutManager(getContext()));

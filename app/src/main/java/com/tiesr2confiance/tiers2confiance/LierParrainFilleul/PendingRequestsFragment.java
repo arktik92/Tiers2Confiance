@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,7 +66,6 @@ public class PendingRequestsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_pending_requests, container, false);
-        init(view);
         getDataFromFirestore(view);
         binding = FragmentPendingRequestsBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -73,13 +73,13 @@ public class PendingRequestsFragment extends Fragment {
 
 
     /** Initialisation des composants  **/
-    public void init(View view) {
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.rvResultatDemand);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-       // setTitle(getString(R.string.accepter_demande));
     }
+
 
     /** Récupération de la liste des demandes  **/
     private void getDataFromFirestore(View view) {
