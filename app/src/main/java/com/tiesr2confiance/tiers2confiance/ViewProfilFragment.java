@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -319,9 +320,13 @@ public class ViewProfilFragment extends Fragment {
                                         }else{
                                             // Si le profil consulté n'est pas le filleul du parrain
                                             //on peut envoyer faire un envoi du profil à son filleul (Proposition)
-                                            btnPflEnvoyer.setVisibility(View.VISIBLE);
-                                            // On peut demander à parrainer le célibataire
-                                            btnLinkRequest.setVisibility(View.VISIBLE);
+                                            if (TextUtils.isEmpty(usNephew)){
+                                                // On peut demander à parrainer le célibataire si on n'a pas de filleul
+                                                btnLinkRequest.setVisibility(View.VISIBLE);
+                                            }else{
+                                                // On peut envoyer le profil à son filleul si on en a un
+                                                btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                            }
                                         }
                                     } else {
                                             // Si le user connecté est un célibataire

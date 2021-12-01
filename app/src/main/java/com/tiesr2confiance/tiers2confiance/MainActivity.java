@@ -1,5 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.tiesr2confiance.tiers2confiance.Common.ListsAttributs.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +14,28 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,6 +65,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     // ******************************** NAVIGATION
     private AppBarConfiguration appBarConfiguration;
     private ProfilFragment binding;
+
+    /** Var Firebase **/
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersCollectionRef = db.collection("users");
 
 
     /**
@@ -130,6 +148,33 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
+
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                assert currentUser != null;
+                DocumentReference userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                        assert contenuUser != null;
+
+                        if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
+                            getSupportFragmentManager().
+                                    beginTransaction().
+                                    replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+                                    commit();
+                        }else{
+                            getSupportFragmentManager().
+                                    beginTransaction().
+                                    replace(R.id.fragment_container, new ViewProfilFragment()).
+                                    commit();
+                        }
+                    }
+                });
+
                 // envoyer les variable sur un autre fragment.
 
 //                String test = "toto";
@@ -153,11 +198,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                        String[] myStrings=bundle.getStringArray("elist");
 //                    }
 //                }
-
-                 getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_container, new ViewProfilFragment()).
-                        commit();
                 break;
             case R.id.nav_search_profil_PF:
                 getSupportFragmentManager().
