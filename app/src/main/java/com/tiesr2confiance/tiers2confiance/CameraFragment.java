@@ -13,7 +13,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
@@ -59,13 +64,21 @@ import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
+
+    /* Camera Setup*/
+public static final String EXTRA_INFO="default";
+
+
+
     ImageView imageProfil, mediaContainer;
     LinearLayout llMediaContainer;
 
     private FragmentFirstBinding binding;
 
 
-    /** Variable FireBase **/
+    /**
+     * Variable FireBase
+     **/
     private FirebaseFirestore db;
     private CollectionReference mediaList;
     private FirebaseStorage storage;
@@ -77,12 +90,19 @@ public class CameraFragment extends Fragment {
     int counter;
     int i = 0;
 
+
+    private FragmentActivity myContext;
+
+    private static final String TAG = "CAMERA FRAGMENT";
+
     /**
      * Variable pour les URI des medias
      **/
     Uri localMediaUri, serverMediaUri;
 
-    /** Variable FireBase **/
+    /**
+     * Variable FireBase
+     **/
 
 
 
@@ -100,11 +120,6 @@ public class CameraFragment extends Fragment {
 
 
     */
-
-
-
-
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -113,12 +128,14 @@ public class CameraFragment extends Fragment {
         binding = FragmentFirstBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
+
+        /** TODO Camera */
+        //return inflater.inflate(R.layout.fragment_camera, container, talse);
+
     }
 
 
-
-
-    public boolean checkPermission(){
+    public boolean checkPermission() {
 
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -127,17 +144,15 @@ public class CameraFragment extends Fragment {
 
             System.out.println("PERMISSION GRANTED");
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        return true;
+            return true;
         } else {
 
             System.out.println("NO PERMISSION GRANTED");
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 102);
-      return false;
+            return false;
         }
 
     }
-
-
 
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -147,12 +162,12 @@ public class CameraFragment extends Fragment {
         initFireBase();
 
 
-        if(checkPermission()){
+        if (checkPermission()) {
             addMediaToLinear();
         }
 
 
-
+        /** Camera **/
 
         /*******/
 
@@ -170,12 +185,7 @@ public class CameraFragment extends Fragment {
         /****/
 
 
-
-
-
-
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-
 
 
             @Override
@@ -184,12 +194,10 @@ public class CameraFragment extends Fragment {
                  Avant tout chose, il faut ajouter la permission dans le Manifest */
 
 
-
                 System.out.println("Fragment");
 
 
                 openGallery(view);
-
 
 
             }
@@ -199,22 +207,19 @@ public class CameraFragment extends Fragment {
     }
 
 
-
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
-    private void initUI(View view){
+    private void initUI(View view) {
         imageProfil = view.findViewById(R.id.ivProfil);
         llMediaContainer = view.findViewById(R.id.llMediaContainer);
     }
 
 
-    public void initFireBase(){
+    public void initFireBase() {
         // go inside the storage;
         storage = FirebaseStorage.getInstance();
         // Go to document
@@ -225,7 +230,7 @@ public class CameraFragment extends Fragment {
 
     }
 
-    public String getFileExtension(Uri uri){
+    public String getFileExtension(Uri uri) {
 
         ContentResolver cR = getContext().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -234,11 +239,11 @@ public class CameraFragment extends Fragment {
     }
 
 
-    private void addMediaToLinear(){
+    private void addMediaToLinear() {
 
         listLocalImageFile.add(localMediaUri);
-        if(listLocalImageFile.size() != 0){
-            mediaContainer = new ImageView(getApplicationContext());
+        if (listLocalImageFile.size() != 0) {
+            mediaContainer = new ImageView(myContext.getApplicationContext());
 // Params de la taille
             mediaContainer.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
             mediaContainer.setPadding(4, 4, 4, 4);
@@ -254,36 +259,53 @@ public class CameraFragment extends Fragment {
                     .error(R.drawable.ic_add_a_photo_24)
                     .placeholder(R.drawable.ic_add_a_photo_24);
 
-            Glide.with(getApplicationContext())
+            //Glide.with(getActivity().getApplicationContext())
+            Glide.with(getParentFragment())
                     .load(listLocalImageFile.get(1))
                     .apply(options)
                     .centerCrop()
-                    .getDiskCacheStrategy(DiskCacheStrategy.ALL)
+                    //  .getDiskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mediaContainer);
             i++;
         }
     }
 
 
-    private void saveImageDatatoFireBase(final ProgressDialog progressDialog){
-        progressDialog.setMessage("Savind uploaded image ....");
+    private void saveImageDatatoFireBase(final DialogFragment dialogFragment) { //  ProgressDialog profressDialog
+        //  progressDialog.setMessage("Savind uploaded image ....");
+        dialogFragment.show(myContext.getSupportFragmentManager(), "Saving Uploaded image ....");
         Map<String, Object> dataMap = new HashMap<>();
         // Below line of code will put your images list as an array in firestore
         dataMap.put("images", savedImageUrl);
 
         mediaList.add(dataMap)
-            .addOnSuccessListener(new OnSuccessListener<Object>() {
-                @Override
-                public void onSuccess(Object o) {
-                    progressDialog.dismiss();
-                    Toast.makeText(CameraFragment.this, "Images uploaded and saved successfully", Toast.LENGTH_SHORT).show();
-                }
-            })
+                .addOnSuccessListener(new OnSuccessListener<Object>() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        //  progressDialog.dismiss();
+                        dialogFragment.dismiss();
+
+                        //  Log.d(TAG, "Images uploaded and saved successfully");
+
+                        dialogFragment.show(myContext.getSupportFragmentManager(), "Images uploaded and saved successfully");
+
+
+//                    Toast.makeText(CameraFragment.this, "Images uploaded and saved successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(CameraFragment.this, "Images uploaded but we couldn't save them to the database.", Toast.LENGTH_SHORT).show();
+                        //  progressDialog.dismiss();
+                        dialogFragment.dismiss();
+
+                        //Log.d(TAG, "Images uploaded but we couldn't save them to the database.");
+
+                        dialogFragment.show(myContext.getSupportFragmentManager(), "Images uploaded but we couldn't save them to the database.");
+
+
+                        //Toast.makeText(CameraFragment.this, "Images uploaded but we couldn't save them to the database.", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -291,17 +313,26 @@ public class CameraFragment extends Fragment {
     }
 
 
-
-
     public void openGallery(View view) {
 
+        final DialogFragment dialogFragment = new DialogFragment();
 
         if ((listLocalImageFile.size() != 0)) {
-            final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
-            progressDialog.setMessage("Uploadled 0/" + listLocalImageFile.size());
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            // final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
+
+            dialogFragment.show(myContext.getSupportFragmentManager(), "Uploadled 0/" + listLocalImageFile.size());
+            // progressDialog.setMessage("Uploadled 0/" + listLocalImageFile.size());
+
+            dialogFragment.getDialog().setCancelable(false);
+            // progressDialog.setCancelable(false);
+
+
+            //progressDialog.setCanceledOnTouchOutside(false);
+            dialogFragment.getDialog().setCanceledOnTouchOutside(false);
+
+
+            //progressDialog.show();
+            dialogFragment.getDialog().show();
 
             final StorageReference storageReference = storage.getReference();
 
@@ -322,36 +353,52 @@ public class CameraFragment extends Fragment {
                                                 public void onComplete(@NonNull Task<Uri> task) {
 
                                                     counter++;
-                                                    progressDialog.setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+                                                    //progressDialog.setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+                                                    // dialogFragment.getDialog().setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+                                                    dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
+                                                    dialogFragment.getDialog().setCancelMessage(null);
 
                                                     if (task.isSuccessful()) {
-                                                        saveImageUrl.add(task.getResult().toString());
+                                                        savedImageUrl.add(task.getResult().toString());
                                                     } else {
                                                         // this is ti delete the image if the download url is not complete
 
                                                         storageReference.child("UserImages/").child(listLocalImageFile.get(index).toString()).delete();
-                                                        Toast.makeText(CameraFragment.this, "Coudn't save", Toast.LENGTH_SHORT).show();
+
+                                                        dialogFragment.show(myContext.getSupportFragmentManager(), "Coudn't save");
+                                                        //     Toast.makeText(CameraFragment.this, "Coudn't save", Toast.LENGTH_SHORT).show();
+
                                                     }
 
                                                     if (counter == listLocalImageFile.size()) {
-                                                        saveImageDatatoFireBase(progressDialog);
+                                                        //saveImageDatatoFireBase(progressDialog);
+                                                        saveImageDatatoFireBase(dialogFragment);
                                                     }
-
                                                 }
                                             });
                                 } else {
-                                    progressDialog.setMessage("Upploaded" + counter + "/" + listLocalImageFile.size());
+
+                                    //    progressDialog.setMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+                                    dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
                                     counter++;
-                                    Toast.makeText(CameraFragment.this, "couldn't upload" + listLocalImageFile.get(index).toString(), Toast.LENGTH_SHORT).show();
+
+                                    //Toast.makeText(CameraFragment.this, "couldn't upload" + listLocalImageFile.get(index).toString(), Toast.LENGTH_SHORT).show();
+                                    dialogFragment.show(myContext.getSupportFragmentManager(), "couldn't upload" + listLocalImageFile.get(index).toString());
+
                                 }
                             }
                         });
             }
         } else {
-            Toast.makeText(this, "Please add some images first", Toast.LENGTH_SHORT).show();
+
+            dialogFragment.show(myContext.getSupportFragmentManager(), "Please add some images first");
+
+            //Toast.makeText(this, "Please add some images first", Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
 /*********/
