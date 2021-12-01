@@ -1,8 +1,13 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,21 +17,35 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentFirstBinding;
@@ -34,22 +53,56 @@ import com.tiesr2confiance.tiers2confiance.databinding.FragmentFirstBinding;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CameraFragment extends Fragment {
 
-    ImageView imageProfil;
+    ImageView imageProfil, mediaContainer;
     LinearLayout llMediaContainer;
 
     private FragmentFirstBinding binding;
 
 
+    /** Variable FireBase **/
     private FirebaseFirestore db;
     private CollectionReference mediaList;
     private FirebaseStorage storage;
     StorageReference mediaFolder;
 
     ArrayList<Uri> listLocalImageFile = new ArrayList<>();
+    ArrayList<String> savedImageUrl = new ArrayList<>();
+
+    int counter;
+    int i = 0;
+
+    /**
+     * Variable pour les URI des medias
+     **/
+    Uri localMediaUri, serverMediaUri;
+
+    /** Variable FireBase **/
+
+
+
+/*
+    public void StartActivityFromFragment(Fragment fragment, Intent intent, int code){
+
+              getActivity().startActivityFromFragment(fragment, intent, code);
+              if(code == 101){
+                  localMediaUri = intent.getData();
+                  // Ajout dans le array();
+                  addMediaToLinear();
+
+              }
+    }
+
+
+    */
+
+
+
 
 
     @Override
@@ -63,6 +116,30 @@ public class CameraFragment extends Fragment {
     }
 
 
+
+
+    public boolean checkPermission(){
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+
+            System.out.println("PERMISSION GRANTED");
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        return true;
+        } else {
+
+            System.out.println("NO PERMISSION GRANTED");
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 102);
+      return false;
+        }
+
+    }
+
+
+
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -70,13 +147,43 @@ public class CameraFragment extends Fragment {
         initFireBase();
 
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+        if(checkPermission()){
+            addMediaToLinear();
+        }
 
+
+
+
+        /*******/
+
+
+        /*
+        int getImage = registerForActivityResult(
+                ActivityResultContracts.GetContent(),
+                ActivityResultCallback{
+            binding.imageView.setImageURI(it);
+        }
+    )
+
+        */
+
+        /****/
+
+
+
+
+
+
+        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
 
 
 
             @Override
             public void onClick(View view) {
+                /** Ajout de vérification de la permission de parcourir les dossiers du terminal
+                 Avant tout chose, il faut ajouter la permission dans le Manifest */
+
+
 
                 System.out.println("Fragment");
 
@@ -84,23 +191,16 @@ public class CameraFragment extends Fragment {
                 openGallery(view);
 
 
-                int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE);
-
-
-
-                if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("PERMISSION GRANTED");
-                } else {
-
-                    System.out.println("NO PERMISSION GRANTED");
-                }
 
             }
 
 
         });
     }
+
+
+
+
 
     @Override
     public void onDestroyView() {
@@ -125,33 +225,139 @@ public class CameraFragment extends Fragment {
 
     }
 
+    public String getFileExtension(Uri uri){
 
-    public void openGallery(View view) {
+        ContentResolver cR = getContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String type = mime.getExtensionFromMimeType(cR.getType(uri));
+        return type;
+    }
 
 
-        /***
+    private void addMediaToLinear(){
 
-if((listLocalImageFile.size() != 0)){
-    final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
-    progressDialog.setMessage("Uploadled 0/"+listLocalImageFile.size());
-    progressDialog.setCanceledOnTouchOutside(false);
-    progressDialog.setCancelable(false);
-    progressDialog.show();
+        listLocalImageFile.add(localMediaUri);
+        if(listLocalImageFile.size() != 0){
+            mediaContainer = new ImageView(getApplicationContext());
+// Params de la taille
+            mediaContainer.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
+            mediaContainer.setPadding(4, 4, 4, 4);
+            // TODO Ajouter le clic sur 'limage pour la modifier ou supprimer en appuyant sur l'ID;
+            // mediaContainer.setId();
 
-    final StorageReference storageReference = storage.getReference();
+            llMediaContainer.addView(mediaContainer);
 
-    for(int i =0; i < listLocalImageFile.size();i++){
+
+            /* Glide image Loader */
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .error(R.drawable.ic_add_a_photo_24)
+                    .placeholder(R.drawable.ic_add_a_photo_24);
+
+            Glide.with(getApplicationContext())
+                    .load(listLocalImageFile.get(1))
+                    .apply(options)
+                    .centerCrop()
+                    .getDiskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mediaContainer);
+            i++;
+        }
+    }
+
+
+    private void saveImageDatatoFireBase(final ProgressDialog progressDialog){
+        progressDialog.setMessage("Savind uploaded image ....");
+        Map<String, Object> dataMap = new HashMap<>();
+        // Below line of code will put your images list as an array in firestore
+        dataMap.put("images", savedImageUrl);
+
+        mediaList.add(dataMap)
+            .addOnSuccessListener(new OnSuccessListener<Object>() {
+                @Override
+                public void onSuccess(Object o) {
+                    progressDialog.dismiss();
+                    Toast.makeText(CameraFragment.this, "Images uploaded and saved successfully", Toast.LENGTH_SHORT).show();
+                }
+            })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CameraFragment.this, "Images uploaded but we couldn't save them to the database.", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
     }
 
 
 
 
-}
-
-         **/
+    public void openGallery(View view) {
 
 
+        if ((listLocalImageFile.size() != 0)) {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
+            progressDialog.setMessage("Uploadled 0/" + listLocalImageFile.size());
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            final StorageReference storageReference = storage.getReference();
+
+            for (int i = 0; i < listLocalImageFile.size(); i++) {
+                final int index = 1;
+                StorageReference fileReference = mediaFolder.child(System.currentTimeMillis()
+                        + "." + getFileExtension(listLocalImageFile.get(1)));
+
+
+                fileReference.putFile(listLocalImageFile.get(i))
+                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    fileReference.getDownloadUrl()
+                                            .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Uri> task) {
+
+                                                    counter++;
+                                                    progressDialog.setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+                                                    if (task.isSuccessful()) {
+                                                        saveImageUrl.add(task.getResult().toString());
+                                                    } else {
+                                                        // this is ti delete the image if the download url is not complete
+
+                                                        storageReference.child("UserImages/").child(listLocalImageFile.get(index).toString()).delete();
+                                                        Toast.makeText(CameraFragment.this, "Coudn't save", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    if (counter == listLocalImageFile.size()) {
+                                                        saveImageDatatoFireBase(progressDialog);
+                                                    }
+
+                                                }
+                                            });
+                                } else {
+                                    progressDialog.setMessage("Upploaded" + counter + "/" + listLocalImageFile.size());
+                                    counter++;
+                                    Toast.makeText(CameraFragment.this, "couldn't upload" + listLocalImageFile.get(index).toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        } else {
+            Toast.makeText(this, "Please add some images first", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+/*********/
+
+
+/*
 
         System.out.print("OpenGallery");
 
@@ -220,8 +426,11 @@ catch(ActivityNotFoundException e){
         }
 
 return false;
-    }
 
+
+
+    }
+*/
 
     /**
      * END CAMERA
