@@ -117,7 +117,6 @@ public class CreditFragment extends Fragment {
                                                     userFilleul.update("us_balance", usSoldeNew);
                                             }
                                         });
-
                             }else{
                                 Toast.makeText(getContext(), "Il faut avoir un filleul pour créditer son compte", Toast.LENGTH_SHORT).show();
                             }
