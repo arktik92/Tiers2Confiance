@@ -24,10 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="4dp"
+                android:layout_margin="12dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -77,6 +74,33 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/lbl_hobbies" />
+
+                <Button
+                    android:id="@+id/btn_pfl_crediter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Créditer son filleul" />
+
+                <Button
+                    android:id="@+id/btn_link_supp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ne plus être le parrain" />
+
+                <Button
+                    android:id="@+id/btn_pfl_envoyer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Envoyer le profil à mon filleul" />
+
+                <Button
+                    android:id="@+id/btn_pfl_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Demander à être le parrain" />
 
             </LinearLayout>
 

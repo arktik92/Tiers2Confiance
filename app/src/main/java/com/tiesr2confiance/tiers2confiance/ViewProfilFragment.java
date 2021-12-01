@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnPflRequest;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -89,7 +91,6 @@ public class ViewProfilFragment extends Fragment {
         getDataIDUser(view);
         showProfil();
         // Affiche les boutons en fonctions du context
-        showBoutonsAction();
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -102,8 +103,21 @@ public class ViewProfilFragment extends Fragment {
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
 
+
+        btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
+        btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
+        btnLinkSupp = view.findViewById(R.id.btn_link_supp);
+        btnPflRequest= view.findViewById(R.id.btn_pfl_request);
+
+        btnPflCrediter.setVisibility(View.INVISIBLE);
+        btnPflEnvoyer.setVisibility(View.INVISIBLE);
+        btnLinkSupp.setVisibility(View.INVISIBLE);
+        btnPflRequest.setVisibility(View.INVISIBLE);
+
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
+
+        showBoutonsAction();
     }
 
     private void getDataIDUser(View view) {
@@ -213,8 +227,29 @@ public class ViewProfilFragment extends Fragment {
                 });
     }
 
-
     private void showBoutonsAction() {
+
+        // Si le user connecté est un parrain
+
+            // Si le profil consulté est un célibataire
+                // Si le profil consulté est le filleul du parrain,
+                        //on peut créditer
+                        btnPflCrediter.setVisibility(View.VISIBLE);
+                        // on peut supprimer le lien de parrainage
+                        btnLinkSupp.setVisibility(View.VISIBLE);
+
+                // Si le profil consulté n'est pas le filleul du parrain
+                        //on peut envoyer faire un envoi du profil à son filleul (Proposition)
+                        btnPflEnvoyer.setVisibility(View.VISIBLE);
+                        //on peut demander d'être le parrain
+                        btnPflRequest.setVisibility(View.VISIBLE);
+
+        // Si le user connecté est un célibataire
+
+
+
+            // Si le profil consulté est un parrain
+
     }
 
 }
