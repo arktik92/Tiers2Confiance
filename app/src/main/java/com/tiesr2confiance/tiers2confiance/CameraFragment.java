@@ -214,7 +214,7 @@ public static final String EXTRA_INFO="default";
     }
 
     private void initUI(View view) {
-        imageProfil = view.findViewById(R.id.ivProfil);
+       // imageProfil = view.findViewById(R.id.ivProfil);
         llMediaContainer = view.findViewById(R.id.llMediaContainer);
     }
 

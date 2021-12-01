@@ -38,6 +38,10 @@
             android:exported="false"/>
 
         <activity
+            android:name=".Login.RoleChoiceActivity"
+            android:exported="false"/>
+
+        <activity
             android:name=".Login.SignInActivity"
             android:exported="false" />
         <activity
