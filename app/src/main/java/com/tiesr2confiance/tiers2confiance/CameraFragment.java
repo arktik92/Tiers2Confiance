@@ -7,10 +7,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
@@ -66,8 +69,7 @@ public class CameraFragment extends Fragment {
 
 
     /* Camera Setup*/
-public static final String EXTRA_INFO="default";
-
+    public static final String EXTRA_INFO = "default";
 
 
     ImageView imageProfil, mediaContainer;
@@ -313,180 +315,287 @@ public static final String EXTRA_INFO="default";
     }
 
 
+    private static Uri KEY_FS_USER_ID = null;
+
+    ArrayList<Uri> DataUri = new ArrayList<Uri>();
+
+    //Context context = getApplicationContext();
+
+    public String getImageFilePath(Uri uri) {
+        File file = new File(uri.getPath());
+
+
+
+        System.out.println("file"+ file);
+
+        /*****
+String[] filePath = file.getPath().split(":");
+String image_id = filePath[filePath.length -1];
+***/
+/*
+        Cursor cursor = getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+            cursor.close();
+            return imagePath;
+        }*/
+        return null;
+
+    }
+
     public void openGallery(View view) {
 
-        final DialogFragment dialogFragment = new DialogFragment();
-
-        if ((listLocalImageFile.size() != 0)) {
-            // final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
-
-            dialogFragment.show(myContext.getSupportFragmentManager(), "Uploadled 0/" + listLocalImageFile.size());
-            // progressDialog.setMessage("Uploadled 0/" + listLocalImageFile.size());
-
-            dialogFragment.getDialog().setCancelable(false);
-            // progressDialog.setCancelable(false);
 
 
-            //progressDialog.setCanceledOnTouchOutside(false);
-            dialogFragment.getDialog().setCanceledOnTouchOutside(false);
+        /****
+        Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Bundle bundle = cameraIntent.getExtras();
+
+        cameraIntent.setType("image/*");
+        cameraIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        cameraIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        Uri CurrentUri = (Uri) cameraIntent.getData();
+
+        DataUri.add(CurrentUri);
 
 
-            //progressDialog.show();
-            dialogFragment.getDialog().show();
+        ***/
 
-            final StorageReference storageReference = storage.getReference();
+        Bitmap selectedImage;
 
-            for (int i = 0; i < listLocalImageFile.size(); i++) {
-                final int index = 1;
-                StorageReference fileReference = mediaFolder.child(System.currentTimeMillis()
-                        + "." + getFileExtension(listLocalImageFile.get(1)));
-
-
-                fileReference.putFile(listLocalImageFile.get(i))
-                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    fileReference.getDownloadUrl()
-                                            .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Uri> task) {
-
-                                                    counter++;
-
-                                                    //progressDialog.setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
-
-                                                    // dialogFragment.getDialog().setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
-                                                    dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
-                                                    dialogFragment.getDialog().setCancelMessage(null);
-
-                                                    if (task.isSuccessful()) {
-                                                        savedImageUrl.add(task.getResult().toString());
-                                                    } else {
-                                                        // this is ti delete the image if the download url is not complete
-
-                                                        storageReference.child("UserImages/").child(listLocalImageFile.get(index).toString()).delete();
-
-                                                        dialogFragment.show(myContext.getSupportFragmentManager(), "Coudn't save");
-                                                        //     Toast.makeText(CameraFragment.this, "Coudn't save", Toast.LENGTH_SHORT).show();
-
-                                                    }
-
-                                                    if (counter == listLocalImageFile.size()) {
-                                                        //saveImageDatatoFireBase(progressDialog);
-                                                        saveImageDatatoFireBase(dialogFragment);
-                                                    }
-                                                }
-                                            });
-                                } else {
-
-                                    //    progressDialog.setMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
-
-                                    dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
-                                    counter++;
-
-                                    //Toast.makeText(CameraFragment.this, "couldn't upload" + listLocalImageFile.get(index).toString(), Toast.LENGTH_SHORT).show();
-                                    dialogFragment.show(myContext.getSupportFragmentManager(), "couldn't upload" + listLocalImageFile.get(index).toString());
-
-                                }
-                            }
-                        });
-            }
-        } else {
-
-            dialogFragment.show(myContext.getSupportFragmentManager(), "Please add some images first");
-
-            //Toast.makeText(this, "Please add some images first", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-/*********/
-
-
-/*
-
-        System.out.print("OpenGallery");
-
-
-        //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-
-     //   Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-       // if(Manifest.permission.WRITE_EXTERNAL_STORAGE == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         //}
+Bundle camerabundle = new Bundle();
 
-        intent.setType("image/*"); // image/jpg
+        cameraIntent.setType("image/*"); // image/jpg
 
-        intent.putExtra("crop", true);
-        intent.putExtra("scale", true);
+        cameraIntent.putExtra("crop", true);
+        cameraIntent.putExtra("scale", true);
 
         // Output image dim
-        intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 256);
+        cameraIntent.putExtra("outputX", 256);
+        cameraIntent.putExtra("outputY", 256);
 
         // Ratio
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        cameraIntent.putExtra("aspectX", 1);
+        cameraIntent.putExtra("aspectY", 1);
 
-        intent.putExtra("return-data", true);
+        cameraIntent.putExtra("return-data", true);
 
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
-        startActivity(intent);
+        System.out.println("EXTRA =>"+EXTRA_INFO);
 
+        System.out.println("EXTRA =>"+Intent.EXTRA_LOCAL_ONLY);
+
+
+        Uri CurrentUri = (Uri) cameraIntent.getData();
+
+        selectedImage = (Bitmap) cameraIntent.getExtras().get("data");
+
+        System.out.println("selectedImage => "+selectedImage);
+
+        System.out.println("CurrentUri =>"+CurrentUri);
+
+
+
+//        File file = new File(CurrentUri.getPath());
+
+      // System.out.println("File =>"+file);
+
+
+        /**
+        final String[] split = file.getPath().split(":");//split the path.
+
+        final String filePath = split[1];
+**/
+       // System.out.println("filePath =>"+file);
+        startActivity(cameraIntent);
+
+
+
+     //   Log.d(TAG, "Get Data: " + getImageFilePath(CurrentUri));
 
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+        /***
+         public void openGallery(View view) {
 
-    public void getCamera(View view) {
+         final DialogFragment dialogFragment = new DialogFragment();
 
+         if ((listLocalImageFile.size() != 0)) {
+         // final ProgressDialog progressDialog = new ProgressDialog(getContext()); // this
 
-        System.out.print("*** GEt CAMERA FUNCTION ****");
+         dialogFragment.show(myContext.getSupportFragmentManager(), "Uploadled 0/" + listLocalImageFile.size());
+         // progressDialog.setMessage("Uploadled 0/" + listLocalImageFile.size());
 
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-try{
-    startActivity(takePictureIntent);
-}
-catch(ActivityNotFoundException e){
-    System.out.println("Error => "+e);
-}
-
-    }
+         dialogFragment.getDialog().setCancelable(false);
+         // progressDialog.setCancelable(false);
 
 
-    public static boolean checkPermission(Context context) {
-        if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+         //progressDialog.setCanceledOnTouchOutside(false);
+         dialogFragment.getDialog().setCanceledOnTouchOutside(false);
 
-            System.out.println("ACCESS_COARSE_LOCATION => ACCES PERMISSION GRANTED ");
+
+         //progressDialog.show();
+         dialogFragment.getDialog().show();
+
+         final StorageReference storageReference = storage.getReference();
+
+         for (int i = 0; i < listLocalImageFile.size(); i++) {
+         final int index = 1;
+         StorageReference fileReference = mediaFolder.child(System.currentTimeMillis()
+         + "." + getFileExtension(listLocalImageFile.get(1)));
+
+
+         fileReference.putFile(listLocalImageFile.get(i))
+         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        @Override public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+        if (task.isSuccessful()) {
+        fileReference.getDownloadUrl()
+        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+        @Override public void onComplete(@NonNull Task<Uri> task) {
+
+        counter++;
+
+        //progressDialog.setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+        // dialogFragment.getDialog().setCancelMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+        dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
+        dialogFragment.getDialog().setCancelMessage(null);
+
+        if (task.isSuccessful()) {
+        savedImageUrl.add(task.getResult().toString());
+        } else {
+        // this is ti delete the image if the download url is not complete
+
+        storageReference.child("UserImages/").child(listLocalImageFile.get(index).toString()).delete();
+
+        dialogFragment.show(myContext.getSupportFragmentManager(), "Coudn't save");
+        //     Toast.makeText(CameraFragment.this, "Coudn't save", Toast.LENGTH_SHORT).show();
 
         }
 
-        if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-            System.out.println("WRITE_EXTERNAL_STORAGE => ACCES PERMISSION GRANTED ");
+        if (counter == listLocalImageFile.size()) {
+        //saveImageDatatoFireBase(progressDialog);
+        saveImageDatatoFireBase(dialogFragment);
         }
+        }
+        });
+        } else {
 
-return false;
+        //    progressDialog.setMessage("Uploaded" + counter + "/" + listLocalImageFile.size());
+
+        dialogFragment.show(myContext.getSupportFragmentManager(), "Uploaded" + counter + "/" + listLocalImageFile.size());
+        counter++;
+
+        //Toast.makeText(CameraFragment.this, "couldn't upload" + listLocalImageFile.get(index).toString(), Toast.LENGTH_SHORT).show();
+        dialogFragment.show(myContext.getSupportFragmentManager(), "couldn't upload" + listLocalImageFile.get(index).toString());
+
+        }
+        }
+        });
+         }
+         } else {
+
+         //   dialogFragment.show(myContext.getSupportFragmentManager(), "Please add some images first");
+         System.out.println("PLease add some image first");
+         //Toast.makeText(this, "Please add some images first", Toast.LENGTH_SHORT).show();
+         }
+         }
+         ***/
+
+
+        /***    System.out.print("OpenGallery");
+
+
+         //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+         //   Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+         // if(Manifest.permission.WRITE_EXTERNAL_STORAGE == PackageManager.PERMISSION_GRANTED) {
+         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+         //}
+
+
+         intent.setType("image/*"); // image/jpg
+
+         intent.putExtra("crop", true);
+         intent.putExtra("scale", true);
+
+         // Output image dim
+         intent.putExtra("outputX", 256);
+         intent.putExtra("outputY", 256);
+
+         // Ratio
+         intent.putExtra("aspectX", 1);
+         intent.putExtra("aspectY", 1);
+
+         intent.putExtra("return-data", true);
+
+         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+         System.out.println("EXTRA"+EXTRA_INFO);
+
+         startActivity(intent);
 
 
 
-    }
-*/
 
-    /**
-     * END CAMERA
-     ****/
+         }
+
+         static final int REQUEST_IMAGE_CAPTURE = 1;
+
+         public void getCamera(View view) {
 
 
-    public void CaptureFromCamera(View view) {
+         System.out.print("*** GEt CAMERA FUNCTION ****");
 
-        System.out.println("get photo");
+
+         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+         try{
+         startActivity(takePictureIntent);
+         }
+         catch(ActivityNotFoundException e){
+         System.out.println("Error => "+e);
+         }
+
+         }
+         ***/
+
+/****
+        public void checkPermission (ContextCompat context){
+            if (ContextCompat.checkSelfPermission(
+                  //  context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                System.out.println("ACCESS_COARSE_LOCATION => ACCES PERMISSION GRANTED ");
+
+            }
+
+            if (ContextCompat.checkSelfPermission(
+                 //   context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                System.out.println("WRITE_EXTERNAL_STORAGE => ACCES PERMISSION GRANTED ");
+
+
+                }
+
+
+
+        }***/
+
+
+        /**
+         * END CAMERA
+         ****/
+
+
+        public void CaptureFromCamera (View view){
+
+            System.out.println("get photo");
 
         /*
         try {
@@ -501,9 +610,9 @@ return false;
 
          */
 
+        }
+
+
     }
-
-
-}
 
 
