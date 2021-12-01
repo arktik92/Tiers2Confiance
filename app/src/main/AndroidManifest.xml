@@ -4,61 +4,50 @@
     package="com.tiesr2confiance.tiers2confiance">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="Android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="Android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="Android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
-
-
     <application
-        android:name="com.tiesr2confiance.tiers2confiance.Common.GlobalClass"
+        android:name=".Common.GlobalClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance.NoActionBar">
-
-
+        <activity
+            android:name=".Login.RoleChoiceActivity"
+            android:exported="false" />
         <activity
             android:name=".Login.ResetPasswordActivity"
             android:exported="false" />
-
-
         <activity
             android:name=".Common.NoInternetActivity"
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    </activity>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Login.SignInActivity"
             android:exported="false" />
         <activity
             android:name=".Login.CreationProfilActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
-
-
-
-
-
+            android:exported="false" />
     </application>
 
 </manifest>

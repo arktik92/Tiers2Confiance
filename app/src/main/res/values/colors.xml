@@ -7,10 +7,10 @@
     <color name="background">#000000</color>
     <color name="TextPrimary">#FEFEFE</color>
     <color name="text_secondary">#FF000000</color>
-    <color name="button">#DC143C</color>
+    <color name="btnCelib">#DC143C</color>
     <color name="notification">#DC143C</color>
     <color name="cardView">#CECECE</color>
-    <color name="buttonPressed">#BB0B0B</color>
     <color name="colorSecondary">#0288D1</color>
+    <color name="btnParrain">#0288D1</color>
 
 </resources>

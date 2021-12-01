@@ -4,4 +4,7 @@
         <item name="android:divider">#FF0000</item>
         <item name="android:dividerHeight">2dp</item>
     </style>
+    <style name="ButtonStyle">
+        <item name="android:background">@drawable/shape_btn_parrain</item>
+    </style>
 </resources>
