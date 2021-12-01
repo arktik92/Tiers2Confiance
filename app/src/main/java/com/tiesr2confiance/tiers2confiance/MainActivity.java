@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -169,9 +170,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                                         replace(R.id.fragment_container, new LierParrainFilleulFragment()).
                                         commit();
                             }else{
+                                Bundle b = new Bundle();
+                                b.putString("idUser", contenuUser.getUs_nephews());
+                                Fragment fragment = new ViewProfilFragment();
+                                fragment.setArguments(b);
                                 getSupportFragmentManager().
                                         beginTransaction().
-                                        replace(R.id.fragment_container, new ViewProfilFragment()).
+                                        replace(R.id.fragment_container, fragment).
                                         commit();
                             }
                         }else{
@@ -181,38 +186,19 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                                         replace(R.id.fragment_container, new LierParrainFilleulFragment()).
                                         commit();
                             }else{
+                                Bundle b = new Bundle();
+                                b.putString("idUser", contenuUser.getUs_godfather());
+                                Fragment fragment = new ViewProfilFragment();
+                                fragment.setArguments(b);
                                 getSupportFragmentManager().
                                         beginTransaction().
-                                        replace(R.id.fragment_container, new ViewProfilFragment()).
+                                        replace(R.id.fragment_container, fragment).
                                         commit();
                             }
                         }
                     }
                 });
 
-                // envoyer les variable sur un autre fragment.
-
-//                String test = "toto";
-//                Bundle b = new Bundle();
-//                b.putString("message", test);
-//                Fragment fragment = new Fragment();
-//                fragment.setArguments(b);
-//                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                //ft.replace(R.id.the_fragg,dv);
-//                ft.commit();
-
-                // recuperer sur un autre fragment
-//                public class Frag2 extends Fragment {
-//                    public View onCreateView(LayoutInflater inflater,
-//                                             ViewGroup containerObject,
-//                                             Bundle savedInstanceState){
-//                        //here is your arguments
-//                        Bundle bundle=getArguments();
-//
-//                        //here is your list array
-//                        String[] myStrings=bundle.getStringArray("elist");
-//                    }
-//                }
                 break;
             case R.id.nav_search_profil_PF:
                 getSupportFragmentManager().
