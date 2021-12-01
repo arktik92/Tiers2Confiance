@@ -126,6 +126,7 @@ public class GlobalClass extends Application {
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN");
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
+        userCountryLanguage = "EN";
 
          myArrayListGenders.clear();
 

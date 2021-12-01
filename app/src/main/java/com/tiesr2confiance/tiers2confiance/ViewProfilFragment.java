@@ -1,5 +1,6 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
@@ -27,13 +28,20 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Common.ListsAttributs;
+import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +59,15 @@ public class ViewProfilFragment extends Fragment {
     /** Collection **/
     private String KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
     public final String KEY_FS_COLLECTION = "users";
+
+
+    private static FirebaseUser user;
+    private static String userId;
+    private static String userNickName;
+    private static String userCountryLanguage = "";
+    private static String userEmail;
+
+
 
 
     String list_hobbies;
@@ -147,6 +164,7 @@ public class ViewProfilFragment extends Fragment {
 //                            listHobbiesVar.setGlobalVarValue( globalVarValue);
 //                            globalVarValue = listHobbiesVar.getGlobalVarValue();
 
+
                             globalVarValue = new HashMap<Long, String>();
                             globalVarValue.put((long)1, getContext().getString(R.string.ho_artisanat_text));
                             globalVarValue.put((long)2, getString(R.string.ho_balades_text));
@@ -172,7 +190,6 @@ public class ViewProfilFragment extends Fragment {
                                     String value = entry.getValue();
                                     if (key.equals(hobbies_list[i])) {
                                         Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
-
                                         hobbies_display += value + " -- ";
                                     }
                                 }
@@ -195,7 +212,5 @@ public class ViewProfilFragment extends Fragment {
                     }
                 });
     }
-
-
 
 }

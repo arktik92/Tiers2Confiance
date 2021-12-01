@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="15dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/et_credit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -27,7 +28,7 @@
             tools:text="Saisir le montant" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_crediter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Créditer" />

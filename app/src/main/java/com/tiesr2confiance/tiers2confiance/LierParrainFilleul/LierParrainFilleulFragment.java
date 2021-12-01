@@ -148,6 +148,7 @@ public class LierParrainFilleulFragment extends Fragment {
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryText) {
+                Log.e(TAG, "onComplete: HHHHsubmit "  );
                 return false;
             }
 

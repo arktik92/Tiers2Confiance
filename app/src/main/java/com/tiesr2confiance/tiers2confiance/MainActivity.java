@@ -6,26 +6,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
-import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromCelibFragment;
-import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromGodfatherFragment;
+import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
-import com.tiesr2confiance.tiers2confiance.ProfilFragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "Main Activity : ";
     /**
      * Variables globales
      **/
@@ -169,16 +169,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
 
             case R.id.nav_crediter:
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_container, new CreditFromGodfatherFragment()).
-                        commit();
-                break;
-
             case R.id.nav_crediter_from_celib:
                 getSupportFragmentManager().
                         beginTransaction().
-                        replace(R.id.fragment_container, new CreditFromCelibFragment()).
+                        replace(R.id.fragment_container, new CreditFragment()).
                         commit();
                 break;
 
@@ -197,7 +191,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer_layout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
 }
