@@ -115,13 +115,13 @@ public class CreditFragment extends Fragment {
                                                     usSolde = contenuFilleul.getUs_balance() ;
                                                     usSoldeNew = usSolde + Long.parseLong(etCredit.getText().toString()) ;
                                                     userFilleul.update("us_balance", usSoldeNew);
+                                                Toast.makeText(getContext(), "Solde créditer, merci!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }else{
                                 Toast.makeText(getContext(), "Il faut avoir un filleul pour créditer son compte", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        Toast.makeText(getContext(), "Solde créditer, merci!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

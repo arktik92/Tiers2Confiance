@@ -13,6 +13,8 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_godfather_nephews.xml" value="0.2359375" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_menu_01_24.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_propositions.xml" value="0.2359375" />
+        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_creation_profil_celibataire.xml" value="0.2015625" />
+        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_creation_profil_parrain.xml" value="0.2015625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_lier_parrain_filleul.xml" value="0.1" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_main.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_main_celibataire.xml" value="0.1" />
@@ -22,7 +24,7 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_sign_in.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/activity_view_profil.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/content_menu.xml" value="0.2453125" />
-        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_crediter.xml" value="0.33" />
+        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_crediter.xml" value="0.22" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_lier_parrain_filleul.xml" value="0.1" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_pending_requests.xml" value="0.19895833333333332" />
