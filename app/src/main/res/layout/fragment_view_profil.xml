@@ -95,13 +95,6 @@
                     android:layout_margin="5dp"
                     android:text="Envoyer le profil à mon filleul" />
 
-                <Button
-                    android:id="@+id/btn_pfl_request"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Demander à être le parrain" />
-
             </LinearLayout>
 
         </RelativeLayout>

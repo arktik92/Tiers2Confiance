@@ -1,6 +1,5 @@
 package com.tiesr2confiance.tiers2confiance;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
@@ -11,6 +10,8 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -31,18 +32,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
-import com.tiesr2confiance.tiers2confiance.Common.ListsAttributs;
-import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
-import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
+import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,16 +50,21 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnPflRequest;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp;
 
     /*** BDD ***/
     private FirebaseFirestore db;
+    private CollectionReference usersCollectionRef;
     /** ID Document **/
+    private FirebaseUser currentUser;
     private DocumentReference noteRef;
+    private DocumentReference userConnected;
     /** Collection **/
     private String KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
     public final String KEY_FS_COLLECTION = "users";
 
+    private Long usRole;
+    private String usNephew;
 
     private static FirebaseUser user;
     private static String userId;
@@ -107,17 +110,49 @@ public class ViewProfilFragment extends Fragment {
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
-        btnPflRequest= view.findViewById(R.id.btn_pfl_request);
 
         btnPflCrediter.setVisibility(View.INVISIBLE);
         btnPflEnvoyer.setVisibility(View.INVISIBLE);
         btnLinkSupp.setVisibility(View.INVISIBLE);
-        btnPflRequest.setVisibility(View.INVISIBLE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
-        showBoutonsAction();
+        // Redirige vers le fragment pour créditer son filleul
+        btnPflCrediter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new CreditFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        // Supprimer le lien Parrain/Filleul
+        btnLinkSupp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Récupération de l'utilisateur connecté
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            noteRef.update("us_godfather", "" );
+                            userConnected.update("us_nephews", "" );
+                        }
+                    }
+                });
+
+            }
+        });
     }
 
     private void getDataIDUser(View view) {
@@ -125,6 +160,7 @@ public class ViewProfilFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         // NoteRef, récupération de l'utilisateur connecté
         noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
+        usersCollectionRef = db.collection("users");
     }
 
     public void showProfil() {
@@ -217,7 +253,44 @@ public class ViewProfilFragment extends Fragment {
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
+
+
+                        // Si le user connecté est un Parrain, on affiche les bouttons qui vont bien
+                        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                        userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshotConnected) {
+                                if (documentSnapshotConnected.exists()) {
+                                    ModelUsers contenuUser = documentSnapshotConnected.toObject(ModelUsers.class);
+                                    assert contenuUser != null;
+
+                                    usRole = contenuUser.getUs_role();
+                                    usNephew = contenuUser.getUs_nephews();
+                                    if (usRole.equals(2L)) {
+                                        Log.e(TAG, "onSuccess: " + usNephew );
+                                        Log.e(TAG, "onSuccess: " + documentSnapshot.getId() );
+                                        // Si le profil consulté est le filleul du parrain,
+                                        if (usNephew.equals(documentSnapshot.getId())){
+                                            //on peut créditer
+                                            btnPflCrediter.setVisibility(View.VISIBLE);
+                                            // on peut supprimer le lien de parrainage
+                                            btnLinkSupp.setVisibility(View.VISIBLE);
+
+                                        }else{
+                                            // Si le profil consulté n'est pas le filleul du parrain
+                                            //on peut envoyer faire un envoi du profil à son filleul (Proposition)
+                                            btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                        }
+                                    } else {
+                                        // Si le user connecté est un célibataire
+                                    }
+                                }
+                            }
+                        });
                     }
+
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -225,31 +298,6 @@ public class ViewProfilFragment extends Fragment {
                         Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void showBoutonsAction() {
-
-        // Si le user connecté est un parrain
-
-            // Si le profil consulté est un célibataire
-                // Si le profil consulté est le filleul du parrain,
-                        //on peut créditer
-                        btnPflCrediter.setVisibility(View.VISIBLE);
-                        // on peut supprimer le lien de parrainage
-                        btnLinkSupp.setVisibility(View.VISIBLE);
-
-                // Si le profil consulté n'est pas le filleul du parrain
-                        //on peut envoyer faire un envoi du profil à son filleul (Proposition)
-                        btnPflEnvoyer.setVisibility(View.VISIBLE);
-                        //on peut demander d'être le parrain
-                        btnPflRequest.setVisibility(View.VISIBLE);
-
-        // Si le user connecté est un célibataire
-
-
-
-            // Si le profil consulté est un parrain
-
     }
 
 }

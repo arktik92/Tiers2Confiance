@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +109,12 @@ public class LierParrainFilleulFragment extends Fragment {
                 usNephewsRequestTo = contenuUser.getUs_nephews_request_to();
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestTo.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestTo.split(";")));
+
+                if (usRole.equals(1L)) {
+                    if ( TextUtils.isEmpty(contenuUser.getUs_godfather())) { usAlreadyLinked = false; }
+                } else {
+                    if ( TextUtils.isEmpty(contenuUser.getUs_nephews())) { usAlreadyLinked = false; }
+                }
 
                 // On affiche la liste seulement si l'utilisateur n'est pas déjà lié avec un autre utilisateur
                 if (usAlreadyLinked == true) {

@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // Appel de la méthode d'initialisation de l'UI
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
             case R.id.nav_deconnexion_celib:
+            case R.id.nav_deconnexion_parrain:
                 firebaseAuth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
