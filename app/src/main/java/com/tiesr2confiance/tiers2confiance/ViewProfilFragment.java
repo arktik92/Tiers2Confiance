@@ -27,9 +27,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -43,6 +45,7 @@ import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ViewProfilFragment extends Fragment {
 
@@ -50,7 +53,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -60,7 +63,7 @@ public class ViewProfilFragment extends Fragment {
     private DocumentReference noteRef;
     private DocumentReference userConnected;
     /** Collection **/
-    private String KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
+    private String KEY_FS_USER_ID;
     public final String KEY_FS_COLLECTION = "users";
 
     private Long usRole;
@@ -81,7 +84,6 @@ public class ViewProfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         //public String arg = getArguments().getString("");
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
 
@@ -90,6 +92,8 @@ public class ViewProfilFragment extends Fragment {
       //      KEY_FS_USER_ID = bundle.getString("IdUser");
       //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
       //  }
+
+        KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
 
         getDataIDUser(view);
         showProfil();
@@ -110,10 +114,12 @@ public class ViewProfilFragment extends Fragment {
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
+        btnLinkRequest = view.findViewById(R.id.btn_link_request);
 
         btnPflCrediter.setVisibility(View.INVISIBLE);
         btnPflEnvoyer.setVisibility(View.INVISIBLE);
         btnLinkSupp.setVisibility(View.INVISIBLE);
+        btnLinkRequest.setVisibility(View.INVISIBLE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
@@ -147,6 +153,38 @@ public class ViewProfilFragment extends Fragment {
                             assert contenuUser != null;
                             noteRef.update("us_godfather", "" );
                             userConnected.update("us_nephews", "" );
+                        }
+                    }
+                });
+
+            }
+        });
+
+        // Le parrain demande à parrainer le célibataire
+        btnLinkRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Récupération de l'utilisateur connecté
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + noteRef.getId()+  ";");
+                            noteRef.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                            assert celibUser != null;
+                                            String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
+                                            noteRef.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
+                                        }
+                                    });
                         }
                     }
                 });
@@ -282,6 +320,8 @@ public class ViewProfilFragment extends Fragment {
                                             // Si le profil consulté n'est pas le filleul du parrain
                                             //on peut envoyer faire un envoi du profil à son filleul (Proposition)
                                             btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                            // On peut demander à parrainer le célibataire
+                                            btnLinkRequest.setVisibility(View.VISIBLE);
                                         }
                                     } else {
                                             // Si le user connecté est un célibataire
