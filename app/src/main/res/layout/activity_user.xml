@@ -33,7 +33,7 @@
                 android:id="@+id/tv_user_AuthUID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView user_AuthUID" />
 
             <Button
                 android:id="@+id/button6"
@@ -60,6 +60,12 @@
                 android:orientation="vertical">
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_chk_hobbies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
     </ScrollView>
 
