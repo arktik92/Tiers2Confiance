@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         init();
 
+
         etPassword.setOnEditorActionListener(editorActionListener);
     }
     /** Gestion du bouton login **/

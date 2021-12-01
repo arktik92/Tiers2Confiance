@@ -11,21 +11,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromCelibFragment;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFromGodfatherFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
+import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
+import com.tiesr2confiance.tiers2confiance.ProfilFragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * Variables globales
      **/
+
+    //********************************* FIREBASE AUTH
+    private FirebaseAuth firebaseAuth;
 
     // ******************************** MENU
     Toolbar toolbar;
@@ -46,10 +51,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private AppBarConfiguration appBarConfiguration;
     private ProfilFragment binding;
 
+
     /**
      * Faire le lien entre les widgets et le design
      **/
     public void initUI() {
+        firebaseAuth = FirebaseAuth.getInstance();
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
@@ -85,6 +92,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // Force l'affichage du 1er fragment au démarrage
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
+
+
     }
 
     private void addFragment() {
@@ -98,13 +107,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Finalisation de la création du fragment
         fragmentTransaction.commit();
 
+
+
 //        getSupportFragmentManager().
 //                beginTransaction().
 //                add(R.id.fragment_container, new Fragment_01()).
 //                commit();
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -178,10 +188,15 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
-
+            case R.id.nav_deconnexion_celib:
+                firebaseAuth.signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }
