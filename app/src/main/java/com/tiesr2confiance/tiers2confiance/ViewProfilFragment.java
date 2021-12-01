@@ -68,8 +68,6 @@ public class ViewProfilFragment extends Fragment {
     private static String userEmail;
 
 
-
-
     String list_hobbies;
     public HashMap<Long, String> globalVarValue;
 
@@ -90,6 +88,8 @@ public class ViewProfilFragment extends Fragment {
 
         getDataIDUser(view);
         showProfil();
+        // Affiche les boutons en fonctions du context
+        showBoutonsAction();
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -211,6 +211,10 @@ public class ViewProfilFragment extends Fragment {
                         Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    private void showBoutonsAction() {
     }
 
 }

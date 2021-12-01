@@ -122,8 +122,13 @@ public class PendingRequestsFragment extends Fragment {
                     if ( TextUtils.isEmpty(contenuUser.getUs_nephews())) { usAlreadyLinked = false; }
                 }
 
+                // On affiche la liste seulement si l'utilisateur n'est pas déjà lié avec un autre utilisateur
                 if (usAlreadyLinked == true) {
-                    Toast.makeText(getContext(), "Vous êtes déjà lié à un utilisateur", Toast.LENGTH_SHORT).show();
+                    if (usRole.equals(1L)){
+                        Toast.makeText(getContext(), "Vous avez déjà un parrain", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), "Vous avez déjà un filleul", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     /** Récupération de la collection Users dans Firestore **/
                     Query query = db.collection("users")

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -50,6 +51,7 @@ public class LierParrainFilleulFragment extends Fragment {
     private SearchView svTextSearch;
     private RecyclerView rvResultat;
     private LierParrainFilleulAdapter adapterUser;
+    private Boolean usAlreadyLinked = true;
 
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -107,9 +109,18 @@ public class LierParrainFilleulFragment extends Fragment {
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestTo.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestTo.split(";")));
 
-                // Appel la fonction qui affiche la liste
-                displayList(usRole, NephewSepareted, GodfatherSepareted, view );
-                adapterUser.startListening();
+                // On affiche la liste seulement si l'utilisateur n'est pas déjà lié avec un autre utilisateur
+                if (usAlreadyLinked == true) {
+                    if (usRole.equals(1L)){
+                        Toast.makeText(getContext(), "Vous avez déjà un parrain", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), "Vous avez déjà un filleul", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    // Appel la fonction qui affiche la liste
+                    displayList(usRole, NephewSepareted, GodfatherSepareted, view);
+                    adapterUser.startListening();
+                }
             }
         });
     }
