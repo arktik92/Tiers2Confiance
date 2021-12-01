@@ -1,17 +1,23 @@
 package com.tiesr2confiance.tiers2confiance;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Models.ModelViewProfilItem;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentLierParrainFilleulBinding;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
 
-public class Profil extends AppCompatActivity {
+public class ProfilFragment extends Fragment {
 
 
     private static final String TAG = "users_test_profil";
@@ -32,40 +38,37 @@ public class Profil extends AppCompatActivity {
     private DocumentReference noteRef;
     /*** Collection reference ***/
     private CollectionReference noteCollectionRef;
-
+    private FragmentProfilBinding binding;
 
     /*** end - BDD ***/
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_profil, container, false);
+        binding = FragmentProfilBinding.inflate(inflater, container, false);
+        getDataIDUser(view);
+        return binding.getRoot();
+    }
 
-    private void init() {
+    /** Initialisation des composants  **/
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        myName = view.findViewById(R.id.etName);
+        myCity = view.findViewById(R.id.etCIty);
+        myEmail = view.findViewById(R.id.etEmail);
+    }
 
-
-        myName = findViewById(R.id.etName);
-        myCity = findViewById(R.id.etCIty);
-        myEmail = findViewById(R.id.etEmail);
-
+    // Récupération de l'id de l'utilisateur connecté
+    private void getDataIDUser(View view) {
         /* Init BDD */
         /*** BDD Connexion ***/
         db = FirebaseFirestore.getInstance();
-
         /*** db Location ***/
         noteRef = db.document("/notes/collection");
-
         /** Add Document into the collection with each different ID **/
         noteCollectionRef = db.collection("notes");
-
         /* End Init BDD */
-
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
-
-        init();
-
     }
 
 
@@ -76,12 +79,7 @@ public class Profil extends AppCompatActivity {
 
         ModelViewProfilItem content = new ModelViewProfilItem(mName, mCity, mEmail);
 
-
-
         noteCollectionRef.add(content);
-
-
-
 
 /*
         ModelViewProfilItem contentProfil = new ModelViewProfilItem(mName);
@@ -101,12 +99,6 @@ public class Profil extends AppCompatActivity {
                     }
                 });
 */
-
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 }

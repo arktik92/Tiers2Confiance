@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <item android:title="Moi (pseudo)">
+        <menu>
+            <item android:title="Mon compte"
+                android:id="@+id/nav_profil"
+                android:icon="@drawable/ic_godfather_nephews"/>
+            <item android:title="Créditer"
+                android:id="@+id/nav_crediter_from_celib"
+                android:icon="@drawable/ic_search_godfather_nephews"/>
+        </menu>
+    </item>
+
+
+    <group android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:title="Propositions reçues"
+            android:id="@+id/nav_fragment_7"
+            android:icon="@drawable/ic_propositions" />
+    </group>
+
+    <group android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:title="Chat"
+            android:id="@+id/nav_fragment_12"
+            android:icon="@drawable/ic_messages" />
+    </group>
+
+
+    <item android:title="Mon parrain">
+        <menu>
+            <item android:title="Voir"
+                android:id="@+id/nav_view_profil"
+                android:icon="@drawable/ic_godfather_nephews"/>
+            <item android:title="Chercher"
+                android:id="@+id/nav_search_profil_PF"
+                android:icon="@drawable/ic_search_godfather_nephews"/>
+            <item android:title="Demandes en attente"
+                android:id="@+id/nav_pending_request"
+                android:icon="@drawable/ic_pending"/>
+        </menu>
+    </item>
+
+
+    <group android:id="@+id/group5"
+        android:checkableBehavior="single">
+        <item
+            android:title="Déconnexion"
+            android:id="@+id/nav_deconnexion_celib"
+            android:icon="@drawable/ic_exit" />
+    </group>
+
+
+</menu>
