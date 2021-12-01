@@ -272,7 +272,6 @@ public class GlobalClass extends Application {
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN");
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
-        userCountryLanguage = "EN";
 
         Query queryGenders = db.collection("genders")
                 .whereEqualTo("ge_country", userCountryLanguage);
