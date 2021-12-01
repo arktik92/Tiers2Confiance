@@ -29,6 +29,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
@@ -71,6 +72,19 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+   //     GlobalClass globalVariables = new GlobalClass();
+   //     globalVariables.LoadUserDataFromFirestore();
+
+        //        Log.i(TAG, globalVariables.getUser());
+//        Log.i(TAG, globalVariables.getUserId());
+//        Log.i(TAG, globalVariables.getUserEmail());
+//        Log.i(TAG, globalVariables.getUserNickName());
+//        Log.i(TAG, globalVariables.getUserCountryLanguage());
+    }
 
     /**
      * Faire le lien entre les widgets et le design
@@ -113,6 +127,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // Force l'affichage du 1er fragment au démarrage
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
+
+
+
+
 
 
     }
