@@ -161,16 +161,31 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                         assert contenuUser != null;
 
-                        if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_container, new LierParrainFilleulFragment()).
-                                    commit();
+                        Long usRole = contenuUser.getUs_role();
+                        if (usRole.equals(2)){
+                            if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
+                                getSupportFragmentManager().
+                                        beginTransaction().
+                                        replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+                                        commit();
+                            }else{
+                                getSupportFragmentManager().
+                                        beginTransaction().
+                                        replace(R.id.fragment_container, new ViewProfilFragment()).
+                                        commit();
+                            }
                         }else{
-                            getSupportFragmentManager().
-                                    beginTransaction().
-                                    replace(R.id.fragment_container, new ViewProfilFragment()).
-                                    commit();
+                            if (TextUtils.isEmpty(contenuUser.getUs_godfather())){
+                                getSupportFragmentManager().
+                                        beginTransaction().
+                                        replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+                                        commit();
+                            }else{
+                                getSupportFragmentManager().
+                                        beginTransaction().
+                                        replace(R.id.fragment_container, new ViewProfilFragment()).
+                                        commit();
+                            }
                         }
                     }
                 });

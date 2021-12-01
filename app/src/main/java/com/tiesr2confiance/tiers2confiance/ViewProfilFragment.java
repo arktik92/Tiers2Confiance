@@ -94,7 +94,13 @@ public class ViewProfilFragment extends Fragment {
       //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
       //  }
 
+        Bundle bundle = getArguments();
+        String myStrings =bundle.getString("idUser");
+
+        Log.e(TAG, "onCreateView: "+ myStrings);
+
         KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
+        KEY_FS_USER_ID = myStrings;
 
         getDataIDUser(view);
         showProfil();

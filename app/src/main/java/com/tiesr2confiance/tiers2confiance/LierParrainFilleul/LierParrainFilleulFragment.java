@@ -196,12 +196,19 @@ public class LierParrainFilleulFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot snapshot, int position) {
 
+
+                String idUser = snapshot.getId();
+                Bundle b = new Bundle();
+                b.putString("idUser", idUser);
                 Fragment fragment = new ViewProfilFragment();
+                fragment.setArguments(b);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+
+
             }
         });
     }
