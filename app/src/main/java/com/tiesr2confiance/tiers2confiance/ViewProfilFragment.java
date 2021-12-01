@@ -284,7 +284,8 @@ public class ViewProfilFragment extends Fragment {
                                             btnPflEnvoyer.setVisibility(View.VISIBLE);
                                         }
                                     } else {
-                                        // Si le user connecté est un célibataire
+                                            // Si le user connecté est un célibataire
+                                            //Pour l'instant rien du tout, pas de boutons
                                     }
                                 }
                             }

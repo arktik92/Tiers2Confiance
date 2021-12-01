@@ -130,8 +130,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
-            case R.id.nav_profil_filleul:
-
                 // envoyer les variable sur un autre fragment.
 
 //                String test = "toto";
@@ -162,7 +160,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
             case R.id.nav_search_profil_PF:
-            case R.id.nav_search_profil_FP:
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new LierParrainFilleulFragment()).
@@ -170,7 +167,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
 
             case R.id.nav_crediter:
-            case R.id.nav_crediter_from_celib:
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new CreditFragment()).
@@ -178,14 +174,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
 
             case R.id.nav_pending_request:
-            case R.id.nav_pending_request_godfather:
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
-            case R.id.nav_deconnexion_celib:
-            case R.id.nav_deconnexion_parrain:
+            case R.id.nav_deconnexion:
                 firebaseAuth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }

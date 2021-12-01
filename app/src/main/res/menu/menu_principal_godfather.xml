@@ -20,16 +20,16 @@
     <item android:title="Mon filleul">
         <menu>
             <item android:title="Voir son profil"
-                android:id="@+id/nav_profil_filleul"
+                android:id="@+id/nav_view_profil"
                 android:icon="@drawable/ic_godfather_nephews"/>
             <item android:title="Créditer"
                 android:id="@+id/nav_crediter"
                 android:icon="@drawable/ic_credit"/>
             <item android:title="Chercher"
-                android:id="@+id/nav_search_profil_FP"
+                android:id="@+id/nav_search_profil_PF"
                 android:icon="@drawable/ic_search_godfather_nephews"/>
             <item android:title="Demandes en attente"
-                android:id="@+id/nav_pending_request_godfather"
+                android:id="@+id/nav_pending_request"
                 android:icon="@drawable/ic_pending"/>
         </menu>
     </item>
@@ -38,7 +38,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Déconnexion"
-            android:id="@+id/nav_deconnexion_parrain"
+            android:id="@+id/nav_deconnexion"
             android:icon="@drawable/ic_exit" />
     </group>
 </menu>

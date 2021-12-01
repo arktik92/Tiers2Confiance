@@ -9,7 +9,7 @@
                 android:id="@+id/nav_profil"
                 android:icon="@drawable/ic_godfather_nephews"/>
             <item android:title="Créditer"
-                android:id="@+id/nav_crediter_from_celib"
+                android:id="@+id/nav_crediter"
                 android:icon="@drawable/ic_search_godfather_nephews"/>
         </menu>
     </item>
@@ -51,7 +51,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Déconnexion"
-            android:id="@+id/nav_deconnexion_celib"
+            android:id="@+id/nav_deconnexion"
             android:icon="@drawable/ic_exit" />
     </group>
 
