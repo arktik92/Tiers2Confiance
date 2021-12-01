@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +31,7 @@ import com.tiesr2confiance.tiers2confiance.Common.Util;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
+import com.tiesr2confiance.tiers2confiance.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentPendingRequestsBinding;
 
 import java.util.ArrayList;
@@ -138,10 +141,14 @@ public class PendingRequestsFragment extends Fragment {
                     adapterUser.setOnItemCliclListener(new PendingRequestsAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(DocumentSnapshot snapshot, int position) {
-                            snapshot.getReference();
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            intent.putExtra("IdUser", snapshot.getId());
-                            startActivity(intent);
+
+                            Fragment fragment = new ViewProfilFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
                         }
                     });
                 }

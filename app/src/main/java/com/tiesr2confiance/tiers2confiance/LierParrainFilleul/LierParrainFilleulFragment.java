@@ -3,6 +3,8 @@ package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -175,10 +177,13 @@ public class LierParrainFilleulFragment extends Fragment {
         adapterUser.setOnItemCliclListener(new LierParrainFilleulAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot snapshot, int position) {
-                snapshot.getReference();
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtra("IdUser", snapshot.getId());
-                startActivity(intent);
+
+                Fragment fragment = new ViewProfilFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }
