@@ -119,25 +119,20 @@ public class LierParrainFilleulFragment extends Fragment {
         critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;
-           // setTitle(getString(R.string.Lier_pf_titre_filleul));
             critere = GodfatherList;
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
             roleInverse = 1;
-           // setTitle(getString(R.string.Lier_pf_titre_parrain));
             critere = NephewsList;
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
-                .whereEqualTo("us_role", roleInverse);
-                //.whereNotIn("us_auth_uid", critere);
+                .whereEqualTo("us_role", roleInverse)
+                .whereNotIn("us_auth_uid", critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
                         .build();
-
-        Log.e(TAG, "Ca passe avec " + query.toString());
-
         adapterUser = new LierParrainFilleulAdapter(users);
         rvResultat.setAdapter(adapterUser);
 
@@ -181,7 +176,6 @@ public class LierParrainFilleulFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot snapshot, int position) {
                 snapshot.getReference();
-
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.putExtra("IdUser", snapshot.getId());
                 startActivity(intent);

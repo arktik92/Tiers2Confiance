@@ -93,23 +93,17 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         Date us_birth_day = model.getUs_birth_date();
         String us_godfather_request_from = model.getUs_godfather_request_from();
         String us_nephews_request_from = model.getUs_nephews_request_from();
-        //String us_avatar;
-        String us_avatar    =   model.getUs_avatar();
+        String us_avatar = model.getUs_avatar();
 
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
         String str = String.format("%tc", us_birth_day);
         holder.tv_birth_day.setText(str);
-        Log.e(TAG, "onBindViewHolder: " + "PAGE REGENEERE" );
-        holder.btn_request.setText("TEST");
 
         // Récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = usersCollectionRef.document(currentUser.getUid());
-
-        //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
-        // Utilisation de glide pour afficher les images,
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
@@ -123,7 +117,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         // puis l'emplacement où mettre l'image, dans le holder crée.
         Glide.with(context)
                 .load(us_avatar)
-//                 .load(R.mipmap.ic_launcher_round)
                 .apply(options)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -140,7 +133,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                                 assert contenuUser != null;
-
                                 // Si l'utilisateur connecté est un célibataire, il cherche et demande à des parrains d'être leur filleul
                                 if (contenuUser.getUs_role() == 1) {
                                     Log.e(TAG , "je suis un célibataire connecté, j'envoi une demande à un parrain");

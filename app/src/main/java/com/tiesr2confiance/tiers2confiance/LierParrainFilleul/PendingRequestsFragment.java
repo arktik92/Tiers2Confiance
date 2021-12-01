@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.tiesr2confiance.tiers2confiance.Common.Util;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentPendingRequestsBinding;
@@ -42,6 +45,7 @@ public class PendingRequestsFragment extends Fragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
     private Long usRole = 2L;
+    private Boolean usAlreadyLinked = true;
 
     private String usGodfatherRequestFrom = "";
     private String usNephewsRequestFrom = "";
@@ -103,27 +107,33 @@ public class PendingRequestsFragment extends Fragment {
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestFrom.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestFrom.split(";")));
 
-
                 if (usRole.equals(1L)) {
                     roleInverse = 2;
+                    if ( TextUtils.isEmpty(contenuUser.getUs_godfather())) { usAlreadyLinked = false; }
                     critere = GodfatherSepareted;
                 } else {
                     roleInverse = 1;
                     critere = NephewSepareted;
+                    if ( TextUtils.isEmpty(contenuUser.getUs_nephews())) { usAlreadyLinked = false; }
                 }
 
-                /** Récupération de la collection Users dans Firestore **/
-                Query query = db.collection("users")
-                        .whereEqualTo("us_role", roleInverse)
-                        .whereIn("us_auth_uid", critere);
-                FirestoreRecyclerOptions<ModelUsers> users =
-                        new FirestoreRecyclerOptions.Builder<ModelUsers>()
-                                .setQuery(query, ModelUsers.class)
-                                .build();
+                if (usAlreadyLinked == true) {
+                    Toast.makeText(getContext(), "Vous êtes déjà lié à un utilisateur", Toast.LENGTH_SHORT).show();
+                }else{
+                    /** Récupération de la collection Users dans Firestore **/
+                    Query query = db.collection("users")
+                            .whereEqualTo("us_role", roleInverse)
+                            .whereIn("us_auth_uid", critere);
+                    FirestoreRecyclerOptions<ModelUsers> users =
+                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                    .setQuery(query, ModelUsers.class)
+                                    .build();
 
-                adapterUser = new PendingRequestsAdapter(users);
-                recyclerView.setAdapter(adapterUser);
-                adapterUser.startListening();
+                    adapterUser = new PendingRequestsAdapter(users);
+                    recyclerView.setAdapter(adapterUser);
+                    adapterUser.startListening();
+                }
+
             }
         });
 
