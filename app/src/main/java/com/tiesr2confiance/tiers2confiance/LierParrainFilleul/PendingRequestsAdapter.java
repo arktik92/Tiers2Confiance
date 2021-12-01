@@ -45,6 +45,8 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     private DocumentReference userConnected;
     private DocumentReference userPosition;
 
+    // Variable locale
+    private PendingRequestsAdapter.OnItemClickListener mOnItemClickListener;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -54,6 +56,16 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     public  PendingRequestsAdapter(@NonNull FirestoreRecyclerOptions<ModelUsers> options) {
         super(options);
     }
+
+    /** #1 Interface **/
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    public void setOnItemCliclListener(PendingRequestsAdapter.OnItemClickListener onItemClickListener){
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
 
     @Override
     protected void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull ModelUsers model) {
@@ -155,6 +167,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         return new PendingRequestsAdapter.ItemViewHolder(view);
     }
 
+
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tv_nickname_request, tv_city_request, tv_birth_day_request;
@@ -172,4 +185,5 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
             cv_profil_user_request = itemView.findViewById(R.id.cv_profil_user_request);
         }
     }
+
 }

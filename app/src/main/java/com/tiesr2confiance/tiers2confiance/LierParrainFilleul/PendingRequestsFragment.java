@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Common.Util;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentPendingRequestsBinding;
@@ -132,6 +134,16 @@ public class PendingRequestsFragment extends Fragment {
                     adapterUser = new PendingRequestsAdapter(users);
                     recyclerView.setAdapter(adapterUser);
                     adapterUser.startListening();
+
+                    adapterUser.setOnItemCliclListener(new PendingRequestsAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DocumentSnapshot snapshot, int position) {
+                            snapshot.getReference();
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            intent.putExtra("IdUser", snapshot.getId());
+                            startActivity(intent);
+                        }
+                    });
                 }
 
             }
