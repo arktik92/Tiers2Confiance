@@ -38,8 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
-
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +77,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                     globalVariables.LoadUserDataFromFirestore();
                                     Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
-
-
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     finish();
                                 } else {

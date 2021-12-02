@@ -6,26 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,20 +28,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
-import com.tiesr2confiance.tiers2confiance.Common.PGO.UserActivity;
 import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
-import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
-import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,38 +45,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
      * Variables globales
      **/
     /** Variable Firebase Auth **/
-    private FirebaseUser user;
-    private String userId, userAuthUID;
-    private String collection;
-    private String userNickName;
-    private String userCountryLanguage;
-    private String userEmail;
-
-
 
 
     /** Variables Firestore **/
-//    private FirebaseFirestore db = FirebaseFirestore.getInstance();;
-    private DocumentReference docRefUserConnected;
-    public static ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
-    public static ArrayList<ModelHobbies> myArrayListHobbies = new ArrayList<>();
-
-    ConstraintLayout userActivityConstraintLayout;
-    LinearLayout gendersLinearLayout;
-    LinearLayout     hobbiesLinearLayout;
-    LinearLayout     hobbiesLinearlayoutChkbox;
-
-    RecyclerView rvHobbies;
-
-    private RadioGroup radioGroupGenders;
-    private RadioGroup  radioGroupHobbies;
-
-    private TextView    tvUserNickName;
-    private TextView    tvUserId;
-    private TextView    tvCountryLanguage;
-    private TextView    tvEmail;
-
-
 
     //********************************* FIREBASE AUTH
     private FirebaseAuth firebaseAuth;
@@ -120,19 +76,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private final CollectionReference usersCollectionRef = db.collection("users");
     DocumentReference userConnected;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        //     GlobalClass globalVariables = new GlobalClass();
-        //     globalVariables.LoadUserDataFromFirestore();
-
-        //        Log.i(TAG, globalVariables.getUser());
-//        Log.i(TAG, globalVariables.getUserId());
-//        Log.i(TAG, globalVariables.getUserEmail());
-//        Log.i(TAG, globalVariables.getUserNickName());
-//        Log.i(TAG, globalVariables.getUserCountryLanguage());
-    }
 
     /**
      * Faire le lien entre les widgets et le design
@@ -142,19 +85,22 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        userConnected = usersCollectionRef.document(currentUser.getUid());
+
+
         if(role == 1) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
             setContentView(R.layout.activity_main_parrain);
         }
-
-
 
         // Appel de la méthode d'initialisation de l'UI
         initUI();
@@ -183,61 +129,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         /*************************************************************/
         /*************************************************************/
-        /**************************** PGO ****************************/
-        /*************************************************************/
-        /*************************************************************/
 
-        Button btnInitVar1;
-        btnInitVar1 = findViewById(R.id.btn_init_var1);
-        btnInitVar1.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   InitVariables();
-                   InitComponents();
-               }
-           });
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        globalVariables.LoadUserDataFromFirestore();
+        globalVariables.LoadGendersDataFromFirestore();
+        globalVariables.LoadHobbiesDataFromFirestore();
 
-        Button btnInitVar2;
-        btnInitVar2 = findViewById(R.id.btn_init_var2);
-        btnInitVar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoadGenders();
-                LoadHobbies();
-            }
-        });
-
-
-        Button btndisplaygenders;
-        btndisplaygenders = findViewById(R.id.btn_display_genders);
-        btndisplaygenders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DisplayGenders();
-            }
-        });
-
-        Button btndisplayhobbies;
-        btndisplayhobbies = findViewById(R.id.btn_display_hobbies);
-        btndisplayhobbies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DisplayHobbies();
-            }
-        });
-
-
-
-        LoadUserData();
-        LoadGenders();
-        LoadHobbies();
-
-        InitVariables();
-        InitComponents();
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        userConnected = usersCollectionRef.document(currentUser.getUid());
 
 
     }
@@ -250,48 +147,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore FINISH *************");
 
     }
-
-    public void InitVariables() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "InitGlobalVariablesStep1");
-
-//        globalVariables.LoadUserDataFromFirestore();
-
-
-        userId              =   globalVariables.getUserId();
-        userNickName        =   globalVariables.getUserNickName();
-        userCountryLanguage =   globalVariables.getUserCountryLanguage();
-        userEmail           =   globalVariables.getUserEmail();
-
-        Log.i(TAGAPP, "userId : " + userId);
-        Log.i(TAGAPP, "userNickName : " + userNickName);
-        Log.i(TAGAPP, "userCountryLanguage : " + userCountryLanguage);
-        Log.i(TAGAPP, "userEmail : " + userEmail);
-        Log.i(TAGAPP, "------- END OF initGlobalVariables ---------");
-        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-
-    }
-
-    private void InitComponents() {
-        tvUserId        = findViewById(R.id.tv_user_id);
-        tvUserNickName  = findViewById(R.id.tv_nick_name);
-        tvCountryLanguage= findViewById(R.id.tv_country_language);
-        tvEmail        =   findViewById(R.id.tv_email);
-
-        /************** init des TextViews ***-******************/
-        tvUserId.setText(userId);
-        tvUserNickName.setText(userNickName);
-        tvCountryLanguage.setText(userCountryLanguage);
-        tvEmail.setText(userEmail);
-
-    }
-
-
-
-
-
-
-
 
     private void LoadGenders() {
         final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
@@ -308,162 +163,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         globalVariables.LoadHobbiesDataFromFirestore();
     }
 
-    private void DisplayGenders() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "DisplayGenders()");
-
-        myArrayListGenders  =   globalVariables.getArrayListGenders();
-
-        Log.i(TAGAPP, "------- myArrayListGenders ---------" + myArrayListGenders.size());
-        Log.i(TAGAPP, "------- myArrayListGenders ---------" + myArrayListGenders);
-        Log.i(TAGAPP, "----------------");
-        for (int i = 0; i < myArrayListGenders.size(); i++) {
-            Log.i(TAGAPP, ">>"
-                    + myArrayListGenders.get(i).getGe_id() + " "
-                    + myArrayListGenders.get(i).getGe_country() + " "
-                    + myArrayListGenders.get(i).getGe_label());
-        }
-        Log.i(TAGAPP, "----------------");
-        Log.i(TAGAPP, "------- myArrayListGenders ---------");
-        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-
-    }
-
-    private void DisplayHobbies() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "DisplayHobbies() ");
-
-        myArrayListHobbies  =   globalVariables.getArrayListHobbies();
-
-        Log.i(TAGAPP, "------- myArrayListHobbies ---------" + myArrayListHobbies.size());
-        Log.i(TAGAPP, "------- myArrayListHobbies ---------" + myArrayListHobbies);
-        Log.i(TAGAPP, "----------------");
-
-
-        Collections.sort(myArrayListHobbies, new Comparator<ModelHobbies>() {
-            @Override
-            public int compare(ModelHobbies u1, ModelHobbies u2) {
-                return u2.getHo_label().compareTo(u1.getHo_label());
-            }
-        });
-
-
-        for (int i = 0; i < myArrayListHobbies.size(); i++) {
-            Log.i(TAGAPP, ">>"
-                    + myArrayListHobbies.get(i).getHo_id() + " "
-                    + myArrayListHobbies.get(i).getHo_country() + " "
-                    + myArrayListHobbies.get(i).getHo_label());
-        }
-        Log.i(TAGAPP, "------- myArrayListHobbies ---------");
-        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void InitComponents_OLD() {
-
-        //userId = user.getUid();
-
-        Log.i(TAG, "initComponents : BEGIN");
-
-        //userActivityLayout =  findViewById(R.id.user_Activity_Layout);
-        userActivityConstraintLayout =  findViewById(R.id.drawer_layout);
-
-        /************** init des TextViews ***-******************/
-
-        tvUserId                    = findViewById(R.id.tv_user_id);
-//        tvUserNickName              = findViewById(R.id.tv_user_nick_name);
-//        tvUserAuthUID               = findViewById(R.id.tv_user_AuthUID);
-
-        tvUserId.setText(userId);
-        tvUserNickName.setText(userNickName);
-//        tvUserAuthUID.setText(userId);
-
-        //        /************** init des Views/Layouts CheckBox et Radiobuttons ***-******************/
-        //
-        //        gendersLinearLayout         = findViewById(R.id.linear_layout_genders);
-        //        hobbiesLinearLayout         = findViewById(R.id.linear_layout_hobbies);
-        //        hobbiesLinearlayoutChkbox   = findViewById(R.id.linear_layout_chk_hobbies);
-        //
-        //
-        ////        rvHobbies           = findViewById(R.id.rv_hobbies);
-        //
-        //        LinearLayout.LayoutParams params =
-        //                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-        //                        , ViewGroup.LayoutParams.WRAP_CONTENT
-        //                        );
-        //        params.setMargins(80, 0, 0, 40);
-        //
-        //
-        //        radioGroupGenders = new RadioGroup(this);
-        //        radioGroupGenders.setLayoutParams(params);
-        //
-        ////        params.setMargins(30, 0, 0, 0);
-        //        radioGroupHobbies = new RadioGroup(this);
-        //        radioGroupHobbies.setLayoutParams(params);
-        //
-        //
-        //
-        //
-        ////        rgGenders.addView(gendersLinearLayout);
-
-        Log.i(TAG, "initComponents : END");
-
-    }
-
-
-
-    public void InitVariablesStep1(){
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAG,"InitGlobalVariablesStep1");
-
-//        globalVariables.LoadUserDataFromFirestore();
-
-
-        userId              =   globalVariables.getUserId();
-        userNickName        =   globalVariables.getUserNickName();
-        userCountryLanguage =   globalVariables.getUserCountryLanguage();
-        String userEmail    =   globalVariables.getUserEmail();
-
-
-        Log.i(TAG, "db : " + db);
-        Log.i(TAG, "user : " + user);
-        Log.i(TAG, "userId : " + userId);
-        Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
-        Log.i(TAG, "------- END OF InitGlobalVariables ---------");
-        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId , Toast.LENGTH_SHORT).show();
-    }
-
-    public void InitGlobalVariablesStep2(){
-//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//
-//        globalVariables.LoadUserDataFromFirestore(); // userNickName, userCountryLanguage
-//
-//        globalVariables.setUserNickName(userNickName);
-//        globalVariables.setUserCountryLanguage(userCountryLanguage);
-//        globalVariables.setUserEmail(userEmail);
-//
-//
-//        Log.i(TAG, "userId : " + userId);
-//        Log.i(TAG, "userNickName : " + userNickName);
-//        Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
-//        Log.i(TAG, "userEmail : " + userEmail);
-//        Log.i(TAG, "------- END OF InitGlobalVariables ---------");
-//        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-    }
 
 
 

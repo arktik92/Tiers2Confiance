@@ -57,7 +57,8 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
-    public static long role, genre,  balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup,hairColor,
+    public static long role;
+    private long  genre,  balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup,hairColor,
             hairLength, eyeColor, smoker;
     private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId,
             userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo,

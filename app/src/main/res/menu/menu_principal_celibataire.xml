@@ -27,7 +27,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Chat"
-            android:id="@+id/nav_PGO"
+            android:id="@+id/nav_fragment_1"
             android:icon="@drawable/ic_messages" />
     </group>
 

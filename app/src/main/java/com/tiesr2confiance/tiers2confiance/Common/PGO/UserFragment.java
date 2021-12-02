@@ -112,9 +112,9 @@ public class UserFragment extends Fragment {
 	/** Initialisation des composants  **/
 	@Override
 	public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-		tvUserId        = view.findViewById(R.id.tv_user_id);
-		tvUserNickName  = view.findViewById(R.id.tv_nick_name);
-		tvCountryLanguage= view.findViewById(R.id.tv_country_language);
+//		tvUserId        = view.findViewById(R.id.tv_user_id);
+//		tvUserNickName  = view.findViewById(R.id.tv_nick_name);
+//		tvCountryLanguage= view.findViewById(R.id.tv_country_language);
 
 //		GlobalClass globalVariables = (GlobalClass) Context.getApplicationContext() ;
 //		globalVariables.LoadUserDataFromFirestore();
