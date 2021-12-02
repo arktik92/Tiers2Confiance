@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, fragment).
                         commit();
                 break;
-            // Mon Parrain
+            // Mon Parrain ou Mon filleul
             case R.id.nav_view_profil:
                 userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                         assert contenuUser != null;
                         Long usRole = contenuUser.getUs_role();
-                        if (usRole.equals(2)){
+                        if (usRole.equals(2L)){
                             if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
                                 getSupportFragmentManager().
                                         beginTransaction().
