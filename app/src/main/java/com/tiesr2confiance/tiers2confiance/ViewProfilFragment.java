@@ -6,6 +6,7 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +57,7 @@ public class ViewProfilFragment extends Fragment {
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers ;
+    private LinearLayout llProfil;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -118,6 +121,8 @@ public class ViewProfilFragment extends Fragment {
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
 
+        llProfil = view.findViewById(R.id.ll_profil);
+        llProfil.setVisibility(View.INVISIBLE);
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
@@ -132,6 +137,7 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest.setVisibility(View.INVISIBLE);
         btnLinkSuppTiers.setVisibility(View.INVISIBLE);
         btnLinkRequestTiers.setVisibility(View.INVISIBLE);
+
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
@@ -284,6 +290,7 @@ public class ViewProfilFragment extends Fragment {
                             String imgUrl_avatar = documentSnapshot.getString(KEY_IMG_AVATAR);
                             String description = documentSnapshot.getString(KEY_DESCRIPTION);
                             String hobbies = documentSnapshot.getString(KEY_HOBBIES);
+                            Long role = documentSnapshot.getLong(KEY_ROLE);
 
                             tvProfilCity.setText(city);
                             tvProfilName.setText(name);
@@ -311,6 +318,10 @@ public class ViewProfilFragment extends Fragment {
                                     .circleCrop()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
+
+                            if (role.equals(1L)){
+                                llProfil.setVisibility(View.VISIBLE);
+                            }
 
                             list_hobbies = documentSnapshot.getString("us_hobbies");
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
@@ -399,7 +410,6 @@ public class ViewProfilFragment extends Fragment {
                                             }
                                         }
                                     } else {
-
                                         // Si le profil consulté est le parrain du filleul
                                         if (usGodfather.equals(documentSnapshot.getId())){
                                             // on peut supprimer le lien de parrainage

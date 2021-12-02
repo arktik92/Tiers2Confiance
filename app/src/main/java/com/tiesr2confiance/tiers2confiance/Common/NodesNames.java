@@ -5,6 +5,7 @@ import java.util.Date;
 public class NodesNames {
 
     // Node des Users
+    public static final String KEY_ROLE = "us_role";
     public static final String KEY_NICKNAME = "us_nickname";
     public static final String KEY_NAME = "us_first_name";
     public static final String KEY_LAST_NAME = "us_last_name";
