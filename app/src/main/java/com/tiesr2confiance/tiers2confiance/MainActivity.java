@@ -234,6 +234,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         InitVariables();
         InitComponents();
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        userConnected = usersCollectionRef.document(currentUser.getUid());
+
 
     }
 
