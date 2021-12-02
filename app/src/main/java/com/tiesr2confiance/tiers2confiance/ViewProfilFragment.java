@@ -54,7 +54,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -122,11 +122,13 @@ public class ViewProfilFragment extends Fragment {
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
+        btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
 
         btnPflCrediter.setVisibility(View.INVISIBLE);
         btnPflEnvoyer.setVisibility(View.INVISIBLE);
         btnLinkSupp.setVisibility(View.INVISIBLE);
         btnLinkRequest.setVisibility(View.INVISIBLE);
+        btnLinkSuppTiers.setVisibility(View.INVISIBLE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
@@ -198,6 +200,32 @@ public class ViewProfilFragment extends Fragment {
 
             }
         });
+
+
+        // Supprimer le lien Parrain/Filleul
+        btnLinkSuppTiers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Récupération de l'utilisateur connecté
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            noteRef.update("us_nephews", "" );
+                            userConnected.update("us_godfather", "" );
+                        }
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     private void getDataIDUser(View view) {
@@ -336,7 +364,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     } else {
                                             // Si le user connecté est un célibataire
-                                            //Pour l'instant rien du tout, pas de boutons
+                                                btnLinkSuppTiers.setVisibility(View.VISIBLE);
                                     }
                                 }
                             }

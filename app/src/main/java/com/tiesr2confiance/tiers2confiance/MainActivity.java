@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         });
 
 
-
         LoadUserData();
         LoadGenders();
         LoadHobbies();
