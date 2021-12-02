@@ -1,71 +1,45 @@
 package com.tiesr2confiance.tiers2confiance;
 
-import static android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 import android.Manifest;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ClipData;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
-import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentFirstBinding;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class CameraFragment extends Fragment {
+class CameraFragment extends Fragment {
 
 
     /* Camera Setup*/
@@ -187,7 +161,7 @@ public class CameraFragment extends Fragment {
         /****/
 
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddPhoto.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
@@ -216,7 +190,7 @@ public class CameraFragment extends Fragment {
     }
 
     private void initUI(View view) {
-        imageProfil = view.findViewById(R.id.ivProfil);
+        imageProfil = view.findViewById(R.id.ivProfilImage);
         llMediaContainer = view.findViewById(R.id.llMediaContainer);
     }
 

@@ -30,7 +30,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
-import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
@@ -119,7 +118,7 @@ public class ViewProfilFragment extends Fragment {
         tvHobbiesname = view.findViewById(R.id.tvHobbiesName);
 
         /** Glide image **/
-        ivProfil = view.findViewById(R.id.ivProfil);
+        ivProfil = view.findViewById(R.id.ivProfilImage);
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
         /** BDD, Connexion FIreStore ***/

@@ -5,11 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,12 +17,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.tiesr2confiance.tiers2confiance.CameraRecyclerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class CameraShowFragment extends AppCompatActivity {
 
@@ -49,7 +45,7 @@ public class CameraShowFragment extends AppCompatActivity {
      **/
     private void initUI() {
         recycler = findViewById(R.id.recylcer);
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.ivProfilImage);
     }
 
     /**
