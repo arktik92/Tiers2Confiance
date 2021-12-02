@@ -102,7 +102,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         globalVariables.LoadGendersDataFromFirestore();
         globalVariables.LoadHobbiesDataFromFirestore();
 
-        long role = 1;
+
+        long role = globalVariables.getUserRole();
+
+        Log.e(TAG, "onCreate: hhhhhhh" + globalVariables.getUserRole() );
 
         if(role == 1) {
             setContentView(R.layout.activity_main_celibataire);
