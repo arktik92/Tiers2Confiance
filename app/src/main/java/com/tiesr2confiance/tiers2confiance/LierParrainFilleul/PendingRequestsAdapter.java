@@ -75,9 +75,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
 
-        String us_godfather = model.getUs_godfather();
-        String us_nephews = model.getUs_nephews();
-
         holder.tv_nickname_request.setText(us_nickname);
         holder.tv_city_request.setText(us_city);
 
@@ -125,10 +122,9 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                                     String ListDemandsNew = ListDemands.replace(userPosition.getId()+ ";", "");
                                     userConnected.update("us_godfather_request_from", ListDemandsNew);
 
-                                    userPosition.update("us_nephews",   us_nephews + userConnected.getId()+  ";");
+                                    userPosition.update("us_nephews",   userConnected.getId()+  ";");
                                     userPosition.update("us_nephews_request_to", "" ); // Replace
                                     Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
-//                                    Log.e(TAG, "Demande du parrain acceptée par le célibataire");
                                 }
 
                                 // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
@@ -155,7 +151,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                         });
             }
         });
-
     }
 
     @NonNull
