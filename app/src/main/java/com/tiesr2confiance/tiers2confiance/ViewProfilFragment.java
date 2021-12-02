@@ -61,7 +61,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers ;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
     private LinearLayout llProfil;
 
     /*** BDD ***/
@@ -128,6 +128,7 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
+        btnUpdateProfil = view.findViewById(R.id.btn_update_profil);
 
         // Les boutons n'existe pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
         btnPflCrediter.setVisibility(View.GONE);
@@ -136,6 +137,7 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest.setVisibility(View.GONE);
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
+        btnUpdateProfil.setVisibility(View.GONE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
@@ -256,15 +258,15 @@ public class ViewProfilFragment extends Fragment {
         userDisplayed.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String name = documentSnapshot.getString(KEY_NAME);
-                            String city = documentSnapshot.getString(KEY_CITY);
-                            String imgurl = documentSnapshot.getString(KEY_IMG);
-                            String imgUrl_avatar = documentSnapshot.getString(KEY_IMG_AVATAR);
-                            String description = documentSnapshot.getString(KEY_DESCRIPTION);
-                            String hobbies = documentSnapshot.getString(KEY_HOBBIES);
-                            Long role = documentSnapshot.getLong(KEY_ROLE);
+                    public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
+                        if (documentSnapshotDisplayed.exists()) {
+                            String name = documentSnapshotDisplayed.getString(KEY_NAME);
+                            String city = documentSnapshotDisplayed.getString(KEY_CITY);
+                            String imgurl = documentSnapshotDisplayed.getString(KEY_IMG);
+                            String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_IMG_AVATAR);
+                            String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
+                            String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
 
                             // Si l'utilisateur à afficher est un célibataire
                             if (role.equals(1L)){
@@ -304,7 +306,7 @@ public class ViewProfilFragment extends Fragment {
                                     .into(ivProfilAvatarShape);
 
 
-                            list_hobbies = documentSnapshot.getString("us_hobbies");
+                            list_hobbies = documentSnapshotDisplayed.getString("us_hobbies");
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
                             String split_key = ";";
                             // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
@@ -333,7 +335,6 @@ public class ViewProfilFragment extends Fragment {
                         }
 
 
-                        // Si le user connecté est un Parrain, on affiche les bouttons qui vont bien
                         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshotConnected) {
@@ -344,36 +345,44 @@ public class ViewProfilFragment extends Fragment {
                                     usRole = contenuUser.getUs_role();
                                     usNephew = contenuUser.getUs_nephews();
                                     usGodfather = contenuUser.getUs_godfather();
-                                    if (usRole.equals(2L)) {
-                                        Log.e(TAG, "onSuccess: " + usNephew );
-                                        Log.e(TAG, "onSuccess: " + documentSnapshot.getId() );
-                                        // Si le profil consulté est le filleul du parrain,
-                                        if (usNephew.equals(documentSnapshot.getId())){
-                                            //on peut créditer
-                                            btnPflCrediter.setVisibility(View.VISIBLE);
-                                            // on peut supprimer le lien de parrainage
-                                            btnLinkSupp.setVisibility(View.VISIBLE);
+                                    // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
+                                    if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
+                                        btnUpdateProfil.setVisibility(View.VISIBLE);
+                                        // Sinon on affiche d'autres boutons
+                                    }else{
+                                        // Si le user connecté est un Parrain, on affiche les boutons qui vont bien
+                                        if (usRole.equals(2L)) {
+                                            Log.e(TAG, "onSuccess: " + usNephew );
+                                            Log.e(TAG, "onSuccess: " + documentSnapshotDisplayed.getId() );
+                                            // Si le profil consulté est le filleul du parrain,
+                                            if (usNephew.equals(documentSnapshotDisplayed.getId())){
+                                                //on peut créditer
+                                                btnPflCrediter.setVisibility(View.VISIBLE);
+                                                // on peut supprimer le lien de parrainage
+                                                btnLinkSupp.setVisibility(View.VISIBLE);
 
-                                        }else{
-                                            // Si le profil consulté n'est pas le filleul du parrain
-                                            //on peut envoyer faire un envoi du profil à son filleul (Proposition)
-                                            if (TextUtils.isEmpty(usNephew)){
-                                                // On peut demander à parrainer le célibataire si on n'a pas de filleul
-                                                btnLinkRequest.setVisibility(View.VISIBLE);
                                             }else{
-                                                // On peut envoyer le profil à son filleul si on en a un
-                                                btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                                // Si le profil consulté n'est pas le filleul du parrain
+                                                //on peut envoyer faire un envoi du profil à son filleul (Proposition)
+                                                if (TextUtils.isEmpty(usNephew)){
+                                                    // On peut demander à parrainer le célibataire si on n'a pas de filleul
+                                                    btnLinkRequest.setVisibility(View.VISIBLE);
+                                                }else{
+                                                    // On peut envoyer le profil à son filleul si on en a un
+                                                    btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                                }
                                             }
-                                        }
-                                    } else {
-                                        // Si le profil consulté est le parrain du filleul
-                                        if (usGodfather.equals(documentSnapshot.getId())){
-                                            // on peut supprimer le lien de parrainage
-                                            btnLinkSuppTiers.setVisibility(View.VISIBLE);
-                                        }else{
-                                            if (TextUtils.isEmpty(usGodfather)){
-                                                // On fait une demande au parrain si on a pas de parrain
-                                                btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                            // Si le user connecté est un Célibataire, on affiche les boutons qui vont bien
+                                        } else {
+                                            // Si le profil consulté est le parrain du filleul
+                                            if (usGodfather.equals(documentSnapshotDisplayed.getId())){
+                                                // on peut supprimer le lien de parrainage
+                                                btnLinkSuppTiers.setVisibility(View.VISIBLE);
+                                            }else{
+                                                if (TextUtils.isEmpty(usGodfather)){
+                                                    // On fait une demande au parrain si on a pas de parrain
+                                                    btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                }
                                             }
                                         }
                                     }
