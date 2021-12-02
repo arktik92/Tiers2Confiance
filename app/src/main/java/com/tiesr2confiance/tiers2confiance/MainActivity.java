@@ -487,26 +487,22 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
             // MOI (Pseudo)
             case R.id.nav_profil:
+                Bundle b = new Bundle();
+                b.putString("idUser", userConnected.getId());
+                Fragment fragment = new ViewProfilFragment();
+                fragment.setArguments(b);
                 getSupportFragmentManager().
                         beginTransaction().
-                        replace(R.id.fragment_container, new ProfilFragment()).
+                        replace(R.id.fragment_container, fragment).
                         commit();
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
-
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                assert currentUser != null;
-                DocumentReference userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                         assert contenuUser != null;
-
                         Long usRole = contenuUser.getUs_role();
                         if (usRole.equals(2)){
                             if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
