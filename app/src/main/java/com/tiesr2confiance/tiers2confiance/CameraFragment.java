@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ public class CameraFragment extends AppCompatActivity {
     private StorageReference storageReference;
 
     private static final String TAG = "CAMERA *******";
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +153,12 @@ public class CameraFragment extends AppCompatActivity {
 
     }
 
+
+    public void getCameraPhoto(View view){
+        Intent intent = new Intent(CameraFragment.this, CameraDeviceFragment.class);
+        startActivity(intent);
+        System.out.println("ENTER proccess getCameraPhoto >> ");
+    }
 
 
 
