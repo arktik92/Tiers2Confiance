@@ -130,4 +130,13 @@
     <string name="hello_second_fragment">"Hello "</string>
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_sign_up">Sign up</string>
+    <string name="btn_reset_password">Reset password</string>
+    <string name="dont_have_account">Don\'t have an account ?</string>
+    <string name="repeter_mot_de_passe">Repeat password</string>
+    <string name="choose_role">Choose your role :</string>
+    <string name="creer_profil">Create profil</string>
+    <string name="lbl_genre_homme">Male</string>
+    <string name="lbl_genre_femme">Female</string>
 </resources>

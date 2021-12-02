@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:text="Tiers de confiance"
             android:textAllCaps="true"
             android:textColor="@color/TextPrimary"
@@ -52,8 +53,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:inputType="textEmailAddress"
-                        android:hint="Email" />
+                        android:hint="@string/lbl_email"
+                        android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -67,8 +68,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:inputType="textPassword"
-                        android:hint="Mot de passe" />
+                        android:hint="@string/lbl_mot_de_passe"
+                        android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -82,8 +83,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:inputType="textPassword"
-                        android:hint="Repeter mot de passe" />
+                        android:hint="@string/repeter_mot_de_passe"
+                        android:inputType="textPassword" />
 
                     <Button
                         android:id="@+id/button2"
@@ -94,7 +95,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/shape_btn"
                         android:onClick="btnSignupClick"
-                        android:text="s'inscrire" />
+                        android:text="@string/btn_sign_up" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

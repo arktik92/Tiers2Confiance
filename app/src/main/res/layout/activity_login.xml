@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Enter email"
+                    android:hint="@string/lbl_email"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -59,7 +59,7 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter password"
+                    android:hint="@string/lbl_mot_de_passe"
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -74,7 +74,7 @@
                 android:hapticFeedbackEnabled="false"
                 android:imeOptions="actionDone"
                 android:onClick="btnLoginClick"
-                android:text="Login" />
+                android:text="@string/btn_login" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -84,7 +84,7 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center_horizontal"
                 android:onClick="btnResetPasswordClick"
-                android:text="Reset password"
+                android:text="@string/btn_reset_password"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="Don't have an account ?"
+            android:text="@string/dont_have_account"
             android:textColor="@color/TextPrimary" />
 
         <TextView
@@ -119,7 +119,7 @@
             android:layout_weight="1"
             android:onClick="tvSignupClick"
             android:paddingStart="8dp"
-            android:text="Sign Up"
+            android:text="@string/btn_sign_up"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorSecondary"
             tools:ignore="TouchTargetSizeCheck" />

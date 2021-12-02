@@ -1,5 +1,6 @@
 <resources>
 
+
     <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
     <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
     <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
@@ -18,11 +19,14 @@
     <string name="btn_paid">Payer</string>
     <string name="btn_refuse">Refuser</string>
     <string name="btn_accept">Accepter</string>
+    <string name="btn_login">Se connecter</string>
+    <string name="btn_sign_up">S\'inscrire</string>
+    <string name="btn_reset_password">Mot de passe oublié</string>
 
     <!-- Texte noms d'Attributs -->
     <string name="lbl_pseudo">Pseudo</string>
-    <string name="lbl_mot_de_passe">mot de passe</string>
-    <string name="lbl_email">email</string>
+    <string name="lbl_mot_de_passe">Mot de passe</string>
+    <string name="lbl_email">Email</string>
     <string name="lbl_prenom">Prénom</string>
     <string name="lbl_nom">Nom</string>
     <string name="lbl_date_inscription">Date d\'inscription</string>
@@ -36,6 +40,8 @@
     <string name="lbl_code_postal">Code Postal</string>
     <string name="lbl_ville">Ville</string>
     <string name="lbl_presentation">Présentaion</string>
+    <string name="lbl_genre_homme">Homme</string>
+    <string name="lbl_genre_femme">Femme</string>
     <string name="lbl_genre">Genre</string>
     <string name="lbl_orientation_sexuelle">Orientation Sexuelle</string>
     <string name="lbl_statut_matrimonial">Statut Matrimonial</string>
@@ -167,4 +173,16 @@
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
     <string name="getImageGallery">Importer Gallerie</string>
     <string name="getImageCamera">Importer depuis Caméra</string>
+
+    <!-- Page Login-->
+    <string name="dont_have_account">Pas encore inscrit ?</string>
+
+    <!-- Page SignUp -->
+    <string name="repeter_mot_de_passe">Repeter mot de passe</string>
+
+    <!-- Page RoleChoice -->
+    <string name="choose_role">Choisi ton rôle :</string>
+    <!-- Page creation de profil -->
+    <string name="creer_profil">Creer profil</string>
+
 </resources>

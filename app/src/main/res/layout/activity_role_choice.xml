@@ -54,7 +54,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
                 android:onClick="onChoiceClick"
-                android:text="Célibataire" />
+                android:text="@string/role_celib_text" />
 
             <Button
                 android:id="@+id/btn_role_parrain"
@@ -62,10 +62,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
-                android:onClick="onChoiceClick"
-                android:theme="@style/Theme.Tiers2Confiance"
                 android:backgroundTint="@color/btnParrain"
-                android:text="Parrain" />
+                android:onClick="onChoiceClick"
+                android:text="@string/lbl_parrain"
+                android:theme="@style/Theme.Tiers2Confiance" />
         </LinearLayout>
 
     </LinearLayout>

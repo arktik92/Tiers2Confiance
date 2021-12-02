@@ -1,5 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity.role;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +36,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
-import com.tiesr2confiance.tiers2confiance.Common.PGO.UserActivity;
 import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,8 +146,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(role == 1) {
+            setContentView(R.layout.activity_main_celibataire);
+        } else {
+            setContentView(R.layout.activity_main_parrain);
+        }
 
-        setContentView(R.layout.activity_main);
+
 
         // Appel de la méthode d'initialisation de l'UI
         initUI();
@@ -220,9 +226,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-        LoadUserData();
-        LoadGenders();
-        LoadHobbies();
+        //LoadUserData();
+        //LoadGenders();
+        //LoadHobbies();
 
         InitVariables();
         InitComponents();
