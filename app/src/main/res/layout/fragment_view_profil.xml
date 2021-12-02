@@ -137,6 +137,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ne plus être le filleule" />
+
+                    <Button
+                        android:id="@+id/btn_link_request_tiers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Demander au parrain" />
                 </LinearLayout>
 
             </LinearLayout>

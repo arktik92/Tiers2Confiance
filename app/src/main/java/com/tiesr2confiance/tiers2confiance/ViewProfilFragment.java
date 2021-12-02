@@ -54,7 +54,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers ;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -69,6 +69,7 @@ public class ViewProfilFragment extends Fragment {
 
     private Long usRole;
     private String usNephew;
+    private String usGodfather;
 
     private static FirebaseUser user;
     private static String userId;
@@ -123,12 +124,14 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
+        btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
 
         btnPflCrediter.setVisibility(View.INVISIBLE);
         btnPflEnvoyer.setVisibility(View.INVISIBLE);
         btnLinkSupp.setVisibility(View.INVISIBLE);
         btnLinkRequest.setVisibility(View.INVISIBLE);
         btnLinkSuppTiers.setVisibility(View.INVISIBLE);
+        btnLinkRequestTiers.setVisibility(View.INVISIBLE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
@@ -218,6 +221,38 @@ public class ViewProfilFragment extends Fragment {
                             assert contenuUser != null;
                             noteRef.update("us_nephews", "" );
                             userConnected.update("us_godfather", "" );
+                        }
+                    }
+                });
+
+            }
+        });
+
+        // Le célibataire demande à être parrainé par un parrain
+        btnLinkRequestTiers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Récupération de l'utilisateur connecté
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                userConnected = usersCollectionRef.document(currentUser.getUid());
+
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + noteRef.getId()+  ";");
+                            noteRef.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                            assert celibUser != null;
+                                            String usNephewsRequestFrom = celibUser.getUs_nephews_request_from();
+                                            noteRef.update("us_nephews_request_from", usNephewsRequestFrom + userConnected.getId()+  ";");
+                                        }
+                                    });
                         }
                     }
                 });
@@ -341,6 +376,7 @@ public class ViewProfilFragment extends Fragment {
 
                                     usRole = contenuUser.getUs_role();
                                     usNephew = contenuUser.getUs_nephews();
+                                    usGodfather = contenuUser.getUs_godfather();
                                     if (usRole.equals(2L)) {
                                         Log.e(TAG, "onSuccess: " + usNephew );
                                         Log.e(TAG, "onSuccess: " + documentSnapshot.getId() );
@@ -363,8 +399,17 @@ public class ViewProfilFragment extends Fragment {
                                             }
                                         }
                                     } else {
-                                            // Si le user connecté est un célibataire
-                                                btnLinkSuppTiers.setVisibility(View.VISIBLE);
+
+                                        // Si le profil consulté est le parrain du filleul
+                                        if (usGodfather.equals(documentSnapshot.getId())){
+                                            // on peut supprimer le lien de parrainage
+                                            btnLinkSuppTiers.setVisibility(View.VISIBLE);
+                                        }else{
+                                            if (TextUtils.isEmpty(usGodfather)){
+                                                // On fait une demande au parrain si on a pas de parrain
+                                                btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                            }
+                                        }
                                     }
                                 }
                             }
