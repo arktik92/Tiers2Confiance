@@ -31,6 +31,9 @@
             <item android:title="Demandes en attente"
                 android:id="@+id/nav_pending_request"
                 android:icon="@drawable/ic_pending"/>
+            <item android:title="PGO"
+                android:id="@+id/nav_PGO"
+                android:icon="@drawable/ic_pending"/>
         </menu>
     </item>
 
