@@ -98,24 +98,36 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-    <string name="ho_artisanat_text">Artisanat</string>
-    <string name="ho_balades_text">Balades</string>
-    <string name="ho_boites_text">Boites de nuit / danser</string>
-    <string name="ho_cafe_text">Café et conversation</string>
-    <string name="ho_charites_text">Charités / Organisations</string>
-    <string name="ho_clubs_text">Clubs de lecture ou de discussion</string>
-    <string name="ho_cuisiner_text">Cuisiner</string>
-    <string name="ho_déguster_text">Déguster du vin / des plats</string>
-    <string name="ho_fairerencontres_text">Faire de nouvelles rencontres</string>
-    <string name="ho_films_text">Films / Cinéma</string>
-    <string name="ho_jardiner_text">Jardiner</string>
-    <string name="ho_jeuxcartes_text">Jeux de cartes / de famille</string>
-    <string name="ho_jeuxvideos_text">Jeux vidéo</string>
-    <string name="ho_medepenser_text">Me dépenser</string>
-    <string name="ho_musique_text">Musique / Concerts</string>
-    <string name="ho_musees_text">Musées / Galeries</string>
-    <string name="ho_pecher_text">Pêcher / Chasser</string>
-    <string name="ho_regarder_text">Regarder le sport</string>
-    <string name="ho_religion_text">Religion / Spirituel</string>
-    <string name="ho_restaurant_text">Restaurant / Recevoir à diner</string>
+    <string name="ho_artisanat_text">Arts and Craft</string>
+    <string name="ho_balades_text">Hiking</string>
+    <string name="ho_boites_text">Dansing</string>
+    <string name="ho_cafe_text">Coffee and Chatting</string>
+    <string name="ho_charites_text">Charity</string>
+    <string name="ho_clubs_text">Reading</string>
+    <string name="ho_cuisiner_text">Cooking</string>
+    <string name="ho_déguster_text">Wines and cuisine</string>
+    <string name="ho_fairerencontres_text">Meeting new people</string>
+    <string name="ho_films_text">Films</string>
+    <string name="ho_jardiner_text">Gardening</string>
+    <string name="ho_jeuxcartes_text">Playing Cards</string>
+    <string name="ho_jeuxvideos_text">Gaming</string>
+    <string name="ho_medepenser_text">Practicing sports</string>
+    <string name="ho_musique_text">Music and concerts</string>
+    <string name="ho_musees_text">Museums</string>
+    <string name="ho_pecher_text">Fishing / Hunting</string>
+    <string name="ho_regarder_text">Watching sports</string>
+    <string name="ho_religion_text">Religion / Spirituality</string>
+    <string name="ho_restaurant_text">Restaurants</string>
+    <string name="ho_shopping_text" translatable="false">Shopping</string>
+    <string name="ho_theatre_text" translatable="false">Theatre</string>
+    <string name="ho_voyages_text" translatable="false">Travelling</string>
+    <string name="title_activity_menu">Menu</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="getImageGallery">Import from phone gallery</string>
+    <string name="getImageCamera">Take a photo</string>
+    <string name="hello_first_fragment">Hello</string>
+    <string name="hello_second_fragment">"Hello "</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
 </resources>

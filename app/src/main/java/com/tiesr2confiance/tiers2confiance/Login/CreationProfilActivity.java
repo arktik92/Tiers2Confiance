@@ -48,6 +48,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
     private static final String TAG = "CreationProfilActivity";
+    private static final String TAGAPP = "LOGAPP";
 
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
@@ -146,6 +147,8 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void creationUser(View view) {
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+
         userEmail = user.getEmail().trim();
         city = etCity.getText().toString().trim();
         firstName = etFistName.getText().toString().trim();
@@ -197,6 +200,11 @@ public class CreationProfilActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
+
+                        globalVariables.LoadUserDataFromFirestore();
+                        Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore *************");
+
+
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                     }
                 })

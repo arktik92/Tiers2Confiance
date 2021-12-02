@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ import com.tiesr2confiance.tiers2confiance.R;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final String TAGAPP = "LOGAPP";
     /** Variables globales **/
     private TextInputEditText etEmail, etPassword;
     private String email,password;
@@ -50,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     }
     /** Gestion du bouton login **/
     public void btnLoginClick(android.view.View v) {
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+
         email = etEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
 
@@ -72,6 +76,9 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
                                 if (task.isSuccessful()) {
+
+                                    globalVariables.LoadUserDataFromFirestore();
+                                    Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
 
 
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));

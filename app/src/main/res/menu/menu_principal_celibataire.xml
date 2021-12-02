@@ -23,11 +23,11 @@
             android:icon="@drawable/ic_propositions" />
     </group>
 
-    <group android:id="@+id/group3"
+    <group android:id="@+id/groupPGO"
         android:checkableBehavior="single">
         <item
             android:title="Chat"
-            android:id="@+id/nav_fragment_12"
+            android:id="@+id/nav_PGO"
             android:icon="@drawable/ic_messages" />
     </group>
 
@@ -47,12 +47,21 @@
     </item>
 
 
-    <group android:id="@+id/group5"
+    <group
+        android:id="@+id/groupPGO"
         android:checkableBehavior="single">
         <item
-            android:title="Déconnexion"
+            android:id="@+id/nav_PGO"
+            android:icon="@drawable/ic_messages"
+            android:title="PGO" />
+    </group>
+    <group
+        android:id="@+id/group5"
+        android:checkableBehavior="single">
+        <item
             android:id="@+id/nav_deconnexion"
-            android:icon="@drawable/ic_exit" />
+            android:icon="@drawable/ic_exit"
+            android:title="Déconnexion" />
     </group>
 
 
