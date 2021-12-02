@@ -18,6 +18,7 @@
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_pending_requests_item_recycler.xml" value="0.371875" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_profil.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_profil_hobbie_item.xml" value="0.371875" />
+        <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_role_choice.xml" value="0.17604166666666668" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_sign_in.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_user.xml" value="0.33" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_view_profil.xml" value="0.371875" />
@@ -25,7 +26,7 @@
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_pending_requests.xml" value="0.22604166666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_profil.xml" value="0.22604166666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_second.xml" value="0.22604166666666667" />
-        <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_user.xml" value="0.45208333333333334" />
+        <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_user.xml" value="0.35714285714285715" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/fragment_view_profil.xml" value="0.22604166666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/gallery_item_image.xml" value="0.22604166666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/row_gender.xml" value="0.67" />

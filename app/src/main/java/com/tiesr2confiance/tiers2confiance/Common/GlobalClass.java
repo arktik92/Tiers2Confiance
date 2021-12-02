@@ -34,7 +34,7 @@ public class GlobalClass extends Application {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String userId;
-    private String userCountryLanguage;// = "FR";
+    private String userCountryLanguage = "EN";
     private String userNickName;
     private String userEmail;
 
@@ -178,8 +178,28 @@ public class GlobalClass extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        LoadUserDataFromFirestore();
-//        LoadGendersDataFromFirestore();
+//        for (int i = 0; i < 10; i++) {
+//            if (
+//                    ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+//                            || userCountryLanguage == "FR"
+//                            || ((userId == "") ? null : userCountryLanguage) == null
+//            ) {
+//                db = FirebaseFirestore.getInstance();
+//                user = FirebaseAuth.getInstance().getCurrentUser();
+//                userId = user.getUid();
+//                LoadUserDataFromFirestore();
+//                //userCountryLanguage = "FR";
+//                Log.i(TAG, "----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : " + userCountryLanguage + "-----");
+//            } else {
+//                break;
+//            }
+//        }
+
+        LoadUserDataFromFirestore();
+        LoadUserDataFromFirestore();
+        LoadUserDataFromFirestore();
+        LoadGendersDataFromFirestore();
+        LoadHobbiesDataFromFirestore();
     }
 
     public void LoadUserDataFromFirestore() {
@@ -200,36 +220,6 @@ public class GlobalClass extends Application {
 
         DocumentReference docRefUserConnected;
         docRefUserConnected = db.document("users/"+ userId); //bSfRUKasZ7PyHnew1jwqG6jksl03
-//        docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03"); //
-
-//        docRefUserConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot myDocSnapshot) {
-//
-//                if (myDocSnapshot.exists()) {
-//
-//                    userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
-//                    userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
-//
-//                    ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
-//                    userCountryLanguage     =   (connectedUser.getUs_country_lang().toString().trim() == "") ? null : connectedUser.getUs_country_lang().toString().trim();
-//
-//                    Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userId : " + userId);
-//                    Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userNickName : " + userNickName);
-//                    Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userCountryLanguage : " + userCountryLanguage);
-//                    Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userEmail : " + userEmail);
-//
-//                    Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess -----");
-//
-////                    Toast.makeText(getApplicationContext(),"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//
-//                    userNickName = "No USER FOUND";
-////                    Toast.makeText(getApplicationContext(),"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         docRefUserConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -252,61 +242,35 @@ public class GlobalClass extends Application {
                     //                        Toast.makeText(getApplicationContext(), "USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
 
                 }
-//                if (task.isSuccessful()) {
-//                    Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : "+ userId +"-----" );
-//                    ModelUsers currentUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
-//
-//                    try {
-//                        if (currentUser.getUs_country_lang() == null) {
-//
-//                            userNickName = currentUser.getUs_nickname();
-//                            userEmail = currentUser.getUs_email();
-//                            userCountryLanguage = currentUser.getUs_country_lang();
-//
-//                            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userId : " + userId);
-//                            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userNickName : " + userNickName);
-//                            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userCountryLanguage : " + userCountryLanguage);
-//                            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userEmail : " + userEmail);
-//
-//                            Log.i(TAG, "----- Update on getUserDataFromFirestore -----");
-//
-//                            //                        Toast.makeText(getApplicationContext(), "USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-//
-//                        } else {
-//
-//                            userNickName = "No USER FOUND";
-//                            //                        Toast.makeText(getApplicationContext(), "No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-//                        }
-//                    } catch (Exception e) {
-//                        System.out.println("Something went wrong when using currentUser.getUs_country_lang()");
-//                    }
-//                }
 
 
         });
 
         Log.i(TAG, "----- END getUserDataFromFirestore -----");
-    } // END getUserDataFromFirestore()
+    } // END LoadUserDataFromFirestore()
 
 
     public void LoadGendersDataFromFirestore() {
         Log.i(TAG, "START ----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                || (userCountryLanguage == "FR")
                 || ((userId == "") ? null : userCountryLanguage) == null
         ){
-//            Util.waitfor(500);
             db      = FirebaseFirestore.getInstance();
             user    = FirebaseAuth.getInstance().getCurrentUser();
             userId  = user.getUid();
-//            LoadUserDataFromFirestore();
+            userNickName = "userNickName : Not Retrieved Yet from FS";
+            userEmail = "userEmail : Not Retrieved Yet From FS";
+            userCountryLanguage = "FR";
+            LoadUserDataFromFirestore();
             Log.i(TAG, "----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN");
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
         Log.i(TAG, "loadGendersDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
-        userCountryLanguage = "EN";
+
 
         Query queryGenders = db.collection("genders")
                 .whereEqualTo("ge_country", userCountryLanguage);
@@ -356,13 +320,7 @@ public class GlobalClass extends Application {
                     }
                 });
 
-
-//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListGenders : " + myArrayListGenders);
-//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListGenders.size() *********** " + myArrayListGenders.size());
-
         arrayListGenders = myArrayListGenders;
-
-//        Util.waitfor(2000);
 
         Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders : " + arrayListGenders);
         Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders.size() *********** " + arrayListGenders.size());
@@ -380,11 +338,10 @@ public class GlobalClass extends Application {
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
-//            Util.waitfor(500);
             db      = FirebaseFirestore.getInstance();
             user    = FirebaseAuth.getInstance().getCurrentUser();
             userId  = user.getUid();
-//            LoadUserDataFromFirestore();
+            LoadUserDataFromFirestore();
             Log.i(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 

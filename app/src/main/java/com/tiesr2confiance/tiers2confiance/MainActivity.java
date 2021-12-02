@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -220,9 +221,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-        LoadUserData();
-        LoadGenders();
-        LoadHobbies();
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        globalVariables.LoadUserDataFromFirestore();
+        globalVariables.LoadGendersDataFromFirestore();
+        globalVariables.LoadHobbiesDataFromFirestore();
+//        LoadUserData();
+//        LoadGenders();
+//        LoadHobbies();
 
         InitVariables();
         InitComponents();
@@ -230,6 +235,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        globalVariables.LoadUserDataFromFirestore();
+        globalVariables.LoadGendersDataFromFirestore();
+        globalVariables.LoadHobbiesDataFromFirestore();
+    }
 
     private void LoadUserData() {
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
@@ -256,7 +269,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         Log.i(TAGAPP, "userCountryLanguage : " + userCountryLanguage);
         Log.i(TAGAPP, "userEmail : " + userEmail);
         Log.i(TAGAPP, "------- END OF initGlobalVariables ---------");
-        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 
     }
 
