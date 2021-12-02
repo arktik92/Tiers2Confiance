@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
+
         }
 
         drawer_layout.closeDrawer(GravityCompat.START);

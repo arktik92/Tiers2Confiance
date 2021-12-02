@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -30,8 +31,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.Color;
+import com.google.firebase.firestore.Query;
 import com.google.type.DateTime;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
+import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.text.DateFormat;
@@ -85,9 +89,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userId = user.getUid();
         db = FirebaseFirestore.getInstance();
         docRef = db.document("users/"+ userId);
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
