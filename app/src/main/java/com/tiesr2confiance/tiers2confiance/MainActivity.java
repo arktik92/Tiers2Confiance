@@ -267,6 +267,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, new PendingRequestsFragment()).
                         commit();
                 break;
+
             case R.id.nav_PGO:
                 getSupportFragmentManager().
                         beginTransaction().

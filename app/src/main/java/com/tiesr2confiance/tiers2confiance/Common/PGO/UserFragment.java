@@ -66,6 +66,7 @@ public class UserFragment extends Fragment {
 	private String userNickName;
 	private String userCountryLanguage;
 	private String userEmail;
+	private long userRole;
 
 
 
@@ -89,6 +90,8 @@ public class UserFragment extends Fragment {
 	private TextView    tvUserId;
 	private TextView    tvCountryLanguage;
 	private TextView    tvEmail;
+	private TextView    tvRole;
+
 
 
 
@@ -207,6 +210,7 @@ public class UserFragment extends Fragment {
 		userNickName        =   globalVariables.getUserNickName();
 		userCountryLanguage =   globalVariables.getUserCountryLanguage();
 		userEmail           =   globalVariables.getUserEmail();
+		userRole            =   globalVariables.getUserRole();
 
 		Log.i(TAGAPP, "userId : " + userId);
 		Log.i(TAGAPP, "userNickName : " + userNickName);
@@ -217,16 +221,27 @@ public class UserFragment extends Fragment {
 
 	}
 	private void InitComponents(View myView) {
-		tvUserId        = myView.findViewById(R.id.tv_user_id);
-		tvUserNickName  = myView.findViewById(R.id.tv_nick_name);
-		tvCountryLanguage= myView.findViewById(R.id.tv_country_language);
-		tvEmail        =   myView.findViewById(R.id.tv_email);
+		tvUserId            = myView.findViewById(R.id.tv_user_id);
+		tvUserNickName      = myView.findViewById(R.id.tv_nick_name);
+		tvCountryLanguage   = myView.findViewById(R.id.tv_country_language);
+		tvEmail             = myView.findViewById(R.id.tv_email);
+		tvRole              = myView.findViewById(R.id.tv_role);
+
 
 		/************** init des TextViews ***-******************/
 		tvUserId.setText(userId);
 		tvUserNickName.setText(userNickName);
 		tvCountryLanguage.setText(userCountryLanguage);
 		tvEmail.setText(userEmail);
+		switch ((int) userRole){
+			case 1:
+				tvRole.setText("CELIB");
+				break;
+			case 2:
+			tvRole.setText("PARRAIN");
+				break;
+		}
+
 
 	}
 
