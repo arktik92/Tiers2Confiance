@@ -1,4 +1,4 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Profil;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
@@ -51,6 +51,7 @@ import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
@@ -254,6 +255,20 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
+        // ACTION BOUTON ROLE=PARRAIN OU CELIBATAIRE : Redirige vers la modification de son profil
+        btnUpdateProfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new ProfilFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+
 
     }
 
@@ -418,5 +433,7 @@ public class ViewProfilFragment extends Fragment {
                     }
                 });
     }
+
+
 
 }

@@ -1,4 +1,6 @@
-package com.tiesr2confiance.tiers2confiance;
+package com.tiesr2confiance.tiers2confiance.Profil;
+
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Models.ModelViewProfilItem;
+import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentLierParrainFilleulBinding;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
 
@@ -29,7 +33,8 @@ public class ProfilFragment extends Fragment {
 
     /*** Global Variable ***/
 
-
+    /** ID Document To Displayed **/
+    private String UserId;
     private EditText myName, myCity, myEmail;
     /*** Begin - BDD ***/
     /*** Create BDD ***/
@@ -46,6 +51,7 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
+
         binding = FragmentProfilBinding.inflate(inflater, container, false);
         getDataIDUser(view);
         return binding.getRoot();

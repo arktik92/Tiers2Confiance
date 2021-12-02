@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +33,9 @@ import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleul
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.Profil.ProfilFragment;
+import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -90,30 +92,16 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        userConnected = usersCollectionRef.document(currentUser.getUid());
-
-        /*************************************************************/
-        /*************************************************************/
-
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
         globalVariables.LoadUserDataFromFirestore();
         globalVariables.LoadGendersDataFromFirestore();
         globalVariables.LoadHobbiesDataFromFirestore();
 
-
         long role = globalVariables.getUserRole();
 
-        Log.e(TAG, "onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
+        Log.d(TAG, "onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
-//        switch((int) role) {
-//            case 1:
-//
-//        }
-
-
-        if((int) role == 1) {
+        if( role == 1L) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
             setContentView(R.layout.activity_main_parrain);
@@ -144,6 +132,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        userConnected = usersCollectionRef.document(currentUser.getUid());
 
     }
 
