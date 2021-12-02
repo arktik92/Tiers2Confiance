@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
+    DocumentReference userConnected;
 
     @Override
     protected void onStart() {
