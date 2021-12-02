@@ -59,7 +59,7 @@ public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
-    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
+    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
     private ImageView ivProfilAvatarShape;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers ;
     private LinearLayout llProfil;
@@ -115,6 +115,7 @@ public class ViewProfilFragment extends Fragment {
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         tvProfilName = view.findViewById(R.id.tvProfilName);
+        tvRole = view.findViewById(R.id.tvRole);
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
@@ -265,6 +266,16 @@ public class ViewProfilFragment extends Fragment {
                             String hobbies = documentSnapshot.getString(KEY_HOBBIES);
                             Long role = documentSnapshot.getLong(KEY_ROLE);
 
+                            // Si l'utilisateur à afficher est un célibataire
+                            if (role.equals(1L)){
+                                tvRole.setText("Je suis " + "Célibataire");
+                                llProfil.setVisibility(View.VISIBLE);
+                            }else{
+                                // sinon, s'il est Tiers de confiance (parrain)
+                                tvRole.setText("Je suis " + "Tiers");
+                            }
+
+
                             tvProfilCity.setText(city);
                             tvProfilName.setText(name);
                             tvDescription.setText(description);
@@ -292,9 +303,6 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
-                            if (role.equals(1L)){
-                                llProfil.setVisibility(View.VISIBLE);
-                            }
 
                             list_hobbies = documentSnapshot.getString("us_hobbies");
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}

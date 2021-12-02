@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private String userEmail;
 
 
-
-
     /** Variables Firestore **/
 //    private FirebaseFirestore db = FirebaseFirestore.getInstance();;
     private DocumentReference docRefUserConnected;
@@ -116,6 +114,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
+    DocumentReference userConnected;
 
     @Override
     protected void onStart() {
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //        Log.i(TAG, globalVariables.getUserEmail());
 //        Log.i(TAG, globalVariables.getUserNickName());
 //        Log.i(TAG, globalVariables.getUserCountryLanguage());
+
     }
 
     /**
@@ -226,6 +226,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         InitVariables();
         InitComponents();
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        userConnected = usersCollectionRef.document(currentUser.getUid());
 
     }
 
@@ -479,26 +482,22 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
             // MOI (Pseudo)
             case R.id.nav_profil:
+                Bundle b = new Bundle();
+                b.putString("idUser", userConnected.getId());
+                Fragment fragment = new ViewProfilFragment();
+                fragment.setArguments(b);
                 getSupportFragmentManager().
                         beginTransaction().
-                        replace(R.id.fragment_container, new ProfilFragment()).
+                        replace(R.id.fragment_container, fragment).
                         commit();
                 break;
             // Mon Parrain
             case R.id.nav_view_profil:
-
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                assert currentUser != null;
-                DocumentReference userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                         assert contenuUser != null;
-
                         Long usRole = contenuUser.getUs_role();
                         if (usRole.equals(2)){
                             if (TextUtils.isEmpty(contenuUser.getUs_nephews())){

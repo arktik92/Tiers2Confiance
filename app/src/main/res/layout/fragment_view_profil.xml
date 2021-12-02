@@ -32,13 +32,28 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/ivProfilAvatarShape"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
-                        android:background="@drawable/shape_avatar_profil"
-                        android:contentDescription="@string/lbl_avatar"
-                        tools:srcCompat="@drawable/shape_avatar_profil" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ivProfilAvatarShape"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:background="@drawable/shape_avatar_profil"
+                            android:contentDescription="@string/lbl_avatar"
+                            tools:srcCompat="@drawable/shape_avatar_profil" />
+
+                        <TextView
+                            android:id="@+id/tvRole"
+                            android:layout_width="wrap_content"
+                            android:layout_height="65dp"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            tools:text="role" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvProfilName"
