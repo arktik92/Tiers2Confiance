@@ -144,9 +144,9 @@
     <string name="ho_regarder_text">Regarder le sport</string>
     <string name="ho_religion_text">Religion / Spirituel</string>
     <string name="ho_restaurant_text">Restaurant / Recevoir à diner</string>
-    <string name="ho_shopping_text" translatable="false">Shopping / Antiquaires</string>
-    <string name="ho_theatre_text" translatable="false">Théâtre / Spectacles</string>
-    <string name="ho_voyages_text" translatable="false">Voyages / Tourisme</string>
+    <string name="ho_shopping_text">Shopping / Antiquaires</string>
+    <string name="ho_theatre_text">Théâtre / Spectacles</string>
+    <string name="ho_voyages_text">Voyages / Tourisme</string>
 
 
     <!-- Attribut xxxxxxx-->

@@ -1,4 +1,4 @@
-package com.tiesr2confiance.tiers2confiance.User;
+package com.tiesr2confiance.tiers2confiance.Common.PGO;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,7 +79,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.fragment_user);
 
         initVariables();
 
@@ -99,25 +99,25 @@ public class UserActivity extends AppCompatActivity {
         //initGendersLayout(); // S'execute avant même que les données reviennent du serveur du coup impossible d'afficher les data
         //initHobbiesLayout(); // idem
 
-        Button btnCreateButtons;
-        btnCreateButtons = findViewById(R.id.btn_create_buttons);
-
-        btnCreateButtons.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initRadioButtonsLayouts();
-            }
-        });
-
-        Button btnShowListGenders;
-        btnShowListGenders = findViewById(R.id.btn_show_list_genders);
-
-        btnShowListGenders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGlobalListGenders();
-            }
-        });
+//        Button btnCreateButtons;
+//        btnCreateButtons = findViewById(R.id.btn_create_buttons);
+//
+//        btnCreateButtons.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                initRadioButtonsLayouts();
+//            }
+//        });
+//
+//        Button btnShowListGenders;
+//        btnShowListGenders = findViewById(R.id.btn_show_list_genders);
+//
+//        btnShowListGenders.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showGlobalListGenders();
+//            }
+//        });
 
 
     }
@@ -179,50 +179,50 @@ public class UserActivity extends AppCompatActivity {
 
     /** Initialisation des composants **/
     public void initComponents() {
-
-        //userId = user.getUid();
-
-        Log.i(TAG, "initComponents : BEGIN");
-
-        //userActivityLayout =  findViewById(R.id.user_Activity_Layout);
-        userActivityConstraintLayout =  findViewById(R.id.user_Activity_Layout);
-
-        /************** init des TextViews ***-******************/
-
-        tvUserId                    = findViewById(R.id.tv_user_id);
-        tvUserNickName              = findViewById(R.id.tv_user_nick_name);
-//        tvUserAuthUID               = findViewById(R.id.tv_user_AuthUID);
-
-        tvUserId.setText(userId);
-        tvUserNickName.setText(userNickName);
-//        tvUserAuthUID.setText(userId);
-
-        /************** init des Views/Layouts CheckBox et Radiobuttons ***-******************/
-        gendersLinearLayout         = findViewById(R.id.linear_layout_genders);
-        hobbiesLinearLayout         = findViewById(R.id.linear_layout_hobbies);
-        hobbiesLinearlayoutChkbox   = findViewById(R.id.linear_layout_chk_hobbies);
-//        rvHobbies           = findViewById(R.id.rv_hobbies);
-
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                        , ViewGroup.LayoutParams.WRAP_CONTENT
-                        );
-        params.setMargins(80, 0, 0, 40);
-
-
-        radioGroupGenders = new RadioGroup(this);
-        radioGroupGenders.setLayoutParams(params);
-
-//        params.setMargins(30, 0, 0, 0);
-        radioGroupHobbies = new RadioGroup(this);
-        radioGroupHobbies.setLayoutParams(params);
-
-
-
-
-//        rgGenders.addView(gendersLinearLayout);
-
-        Log.i(TAG, "initComponents : END");
+//
+//        //userId = user.getUid();
+//
+//        Log.i(TAG, "initComponents : BEGIN");
+//
+//        //userActivityLayout =  findViewById(R.id.user_Activity_Layout);
+//        userActivityConstraintLayout =  findViewById(R.id.user_Activity_Layout);
+//
+//        /************** init des TextViews ***-******************/
+//
+//        tvUserId                    = findViewById(R.id.tv_user_id);
+//        tvUserNickName              = findViewById(R.id.tv_user_nick_name);
+////        tvUserAuthUID               = findViewById(R.id.tv_user_AuthUID);
+//
+//        tvUserId.setText(userId);
+//        tvUserNickName.setText(userNickName);
+////        tvUserAuthUID.setText(userId);
+//
+//        /************** init des Views/Layouts CheckBox et Radiobuttons ***-******************/
+//        gendersLinearLayout         = findViewById(R.id.linear_layout_genders);
+//        hobbiesLinearLayout         = findViewById(R.id.linear_layout_hobbies);
+//        hobbiesLinearlayoutChkbox   = findViewById(R.id.linear_layout_chk_hobbies);
+////        rvHobbies           = findViewById(R.id.rv_hobbies);
+//
+//        LinearLayout.LayoutParams params =
+//                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+//                        , ViewGroup.LayoutParams.WRAP_CONTENT
+//                        );
+//        params.setMargins(80, 0, 0, 40);
+//
+//
+//        radioGroupGenders = new RadioGroup(this);
+//        radioGroupGenders.setLayoutParams(params);
+//
+////        params.setMargins(30, 0, 0, 0);
+//        radioGroupHobbies = new RadioGroup(this);
+//        radioGroupHobbies.setLayoutParams(params);
+//
+//
+//
+//
+////        rgGenders.addView(gendersLinearLayout);
+//
+//        Log.i(TAG, "initComponents : END");
 
     }
 
@@ -313,124 +313,124 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public void getHobbiesDataFromFirestore() {
-
-        Log.i(TAG, "getHobbiesDataFromFirestore: BEGIN");
-        hobbiesLinearLayout = findViewById(R.id.linear_layout_hobbies);
-//        rvHobbies = findViewById(R.id.rv_hobbies);
-        myArrayListHobbies.clear();
-
-
-        Query queryHobbies = db.collection("hobbies")
-                .whereEqualTo("ho_country", userCountryLanguage);
-                //.orderBy("ho_label");
-                //.orderBy("ge_label", Query.Direction.DESCENDING);
-
-        queryHobbies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot documentSnapshots) {
-                if (documentSnapshots.isEmpty()) {
-                    Log.i(TAG, "onSuccess: LIST EMPTY");
-
-                } else {
-                    for (DocumentSnapshot documentSnapshot : documentSnapshots) {
-                        if (documentSnapshot.exists()) {
-                            String hobbiesDocId = documentSnapshot.getId();
-
-                            Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-//                            DocumentReference documentReference1 = FirebaseFirestore.getInstance().document("some path");
-                            DocumentReference docRefHobbie = db.document("hobbies/"+ hobbiesDocId);
-                            docRefHobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Log.i(TAG, "onSuccess ******** Hobbies :");
-
-                                    ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
-                                    String hoLabel = hobbie.getHo_label();
-                                    Log.i(TAG, "onSuccess ******** hobbie : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
-                                    myArrayListHobbies.add(hobbie);
-                                    Log.i(TAG, "onSuccess ******** myArrayListHobbies : " + myArrayListGenders);
-                                    Log.i(TAG, "********* myArrayListHobbies.size() *********** " + myArrayListHobbies.size());
-
-                                    /*************** Gestion avec des Boutons Radio *******************/
-                                    RadioButton radioButton = new RadioButton(getApplicationContext());
-                                    radioButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                                    radioButton.setText(hobbie.getHo_id() + " - " + hobbie.getHo_label());
-                                    radioButton.setText(hobbie.ho_label);
-                                    radioButton.setId(hobbie.getHo_id());
-                                    radioGroupHobbies.addView(radioButton);
-
-                                    /*************** Gestion avec des CheckBox *******************/
-                                    CheckBox checkBox   = new CheckBox(getApplicationContext());
-                                    checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                                    checkBox.setText(hobbie.getHo_id() + " - " + hobbie.getHo_label());
-                                    checkBox.setText(hobbie.ho_label);
-                                    checkBox.setId(hobbie.getHo_id());
-                                    hobbiesLinearlayoutChkbox.addView(checkBox);
-//                                    if (hobbiesLinearlayoutChkbox != null) {
-//                                        hobbiesLinearlayoutChkbox.addView(checkBox);
-//                                    }
-
-                                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                        @Override
-                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                            String msg = "You have " + (isChecked ? "checked" : "unchecked") + " this Checkbox #" + checkBox.getId();
-//                                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                                            Log.i(TAG, msg);
-                                            Util.showSnackBar(userActivityConstraintLayout,msg);
-                                        }
-                                    });
-
-
-
-
-
-                                }
-
-
-                            });
-                        }
-                    }
-
-
-
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
-                        Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
-
-                    }
-                });
-
-
-
-
-
-        Log.i(TAG, "getHobbiesDataFromFirestore: END");
+//
+//        Log.i(TAG, "getHobbiesDataFromFirestore: BEGIN");
+//        hobbiesLinearLayout = findViewById(R.id.linear_layout_hobbies);
+////        rvHobbies = findViewById(R.id.rv_hobbies);
+//        myArrayListHobbies.clear();
+//
+//
+//        Query queryHobbies = db.collection("hobbies")
+//                .whereEqualTo("ho_country", userCountryLanguage);
+//                //.orderBy("ho_label");
+//                //.orderBy("ge_label", Query.Direction.DESCENDING);
+//
+//        queryHobbies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot documentSnapshots) {
+//                if (documentSnapshots.isEmpty()) {
+//                    Log.i(TAG, "onSuccess: LIST EMPTY");
+//
+//                } else {
+//                    for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+//                        if (documentSnapshot.exists()) {
+//                            String hobbiesDocId = documentSnapshot.getId();
+//
+//                            Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+////                            DocumentReference documentReference1 = FirebaseFirestore.getInstance().document("some path");
+//                            DocumentReference docRefHobbie = db.document("hobbies/"+ hobbiesDocId);
+//                            docRefHobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    Log.i(TAG, "onSuccess ******** Hobbies :");
+//
+//                                    ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
+//                                    String hoLabel = hobbie.getHo_label();
+//                                    Log.i(TAG, "onSuccess ******** hobbie : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
+//                                    myArrayListHobbies.add(hobbie);
+//                                    Log.i(TAG, "onSuccess ******** myArrayListHobbies : " + myArrayListGenders);
+//                                    Log.i(TAG, "********* myArrayListHobbies.size() *********** " + myArrayListHobbies.size());
+//
+//                                    /*************** Gestion avec des Boutons Radio *******************/
+//                                    RadioButton radioButton = new RadioButton(getApplicationContext());
+//                                    radioButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+////                                    radioButton.setText(hobbie.getHo_id() + " - " + hobbie.getHo_label());
+//                                    radioButton.setText(hobbie.ho_label);
+//                                    radioButton.setId(hobbie.getHo_id());
+//                                    radioGroupHobbies.addView(radioButton);
+//
+//                                    /*************** Gestion avec des CheckBox *******************/
+//                                    CheckBox checkBox   = new CheckBox(getApplicationContext());
+//                                    checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+////                                    checkBox.setText(hobbie.getHo_id() + " - " + hobbie.getHo_label());
+//                                    checkBox.setText(hobbie.ho_label);
+//                                    checkBox.setId(hobbie.getHo_id());
+//                                    hobbiesLinearlayoutChkbox.addView(checkBox);
+////                                    if (hobbiesLinearlayoutChkbox != null) {
+////                                        hobbiesLinearlayoutChkbox.addView(checkBox);
+////                                    }
+//
+//                                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                                        @Override
+//                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                                            String msg = "You have " + (isChecked ? "checked" : "unchecked") + " this Checkbox #" + checkBox.getId();
+////                                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+//                                            Log.i(TAG, msg);
+//                                            Util.showSnackBar(userActivityConstraintLayout,msg);
+//                                        }
+//                                    });
+//
+//
+//
+//
+//
+//                                }
+//
+//
+//                            });
+//                        }
+//                    }
+//
+//
+//
+//                }
+//            }
+//        })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
+//                        Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
+//
+//                    }
+//                });
+//
+//
+//
+//
+//
+//        Log.i(TAG, "getHobbiesDataFromFirestore: END");
     }
 
 
     public void initGendersLayout(){//onClickButton
-        Log.i(TAG, "*** initGendersLayout ***" );
-//        rgGenders       = findViewById(R.id.rg_Genders);
-//        Util.waitfor(2000);
-        gendersLinearLayout = findViewById(R.id.linear_layout_genders);
-        gendersLinearLayout.addView(radioGroupGenders);
-
-        radioGroupGenders.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                String text = "Genders - you selected ";
-                text += checkedId;
-                //Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                Util.showSnackBar(userActivityConstraintLayout,text);
-
-                Log.i(TAG, text);
-            }
-        });
+//        Log.i(TAG, "*** initGendersLayout ***" );
+////        rgGenders       = findViewById(R.id.rg_Genders);
+////        Util.waitfor(2000);
+//        gendersLinearLayout = findViewById(R.id.linear_layout_genders);
+//        gendersLinearLayout.addView(radioGroupGenders);
+//
+//        radioGroupGenders.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                String text = "Genders - you selected ";
+//                text += checkedId;
+//                //Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//                Util.showSnackBar(userActivityConstraintLayout,text);
+//
+//                Log.i(TAG, text);
+//            }
+//        });
 
 //        for(int i = 0; i <= myArrayListGenders.size(); i++){
 //            Log.i(TAG, "onSuccess ******** gender ********  : " );
@@ -488,78 +488,78 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public void getGendersDataFromFirestore() {
-
-        Log.i(TAG, "getGendersDataFromFirestore: BEGIN");
-
-        myArrayListGenders.clear();
-
-//        user = FirebaseAuth.getInstance().getCurrentUser();
-//        userId = user.getUid();
-//        db = FirebaseFirestore.getInstance();
-        Query queryGenders = db.collection("genders")
-                .whereEqualTo("ge_country", userCountryLanguage);
-                //.whereNotIn("us_auth_uid", critere) ici ça plante ??
-                //.orderBy("ge_label");
-                //.orderBy("ge_label", Query.Direction.DESCENDING);
-                //.orderBy("ge_label", Query.Direction.ASCENDING);
-
-        queryGenders.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot documentSnapshots) {
-                if (documentSnapshots.isEmpty()) {
-                    Log.i(TAG, "onSuccess: LIST EMPTY");
-                    return;
-                } else {
-                    for (DocumentSnapshot documentSnapshot : documentSnapshots) {
-                        if (documentSnapshot.exists()) {
-                            String genderDocId = documentSnapshot.getId();
-
-                            Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-//                            DocumentReference documentReference1 = FirebaseFirestore.getInstance().document("some path");
-                            DocumentReference docRefGender = db.document("genders/"+ genderDocId);
-                            docRefGender.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                                    ModelGenders gender= documentSnapshot.toObject(ModelGenders.class);
-                                    Log.i(TAG, "onSuccess ******** gender : " + gender.getGe_id() + " " + gender.getGe_country() + " " + gender.getGe_label());
-                                    myArrayListGenders.add(gender);
-                                    Log.i(TAG, "onSuccess ******** mArrayListGenders : " + myArrayListGenders);
-                                    Log.i(TAG, "********* myArrayListGenders.size() *********** " + myArrayListGenders.size());
-                                    RadioButton radioButton = new RadioButton(getApplicationContext());
-                                    radioButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                                    radioButton.setText(gender.getGe_id() + " - " + gender.getGe_label());
-                                    radioButton.setText(gender.getGe_label());
-                                    radioButton.setId(gender.getGe_id());
-                                    radioGroupGenders.addView(radioButton);
-                                    radioGroupGenders.setOrientation(LinearLayout.HORIZONTAL);
-
-                                }
-
-
-                            });
-                        }
-                    }
-
-
-
-                }
-            }
-        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "Error getting genders from FireStore!!!", Toast.LENGTH_LONG).show();
-                                Log.e(TAG, "onFailure : Error getting genders from FireStore!!!");
-
-                            }
-        });
-
-
-
-
-
-        Log.i(TAG, "getGendersDataFromFirestore: END");
+//
+//        Log.i(TAG, "getGendersDataFromFirestore: BEGIN");
+//
+//        myArrayListGenders.clear();
+//
+////        user = FirebaseAuth.getInstance().getCurrentUser();
+////        userId = user.getUid();
+////        db = FirebaseFirestore.getInstance();
+//        Query queryGenders = db.collection("genders")
+//                .whereEqualTo("ge_country", userCountryLanguage);
+//                //.whereNotIn("us_auth_uid", critere) ici ça plante ??
+//                //.orderBy("ge_label");
+//                //.orderBy("ge_label", Query.Direction.DESCENDING);
+//                //.orderBy("ge_label", Query.Direction.ASCENDING);
+//
+//        queryGenders.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot documentSnapshots) {
+//                if (documentSnapshots.isEmpty()) {
+//                    Log.i(TAG, "onSuccess: LIST EMPTY");
+//                    return;
+//                } else {
+//                    for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+//                        if (documentSnapshot.exists()) {
+//                            String genderDocId = documentSnapshot.getId();
+//
+//                            Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+////                            DocumentReference documentReference1 = FirebaseFirestore.getInstance().document("some path");
+//                            DocumentReference docRefGender = db.document("genders/"+ genderDocId);
+//                            docRefGender.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                                    ModelGenders gender= documentSnapshot.toObject(ModelGenders.class);
+//                                    Log.i(TAG, "onSuccess ******** gender : " + gender.getGe_id() + " " + gender.getGe_country() + " " + gender.getGe_label());
+//                                    myArrayListGenders.add(gender);
+//                                    Log.i(TAG, "onSuccess ******** mArrayListGenders : " + myArrayListGenders);
+//                                    Log.i(TAG, "********* myArrayListGenders.size() *********** " + myArrayListGenders.size());
+//                                    RadioButton radioButton = new RadioButton(getApplicationContext());
+//                                    radioButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+////                                    radioButton.setText(gender.getGe_id() + " - " + gender.getGe_label());
+//                                    radioButton.setText(gender.getGe_label());
+//                                    radioButton.setId(gender.getGe_id());
+//                                    radioGroupGenders.addView(radioButton);
+//                                    radioGroupGenders.setOrientation(LinearLayout.HORIZONTAL);
+//
+//                                }
+//
+//
+//                            });
+//                        }
+//                    }
+//
+//
+//
+//                }
+//            }
+//        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(getApplicationContext(), "Error getting genders from FireStore!!!", Toast.LENGTH_LONG).show();
+//                                Log.e(TAG, "onFailure : Error getting genders from FireStore!!!");
+//
+//                            }
+//        });
+//
+//
+//
+//
+//
+//        Log.i(TAG, "getGendersDataFromFirestore: END");
     } // END getGendersDataFromFirestore()
 
 

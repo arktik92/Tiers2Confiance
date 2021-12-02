@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:onClick="launchLierParrainFilleulActivity"
+            android:onClick=""
             android:text="Chercher Parrain/Filleul" />
 
         <Button
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:onClick="launchPendingRequestsActivity"
+            android:onClick=""
             android:text="liste des demandes en attente" />
 
         <Button
