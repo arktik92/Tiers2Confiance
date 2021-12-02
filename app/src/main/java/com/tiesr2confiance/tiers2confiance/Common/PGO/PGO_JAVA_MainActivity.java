@@ -2,356 +2,589 @@
 //
 //import androidx.annotation.NonNull;
 //import androidx.annotation.Nullable;
+//import androidx.appcompat.app.ActionBarDrawerToggle;
 //import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.widget.Toolbar;
 //import androidx.constraintlayout.widget.ConstraintLayout;
-//import androidx.core.app.TaskStackBuilder;
+//import androidx.core.view.GravityCompat;
+//import androidx.drawerlayout.widget.DrawerLayout;
+//import androidx.fragment.app.Fragment;
+//import androidx.fragment.app.FragmentManager;
+//import androidx.fragment.app.FragmentTransaction;
+//import androidx.navigation.ui.AppBarConfiguration;
+//import androidx.recyclerview.widget.RecyclerView;
 //
 //import android.content.Intent;
 //import android.os.Bundle;
+//import android.text.TextUtils;
 //import android.util.Log;
+//import android.view.MenuItem;
 //import android.view.View;
 //import android.widget.Button;
+//import android.widget.LinearLayout;
+//import android.widget.RadioGroup;
+//import android.widget.TextView;
 //import android.widget.Toast;
 //
-//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
+//import com.google.android.material.navigation.NavigationView;
 //import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.firestore.CollectionReference;
+//import com.google.firebase.firestore.DocumentReference;
+//import com.google.firebase.firestore.DocumentSnapshot;
 //import com.google.firebase.firestore.FirebaseFirestore;
 //import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
-//import com.tiesr2confiance.tiers2confiance.Common.Util;
+//import com.tiesr2confiance.tiers2confiance.Common.PGO.UserActivity;
+//import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
+//import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
+//import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
+//import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
 //import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
 //import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
-//import com.tiesr2confiance.tiers2confiance.Common.PGO.UserActivity;
+//import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 //
 //import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.Comparator;
+//import java.util.Objects;
 //
-//public class MainActivity_OLD extends AppCompatActivity {
-//
-//    ConstraintLayout mainActivityConstraintLayout;
-//
-//    /**  Var globales **/
-//    private static final String TAG = "LOGAPP_MainActivity";
-//
-//    /** Variable Firebase Auth **/
-//    private FirebaseFirestore db;
-//    private static FirebaseUser user;
-//    private static String userId;
-//    private static String userNickName;
-//    private static String userCountryLanguage;
-//    private static String userEmail;
-//
-//    public MainActivity_OLD() {
-//        super();
-//        //InitGlobalVariables();
-//        Log.e(TAG, "------- XXXX MainActivity constructor1 START ---------");
-//    }
-//
-//    public MainActivity_OLD(int contentLayoutId) {
-//        super(contentLayoutId);
-//        //InitGlobalVariables();
-//        Log.e(TAG, "------- XXXX MainActivity constructor2 START ---------");
-//    }
-//
-//    @Override
-//    public void setTheme(int resId) {
-//        super.setTheme(resId);
-//        Log.e(TAG, "------- XXXX MainActivity setTheme START ---------");
-//    }
-//
-//    @Override
-//    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        //InitArrays();
-//        Log.e(TAG, "------- XXXX MainActivity onPostCreate START ---------");
-//    }
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        InitGlobalVariables(); // GlobalClass
-//        Log.e(TAG, "------- XXXX MainActivity onStart START ---------");
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Log.e(TAG, "------- XXXX MainActivity onStop START ---------");
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        Log.e(TAG, "------- XXXX MainActivity onDestroy START ---------");
-//    }
-//
-//    @Override
-//    public void onCreateSupportNavigateUpTaskStack(@NonNull TaskStackBuilder builder) {
-//        super.onCreateSupportNavigateUpTaskStack(builder);
-//        Log.e(TAG, "------- XXXX MainActivity onCreateSupportNavigateUpTaskStack START ---------");
-//    }
-//
-//    @Override
-//    public void onPrepareSupportNavigateUpTaskStack(@NonNull TaskStackBuilder builder) {
-//        super.onPrepareSupportNavigateUpTaskStack(builder);
-//        Log.e(TAG, "------- XXXX MainActivity onPrepareSupportNavigateUpTaskStack START ---------");
-//    }
-//
-//    @Override
-//    public void onContentChanged() {
-//        super.onContentChanged();
-//        Log.e(TAG, "------- XXXX MainActivity onContentChanged START ---------");
-//    }
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        Log.e(TAG, "------- XXXX MainActivity onCreate START ---------");
-//        Log.i(TAG, "------- MainActivity onCreate START ---------");
-//
-////        InitGlobalVariables(); // GlobalClass
-////        InitArrays();// GlobalClass
-//
-//        Button btnInitVars1;
-//        btnInitVars1 = findViewById(R.id.btn_init_vars1);
-//
-//        btnInitVars1.setOnClickListener(new View.OnClickListener() {
-//               @Override
-//               public void onClick(View v) {
-//                   InitGlobalVariablesStep1();
-//               }
-//           });
-//
-//        Button btnInitVars2;
-//        btnInitVars2 = findViewById(R.id.btn_init_vars2);
-//
-//        btnInitVars2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                InitGlobalVariablesStep2();
-//            }
-//        });
+//public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 //
-//        Button btnInitArrays;
-//        btnInitArrays = findViewById(R.id.btn_init_arrays);
-//        btnInitArrays.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                InitArrays();
-//            }
-//        });
+//	private static final String TAG = "Main Activity : ";
+//	private static final String TAGAPP = "LOGAPP";
+//	/**
+//	 * Variables globales
+//	 **/
+//	/** Variable Firebase Auth **/
+//	private FirebaseUser user;
+//	private String userId, userAuthUID;
+//	private String collection;
+//	private String userNickName;
+//	private String userCountryLanguage;
+//	private String userEmail;
+//
+//
+//
+//
+//	/** Variables Firestore **/
+////    private FirebaseFirestore db = FirebaseFirestore.getInstance();;
+//	private DocumentReference docRefUserConnected;
+//	public static ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
+//	public static ArrayList<ModelHobbies> myArrayListHobbies = new ArrayList<>();
+//
+//	ConstraintLayout userActivityConstraintLayout;
+//	LinearLayout gendersLinearLayout;
+//	LinearLayout     hobbiesLinearLayout;
+//	LinearLayout     hobbiesLinearlayoutChkbox;
+//
+//	RecyclerView rvHobbies;
+//
+//	private RadioGroup radioGroupGenders;
+//	private RadioGroup  radioGroupHobbies;
+//
+//	private TextView    tvUserNickName;
+//	private TextView    tvUserId;
+//	private TextView    tvCountryLanguage;
+//	private TextView    tvEmail;
+//
+//
+//
+//	//********************************* FIREBASE AUTH
+//	private FirebaseAuth firebaseAuth;
+//
+//	// ******************************** MENU
+//	Toolbar toolbar;
+//	DrawerLayout drawer_layout;
+//
+//	// La gestion des fragments
+//	FragmentManager fragmentManager;
+//	FragmentTransaction fragmentTransaction;
+//
+//	// Gestion de la NavigationView
+//	private NavigationView navigationView;
+//
+//	// Variable emplacement
+//	private static final String emplacement
+//			= MainActivity.class.getSimpleName();
+//
+//	// ******************************** NAVIGATION
+//	private AppBarConfiguration appBarConfiguration;
+//	private ProfilFragment binding;
+//
+//	/** Var Firebase **/
+//	private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//	private final CollectionReference usersCollectionRef = db.collection("users");
+//
+//	@Override
+//	protected void onStart() {
+//		super.onStart();
+//
+//		//     GlobalClass globalVariables = new GlobalClass();
+//		//     globalVariables.LoadUserDataFromFirestore();
+//
+//		//        Log.i(TAG, globalVariables.getUser());
+////        Log.i(TAG, globalVariables.getUserId());
+////        Log.i(TAG, globalVariables.getUserEmail());
+////        Log.i(TAG, globalVariables.getUserNickName());
+////        Log.i(TAG, globalVariables.getUserCountryLanguage());
+//	}
+//
+//	/**
+//	 * Faire le lien entre les widgets et le design
+//	 **/
+//	public void initUI() {
+//		firebaseAuth = FirebaseAuth.getInstance();
+//		toolbar = findViewById(R.id.toolbar);
+//		drawer_layout = findViewById(R.id.drawer_layout);
+//		navigationView = findViewById(R.id.nav_navigationView);
+//
+//	}
+//
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//
+//		setContentView(R.layout.activity_main);
+//
+//		// Appel de la méthode d'initialisation de l'UI
+//		initUI();
+//		// Ajout du support pour la gestio nde la Toolbar
+//		setSupportActionBar(toolbar);
+//		// Ajout de la gestion des options d'accessibilité
+//		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//				this, // Le context de l'activité
+//				drawer_layout, // Le layout du MainActivity
+//				toolbar, // La toolbar
+//				R.string.navigation_drawer_open,
+//				R.string.navigation_drawer_close);
+//
+//		// Ajout d'un listener sur le bouton hamburger
+//		drawer_layout.addDrawerListener(toggle);
+//		// Synchro le bouton hamburger et le menu
+//		toggle.syncState();
+//		//
+//		navigationView.setNavigationItemSelectedListener(this);
+//
+//		if(savedInstanceState == null){
+//			addFragment();
+//			// Force l'affichage du 1er fragment au démarrage
+//			navigationView.setCheckedItem(R.id.nav_fragment_1);
+//		}
+//
+//		/*************************************************************/
+//		/*************************************************************/
+//		/**************************** PGO ****************************/
+//		/*************************************************************/
+//		/*************************************************************/
+//
+//		Button btnInitVar1;
+//		btnInitVar1 = findViewById(R.id.btn_init_var1);
+//		btnInitVar1.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				InitVariables();
+//				InitComponents();
+//			}
+//		});
+//
+//		Button btnInitVar2;
+//		btnInitVar2 = findViewById(R.id.btn_init_var2);
+//		btnInitVar2.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				LoadGenders();
+//				LoadHobbies();
+//			}
+//		});
+//
+//
+//		Button btndisplaygenders;
+//		btndisplaygenders = findViewById(R.id.btn_display_genders);
+//		btndisplaygenders.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				DisplayGenders();
+//			}
+//		});
+//
+//		Button btndisplayhobbies;
+//		btndisplayhobbies = findViewById(R.id.btn_display_hobbies);
+//		btndisplayhobbies.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				DisplayHobbies();
+//			}
+//		});
+//
+//
+//
+//		GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		globalVariables.LoadUserDataFromFirestore();
+//		globalVariables.LoadGendersDataFromFirestore();
+//		globalVariables.LoadHobbiesDataFromFirestore();
+////        LoadUserData();
+////        LoadGenders();
+////        LoadHobbies();
+//
+//		InitVariables();
+//		InitComponents();
+//
+//
+//	}
+//
+//	@Override
+//	protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+//		super.onPostCreate(savedInstanceState);
+//		GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		globalVariables.LoadUserDataFromFirestore();
+//		globalVariables.LoadGendersDataFromFirestore();
+//		globalVariables.LoadHobbiesDataFromFirestore();
+//	}
+//
+//	private void LoadUserData() {
+//		GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore START *************");
+//		globalVariables.LoadUserDataFromFirestore();
+//		Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore FINISH *************");
+//
+//	}
+//
+//	public void InitVariables() {
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAGAPP, "InitGlobalVariablesStep1");
+//
+////        globalVariables.LoadUserDataFromFirestore();
+//
+//
+//		userId              =   globalVariables.getUserId();
+//		userNickName        =   globalVariables.getUserNickName();
+//		userCountryLanguage =   globalVariables.getUserCountryLanguage();
+//		userEmail           =   globalVariables.getUserEmail();
 //
+//		Log.i(TAGAPP, "userId : " + userId);
+//		Log.i(TAGAPP, "userNickName : " + userNickName);
+//		Log.i(TAGAPP, "userCountryLanguage : " + userCountryLanguage);
+//		Log.i(TAGAPP, "userEmail : " + userEmail);
+//		Log.i(TAGAPP, "------- END OF initGlobalVariables ---------");
+////        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 //
-//        Button btnInitAll;
-//        btnInitAll = findViewById(R.id.btn_init_all);
-//        btnInitAll.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                InitGlobalVarsAndArrays();
-//            }
+//	}
 //
-//        });
+//	private void InitComponents() {
+//		tvUserId        = findViewById(R.id.tv_user_id);
+//		tvUserNickName  = findViewById(R.id.tv_nick_name);
+//		tvCountryLanguage= findViewById(R.id.tv_country_language);
+//		tvEmail        =   findViewById(R.id.tv_email);
 //
-//        Button btnDisplayGendersArray;
-//        btnDisplayGendersArray = findViewById(R.id.btn_Display_Genders_Array);
-//        btnDisplayGendersArray.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		/************** init des TextViews ***-******************/
+//		tvUserId.setText(userId);
+//		tvUserNickName.setText(userNickName);
+//		tvCountryLanguage.setText(userCountryLanguage);
+//		tvEmail.setText(userEmail);
 //
-//                ArrayList<ModelGenders> arrayListGenders = globalVariables.getArrayListGenders();
+//	}
 //
 //
 //
-//                mainActivityConstraintLayout = findViewById(R.id.mainActivityConstraintLayout);
-//                String msg = "***** arrayListGenders.size() *********** " + arrayListGenders.size();
-//                Log.d(TAG, msg );
-//                msg = "***** arrayListGenders *********** " + arrayListGenders;
-//                Log.d(TAG, msg );
-//                Util.showSnackBar(mainActivityConstraintLayout,msg);
-//                Util.waitfor(500);
 //
-////                msg = "***** user *********** " + globalVariables.getUserCountryLanguage()+ "/" + globalVariables.getUserId();
-////                Log.d(TAG, msg );
-////                Util.showSnackBar(mainActivityConstraintLayout,msg);
-////                Util.waitfor(500);
 //
 //
-//            };
-//        });
 //
-//            Button btnDisplayHobbiesArray;
-//            btnDisplayHobbiesArray = findViewById(R.id.btn_Display_Hobbies_Array);
-//            btnDisplayHobbiesArray.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
 //
-//                    ArrayList<ModelHobbies> arrayListHobbies = globalVariables.getArrayListHobbies();
+//	private void LoadGenders() {
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAGAPP, "LoadGenders()");
 //
+//		globalVariables.LoadGendersDataFromFirestore();
+//	}
 //
 //
-//                    mainActivityConstraintLayout = findViewById(R.id.mainActivityConstraintLayout);
-//                    String msg = "***** arrayListHobbies.size() *********** " + arrayListHobbies.size();
-//                    Log.d(TAG, msg );
-//                    msg = "***** arrayListHobbies *********** " + arrayListHobbies;
-//                    Log.d(TAG, msg );
-//                    Util.showSnackBar(mainActivityConstraintLayout,msg);
-//                    Util.waitfor(500);
+//	private void LoadHobbies() {
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAGAPP, "LoadHobbies()");
 //
-////                msg = "***** user *********** " + globalVariables.getUserCountryLanguage()+ "/" + globalVariables.getUserId();
-////                Log.d(TAG, msg );
-////                Util.showSnackBar(mainActivityConstraintLayout,msg);
-////                Util.waitfor(500);
+//		globalVariables.LoadHobbiesDataFromFirestore();
+//	}
 //
+//	private void DisplayGenders() {
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAGAPP, "DisplayGenders()");
 //
-//                }
-//            });
+//		myArrayListGenders  =   globalVariables.getArrayListGenders();
 //
+//		Log.i(TAGAPP, "------- myArrayListGenders ---------" + myArrayListGenders.size());
+//		Log.i(TAGAPP, "------- myArrayListGenders ---------" + myArrayListGenders);
+//		Log.i(TAGAPP, "----------------");
+//		for (int i = 0; i < myArrayListGenders.size(); i++) {
+//			Log.i(TAGAPP, ">>"
+//					+ myArrayListGenders.get(i).getGe_id() + " "
+//					+ myArrayListGenders.get(i).getGe_country() + " "
+//					+ myArrayListGenders.get(i).getGe_label());
+//		}
+//		Log.i(TAGAPP, "----------------");
+//		Log.i(TAGAPP, "------- myArrayListGenders ---------");
+//		Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 //
+//	}
 //
-//        Log.i(TAG, "------- MainActivity onCreate START ---------");
-//    }
+//	private void DisplayHobbies() {
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAGAPP, "DisplayHobbies() ");
 //
-//    private void InitGlobalVarsAndArrays() {
-//        InitGlobalVariablesStep1();
-//        InitGlobalVariablesStep2();
-//        InitArrays();
-//
-//    }
-//
-//
-//    private void InitArrays() {
-//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//        globalVariables.LoadGendersDataFromFirestore();
-//        globalVariables.LoadHobbiesDataFromFirestore();
-//
-//
-//        Log.i(TAG, "------- Init Arrays ---------");
-//    }
-//
-//    public void InitGlobalVariables(){
-//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//
-//        globalVariables.LoadUserDataFromFirestore();
-//
-////        InitGlobalVariablesStep1();
-////        InitGlobalVariablesStep2();
-//
-//    }
-//
-//
-//    public void InitGlobalVariablesStep1(){
-//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//        Log.d(TAG,"InitGlobalVariablesStep1");
+//		myArrayListHobbies  =   globalVariables.getArrayListHobbies();
 //
-//
-//        db      = FirebaseFirestore.getInstance();
-//        user    = FirebaseAuth.getInstance().getCurrentUser();
-//        userId  = user.getUid();
+//		Log.i(TAGAPP, "------- myArrayListHobbies ---------" + myArrayListHobbies.size());
+//		Log.i(TAGAPP, "------- myArrayListHobbies ---------" + myArrayListHobbies);
+//		Log.i(TAGAPP, "----------------");
 //
-//        globalVariables.setDb(db);
-//        globalVariables.setUser(user);
-//        globalVariables.setUserId(userId);
 //
-//        Log.i(TAG, "db : " + db);
-//        Log.i(TAG, "user : " + user);
-//        Log.i(TAG, "userId : " + userId);
-//        Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
-//        Log.i(TAG, "------- END OF InitGlobalVariables ---------");
-//        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId , Toast.LENGTH_SHORT).show();
-//    }
+//		Collections.sort(myArrayListHobbies, new Comparator<ModelHobbies>() {
+//			@Override
+//			public int compare(ModelHobbies u1, ModelHobbies u2) {
+//				return u2.getHo_label().compareTo(u1.getHo_label());
+//			}
+//		});
 //
-//    public void InitGlobalVariablesStep2(){
-//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
 //
-//        globalVariables.LoadUserDataFromFirestore(); // userNickName, userCountryLanguage
+//		for (int i = 0; i < myArrayListHobbies.size(); i++) {
+//			Log.i(TAGAPP, ">>"
+//					+ myArrayListHobbies.get(i).getHo_id() + " "
+//					+ myArrayListHobbies.get(i).getHo_country() + " "
+//					+ myArrayListHobbies.get(i).getHo_label());
+//		}
+//		Log.i(TAGAPP, "------- myArrayListHobbies ---------");
+//		Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 //
-//        globalVariables.setUserNickName(userNickName);
-//        globalVariables.setUserCountryLanguage(userCountryLanguage);
-//        globalVariables.setUserEmail(userEmail);
+//	}
 //
 //
-//        Log.i(TAG, "userId : " + userId);
-//        Log.i(TAG, "userNickName : " + userNickName);
-//        Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
-//        Log.i(TAG, "userEmail : " + userEmail);
-//        Log.i(TAG, "------- END OF InitGlobalVariables ---------");
-//        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-//    }
 //
 //
 //
-//                    //
-//                    //
-//                    //    public void SetUserDataFromFirestore() {
-//                    //        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//                    //        DocumentReference docRefUserConnected;
-//                    //
-//                    //        docRefUserConnected = db.document("users/"+ userId); //bSfRUKasZ7PyHnew1jwqG6jksl03
-//                    ////        docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03"); //
-//                    //        docRefUserConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    //            @Override
-//                    //            public void onSuccess(DocumentSnapshot myDocSnapshot) {
-//                    //
-//                    //                if (myDocSnapshot.exists()) {
-//                    //
-//                    //                    userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
-//                    //                    userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
-//                    //
-//                    //                    ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
-//                    //                    userCountryLanguage     =   connectedUser.getUs_country_lang().toString().trim();
-//                    //
-//                    //
-//                    ////                    Mise à jour des variables ici car délai de latence dans l'init des variables.
-//                    //                    globalVariables.setUserNickName(userNickName);
-//                    //                    globalVariables.setUserCountryLanguage(userCountryLanguage);
-//                    //                    globalVariables.setUserEmail(userEmail);
-//                    //
-//                    //                    Log.i(TAG, "userId : " + userId);
-//                    //                    Log.i(TAG, "userNickName : " + userNickName);
-//                    //                    Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
-//                    //                    Log.i(TAG, "userEmail : " + userEmail);
-//                    //
-//                    //                    Log.i(TAG, "----- Update on getUserDataFromFirestore -----");
-//                    //
-//                    //                    Toast.makeText(MainActivity.this,"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-//                    //
-//                    //                } else {
-//                    //
-//                    //                    userNickName = "No USER FOUND";
-//                    //                    Toast.makeText(MainActivity.this,"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-//                    //                }
-//                    //            }
-//                    //        });
-//                    //
-//                    //        Log.i(TAG, "----- END getUserDataFromFirestore -----");
-//                    //    } // END getUserDataFromFirestore()
 //
-//    public void launchLierParrainFilleulActivity(View v){
-//        Intent intent = new Intent(MainActivity.this, LierParrainFilleulActivity.class);
-////        intent.putExtra("IdUser", snapshot.getId());
-//        startActivity(intent);
 //
 //
-//    }
 //
-//    public void launchPendingRequestsActivity(View v){
-//        Intent intent = new Intent(MainActivity.this, PendingRequestsActivity.class);
-////        intent.putExtra("IdUser", snapshot.getId());
-//        startActivity(intent);
 //
 //
-//    }
 //
-//    public void launchUserActivity(View v){
-//        Intent intent = new Intent(MainActivity.this, UserActivity.class);
-////        intent.putExtra("IdUser", snapshot.getId());
 //
+//
+//
+//	public void InitComponents_OLD() {
+//
+//		//userId = user.getUid();
+//
+//		Log.i(TAG, "initComponents : BEGIN");
+//
+//		//userActivityLayout =  findViewById(R.id.user_Activity_Layout);
+//		userActivityConstraintLayout =  findViewById(R.id.drawer_layout);
+//
+//		/************** init des TextViews ***-******************/
+//
+//		tvUserId                    = findViewById(R.id.tv_user_id);
+////        tvUserNickName              = findViewById(R.id.tv_user_nick_name);
+////        tvUserAuthUID               = findViewById(R.id.tv_user_AuthUID);
+//
+//		tvUserId.setText(userId);
+//		tvUserNickName.setText(userNickName);
+////        tvUserAuthUID.setText(userId);
+//
+//		//        /************** init des Views/Layouts CheckBox et Radiobuttons ***-******************/
+//		//
+//		//        gendersLinearLayout         = findViewById(R.id.linear_layout_genders);
+//		//        hobbiesLinearLayout         = findViewById(R.id.linear_layout_hobbies);
+//		//        hobbiesLinearlayoutChkbox   = findViewById(R.id.linear_layout_chk_hobbies);
+//		//
+//		//
+//		////        rvHobbies           = findViewById(R.id.rv_hobbies);
+//		//
+//		//        LinearLayout.LayoutParams params =
+//		//                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+//		//                        , ViewGroup.LayoutParams.WRAP_CONTENT
+//		//                        );
+//		//        params.setMargins(80, 0, 0, 40);
+//		//
+//		//
+//		//        radioGroupGenders = new RadioGroup(this);
+//		//        radioGroupGenders.setLayoutParams(params);
+//		//
+//		////        params.setMargins(30, 0, 0, 0);
+//		//        radioGroupHobbies = new RadioGroup(this);
+//		//        radioGroupHobbies.setLayoutParams(params);
+//		//
+//		//
+//		//
+//		//
+//		////        rgGenders.addView(gendersLinearLayout);
+//
+//		Log.i(TAG, "initComponents : END");
+//
+//	}
+//
+//
+//
+//	public void InitVariablesStep1(){
+//		final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//		Log.d(TAG,"InitGlobalVariablesStep1");
+//
+////        globalVariables.LoadUserDataFromFirestore();
+//
+//
+//		userId              =   globalVariables.getUserId();
+//		userNickName        =   globalVariables.getUserNickName();
+//		userCountryLanguage =   globalVariables.getUserCountryLanguage();
+//		String userEmail    =   globalVariables.getUserEmail();
+//
+//
+//		Log.i(TAG, "db : " + db);
+//		Log.i(TAG, "user : " + user);
+//		Log.i(TAG, "userId : " + userId);
+//		Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
+//		Log.i(TAG, "------- END OF InitGlobalVariables ---------");
+//		Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId , Toast.LENGTH_SHORT).show();
+//	}
+//
+//	public void InitGlobalVariablesStep2(){
 ////        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-////        globalVariables.LoadGendersDataFromFirestore();
+////
+////        globalVariables.LoadUserDataFromFirestore(); // userNickName, userCountryLanguage
+////
+////        globalVariables.setUserNickName(userNickName);
+////        globalVariables.setUserCountryLanguage(userCountryLanguage);
+////        globalVariables.setUserEmail(userEmail);
+////
+////
+////        Log.i(TAG, "userId : " + userId);
+////        Log.i(TAG, "userNickName : " + userNickName);
+////        Log.i(TAG, "userCountryLanguage : " + userCountryLanguage);
+////        Log.i(TAG, "userEmail : " + userEmail);
+////        Log.i(TAG, "------- END OF InitGlobalVariables ---------");
+////        Toast.makeText(MainActivity.this,"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
+//	}
 //
-//        startActivity(intent);
 //
 //
-//    }
+//	private void addFragment() {
+//		fragmentManager = getSupportFragmentManager();
+//		// Commencer la discussion
+//		fragmentTransaction = fragmentManager.beginTransaction();
+//		// Appel du nouveau fragment
+//		CameraFragment cameraFragment = new CameraFragment();
+//		// Ajouter au container de fragment
+//		fragmentTransaction.add(R.id.fragment_container, cameraFragment);
+//		// Finalisation de la création du fragment
+//		fragmentTransaction.commit();
+//
+//
+//
+////        getSupportFragmentManager().
+////                beginTransaction().
+////                add(R.id.fragment_container, new Fragment_01()).
+////                commit();
+//	}
+//
+//	@Override
+//	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//		switch (item.getItemId()) {
+//
+//			// MOI (Pseudo)
+//			case R.id.nav_profil:
+//				getSupportFragmentManager().
+//						beginTransaction().
+//						replace(R.id.fragment_container, new ProfilFragment()).
+//						commit();
+//				break;
+//			// Mon Parrain
+//			case R.id.nav_view_profil:
+//
+//				FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//
+//				assert currentUser != null;
+//				DocumentReference userConnected = usersCollectionRef.document(currentUser.getUid());
+//
+//				userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//					@Override
+//					public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//
+//						ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+//						assert contenuUser != null;
+//
+//						Long usRole = contenuUser.getUs_role();
+//						if (usRole.equals(2)){
+//							if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
+//								getSupportFragmentManager().
+//										beginTransaction().
+//										replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+//										commit();
+//							}else{
+//								Bundle b = new Bundle();
+//								b.putString("idUser", contenuUser.getUs_nephews());
+//								Fragment fragment = new ViewProfilFragment();
+//								fragment.setArguments(b);
+//								getSupportFragmentManager().
+//										beginTransaction().
+//										replace(R.id.fragment_container, fragment).
+//										commit();
+//							}
+//						}else{
+//							if (TextUtils.isEmpty(contenuUser.getUs_godfather())){
+//								getSupportFragmentManager().
+//										beginTransaction().
+//										replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+//										commit();
+//							}else{
+//								Bundle b = new Bundle();
+//								b.putString("idUser", contenuUser.getUs_godfather());
+//								Fragment fragment = new ViewProfilFragment();
+//								fragment.setArguments(b);
+//								getSupportFragmentManager().
+//										beginTransaction().
+//										replace(R.id.fragment_container, fragment).
+//										commit();
+//							}
+//						}
+//					}
+//				});
+//
+//				break;
+//			case R.id.nav_search_profil_PF:
+//				getSupportFragmentManager().
+//						beginTransaction().
+//						replace(R.id.fragment_container, new LierParrainFilleulFragment()).
+//						commit();
+//				break;
+//
+//			case R.id.nav_crediter:
+//				getSupportFragmentManager().
+//						beginTransaction().
+//						replace(R.id.fragment_container, new CreditFragment()).
+//						commit();
+//				break;
+//
+//			case R.id.nav_pending_request:
+//				getSupportFragmentManager().
+//						beginTransaction().
+//						replace(R.id.fragment_container, new PendingRequestsFragment()).
+//						commit();
+//				break;
+//			case R.id.nav_PGO:
+//				getSupportFragmentManager().
+//						beginTransaction().
+//						replace(R.id.fragment_container, new UserFragment()).
+//						commit();
+//				break;
+//			case R.id.nav_deconnexion:
+//				firebaseAuth.signOut();
+//				startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//		}
+//
+//		drawer_layout.closeDrawer(GravityCompat.START);
+//		return true;
+//	}
+//
+//
 //}

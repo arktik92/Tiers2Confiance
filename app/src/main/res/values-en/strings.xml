@@ -67,8 +67,8 @@
     <string name="lbl_date_derniere_connexion">Last connexion</string>
     <string name="lbl_role">Role</string>
     <string name="lbl_solde">Balance</string>
-    <string name="lbl_filleuls">Nephews</string>
-    <string name="lbl_parrain">Godfather</string>
+    <string name="lbl_celibataire">Single</string>
+    <string name="lbl_tiers">Third party</string>
     <string name="lbl_date_naissance">Birth date</string>
     <string name="lbl_code_postal">Zip Code</string>
     <string name="lbl_ville">City</string>
