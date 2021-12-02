@@ -36,6 +36,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
+import com.tiesr2confiance.tiers2confiance.Common.PGO.UserActivity;
 import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -226,9 +227,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-        //LoadUserData();
-        //LoadGenders();
-        //LoadHobbies();
+        LoadUserData();
+        LoadGenders();
+        LoadHobbies();
 
         InitVariables();
         InitComponents();

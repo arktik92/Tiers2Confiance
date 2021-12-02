@@ -147,8 +147,8 @@ public class LierParrainFilleulFragment extends Fragment {
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
-                .whereEqualTo("us_role", roleInverse)
-                .whereNotIn("us_auth_uid", critere);
+                .whereEqualTo("us_role", roleInverse);
+                //.whereNotIn("us_auth_uid", critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)

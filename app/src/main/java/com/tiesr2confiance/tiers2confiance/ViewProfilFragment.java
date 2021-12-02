@@ -1,11 +1,14 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,10 +44,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -52,33 +59,27 @@ public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
-    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies;
+    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
     private ImageView ivProfilAvatarShape;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
+    private LinearLayout llProfil;
 
     /*** BDD ***/
     private FirebaseFirestore db;
-    private CollectionReference usersCollectionRef;
-    /** ID Document **/
-    private FirebaseUser currentUser;
-    private DocumentReference noteRef;
-    private DocumentReference userConnected;
-    /** Collection **/
-    private String KEY_FS_USER_ID;
-    public final String KEY_FS_COLLECTION = "users";
 
+    /** ID Document To Displayed **/
+    private String UserId;
+    private DocumentReference userDisplayed;
+
+    /** ID Document Connected **/
+    private FirebaseUser currentUser;
+    private DocumentReference userConnected;
+
+    /** Variables **/
     private Long usRole;
     private String usNephew;
-
-    private static FirebaseUser user;
-    private static String userId;
-    private static String userNickName;
-    private static String userCountryLanguage = "";
-    private static String userEmail;
-
-
-    String list_hobbies;
-    public HashMap<Long, String> globalVarValue;
+    private String usGodfather;
+    private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
 
@@ -88,23 +89,23 @@ public class ViewProfilFragment extends Fragment {
         //public String arg = getArguments().getString("");
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
 
-      //  Bundle bundle = getIntent().getExtras();
-      //  if(bundle.getString("IdUser") != null) {
-      //      KEY_FS_USER_ID = bundle.getString("IdUser");
-      //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
-      //  }
-
+        // Récupération de l'ID de l'utilisateur à afficher
         Bundle bundle = getArguments();
         String myStrings =bundle.getString("idUser");
+        UserId = myStrings;
 
-        Log.e(TAG, "onCreateView: "+ myStrings);
+        // userDisplayed, récupération de l'utilisateur à afficher
+        db = FirebaseFirestore.getInstance();
+        userDisplayed = db.document(KEY_FS_COLLECTION + "/" + UserId);
 
-        KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
-        KEY_FS_USER_ID = myStrings;
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
 
-        getDataIDUser(view);
+        // Affiche les élèments du profil en fonction du rôle et des liens entre l'utilisateur affiché, et l'utilisateur connecté
+        // + Affiche les boutons necessaires
         showProfil();
-        // Affiche les boutons en fonctions du context
+
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -112,26 +113,36 @@ public class ViewProfilFragment extends Fragment {
     /** Initialisation des composants  **/
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         tvProfilName = view.findViewById(R.id.tvProfilName);
+        tvRole = view.findViewById(R.id.tvRole);
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
-
+        llProfil = view.findViewById(R.id.ll_profil);
+        llProfil.setVisibility(View.GONE);
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
+        btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
+        btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
+        btnUpdateProfil = view.findViewById(R.id.btn_update_profil);
 
-        btnPflCrediter.setVisibility(View.INVISIBLE);
-        btnPflEnvoyer.setVisibility(View.INVISIBLE);
-        btnLinkSupp.setVisibility(View.INVISIBLE);
-        btnLinkRequest.setVisibility(View.INVISIBLE);
+        // Les boutons n'existe pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
+        btnPflCrediter.setVisibility(View.GONE);
+        btnPflEnvoyer.setVisibility(View.GONE);
+        btnLinkSupp.setVisibility(View.GONE);
+        btnLinkRequest.setVisibility(View.GONE);
+        btnLinkSuppTiers.setVisibility(View.GONE);
+        btnLinkRequestTiers.setVisibility(View.GONE);
+        btnUpdateProfil.setVisibility(View.GONE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
-        // Redirige vers le fragment pour créditer son filleul
+        // ACTION BOUTON ROLE=PARRAIN : Redirige vers le fragment permettant de créditer son filleul
         btnPflCrediter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,21 +155,17 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Supprimer le lien Parrain/Filleul
+        // ACTION BOUTON ROLE=PARRAIN : Supprime le lien entre le parrain et le filleul
         btnLinkSupp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            noteRef.update("us_godfather", "" );
+                            userDisplayed.update("us_godfather", "" );
                             userConnected.update("us_nephews", "" );
                         }
                     }
@@ -167,29 +174,25 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Le parrain demande à parrainer le célibataire
+        // ACTION BOUTON ROLE=PARRAIN : Le parrain demande à un célibataire (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + noteRef.getId()+  ";");
-                            noteRef.get()
+                            userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                             assert celibUser != null;
                                             String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
-                                            noteRef.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
+                                            userDisplayed.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
                                         }
                                     });
                         }
@@ -198,29 +201,82 @@ public class ViewProfilFragment extends Fragment {
 
             }
         });
-    }
 
-    private void getDataIDUser(View view) {
-        /** BDD, Connexion FIreStore ***/
-        db = FirebaseFirestore.getInstance();
-        // NoteRef, récupération de l'utilisateur connecté
-        noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
-        usersCollectionRef = db.collection("users");
+
+        // ACTION BOUTON ROLE=CELIBATAIRE : Supprime le lien entre le parrain et le célibataire connecté
+        btnLinkSuppTiers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userDisplayed.update("us_nephews", "" );
+                            userConnected.update("us_godfather", "" );
+                        }
+                    }
+                });
+
+            }
+        });
+
+        // ACTION BOUTON ROLE=CELIBATAIRE : Le célibataire demande à être parrainé par un parrain
+        btnLinkRequestTiers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                            assert celibUser != null;
+                                            String usNephewsRequestFrom = celibUser.getUs_nephews_request_from();
+                                            userDisplayed.update("us_nephews_request_from", usNephewsRequestFrom + userConnected.getId()+  ";");
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     public void showProfil() {
 
-        noteRef.get()
+        userDisplayed.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String name = documentSnapshot.getString(KEY_NAME);
-                            String city = documentSnapshot.getString(KEY_CITY);
-                            String imgurl = documentSnapshot.getString(KEY_IMG);
-                            String imgUrl_avatar = documentSnapshot.getString(KEY_IMG_AVATAR);
-                            String description = documentSnapshot.getString(KEY_DESCRIPTION);
-                            String hobbies = documentSnapshot.getString(KEY_HOBBIES);
+                    public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
+                        if (documentSnapshotDisplayed.exists()) {
+                            String name = documentSnapshotDisplayed.getString(KEY_NAME);
+                            String city = documentSnapshotDisplayed.getString(KEY_CITY);
+                            String imgurl = documentSnapshotDisplayed.getString(KEY_IMG);
+                            String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_IMG_AVATAR);
+                            String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
+                            String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+
+                            // Si l'utilisateur à afficher est un célibataire
+                            if (role.equals(1L)){
+                                tvRole.setText("Je suis " + "Célibataire");
+                                llProfil.setVisibility(View.VISIBLE);
+                            }else{
+                                // sinon, s'il est Tiers de confiance (parrain)
+                                tvRole.setText("Je suis " + "Tiers");
+                            }
+
 
                             tvProfilCity.setText(city);
                             tvProfilName.setText(name);
@@ -249,60 +305,35 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
-                            list_hobbies = documentSnapshot.getString("us_hobbies");
+
+                            list_hobbies = documentSnapshotDisplayed.getString("us_hobbies");
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
                             String split_key = ";";
                             // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
-                            String[] hobbies_list = list_hobbies.split(split_key);
+                            String[] hobbiesListUser = list_hobbies.split(split_key);
 
-//                            ListsAttributs listHobbiesVar = new ListsAttributs();
-//                            listHobbiesVar.setGlobalVarValue( globalVarValue);
-//                            globalVarValue = listHobbiesVar.getGlobalVarValue();
+                            // Appel de la classe global pour charger les Hobbies
+                            final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                            ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
 
-
-                            globalVarValue = new HashMap<Long, String>();
-                            globalVarValue.put((long)1, getContext().getString(R.string.ho_artisanat_text));
-                            globalVarValue.put((long)2, getString(R.string.ho_balades_text));
-                            globalVarValue.put((long)3, getString(R.string.ho_boites_text));
-                            globalVarValue.put((long)4, getString(R.string.ho_cafe_text));
-                            globalVarValue.put((long)5, getString(R.string.ho_charites_text));
-                            globalVarValue.put((long)6, getString(R.string.ho_clubs_text));
-                            globalVarValue.put((long)7, getString(R.string.ho_cuisiner_text));
-                            globalVarValue.put((long)8, getString(R.string.ho_déguster_text));
-                            globalVarValue.put((long)9, getString(R.string.ho_fairerencontres_text));
-                            globalVarValue.put((long)10, getString(R.string.ho_films_text));
-                            globalVarValue.put((long)11, getString(R.string.ho_jardiner_text));
-                            globalVarValue.put((long)12, getString(R.string.ho_jeuxcartes_text));
-                            globalVarValue.put((long)13, getString(R.string.ho_jeuxvideos_text));
-
-                            Log.e(TAG, "onSuccess SIZE: " + globalVarValue.size() );
-
+                            // Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
                             int i;
-                            String hobbies_display="--";
-                            for (i=0; i< hobbies_list.length;i++) {
-                                for (Map.Entry<Long, String> entry : globalVarValue.entrySet()) {
-                                    String key = entry.getKey().toString();
-                                    String value = entry.getValue();
-                                    if (key.equals(hobbies_list[i])) {
-                                        Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
-                                        hobbies_display += value + " -- ";
+                            String hobbiesToDisplay="--";
+                            for (i=0; i< hobbiesListUser.length;i++) {
+
+                                for (int j = 0; j < ListHobbiesComplete.size(); j++) {
+                                    String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
+                                    String value = ListHobbiesComplete.get(j).getHo_label();
+                                    if (key.equals(hobbiesListUser[i])) {
+                                        hobbiesToDisplay += value + " -- ";
                                     }
                                 }
                             }
-
-                            tvHobbies.setText(hobbies_display);
-                            // Ici on va chercher les labels correspondants à la liste d'ID récupérée, puis on les affiche
-                            //ListsAttributs attrHobies = new ListsAttributs(FirebaseFirestore.getInstance(), "EN");
-                            //attrHobies.getHobbiesDataFromFirestore();
-
+                            tvHobbies.setText(hobbiesToDisplay);
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
 
-
-                        // Si le user connecté est un Parrain, on affiche les bouttons qui vont bien
-                        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                        userConnected = usersCollectionRef.document(currentUser.getUid());
 
                         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -313,30 +344,47 @@ public class ViewProfilFragment extends Fragment {
 
                                     usRole = contenuUser.getUs_role();
                                     usNephew = contenuUser.getUs_nephews();
-                                    if (usRole.equals(2L)) {
-                                        Log.e(TAG, "onSuccess: " + usNephew );
-                                        Log.e(TAG, "onSuccess: " + documentSnapshot.getId() );
-                                        // Si le profil consulté est le filleul du parrain,
-                                        if (usNephew.equals(documentSnapshot.getId())){
-                                            //on peut créditer
-                                            btnPflCrediter.setVisibility(View.VISIBLE);
-                                            // on peut supprimer le lien de parrainage
-                                            btnLinkSupp.setVisibility(View.VISIBLE);
+                                    usGodfather = contenuUser.getUs_godfather();
+                                    // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
+                                    if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
+                                        btnUpdateProfil.setVisibility(View.VISIBLE);
+                                        // Sinon on affiche d'autres boutons
+                                    }else{
+                                        // Si le user connecté est un Parrain, on affiche les boutons qui vont bien
+                                        if (usRole.equals(2L)) {
+                                            Log.e(TAG, "onSuccess: " + usNephew );
+                                            Log.e(TAG, "onSuccess: " + documentSnapshotDisplayed.getId() );
+                                            // Si le profil consulté est le filleul du parrain,
+                                            if (usNephew.equals(documentSnapshotDisplayed.getId())){
+                                                //on peut créditer
+                                                btnPflCrediter.setVisibility(View.VISIBLE);
+                                                // on peut supprimer le lien de parrainage
+                                                btnLinkSupp.setVisibility(View.VISIBLE);
 
-                                        }else{
-                                            // Si le profil consulté n'est pas le filleul du parrain
-                                            //on peut envoyer faire un envoi du profil à son filleul (Proposition)
-                                            if (TextUtils.isEmpty(usNephew)){
-                                                // On peut demander à parrainer le célibataire si on n'a pas de filleul
-                                                btnLinkRequest.setVisibility(View.VISIBLE);
                                             }else{
-                                                // On peut envoyer le profil à son filleul si on en a un
-                                                btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                                // Si le profil consulté n'est pas le filleul du parrain
+                                                //on peut envoyer faire un envoi du profil à son filleul (Proposition)
+                                                if (TextUtils.isEmpty(usNephew)){
+                                                    // On peut demander à parrainer le célibataire si on n'a pas de filleul
+                                                    btnLinkRequest.setVisibility(View.VISIBLE);
+                                                }else{
+                                                    // On peut envoyer le profil à son filleul si on en a un
+                                                    btnPflEnvoyer.setVisibility(View.VISIBLE);
+                                                }
+                                            }
+                                            // Si le user connecté est un Célibataire, on affiche les boutons qui vont bien
+                                        } else {
+                                            // Si le profil consulté est le parrain du filleul
+                                            if (usGodfather.equals(documentSnapshotDisplayed.getId())){
+                                                // on peut supprimer le lien de parrainage
+                                                btnLinkSuppTiers.setVisibility(View.VISIBLE);
+                                            }else{
+                                                if (TextUtils.isEmpty(usGodfather)){
+                                                    // On fait une demande au parrain si on a pas de parrain
+                                                    btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                }
                                             }
                                         }
-                                    } else {
-                                            // Si le user connecté est un célibataire
-                                            //Pour l'instant rien du tout, pas de boutons
                                     }
                                 }
                             }
