@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class CameraDeviceFragment extends AppCompatActivity {
 
     /*** var global ****/
@@ -34,10 +37,15 @@ public class CameraDeviceFragment extends AppCompatActivity {
 
     private static final String TAG = "* CAMERA DEVICE * ";
 
+    private static final int REQUEST_ID_IMAGE_CAPTURE = 1888;
     static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
 
 
+    public Uri imageUri;
+
     private ImageView imageView;
+
+    private  Camera mCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +55,34 @@ public class CameraDeviceFragment extends AppCompatActivity {
 
         imageView = findViewById(R.id.ivAvatar);
 
-        Log.d(TAG, "onCreate: ");
+        checkCamera(CameraDeviceFragment.this);
+
+
 
      //  if (checkAndRequestPermissions(CameraDeviceFragment.this))
             getPhoto(CameraDeviceFragment.this);
+
+
+
+
     }
 
+
+    public boolean checkCamera(Context context){
+
+        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            // this device has a camera
+            Log.d(TAG, "checkCamera: this device has camera");
+            return true;
+
+        }else{
+            // this device has no camera
+
+            Log.d(TAG, "checkCamera: this device has no camera");
+            return false;
+        }
+
+    }
 
     public static boolean checkAndRequestPermissions(final Activity context) {
         int WExtStorePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -61,7 +91,7 @@ public class CameraDeviceFragment extends AppCompatActivity {
         List<String> listPermissionsNeeded = new ArrayList<>();
 
 
-        /* Check Camera Permisison */
+        /* Check Camera Permission */
         if (CameraPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded
                     .add(Manifest.permission.CAMERA);
@@ -152,6 +182,8 @@ public class CameraDeviceFragment extends AppCompatActivity {
 
         Log.d(TAG, "***** GetPhoto ****** ");
 
+
+
         final CharSequence[] optionMenu ={"Take a photo", "Choose From Gallery", "Exit"};
 
         /*** create a MenuOption Array ***/
@@ -166,20 +198,23 @@ public class CameraDeviceFragment extends AppCompatActivity {
                 if(optionMenu[i].equals("Take photo")){
                     // Open the camera and get the photo
 
-                    Log.d(TAG, " ENTER TAKE PHOTO");
-
-
-                    try{
+                    try{     Log.d(TAG, "onClick: TAKE PICTURE");
 
 
 
-                       /*** Intent takepicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takepicture, 0);
-                        Log.d(TAG, "onClick: TAKE PICTURE");
-**/
-                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        /****
+                        Intent takepicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takepicture, REQUEST_ID_IMAGE_CAPTURE);
 
-                     startActivityForResult(cameraIntent, 1888);
+
+                        ***/
+// Camera Intent
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.TITLE,"New Picture");
+                        Uri imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                        startActivityForResult(takePicture, REQUEST_ID_IMAGE_CAPTURE);
 
 
                     }
@@ -197,7 +232,9 @@ public class CameraDeviceFragment extends AppCompatActivity {
 
                     pickPhoto.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
-                    startActivityForResult(pickPhoto, 1);
+                    startActivityForResult(pickPhoto, REQUEST_ID_IMAGE_CAPTURE);
+
+
                     Log.d(TAG, "onClick: GALLERY EXTRA_LOCAL_ONLY");
                 }else if(optionMenu[i].equals("Exit")){
                     dialogInterface.dismiss();
@@ -214,6 +251,38 @@ public class CameraDeviceFragment extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
+if(requestCode == REQUEST_ID_IMAGE_CAPTURE && resultCode == RESULT_OK){
+
+
+
+    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+    //  Bundle camerabundle = new Bundle();
+
+    cameraIntent.setType("image/*"); // image/jpg
+
+    cameraIntent.putExtra("crop", true);
+    cameraIntent.putExtra("scale", true);
+
+    // Output image dim
+    cameraIntent.putExtra("outputX", 256);
+    cameraIntent.putExtra("outputY", 256);
+
+    // Ratio
+    cameraIntent.putExtra("aspectX", 1);
+    cameraIntent.putExtra("aspectY", 1);
+
+    cameraIntent.putExtra("return-data", true);
+
+    cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+    startActivityForResult(cameraIntent, 1);
+
+    Log.i("MyLog", "Video saved to: " + imageUri);
+
+}
+
+
         /***
          if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
          Bundle extras = data.getExtras();
@@ -222,6 +291,10 @@ public class CameraDeviceFragment extends AppCompatActivity {
          // imageView.setImageBitmap(imageBitmap);
          }
          ***/
+
+
+
+        /****
 
         if (requestCode != RESULT_CANCELED) {
             switch (requestCode) {
@@ -239,7 +312,9 @@ public class CameraDeviceFragment extends AppCompatActivity {
                     break;
 
                 case 1:
-                    if (resultCode == RESULT_OK && data != null) {
+                   // if (resultCode == RESULT_OK && data != null) {
+
+                    if(requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
                         Uri selectedImage = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
                         if (selectedImage != null) {
@@ -262,6 +337,9 @@ public class CameraDeviceFragment extends AppCompatActivity {
 
             }
         }
+
+
+        ****/
 
     }
 
