@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -51,9 +52,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentFirstBinding;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +67,8 @@ import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
+    private static final String TAGAPP = "LOGAPP";
+//    final   GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
     /* Camera Setup*/
 public static final String EXTRA_INFO="default";
@@ -127,7 +132,17 @@ public static final String EXTRA_INFO="default";
     ) {
         binding = FragmentFirstBinding.inflate(inflater, container, false);
 
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        //globalVariables.LoadUserDataFromFirestore();
+
+
         return binding.getRoot();
+
+
+
+
+
+
 
         /** TODO Camera */
         //return inflater.inflate(R.layout.fragment_camera, container, talse);
@@ -160,6 +175,7 @@ public static final String EXTRA_INFO="default";
 
         initUI(view);
         initFireBase();
+
 
 
         if (checkPermission()) {
@@ -204,6 +220,7 @@ public static final String EXTRA_INFO="default";
 
 
         });
+
     }
 
 
