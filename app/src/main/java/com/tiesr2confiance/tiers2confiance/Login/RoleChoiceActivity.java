@@ -22,7 +22,6 @@ public class RoleChoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_choice);
 
-        super.onCreate(savedInstanceState);
         final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
 
         btnRoleCelib    =   findViewById(R.id.btn_role_celib);
