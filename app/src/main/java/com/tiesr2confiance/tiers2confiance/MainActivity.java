@@ -1,7 +1,5 @@
 package com.tiesr2confiance.tiers2confiance;
 
-import static com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity.role;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
@@ -95,6 +94,15 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
 
+        /*************************************************************/
+        /*************************************************************/
+
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        globalVariables.LoadUserDataFromFirestore();
+        globalVariables.LoadGendersDataFromFirestore();
+        globalVariables.LoadHobbiesDataFromFirestore();
+
+        long role = 1;
 
         if(role == 1) {
             setContentView(R.layout.activity_main_celibataire);
@@ -126,15 +134,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // Force l'affichage du 1er fragment au démarrage
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
-
-        /*************************************************************/
-        /*************************************************************/
-
-        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        globalVariables.LoadUserDataFromFirestore();
-        globalVariables.LoadGendersDataFromFirestore();
-        globalVariables.LoadHobbiesDataFromFirestore();
-
 
 
     }
