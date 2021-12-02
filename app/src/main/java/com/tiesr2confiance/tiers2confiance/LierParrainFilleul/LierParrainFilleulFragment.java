@@ -1,17 +1,22 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -25,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.ViewProfilFragment;
@@ -46,6 +52,7 @@ public class LierParrainFilleulFragment extends Fragment {
     private SearchView svTextSearch;
     private RecyclerView rvResultat;
     private LierParrainFilleulAdapter adapterUser;
+    private Boolean usAlreadyLinked = true;
 
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -69,14 +76,14 @@ public class LierParrainFilleulFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_lier_parrain_filleul, container, false);
-        init(view);
         getDataFromFirestore(view);
         binding = FragmentLierParrainFilleulBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
-    public void init(View view) {
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         rvResultat = view.findViewById(R.id.rvResultat);
         rvResultat.setHasFixedSize(true);
         rvResultat.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -103,9 +110,24 @@ public class LierParrainFilleulFragment extends Fragment {
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestTo.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestTo.split(";")));
 
-                // Appel la fonction qui affiche la liste
-                displayList(usRole, NephewSepareted, GodfatherSepareted, view );
-                adapterUser.startListening();
+                if (usRole.equals(1L)) {
+                    if ( TextUtils.isEmpty(contenuUser.getUs_godfather())) { usAlreadyLinked = false; }
+                } else {
+                    if ( TextUtils.isEmpty(contenuUser.getUs_nephews())) { usAlreadyLinked = false; }
+                }
+
+                // On affiche la liste seulement si l'utilisateur n'est pas déjà lié avec un autre utilisateur
+                if (usAlreadyLinked == true) {
+                    if (usRole.equals(1L)){
+                        Toast.makeText(getContext(), "Vous avez déjà un parrain", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), "Vous avez déjà un filleul", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    // Appel la fonction qui affiche la liste
+                    displayList(usRole, NephewSepareted, GodfatherSepareted, view);
+                    adapterUser.startListening();
+                }
             }
         });
     }
@@ -117,25 +139,20 @@ public class LierParrainFilleulFragment extends Fragment {
         critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;
-           // setTitle(getString(R.string.Lier_pf_titre_filleul));
             critere = GodfatherList;
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
             roleInverse = 1;
-           // setTitle(getString(R.string.Lier_pf_titre_parrain));
             critere = NephewsList;
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
-                .whereEqualTo("us_role", roleInverse);
-                //.whereNotIn("us_auth_uid", critere);
+                .whereEqualTo("us_role", roleInverse)
+                .whereNotIn("us_auth_uid", critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
                         .build();
-
-        Log.e(TAG, "Ca passe avec " + query.toString());
-
         adapterUser = new LierParrainFilleulAdapter(users);
         rvResultat.setAdapter(adapterUser);
 
@@ -146,11 +163,13 @@ public class LierParrainFilleulFragment extends Fragment {
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryText) {
+                Log.e(TAG, "onComplete: HHHHsubmit "  );
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.e(TAG, "onComplete: HHHH "  );
                // adapterUser.stopListening();
                 Query query = db.collection("users")
                         .whereEqualTo("us_role", roleInverse)
@@ -158,6 +177,8 @@ public class LierParrainFilleulFragment extends Fragment {
                         .orderBy("us_nickname")
                         .startAt(newText)
                         .endAt(newText+"\uf8ff");
+
+                Log.e(TAG, "onQueryTextChange: " + "TESSS" );
 
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
@@ -174,11 +195,20 @@ public class LierParrainFilleulFragment extends Fragment {
         adapterUser.setOnItemCliclListener(new LierParrainFilleulAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot snapshot, int position) {
-                snapshot.getReference();
 
-                Intent intent = new Intent(getContext(), ViewProfilFragment.class);
-                intent.putExtra("IdUser", snapshot.getId());
-                startActivity(intent);
+
+                String idUser = snapshot.getId();
+                Bundle b = new Bundle();
+                b.putString("idUser", idUser);
+                Fragment fragment = new ViewProfilFragment();
+                fragment.setArguments(b);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
             }
         });
     }

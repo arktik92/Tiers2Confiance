@@ -127,7 +127,7 @@
     <string name="ho_artisanat_text">Artisanat</string>
     <string name="ho_balades_text">Balades</string>
     <string name="ho_boites_text">Boites de nuit / danser</string>
-    <string name="ho_cafe_text">Café et conversation</string>
+    <string name="ho_cafe_text" translatable="false">Café et conversation</string>
     <string name="ho_charites_text">Charités / Organisations</string>
     <string name="ho_clubs_text">Clubs de lecture ou de discussion</string>
     <string name="ho_cuisiner_text">Cuisiner</string>

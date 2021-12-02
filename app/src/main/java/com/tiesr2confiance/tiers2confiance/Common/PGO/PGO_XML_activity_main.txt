@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:onClick="launchLierParrainFilleulActivity"
+            android:text="Chercher Parrain/Filleul" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:onClick="launchPendingRequestsActivity"
+            android:text="liste des demandes en attente" />
+
+        <Button
+            android:id="@+id/btn_init_vars1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="INIT VARS" />
+
+        <Button
+            android:id="@+id/btn_init_vars2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INIT VARS 2" />
+
+        <Button
+            android:id="@+id/btn_init_arrays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Init Arrays" />
+
+        <Button
+            android:id="@+id/btn_init_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="InitGlobalVarsAndArrays" />
+
+        <Button
+            android:id="@+id/btn_Display_Genders_Array"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display GendersArray" />
+
+        <Button
+            android:id="@+id/btn_Display_Hobbies_Array"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display HobbiesArray" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="290dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="18dp"
+            android:onClick="launchUserActivity"
+            android:text="USER ACTIVITY" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,13 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <group android:id="@+id/group1"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_profil"
-            android:icon="@drawable/ic_account"
-            android:title="Moi (pseudo)" />
-    </group>
+
+    <item android:title="Moi (pseudo)">
+        <menu>
+            <item android:title="Mon compte"
+                android:id="@+id/nav_profil"
+                android:icon="@drawable/ic_godfather_nephews"/>
+            <item android:title="Créditer"
+                android:id="@+id/nav_crediter"
+                android:icon="@drawable/ic_search_godfather_nephews"/>
+        </menu>
+    </item>
+
 
     <group android:id="@+id/group2"
         android:checkableBehavior="single">
@@ -46,7 +51,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Déconnexion"
-            android:id="@+id/nav_deconnexion_celib"
+            android:id="@+id/nav_deconnexion"
             android:icon="@drawable/ic_exit" />
     </group>
 

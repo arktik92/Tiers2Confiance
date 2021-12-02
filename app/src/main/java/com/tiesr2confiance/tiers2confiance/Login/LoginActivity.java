@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Common.Util;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Common.NoInternetActivity;
@@ -24,6 +26,7 @@ import com.tiesr2confiance.tiers2confiance.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
     /** Variables globales **/
     private TextInputEditText etEmail, etPassword;
     private String email,password;
@@ -32,12 +35,16 @@ public class LoginActivity extends AppCompatActivity {
     public void init() {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
+
 
         etPassword.setOnEditorActionListener(editorActionListener);
     }
@@ -66,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
 
-                                   //TODO intent a replacer
+
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     finish();
                                 } else {

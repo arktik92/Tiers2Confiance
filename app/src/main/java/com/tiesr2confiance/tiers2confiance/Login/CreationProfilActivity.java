@@ -7,22 +7,21 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.ColorStateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -30,20 +29,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.type.Color;
-import com.google.firebase.firestore.Query;
-import com.google.type.DateTime;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
-import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
-import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,12 +44,16 @@ import java.util.Map;
 public class CreationProfilActivity extends AppCompatActivity {
 
     /** Variables globales **/
+
+
+
     private static final String TAG = "CreationProfilActivity";
-    private EditText etLastName, etFistName, etNickName, etZipCode, etCity;
+
+    private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
-    private String lastName,firstName,nickName, dateOfBirth, zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather, image;
-    private long role;
-    private RadioGroup rgRadioGroup;
+    private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId, userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo, godfatherRequestFrom, godfather, image;
+    public static long role, genre;
+    private RadioGroup radioGroupGenre;
     private RadioButton rbHomme, rbFemme;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Timestamp currentDate, registeredDate, timestamp;
@@ -77,13 +73,15 @@ public class CreationProfilActivity extends AppCompatActivity {
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
         etZipCode = findViewById(R.id.et_creation_code_postal);
         etCity = findViewById(R.id.et_creation_ville);
-        rgRadioGroup =findViewById(R.id.rg_radio_group);
+        radioGroupGenre =findViewById(R.id.radio_group_genre);
+
+
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
+
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
 
 
-        role = 1;
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
@@ -94,9 +92,18 @@ public class CreationProfilActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creation_profil);
+        if(role == 1) {
+            setContentView(R.layout.activity_creation_profil_celibataire);
+        } else {
+            setContentView(R.layout.activity_creation_profil_parrain);
+        }
+
 
         init();
+
+
+
+
 
         /** Méthode OnClickListener du Date Picker **/
         tvDateOfBirth.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +142,8 @@ public class CreationProfilActivity extends AppCompatActivity {
         };
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void creationUser(View view) {
         userEmail = user.getEmail().trim();
@@ -150,6 +159,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         godfatherRequestFrom= "";
         image = "";
         godfather = "";
+        hobbies = "";
         currentDate = Timestamp.now();
         if(registeredDate == null) {
             registeredDate = Timestamp.now();
@@ -176,6 +186,11 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_nephews", nephews);
         userList.put("us_godfather", godfather);
         userList.put("us_role", role);
+        userList.put("us_gender", genre);
+        userList.put("us_hobbies", hobbies);
+
+
+
         docRef.set(userList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -193,5 +208,26 @@ public class CreationProfilActivity extends AppCompatActivity {
                     }
                 });
 
+
     }
+
+
+    public void radioButtonGender(View view) {
+
+        boolean checked = ((RadioButton)view).isChecked();
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.rb_homme:
+                if(checked)
+                    genre = 1;
+                break;
+            case R.id.rb_femme:
+                if(checked)
+                    genre = 2;
+                break;
+        }
+
+    }
+
+
 }

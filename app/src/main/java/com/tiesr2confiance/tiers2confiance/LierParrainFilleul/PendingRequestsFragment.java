@@ -1,15 +1,21 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,8 +27,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.tiesr2confiance.tiers2confiance.Common.Util;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
+import com.tiesr2confiance.tiers2confiance.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentPendingRequestsBinding;
 
 import java.util.ArrayList;
@@ -41,6 +50,7 @@ public class PendingRequestsFragment extends Fragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
     private Long usRole = 2L;
+    private Boolean usAlreadyLinked = true;
 
     private String usGodfatherRequestFrom = "";
     private String usNephewsRequestFrom = "";
@@ -65,7 +75,6 @@ public class PendingRequestsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_pending_requests, container, false);
-        init(view);
         getDataFromFirestore(view);
         binding = FragmentPendingRequestsBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -73,13 +82,13 @@ public class PendingRequestsFragment extends Fragment {
 
 
     /** Initialisation des composants  **/
-    public void init(View view) {
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.rvResultatDemand);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-       // setTitle(getString(R.string.accepter_demande));
     }
+
 
     /** Récupération de la liste des demandes  **/
     private void getDataFromFirestore(View view) {
@@ -103,27 +112,52 @@ public class PendingRequestsFragment extends Fragment {
                 ArrayList<String> GodfatherSepareted = new ArrayList<>(Arrays.asList(usGodfatherRequestFrom.split(";")));
                 ArrayList<String> NephewSepareted = new ArrayList<>(Arrays.asList(usNephewsRequestFrom.split(";")));
 
-
                 if (usRole.equals(1L)) {
                     roleInverse = 2;
+                    if ( TextUtils.isEmpty(contenuUser.getUs_godfather())) { usAlreadyLinked = false; }
                     critere = GodfatherSepareted;
                 } else {
                     roleInverse = 1;
                     critere = NephewSepareted;
+                    if ( TextUtils.isEmpty(contenuUser.getUs_nephews())) { usAlreadyLinked = false; }
                 }
 
-                /** Récupération de la collection Users dans Firestore **/
-                Query query = db.collection("users")
-                        .whereEqualTo("us_role", roleInverse)
-                        .whereIn("us_auth_uid", critere);
-                FirestoreRecyclerOptions<ModelUsers> users =
-                        new FirestoreRecyclerOptions.Builder<ModelUsers>()
-                                .setQuery(query, ModelUsers.class)
-                                .build();
+                // On affiche la liste seulement si l'utilisateur n'est pas déjà lié avec un autre utilisateur
+                if (usAlreadyLinked == true) {
+                    if (usRole.equals(1L)){
+                        Toast.makeText(getContext(), "Vous avez déjà un parrain", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), "Vous avez déjà un filleul", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    /** Récupération de la collection Users dans Firestore **/
+                    Query query = db.collection("users")
+                            .whereEqualTo("us_role", roleInverse)
+                            .whereIn("us_auth_uid", critere);
+                    FirestoreRecyclerOptions<ModelUsers> users =
+                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                    .setQuery(query, ModelUsers.class)
+                                    .build();
 
-                adapterUser = new PendingRequestsAdapter(users);
-                recyclerView.setAdapter(adapterUser);
-                adapterUser.startListening();
+                    adapterUser = new PendingRequestsAdapter(users);
+                    recyclerView.setAdapter(adapterUser);
+                    adapterUser.startListening();
+
+                    adapterUser.setOnItemCliclListener(new PendingRequestsAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DocumentSnapshot snapshot, int position) {
+
+                            Fragment fragment = new ViewProfilFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+                        }
+                    });
+                }
+
             }
         });
 

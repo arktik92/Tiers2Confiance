@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,8 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     private DocumentReference userConnected;
     private DocumentReference userPosition;
 
+    // Variable locale
+    private PendingRequestsAdapter.OnItemClickListener mOnItemClickListener;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -54,6 +57,16 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         super(options);
     }
 
+    /** #1 Interface **/
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    public void setOnItemCliclListener(PendingRequestsAdapter.OnItemClickListener onItemClickListener){
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+
     @Override
     protected void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull ModelUsers model) {
 
@@ -61,9 +74,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         String us_nickname = model.getUs_nickname();
         String us_city = model.getUs_city();
         Date us_birth_day = model.getUs_birth_date();
-
-        String us_godfather = model.getUs_godfather();
-        String us_nephews = model.getUs_nephews();
 
         holder.tv_nickname_request.setText(us_nickname);
         holder.tv_city_request.setText(us_city);
@@ -75,8 +85,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = usersCollectionRef.document(currentUser.getUid());
 
-        //TODO Inserer la bonne image quand on aura récupérer l'url depuis le model
-        // Utilisation de glide pour afficher les images,
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .error(R.mipmap.ic_launcher)
@@ -109,18 +117,23 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                                 // Si l'utilisateur connecté est un célibataire, il accepte la demande d'un parrain
                                 if (contenuUser.getUs_role() == 1) {
                                     userConnected.update("us_godfather", userPosition.getId() );
-                                    userConnected.update("us_godfather_request_from", ""); // Replace
+                                    // Replace
+                                    String ListDemands = contenuUser.getUs_godfather_request_from();
+                                    String ListDemandsNew = ListDemands.replace(userPosition.getId()+ ";", "");
+                                    userConnected.update("us_godfather_request_from", ListDemandsNew);
 
-                                    userPosition.update("us_nephews",   us_nephews + userConnected.getId()+  ";");
+                                    userPosition.update("us_nephews",   userConnected.getId()+  ";");
                                     userPosition.update("us_nephews_request_to", "" ); // Replace
                                     Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
-//                                    Log.e(TAG, "Demande du parrain acceptée par le célibataire");
                                 }
 
                                 // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
                                 if (contenuUser.getUs_role() == 2) {
                                     userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userPosition.getId()+  ";");
-                                    userConnected.update("us_nephews_request_from", "" );// Replace
+                                    // Replace
+                                    String ListDemands = contenuUser.getUs_nephews_request_from();
+                                    String ListDemandsNew = ListDemands.replace(userPosition.getId() + ";", "");
+                                    userConnected.update("us_nephews_request_from", ListDemandsNew );
 
                                     userPosition.update("us_godfather", userConnected.getId() );
                                     userPosition.update("us_godfather_request_to", "");
@@ -138,7 +151,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                         });
             }
         });
-
     }
 
     @NonNull
@@ -149,6 +161,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                 .inflate(R.layout.activity_pending_requests_item_recycler, parent, false);
         return new PendingRequestsAdapter.ItemViewHolder(view);
     }
+
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -167,4 +180,5 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
             cv_profil_user_request = itemView.findViewById(R.id.cv_profil_user_request);
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Models.ModelViewProfilItem;
+import com.tiesr2confiance.tiers2confiance.databinding.FragmentLierParrainFilleulBinding;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentProfilBinding;
 
 public class ProfilFragment extends Fragment {
@@ -35,9 +38,7 @@ public class ProfilFragment extends Fragment {
     private DocumentReference noteRef;
     /*** Collection reference ***/
     private CollectionReference noteCollectionRef;
-
     private FragmentProfilBinding binding;
-
 
     /*** end - BDD ***/
 
@@ -45,15 +46,21 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
-        init(view);
         binding = FragmentProfilBinding.inflate(inflater, container, false);
+        getDataIDUser(view);
         return binding.getRoot();
     }
 
-    private void init(View view) {
+    /** Initialisation des composants  **/
+    @Override
+    public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         myName = view.findViewById(R.id.etName);
         myCity = view.findViewById(R.id.etCIty);
         myEmail = view.findViewById(R.id.etEmail);
+    }
+
+    // Récupération de l'id de l'utilisateur connecté
+    private void getDataIDUser(View view) {
         /* Init BDD */
         /*** BDD Connexion ***/
         db = FirebaseFirestore.getInstance();

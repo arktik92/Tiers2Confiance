@@ -96,4 +96,26 @@
     <!-- String pour la decription pour l'aide aux déficients visuels   -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="ho_artisanat_text">Artisanat</string>
+    <string name="ho_balades_text">Balades</string>
+    <string name="ho_boites_text">Boites de nuit / danser</string>
+    <string name="ho_cafe_text">Café et conversation</string>
+    <string name="ho_charites_text">Charités / Organisations</string>
+    <string name="ho_clubs_text">Clubs de lecture ou de discussion</string>
+    <string name="ho_cuisiner_text">Cuisiner</string>
+    <string name="ho_déguster_text">Déguster du vin / des plats</string>
+    <string name="ho_fairerencontres_text">Faire de nouvelles rencontres</string>
+    <string name="ho_films_text">Films / Cinéma</string>
+    <string name="ho_jardiner_text">Jardiner</string>
+    <string name="ho_jeuxcartes_text">Jeux de cartes / de famille</string>
+    <string name="ho_jeuxvideos_text">Jeux vidéo</string>
+    <string name="ho_medepenser_text">Me dépenser</string>
+    <string name="ho_musique_text">Musique / Concerts</string>
+    <string name="ho_musees_text">Musées / Galeries</string>
+    <string name="ho_pecher_text">Pêcher / Chasser</string>
+    <string name="ho_regarder_text">Regarder le sport</string>
+    <string name="ho_religion_text">Religion / Spirituel</string>
+    <string name="ho_restaurant_text">Restaurant / Recevoir à diner</string>
 </resources>

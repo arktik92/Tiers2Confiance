@@ -97,7 +97,7 @@ public class SignInActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
 
                                     user = FirebaseAuth.getInstance().getCurrentUser();
-                                    startActivity(new Intent(SignInActivity.this,CreationProfilActivity.class));
+                                    startActivity(new Intent(SignInActivity.this,RoleChoiceActivity.class));
 
                                 } else {
                                     Toast.makeText(SignInActivity.this,

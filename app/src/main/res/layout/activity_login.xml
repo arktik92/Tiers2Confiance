@@ -69,6 +69,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:background="@drawable/shape_btn"
+                android:backgroundTintMode="src_in"
+                android:hapticFeedbackEnabled="false"
                 android:imeOptions="actionDone"
                 android:onClick="btnLoginClick"
                 android:text="Login" />
