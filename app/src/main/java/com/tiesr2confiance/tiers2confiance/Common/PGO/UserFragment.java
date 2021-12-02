@@ -235,10 +235,10 @@ public class UserFragment extends Fragment {
 		tvEmail.setText(userEmail);
 		switch ((int) userRole){
 			case 1:
-				tvRole.setText("CELIB");
+				tvRole.setText(userRole +" - CELIB");
 				break;
 			case 2:
-			tvRole.setText("PARRAIN");
+			tvRole.setText(userRole +" - PARRAIN");
 				break;
 		}
 

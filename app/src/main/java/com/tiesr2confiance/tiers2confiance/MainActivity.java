@@ -105,9 +105,15 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         long role = globalVariables.getUserRole();
 
-        Log.e(TAG, "onCreate: hhhhhhh" + globalVariables.getUserRole() );
+        Log.e(TAG, "onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
-        if(role == 1) {
+//        switch((int) role) {
+//            case 1:
+//
+//        }
+
+
+        if((int) role == 1) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
             setContentView(R.layout.activity_main_parrain);
