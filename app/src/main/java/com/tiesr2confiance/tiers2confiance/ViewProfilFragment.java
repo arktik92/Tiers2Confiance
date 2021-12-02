@@ -1,5 +1,6 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
@@ -42,10 +43,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -122,7 +126,7 @@ public class ViewProfilFragment extends Fragment {
         tvHobbies = view.findViewById(R.id.tvHobbies);
 
         llProfil = view.findViewById(R.id.ll_profil);
-        llProfil.setVisibility(View.INVISIBLE);
+        llProfil.setVisibility(View.GONE);
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
@@ -131,12 +135,12 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
 
-        btnPflCrediter.setVisibility(View.INVISIBLE);
-        btnPflEnvoyer.setVisibility(View.INVISIBLE);
-        btnLinkSupp.setVisibility(View.INVISIBLE);
-        btnLinkRequest.setVisibility(View.INVISIBLE);
-        btnLinkSuppTiers.setVisibility(View.INVISIBLE);
-        btnLinkRequestTiers.setVisibility(View.INVISIBLE);
+        btnPflCrediter.setVisibility(View.GONE);
+        btnPflEnvoyer.setVisibility(View.GONE);
+        btnLinkSupp.setVisibility(View.GONE);
+        btnLinkRequest.setVisibility(View.GONE);
+        btnLinkSuppTiers.setVisibility(View.GONE);
+        btnLinkRequestTiers.setVisibility(View.GONE);
 
 
         /** Glide image **/
@@ -327,37 +331,19 @@ public class ViewProfilFragment extends Fragment {
                             Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
                             String split_key = ";";
                             // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
-                            String[] hobbies_list = list_hobbies.split(split_key);
+                            String[] hobbiesListUser = list_hobbies.split(split_key);
 
-//                            ListsAttributs listHobbiesVar = new ListsAttributs();
-//                            listHobbiesVar.setGlobalVarValue( globalVarValue);
-//                            globalVarValue = listHobbiesVar.getGlobalVarValue();
-
-
-                            globalVarValue = new HashMap<Long, String>();
-                            globalVarValue.put((long)1, getContext().getString(R.string.ho_artisanat_text));
-                            globalVarValue.put((long)2, getString(R.string.ho_balades_text));
-                            globalVarValue.put((long)3, getString(R.string.ho_boites_text));
-                            globalVarValue.put((long)4, getString(R.string.ho_cafe_text));
-                            globalVarValue.put((long)5, getString(R.string.ho_charites_text));
-                            globalVarValue.put((long)6, getString(R.string.ho_clubs_text));
-                            globalVarValue.put((long)7, getString(R.string.ho_cuisiner_text));
-                            globalVarValue.put((long)8, getString(R.string.ho_déguster_text));
-                            globalVarValue.put((long)9, getString(R.string.ho_fairerencontres_text));
-                            globalVarValue.put((long)10, getString(R.string.ho_films_text));
-                            globalVarValue.put((long)11, getString(R.string.ho_jardiner_text));
-                            globalVarValue.put((long)12, getString(R.string.ho_jeuxcartes_text));
-                            globalVarValue.put((long)13, getString(R.string.ho_jeuxvideos_text));
-
-                            Log.e(TAG, "onSuccess SIZE: " + globalVarValue.size() );
+                            final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                            ArrayList<ModelHobbies> ListHobbies = globalVariables.getArrayListHobbies();
 
                             int i;
                             String hobbies_display="--";
-                            for (i=0; i< hobbies_list.length;i++) {
-                                for (Map.Entry<Long, String> entry : globalVarValue.entrySet()) {
-                                    String key = entry.getKey().toString();
-                                    String value = entry.getValue();
-                                    if (key.equals(hobbies_list[i])) {
+                            for (i=0; i< hobbiesListUser.length;i++) {
+
+                                for (int j = 0; j < ListHobbies.size(); j++) {
+                                    String key = String.valueOf(ListHobbies.get(j).getHo_id());
+                                    String value = ListHobbies.get(j).getHo_label();
+                                    if (key.equals(hobbiesListUser[i])) {
                                         Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
                                         hobbies_display += value + " -- ";
                                     }

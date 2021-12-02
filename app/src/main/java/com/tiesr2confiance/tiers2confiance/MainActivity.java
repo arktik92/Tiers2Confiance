@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     }
 
-    private void DisplayHobbies() {
+    public void DisplayHobbies() {
         final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
         Log.d(TAGAPP, "DisplayHobbies() ");
 
