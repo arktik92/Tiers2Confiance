@@ -25,7 +25,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-public class Camera extends AppCompatActivity {
+public class CameraFragment extends AppCompatActivity {
 
     private ImageView profilPic;
     private Button btnImportPhoto, btnImportCamera;
@@ -108,6 +108,9 @@ public class Camera extends AppCompatActivity {
         Log.d(TAG, "***** UploadPhoto ***** ");
 
         final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, "***** ProgressDialog ***** ");
+
         prDial.setTitle("Uploading Image...");
         prDial.show();
 
@@ -146,6 +149,8 @@ public class Camera extends AppCompatActivity {
 
 
     }
+
+
 
 
 }
