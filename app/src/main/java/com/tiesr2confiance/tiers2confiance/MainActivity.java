@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Appel du nouveau fragment
         CameraFragment cameraFragment = new CameraFragment();
         // Ajouter au container de fragment
-        fragmentTransaction.add(R.id.fragment_container, cameraFragment);
+        fragmentTransaction.add(R.id.fragment_container, new Fragment());
         // Finalisation de la création du fragment
         fragmentTransaction.commit();
 

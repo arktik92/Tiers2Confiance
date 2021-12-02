@@ -24,7 +24,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tiers2Confiance.NoActionBar" >
+        android:theme="@style/Theme.Tiers2Confiance.NoActionBar">
+        <activity
+            android:name=".CameraDeviceFragment"
+            android:exported="false" />
         <activity
             android:name=".Login.ResetPasswordActivity"
             android:exported="false" />
@@ -33,7 +36,7 @@
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,8 +54,10 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
+            android:exported="false"/>
+        <activity
+            android:name=".CameraFragment"
+            android:exported="false"/>
     </application>
 
 </manifest>
