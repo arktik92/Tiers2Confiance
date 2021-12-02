@@ -48,7 +48,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_role_crelib"
+                android:id="@+id/btn_role_celib"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

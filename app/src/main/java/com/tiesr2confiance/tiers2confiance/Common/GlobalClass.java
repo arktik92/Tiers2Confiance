@@ -37,7 +37,7 @@ public class GlobalClass extends Application {
     private String userCountryLanguage = "EN";
     private String userNickName;
     private String userEmail;
-    private long userRole;
+    private long userRole = 1L;
 
     private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
     private ArrayList<ModelHobbies> arrayListHobbies = new ArrayList<>();

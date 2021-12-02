@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
@@ -47,7 +48,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
     private static final String TAG = "CreationProfilActivity";
-
+    private static final String TAGAPP = "LOGAPP";
     // Variable Widgets
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
@@ -57,7 +58,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
-    public static long role;
+    public  long role;
     private long  genre,  balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup,hairColor,
             hairLength, eyeColor, smoker;
     private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId,
@@ -97,12 +98,31 @@ public class CreationProfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        role    =   globalVariables.getUserRole();
+
+        Log.i(TAGAPP, "CreationProfilActivity onCreate role : " + role);
+
         // Définition de la contentView en fonction du rôle
-        if(role == 1) {
-            setContentView(R.layout.activity_creation_profil_celibataire);
-        } else {
-            setContentView(R.layout.activity_creation_profil_parrain);
+
+        switch((int) role) {
+            case 1:
+                setContentView(R.layout.activity_creation_profil_celibataire);
+                break;
+            case 2:
+                setContentView(R.layout.activity_creation_profil_parrain);
+                break;
+            default:
+                setContentView(R.layout.activity_creation_profil_parrain);
+                break;
         }
+
+//
+//        if((int) role == 1) {
+//            setContentView(R.layout.activity_creation_profil_celibataire);
+//        } else {
+//            setContentView(R.layout.activity_creation_profil_parrain);
+//        }
 
         // Rappel de la méthode init
         init();
