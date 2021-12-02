@@ -90,7 +90,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         // Récupération des attributs des utilisateurs de la liste
         String us_nickname = model.getUs_nickname();
         String us_city = model.getUs_city();
-        Date us_birth_day = model.getUs_birth_date();
         String us_godfather_request_from = model.getUs_godfather_request_from();
         String us_nephews_request_from = model.getUs_nephews_request_from();
         String us_avatar = model.getUs_avatar();
@@ -98,8 +97,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         holder.tv_nickname.setText(us_nickname);
         holder.tv_city.setText(us_city);
 
-        String str = String.format("%tc", us_birth_day);
-        holder.tv_birth_day.setText(str);
+        //String str = String.format("%tc", us_birth_day);
 
         // Récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,7 +161,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tv_nickname, tv_city, tv_birth_day;
+        public TextView tv_nickname, tv_city;
         public ImageView iv_photo_profil;
         public Button btn_request;
         public CardView cv_profil_user;
@@ -172,7 +170,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
             super(itemView);
             tv_nickname = itemView.findViewById(R.id.tv_nickname);
             tv_city = itemView.findViewById(R.id.tv_city);
-            tv_birth_day = itemView.findViewById(R.id.tv_birth_day);
             iv_photo_profil = itemView.findViewById(R.id.iv_photo_profil);
             btn_request = itemView.findViewById(R.id.btn_request);
             cv_profil_user = itemView.findViewById(R.id.cv_profil_user);

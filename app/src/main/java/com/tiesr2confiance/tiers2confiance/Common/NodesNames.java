@@ -12,7 +12,7 @@ public class NodesNames {
     public static final String KEY_IMG = "us_img";
     public static final String KEY_CODE_POSTAL = "us_postal_code";
     public static final String KEY_CITY = "us_city";
-    public static final String KEY_IMG_AVATAR = "us_img_avatar";
+    public static final String KEY_IMG_AVATAR = "us_avatar";
     public static final String KEY_DESCRIPTION = "us_presentation";
     public static final String KEY_GENDER = "us_gender";
     public static final String KEY_SEXUAL_ORIENTATION = "us_sexual_orientation";

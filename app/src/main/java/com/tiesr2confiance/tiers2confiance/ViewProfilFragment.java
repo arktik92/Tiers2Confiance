@@ -4,10 +4,12 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_GENDER;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NICKNAME;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
 
 import androidx.annotation.NonNull;
@@ -46,6 +48,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
@@ -60,7 +63,7 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
-    private ImageView ivProfilAvatarShape;
+    private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
     private LinearLayout llProfil;
 
@@ -119,6 +122,7 @@ public class ViewProfilFragment extends Fragment {
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
+        ivGender = view.findViewById(R.id.ivGender);
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
 
@@ -260,7 +264,7 @@ public class ViewProfilFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
-                            String name = documentSnapshotDisplayed.getString(KEY_NAME);
+                            String nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
                             String city = documentSnapshotDisplayed.getString(KEY_CITY);
                             String imgurl = documentSnapshotDisplayed.getString(KEY_IMG);
                             String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_IMG_AVATAR);
@@ -270,16 +274,15 @@ public class ViewProfilFragment extends Fragment {
 
                             // Si l'utilisateur à afficher est un célibataire
                             if (role.equals(1L)){
-                                tvRole.setText("Je suis " + "Célibataire");
+                                tvRole.setText("Célib");
                                 llProfil.setVisibility(View.VISIBLE);
                             }else{
                                 // sinon, s'il est Tiers de confiance (parrain)
-                                tvRole.setText("Je suis " + "Tiers");
+                                tvRole.setText("Tiers");
                             }
 
-
                             tvProfilCity.setText(city);
-                            tvProfilName.setText(name);
+                            tvProfilName.setText(nickname);
                             tvDescription.setText(description);
                             /** Glide - Add Picture **/
                             Context context = getContext();
@@ -287,14 +290,7 @@ public class ViewProfilFragment extends Fragment {
                                     .centerCrop()
                                     .error(R.mipmap.ic_launcher)
                                     .placeholder(R.mipmap.ic_launcher);
-                            /*
-                            Glide
-                                    .with(context)
-                                    .load(imgurl)
-                                    .apply(options)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(ivProfil);
-                                 */
+
                             /** Loading Avatar **/
                             Glide
                                     .with(context)
@@ -305,22 +301,21 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
-
-                            list_hobbies = documentSnapshotDisplayed.getString("us_hobbies");
-                            Log.d(TAG, " List Hobbies ID => " + list_hobbies); //  Ie19kQdquBcoGypUpyWS => {ho_label=Jardiner}
+                            // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                             String split_key = ";";
-                            // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
+                            list_hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             String[] hobbiesListUser = list_hobbies.split(split_key);
+                            String genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
 
-                            // Appel de la classe global pour charger les Hobbies
+                            // Appel de la classe global pour charger les listes d'attributs
                             final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
                             ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
+                            ArrayList<ModelGenders> ListGendersComplete = globalVariables.getArrayListGenders();
 
-                            // Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
+                            // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
                             int i;
-                            String hobbiesToDisplay="--";
+                            String hobbiesToDisplay="-- ";
                             for (i=0; i< hobbiesListUser.length;i++) {
-
                                 for (int j = 0; j < ListHobbiesComplete.size(); j++) {
                                     String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
                                     String value = ListHobbiesComplete.get(j).getHo_label();
@@ -330,6 +325,30 @@ public class ViewProfilFragment extends Fragment {
                                 }
                             }
                             tvHobbies.setText(hobbiesToDisplay);
+
+                            // GENDERS VALEURS :  des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
+                            // En fait , pas besoin de récupérer le label du genre, puisqu'on affiche une icone en fonciton de l'id renseigné dans us_genre
+                            /*
+                            String genderToDisplay="";
+                                for (int j = 0; j < ListGendersComplete.size(); j++) {
+                                    String key = String.valueOf(ListGendersComplete.get(j).getGe_id());
+                                    String value = ListGendersComplete.get(j).getGe_label();
+                                    if (key.equals(genderUser)) {
+                                        genderToDisplay = value;
+                                    }
+                                }
+                            */
+
+                                if (genderUser.equals("1")){
+                                    ivGender.setImageResource(R.drawable.ic_female);
+                                }else if (genderUser.equals("2")){
+                                    ivGender.setImageResource(R.drawable.ic_male);
+                                }else {
+                                    ivGender.setImageResource(R.drawable.ic_transgenre);
+                                }
+
+
+
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }

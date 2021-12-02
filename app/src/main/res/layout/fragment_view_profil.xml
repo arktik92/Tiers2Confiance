@@ -37,22 +37,31 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/tvRole"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:layout_margin="4dp"
+                            android:gravity="center"
+                            tools:text="role" />
+
                         <ImageView
                             android:id="@+id/ivProfilAvatarShape"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"
                             android:background="@drawable/shape_avatar_profil"
                             android:contentDescription="@string/lbl_avatar"
                             tools:srcCompat="@drawable/shape_avatar_profil" />
 
-                        <TextView
-                            android:id="@+id/tvRole"
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/ivGender"
+                            android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_margin="4dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            tools:text="role" />
+                            android:contentDescription="@string/lbl_genre"
+                            tools:srcCompat="@drawable/ic_female" />
                     </LinearLayout>
 
                     <TextView
@@ -60,8 +69,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="nickname"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -69,12 +79,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="city" />
 
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:text="description" />
                 </LinearLayout>
@@ -83,16 +95,19 @@
                     android:id="@+id/ll_profil"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="25dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView11"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="2dp"
                         android:layout_weight="1"
-                        android:text="My Hobbies"
-                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:text="Mes hobbies"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -101,6 +116,25 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/lbl_hobbies" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Ma personnalité"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPersonnality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_personnalite" />
                 </LinearLayout>
 
                 <LinearLayout
