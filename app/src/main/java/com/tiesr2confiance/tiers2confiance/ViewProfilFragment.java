@@ -3,6 +3,7 @@ package com.tiesr2confiance.tiers2confiance;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
@@ -65,28 +66,20 @@ public class ViewProfilFragment extends Fragment {
 
     /*** BDD ***/
     private FirebaseFirestore db;
-    private CollectionReference usersCollectionRef;
-    /** ID Document **/
-    private FirebaseUser currentUser;
-    private DocumentReference noteRef;
-    private DocumentReference userConnected;
-    /** Collection **/
-    private String KEY_FS_USER_ID;
-    public final String KEY_FS_COLLECTION = "users";
 
+    /** ID Document To Displayed **/
+    private String UserId;
+    private DocumentReference userDisplayed;
+
+    /** ID Document Connected **/
+    private FirebaseUser currentUser;
+    private DocumentReference userConnected;
+
+    /** Variables **/
     private Long usRole;
     private String usNephew;
     private String usGodfather;
-
-    private static FirebaseUser user;
-    private static String userId;
-    private static String userNickName;
-    private static String userCountryLanguage = "";
-    private static String userEmail;
-
-
-    String list_hobbies;
-    public HashMap<Long, String> globalVarValue;
+    private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
 
@@ -96,23 +89,23 @@ public class ViewProfilFragment extends Fragment {
         //public String arg = getArguments().getString("");
         View view = inflater.inflate(R.layout.fragment_view_profil, container, false);
 
-      //  Bundle bundle = getIntent().getExtras();
-      //  if(bundle.getString("IdUser") != null) {
-      //      KEY_FS_USER_ID = bundle.getString("IdUser");
-      //      Log.d(TAG, "BundleGetString: "+ KEY_FS_USER_ID);
-      //  }
-
+        // Récupération de l'ID de l'utilisateur à afficher
         Bundle bundle = getArguments();
         String myStrings =bundle.getString("idUser");
+        UserId = myStrings;
 
-        Log.e(TAG, "onCreateView: "+ myStrings);
+        // userDisplayed, récupération de l'utilisateur à afficher
+        db = FirebaseFirestore.getInstance();
+        userDisplayed = db.document(KEY_FS_COLLECTION + "/" + UserId);
 
-        KEY_FS_USER_ID = "c0aS9xtlb1CFE51hQzRJ";
-        KEY_FS_USER_ID = myStrings;
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
 
-        getDataIDUser(view);
+        // Affiche les élèments du profil en fonction du rôle et des liens entre l'utilisateur affiché, et l'utilisateur connecté
+        // + Affiche les boutons necessaires
         showProfil();
-        // Affiche les boutons en fonctions du context
+
         binding = FragmentViewProfilBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -120,11 +113,11 @@ public class ViewProfilFragment extends Fragment {
     /** Initialisation des composants  **/
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         tvProfilName = view.findViewById(R.id.tvProfilName);
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
-
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
 
@@ -135,6 +128,7 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
 
+        // Les boutons n'existe pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
         btnPflCrediter.setVisibility(View.GONE);
         btnPflEnvoyer.setVisibility(View.GONE);
         btnLinkSupp.setVisibility(View.GONE);
@@ -142,11 +136,10 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
 
-
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
-        // Redirige vers le fragment pour créditer son filleul
+        // ACTION BOUTON ROLE=PARRAIN : Redirige vers le fragment permettant de créditer son filleul
         btnPflCrediter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,21 +152,17 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Supprimer le lien Parrain/Filleul
+        // ACTION BOUTON ROLE=PARRAIN : Supprime le lien entre le parrain et le filleul
         btnLinkSupp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            noteRef.update("us_godfather", "" );
+                            userDisplayed.update("us_godfather", "" );
                             userConnected.update("us_nephews", "" );
                         }
                     }
@@ -182,29 +171,25 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Le parrain demande à parrainer le célibataire
+        // ACTION BOUTON ROLE=PARRAIN : Le parrain demande à un célibataire (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + noteRef.getId()+  ";");
-                            noteRef.get()
+                            userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                             assert celibUser != null;
                                             String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
-                                            noteRef.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
+                                            userDisplayed.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
                                         }
                                     });
                         }
@@ -215,21 +200,17 @@ public class ViewProfilFragment extends Fragment {
         });
 
 
-        // Supprimer le lien Parrain/Filleul
+        // ACTION BOUTON ROLE=CELIBATAIRE : Supprime le lien entre le parrain et le célibataire connecté
         btnLinkSuppTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            noteRef.update("us_nephews", "" );
+                            userDisplayed.update("us_nephews", "" );
                             userConnected.update("us_godfather", "" );
                         }
                     }
@@ -238,29 +219,25 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Le célibataire demande à être parrainé par un parrain
+        // ACTION BOUTON ROLE=CELIBATAIRE : Le célibataire demande à être parrainé par un parrain
         btnLinkRequestTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Récupération de l'utilisateur connecté
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                userConnected = usersCollectionRef.document(currentUser.getUid());
-
                 userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + noteRef.getId()+  ";");
-                            noteRef.get()
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                             assert celibUser != null;
                                             String usNephewsRequestFrom = celibUser.getUs_nephews_request_from();
-                                            noteRef.update("us_nephews_request_from", usNephewsRequestFrom + userConnected.getId()+  ";");
+                                            userDisplayed.update("us_nephews_request_from", usNephewsRequestFrom + userConnected.getId()+  ";");
                                         }
                                     });
                         }
@@ -273,17 +250,9 @@ public class ViewProfilFragment extends Fragment {
 
     }
 
-    private void getDataIDUser(View view) {
-        /** BDD, Connexion FIreStore ***/
-        db = FirebaseFirestore.getInstance();
-        // NoteRef, récupération de l'utilisateur connecté
-        noteRef = db.document(KEY_FS_COLLECTION + "/" + KEY_FS_USER_ID);
-        usersCollectionRef = db.collection("users");
-    }
-
     public void showProfil() {
 
-        noteRef.get()
+        userDisplayed.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -333,37 +302,30 @@ public class ViewProfilFragment extends Fragment {
                             // Ici on a récupérer dans la variables hobbies_list la liste des hobbies de l'utilisateur
                             String[] hobbiesListUser = list_hobbies.split(split_key);
 
+                            // Appel de la classe global pour charger les Hobbies
                             final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
-                            ArrayList<ModelHobbies> ListHobbies = globalVariables.getArrayListHobbies();
+                            ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
 
+                            // Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
                             int i;
-                            String hobbies_display="--";
+                            String hobbiesToDisplay="--";
                             for (i=0; i< hobbiesListUser.length;i++) {
 
-                                for (int j = 0; j < ListHobbies.size(); j++) {
-                                    String key = String.valueOf(ListHobbies.get(j).getHo_id());
-                                    String value = ListHobbies.get(j).getHo_label();
+                                for (int j = 0; j < ListHobbiesComplete.size(); j++) {
+                                    String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
+                                    String value = ListHobbiesComplete.get(j).getHo_label();
                                     if (key.equals(hobbiesListUser[i])) {
-                                        Log.e(TAG, "onSuccess: " + "Clé: " + key + ", Valeur: " + value );
-                                        hobbies_display += value + " -- ";
+                                        hobbiesToDisplay += value + " -- ";
                                     }
                                 }
                             }
-
-                            tvHobbies.setText(hobbies_display);
-                            // Ici on va chercher les labels correspondants à la liste d'ID récupérée, puis on les affiche
-                            //ListsAttributs attrHobies = new ListsAttributs(FirebaseFirestore.getInstance(), "EN");
-                            //attrHobies.getHobbiesDataFromFirestore();
-
+                            tvHobbies.setText(hobbiesToDisplay);
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
                         }
 
 
                         // Si le user connecté est un Parrain, on affiche les bouttons qui vont bien
-                        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                        userConnected = usersCollectionRef.document(currentUser.getUid());
-
                         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshotConnected) {

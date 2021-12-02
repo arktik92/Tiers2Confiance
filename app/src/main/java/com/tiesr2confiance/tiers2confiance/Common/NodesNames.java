@@ -21,6 +21,10 @@ public class NodesNames {
     public static final String KEY_HAS_KID = "us_has_kids";
 
 
+    public static final String KEY_FS_COLLECTION = "users";
+
+
+
 
     public static final String KEY_FS_USER_HOBBIE = "hobbies";
     public static final String KEY_HOBBIES_NAME = "ho_name";
