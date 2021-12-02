@@ -1,6 +1,7 @@
 <resources>
 
     <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
+    <string name="app_name" translatable="false">Tiers2</string>
     <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
     <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
     <string name="Lier_pf_pseudo">Saisir son pseudo : </string>

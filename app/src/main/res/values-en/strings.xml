@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">Tiers2</string>
     <string name="Lier_pf_titre_filleul">"Find your Godfather"</string>
     <string name="Lier_pf_titre_parrain">Find a Nephew</string>
     <string name="Lier_pf_pseudo">type nickname</string>
