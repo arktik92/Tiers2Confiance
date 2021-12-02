@@ -64,7 +64,7 @@
                 android:layout_margin="8dp"
                 android:backgroundTint="@color/btnParrain"
                 android:onClick="onChoiceClick"
-                android:text="@string/lbl_parrain"
+                android:text="@string/lbl_tiers"
                 android:theme="@style/Theme.Tiers2Confiance" />
         </LinearLayout>
 
