@@ -126,11 +126,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         //
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(savedInstanceState == null){
-            addFragment();
-            // Force l'affichage du 1er fragment au démarrage
-            navigationView.setCheckedItem(R.id.nav_fragment_1);
-        }
+//        if(savedInstanceState == null){
+//            addFragment();
+//            // Force l'affichage du 1er fragment au démarrage
+//            navigationView.setCheckedItem(R.id.nav_fragment_1);
+//        }
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currentUser != null;
@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-
     private void addFragment() {
         fragmentManager = getSupportFragmentManager();
         // Commencer la discussion
@@ -188,6 +187,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
+            // MOI (Pseudo)
+            case R.id.nav_photos:
+                Intent intent = new Intent(MainActivity.this, CameraFragment.class);
+                startActivity(intent);
+
+                break;
             // MOI (Pseudo)
             case R.id.nav_profil:
                 Bundle b = new Bundle();

@@ -13,7 +13,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Chat"
-            android:id="@+id/nav_fragment_1"
+            android:id="@+id/nav_photos"
             android:icon="@drawable/ic_messages"/>
     </group>
 
