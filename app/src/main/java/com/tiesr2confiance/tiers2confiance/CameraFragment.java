@@ -54,7 +54,6 @@ public class CameraFragment extends AppCompatActivity {
         storageReference = storage.getReference();
 
 
-
         btnImportPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,13 +65,13 @@ public class CameraFragment extends AppCompatActivity {
     }
 
 
-    private void selectPicture(){
+    private void selectPicture() {
 
         Log.d(TAG, "***** SelectPicture *******");
 
         Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-     //  Bundle camerabundle = new Bundle();
+        //  Bundle camerabundle = new Bundle();
 
         cameraIntent.setType("image/*"); // image/jpg
 
@@ -95,10 +94,10 @@ public class CameraFragment extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData()!= null){
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
 
             uploadPhoto();
@@ -106,7 +105,7 @@ public class CameraFragment extends AppCompatActivity {
     }
 
 
-    private void uploadPhoto(){
+    private void uploadPhoto() {
 
         Log.d(TAG, "***** UploadPhoto ***** ");
 
@@ -121,9 +120,9 @@ public class CameraFragment extends AppCompatActivity {
 
         // Create the reference to "images/mountain.jpg
 
-        Log.d(TAG, "RandomKey: " +randomKey);
+        Log.d(TAG, "RandomKey: " + randomKey);
 
-        StorageReference riversRef = storageReference.child("images/"+randomKey);
+        StorageReference riversRef = storageReference.child("images/" + randomKey);
 
         riversRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -143,23 +142,28 @@ public class CameraFragment extends AppCompatActivity {
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount() );
-                        prDial.setMessage("Percentage:"+ (int) progressPercent +"%");
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
                     }
                 });
 
 
-
-
     }
 
 
-    public void getCameraPhoto(View view){
-        Intent intent = new Intent(CameraFragment.this, CameraDeviceFragment.class);
+    public void getCameraPhoto(View view) {
+        Log.d(TAG, "GET PHOTO STEP");
+
+        Intent intent = new Intent (CameraFragment.this, CameraDevice.class);
         startActivity(intent);
-        System.out.println("ENTER proccess getCameraPhoto >> ");
-    }
 
+        /***
+         Intent intent = new Intent(CameraFragment.this, CameraDeviceFragment.class);
+         startActivity(intent);
+         System.out.println("ENTER proccess getCameraPhoto >> ");
+         ***/
+
+    }
 
 
 }
