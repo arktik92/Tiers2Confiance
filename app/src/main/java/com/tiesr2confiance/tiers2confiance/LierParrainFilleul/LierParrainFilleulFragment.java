@@ -2,6 +2,7 @@ package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 
@@ -48,6 +48,7 @@ public class LierParrainFilleulFragment extends Fragment {
     ArrayList<String> critere = new ArrayList<>();
 
     private SearchView svTextSearch;
+
     private RecyclerView rvResultat;
     private LierParrainFilleulAdapter adapterUser;
     private Boolean usAlreadyLinked = true;
@@ -138,45 +139,48 @@ public class LierParrainFilleulFragment extends Fragment {
        if (usRole.equals(1L)) {
             roleInverse = 2;
             critere = GodfatherList;
+           Log.e(TAG, "displayList: " + GodfatherList.size() +" => " + GodfatherList.toString() );
        } else {
            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires à qui il n'a pas déjà demandé
             roleInverse = 1;
             critere = NephewsList;
+           Log.e(TAG, "displayList: " + NephewsList.size() +" => " + NephewsList.toString() );
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
                 .whereEqualTo("us_role", roleInverse)
                 .whereNotIn("us_auth_uid", critere);
+
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
                         .build();
+
         adapterUser = new LierParrainFilleulAdapter(users);
         rvResultat.setAdapter(adapterUser);
+        adapterUser.startListening();
 
         // Liaison des variables svTextSearch et lvResultat avec les éléments du graphique
+
         svTextSearch = view.findViewById(R.id.svTextSearch);
 
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
+
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String queryText) {
-                Log.e(TAG, "onComplete: HHHHsubmit "  );
+            public boolean onQueryTextSubmit(String s) {
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String s) {
                 Log.e(TAG, "onComplete: HHHH "  );
-               // adapterUser.stopListening();
                 Query query = db.collection("users")
                         .whereEqualTo("us_role", roleInverse)
                         .whereNotIn("us_auth_uid", critere)
                         .orderBy("us_nickname")
-                        .startAt(newText)
-                        .endAt(newText+"\uf8ff");
-
-                Log.e(TAG, "onQueryTextChange: " + "TESSS" );
+                        .startAt(s)
+                        .endAt(s+"\uf8ff");
 
                 FirestoreRecyclerOptions<ModelUsers> users =
                         new FirestoreRecyclerOptions.Builder<ModelUsers>()
@@ -189,6 +193,7 @@ public class LierParrainFilleulFragment extends Fragment {
                 return false;
             }
         });
+
 
         adapterUser.setOnItemCliclListener(new LierParrainFilleulAdapter.OnItemClickListener() {
             @Override

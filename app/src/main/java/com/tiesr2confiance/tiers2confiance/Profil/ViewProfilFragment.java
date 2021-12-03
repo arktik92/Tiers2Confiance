@@ -357,9 +357,9 @@ public class ViewProfilFragment extends Fragment {
                             */
 
                                 if (genderUser.equals("1")){
-                                    ivGender.setImageResource(R.drawable.ic_female);
-                                }else if (genderUser.equals("2")){
                                     ivGender.setImageResource(R.drawable.ic_male);
+                                }else if (genderUser.equals("2")){
+                                    ivGender.setImageResource(R.drawable.ic_female);
                                 }else {
                                     ivGender.setImageResource(R.drawable.ic_transgenre);
                                 }

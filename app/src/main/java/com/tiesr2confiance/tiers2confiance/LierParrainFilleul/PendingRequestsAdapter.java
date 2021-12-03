@@ -121,7 +121,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                                     String ListDemandsNew = ListDemands.replace(userPosition.getId()+ ";", "");
                                     userConnected.update("us_godfather_request_from", ListDemandsNew);
 
-                                    userPosition.update("us_nephews",   userConnected.getId()+  ";");
+                                    userPosition.update("us_nephews",   userConnected.getId());
                                     userPosition.update("us_nephews_request_to", "" ); // Replace
                                     Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
                                 }
