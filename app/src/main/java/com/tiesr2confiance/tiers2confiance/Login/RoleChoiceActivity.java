@@ -30,7 +30,7 @@ public class RoleChoiceActivity extends AppCompatActivity {
         btnRoleCelib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                globalVariables.setUserRole(1);
+                globalVariables.setUserRole(1L);
                 startActivity(new Intent(RoleChoiceActivity.this, CreationProfilActivity.class));
             }
         });
@@ -38,7 +38,7 @@ public class RoleChoiceActivity extends AppCompatActivity {
         btnRoleParrain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                globalVariables.setUserRole(2);
+                globalVariables.setUserRole(2L);
                 startActivity(new Intent(RoleChoiceActivity.this, CreationProfilActivity.class));
             }
         });

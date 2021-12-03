@@ -143,8 +143,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
 
-        globalVariables.DisplayAttributes();
-
     }
 
 
