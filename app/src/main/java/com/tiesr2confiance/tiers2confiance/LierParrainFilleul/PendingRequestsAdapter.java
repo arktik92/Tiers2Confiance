@@ -1,7 +1,6 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,7 +158,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.activity_pending_requests_item_recycler, parent, false);
+                .inflate(R.layout.fragment_pending_requests_item_recycler, parent, false);
         return new PendingRequestsAdapter.ItemViewHolder(view);
     }
 

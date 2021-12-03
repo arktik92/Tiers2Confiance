@@ -133,20 +133,20 @@ public class LierParrainFilleulFragment extends Fragment {
     public void displayList(Long role, ArrayList<String> NephewsList, ArrayList<String> GodfatherList, View view ){
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
-        // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains disponibles
+        // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains à qui il n'a pas encore fait de demande
         critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;
             critere = GodfatherList;
        } else {
-           // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires, qui n'ont pas déjà un parrain
+           // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires à qui il n'a pas déjà demandé
             roleInverse = 1;
             critere = NephewsList;
        }
         /** Récupération de la collection Users dans Firestore **/
         Query query = db.collection("users")
-                .whereEqualTo("us_role", roleInverse);
-                //.whereNotIn("us_auth_uid", critere);
+                .whereEqualTo("us_role", roleInverse)
+                .whereNotIn("us_auth_uid", critere);
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
                         .setQuery(query, ModelUsers.class)
@@ -171,7 +171,7 @@ public class LierParrainFilleulFragment extends Fragment {
                // adapterUser.stopListening();
                 Query query = db.collection("users")
                         .whereEqualTo("us_role", roleInverse)
-                        //.whereNotIn("us_auth_uid", critere) ici ça plante ??
+                        .whereNotIn("us_auth_uid", critere)
                         .orderBy("us_nickname")
                         .startAt(newText)
                         .endAt(newText+"\uf8ff");

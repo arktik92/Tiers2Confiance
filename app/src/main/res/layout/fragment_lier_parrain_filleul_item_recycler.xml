@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -53,15 +54,14 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_link"
+                android:layout_width="30dp"
+                android:layout_height="80dp"
+                android:layout_margin="5dp"
+                app:srcCompat="@drawable/ic_already_linked" />
 
-        <Button
-            android:id="@+id/btn_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_btn"
-            android:backgroundTint="@color/btnCelib"
-            android:text="@string/btn_request" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
