@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -66,31 +65,7 @@ public class CameraDevice extends AppCompatActivity {
 
     public void getPhoto(){
         Log.d(TAG, "getPhoto: ");
-
-
-        // Request for camera runtime permission
-
-        if(ContextCompat.checkSelfPermission(CameraDevice.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions( CameraDevice.this, new String [ ] {
-                    Manifest.permission.CAMERA
-            }, 100);
-        }
-
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent  = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
-
-            }
-        });
-
-
-
-
-
-
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     }
 
 

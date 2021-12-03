@@ -3,14 +3,10 @@ package com.tiesr2confiance.tiers2confiance;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -158,8 +154,6 @@ public class CameraFragment extends AppCompatActivity {
     public void getCameraPhoto(View view) {
         Log.d(TAG, "GET PHOTO STEP");
 
-
-
         Intent intent = new Intent (CameraFragment.this, CameraDevice.class);
         startActivity(intent);
 
@@ -168,33 +162,6 @@ public class CameraFragment extends AppCompatActivity {
          startActivity(intent);
          System.out.println("ENTER proccess getCameraPhoto >> ");
          ***/
-
-
-
-        Log.d(TAG, "getPhoto: ");
-
-
-        // Request for camera runtime permission
-
-
-
-        /***TODO
-        if(ContextCompat.checkSelfPermission(CameraDevice.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions( CameraDevice.this, new String [ ] {
-                    Manifest.permission.CAMERA
-            }, 100);
-        }
-
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent  = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
-
-            }
-        });
-***/
 
     }
 
