@@ -96,7 +96,9 @@ public class CreditFragment extends Fragment {
                         } else {
                             // je suis parrain => Créditer mon filleul
                             usNephews = contenuUser.getUs_nephews();
+                            Log.e(TAG, "onComplete: " + contenuUser.getUs_nephews() );
                             if (TextUtils.isEmpty(usNephews) == false){
+                                userFilleul = usersCollectionRef.document(usNephews);
                                 userFilleul.get()
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -114,7 +116,7 @@ public class CreditFragment extends Fragment {
                                                 usSolde = contenuFilleul.getUs_balance();
                                                 usSoldeNew = usSolde + Long.parseLong(etCredit.getText().toString()) ;
                                                 userFilleul.update("us_balance", usSoldeNew);
-                                                Toast.makeText(getContext(), "Solde créditer, merci!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Solde crédité, merci!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }else{
