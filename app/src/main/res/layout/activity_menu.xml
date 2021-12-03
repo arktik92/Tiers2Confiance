@@ -50,7 +50,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/cardView"
-        app:headerLayout="@layout/nav_header"
+        app:headerLayout="@layout/nav_header_celibataire"
         app:menu="@menu/menu_principal_godfather" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
