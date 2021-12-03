@@ -13,12 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Common.Util;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
@@ -29,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final String TAGAPP = "LOGAPP";
+
     /** Variables globales **/
     private TextInputEditText etEmail, etPassword;
     private String email,password;
@@ -50,10 +54,18 @@ public class LoginActivity extends AppCompatActivity {
     }
     /** Gestion du bouton login **/
     public void btnLoginClick(android.view.View v) {
-        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
 
         email = etEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
+
+
+        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: user : " + globalVariables.getUser());
+        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: userId : " + globalVariables.getUserId());
+        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: UserEmail : " + globalVariables.getUserEmail());
+        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: UserRole : " + globalVariables.getUserRole());
+
 
         // Vérification du remplissage des champs email et password
         if (email.equals("")) {
@@ -67,16 +79,23 @@ public class LoginActivity extends AppCompatActivity {
             {
 
                 /** 5 Connexion à authenticator en utilisant les tools Firebase cf cours**/
+
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(@NonNull AuthResult authResult) {
+                                Log.d(TAGAPP, ">>>>> firebaseAuth.signInWithEmailAndPassword addOnSuccessListener");
+                            }
+                        })
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
                                 if (task.isSuccessful()) {
-
-                                    globalVariables.LoadUserDataFromFirestore();
-                                    Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
+                                    Log.d(TAGAPP, ">>>>> firebaseAuth.signInWithEmailAndPassword addOnCompleteListener");
+//                                    LoadUserData();
+//
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     finish();
                                 } else {
@@ -87,7 +106,15 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                             }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "onFailure: error in FirebaseAuth.signInWithEmailAndPassword");
+                            }
                         });
+
+                Log.d(TAGAPP, ">>>>> <<<<<<<<<<<");
 
             } else {
                 startActivity(new Intent(LoginActivity.this, NoInternetActivity.class));
@@ -95,8 +122,61 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+
+    private void LoadUserData() {
+        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserEmail : " + globalVariables.getUserEmail());
+//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserRole : " + globalVariables.getUserRole());
+
+        Log.i(TAG, "LoginActivity : onDestroy ");
+        FirebaseFirestore db;
+        FirebaseUser user;
+        String userId = "";
+
+        try {
+
+
+
+            db      = FirebaseFirestore.getInstance();
+            user    = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null){
+                userId  = user.getUid();
+            }
+            globalVariables.setUser(user);
+            globalVariables.setUserId(userId);
+            globalVariables.setUserEmail(email);
+            globalVariables.setUserCountryLanguage("XX"); // FR valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
+            globalVariables.setUserRole(0); //Célibataire valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
+
+            Log.i(TAGAPP, "LoginActivity : onDestroy : user : " + globalVariables.getUser());
+            Log.i(TAGAPP, "LoginActivity : onDestroy : userId : " + globalVariables.getUserId());
+
+            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
+            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
+
+
+            globalVariables.LoadUserDataFromFirestore();
+            Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
+
+            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
+            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
+
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- LoginActivity : onDestroy error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- LoginActivity : onDestroy onComplete error on userId: "+ userId +" -----userEmail "  + email);
+        };
+
+    }
+
     /** Gestion du click sur signUp **/
     public void tvSignupClick(android.view.View v) {
+
         startActivity(new Intent(this, SignInActivity.class));
     }
 

@@ -148,6 +148,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 //				BindComponents(myView);
 				InitVariables(myView);
+				globalVariables.DisplayAttributes();
 			}
 		});
 
@@ -157,6 +158,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 				globalVariables.LoadGendersDataFromFirestore();
 				globalVariables.LoadHobbiesDataFromFirestore();
+				globalVariables.DisplayAttributes();
 			}
 		});
 
@@ -166,7 +168,8 @@ public class UserFragment extends Fragment {
 		btndisplaygenders.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
-				DisplayGenders();
+				// DisplayGenders();
+				globalVariables.DisplayGenders();
 			}
 		});
 
@@ -180,10 +183,15 @@ public class UserFragment extends Fragment {
 		});
 
 
+		try {
+			globalVariables.LoadUserDataFromFirestore();
+			globalVariables.LoadGendersDataFromFirestore();
+			globalVariables.LoadHobbiesDataFromFirestore();
+		}
+	        catch (Exception e) {
+			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
+			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
-		globalVariables.LoadUserDataFromFirestore();
-		globalVariables.LoadGendersDataFromFirestore();
-		globalVariables.LoadHobbiesDataFromFirestore();
 //        LoadUserData();
 //        LoadGenders();
 //        LoadHobbies();
@@ -203,7 +211,7 @@ public class UserFragment extends Fragment {
 		final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
 		Log.d(TAGAPP, "InitGlobalVariablesStep1");
 
-//        globalVariables.LoadUserDataFromFirestore();
+        globalVariables.LoadUserDataFromFirestore();
 
 
 		userId              =   globalVariables.getUserId();

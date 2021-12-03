@@ -93,9 +93,16 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         super.onCreate(savedInstanceState);
 
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        globalVariables.LoadUserDataFromFirestore();
-        globalVariables.LoadGendersDataFromFirestore();
-        globalVariables.LoadHobbiesDataFromFirestore();
+        String userId       = globalVariables.getUserId();
+        String userEmail    = globalVariables.getUserEmail();
+        try {
+            globalVariables.LoadUserDataFromFirestore();
+            globalVariables.LoadGendersDataFromFirestore();
+            globalVariables.LoadHobbiesDataFromFirestore();
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
         long role = globalVariables.getUserRole();
 
@@ -135,6 +142,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
+
+        globalVariables.DisplayAttributes();
 
     }
 
