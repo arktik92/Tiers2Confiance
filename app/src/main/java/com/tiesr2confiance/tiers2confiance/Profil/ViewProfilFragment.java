@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.Profil;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
@@ -63,7 +64,7 @@ public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
-    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
+    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole, tvBalance;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
     private LinearLayout llProfil;
@@ -123,6 +124,7 @@ public class ViewProfilFragment extends Fragment {
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
+        tvBalance = view.findViewById(R.id.tvBalance);
         ivGender = view.findViewById(R.id.ivGender);
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
@@ -288,6 +290,7 @@ public class ViewProfilFragment extends Fragment {
                             String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
                             String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+                            Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
                             // Si l'utilisateur à afficher est un célibataire
                             if (role.equals(1L)){
@@ -297,6 +300,7 @@ public class ViewProfilFragment extends Fragment {
                                 // sinon, s'il est Tiers de confiance (parrain)
                                 tvRole.setText("Tiers");
                             }
+                            tvBalance.setText(String.valueOf(balance));
 
                             tvProfilCity.setText(city);
                             tvProfilName.setText(nickname);

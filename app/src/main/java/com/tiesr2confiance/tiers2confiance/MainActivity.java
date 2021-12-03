@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
+        role = 1L;
+
         if( role == 1L) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
