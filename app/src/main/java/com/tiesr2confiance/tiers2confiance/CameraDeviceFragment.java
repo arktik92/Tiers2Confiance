@@ -212,6 +212,8 @@ public class CameraDeviceFragment extends AppCompatActivity {
                         ContentValues values = new ContentValues();
                         values.put(MediaStore.Images.Media.TITLE,"New Picture");
                         Uri imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+
+
                         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         startActivityForResult(takePicture, REQUEST_ID_IMAGE_CAPTURE);
@@ -250,37 +252,15 @@ public class CameraDeviceFragment extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == REQUEST_ID_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData()!= null){
+            imageUri = data.getData();
 
-if(requestCode == REQUEST_ID_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Log.d(TAG, "REQUEST_ID_IMAGE_CAPTURE: "+ REQUEST_ID_IMAGE_CAPTURE);
+            uploadPhoto();
+
+        }
 
 
-
-    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-    //  Bundle camerabundle = new Bundle();
-
-    cameraIntent.setType("image/*"); // image/jpg
-
-    cameraIntent.putExtra("crop", true);
-    cameraIntent.putExtra("scale", true);
-
-    // Output image dim
-    cameraIntent.putExtra("outputX", 256);
-    cameraIntent.putExtra("outputY", 256);
-
-    // Ratio
-    cameraIntent.putExtra("aspectX", 1);
-    cameraIntent.putExtra("aspectY", 1);
-
-    cameraIntent.putExtra("return-data", true);
-
-    cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
-    startActivityForResult(cameraIntent, 1);
-
-    Log.i("MyLog", "Video saved to: " + imageUri);
-
-}
 
 
         /***
@@ -342,6 +322,14 @@ if(requestCode == REQUEST_ID_IMAGE_CAPTURE && resultCode == RESULT_OK){
         ****/
 
     }
+
+
+
+    private void uploadPhoto() {
+
+        Log.d(TAG, "***** UploadPhoto ***** ");
+    }
+
 
 
 }
