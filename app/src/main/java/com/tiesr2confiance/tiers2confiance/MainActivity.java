@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
             Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
+        globalVariables.DisplayAttributes();
+
+
         long role = globalVariables.getUserRole();
 
         Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());

@@ -73,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         } else if (password.equals("")) {
             etPassword.setError("Enter password");
         } else {
+
+
+
             //vérification de la connection internet
             if (Util.connectionAvailable(this))
                 // Si la connexion fonctionne
@@ -122,58 +125,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
-    private void LoadUserData() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserEmail : " + globalVariables.getUserEmail());
-//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: userCountryLanguage : " + globalVariables.getUserCountryLanguage());
-//                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserRole : " + globalVariables.getUserRole());
-
-        Log.i(TAG, "LoginActivity : onDestroy ");
-        FirebaseFirestore db;
-        FirebaseUser user;
-        String userId = "";
-
-        try {
-
-
-
-            db      = FirebaseFirestore.getInstance();
-            user    = FirebaseAuth.getInstance().getCurrentUser();
-
-            if (user != null){
-                userId  = user.getUid();
-            }
-            globalVariables.setUser(user);
-            globalVariables.setUserId(userId);
-            globalVariables.setUserEmail(email);
-            globalVariables.setUserCountryLanguage("XX"); // FR valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
-            globalVariables.setUserRole(0); //Célibataire valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
-
-            Log.i(TAGAPP, "LoginActivity : onDestroy : user : " + globalVariables.getUser());
-            Log.i(TAGAPP, "LoginActivity : onDestroy : userId : " + globalVariables.getUserId());
-
-            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
-            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
-            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
-
-
-            globalVariables.LoadUserDataFromFirestore();
-            Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
-
-            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
-            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
-            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
-
-        }
-        catch (Exception e) {
-            Log.e(TAG, "----- LoginActivity : onDestroy error on userId: "+ userId +" -----" );
-            Log.e(TAG, "----- LoginActivity : onDestroy onComplete error on userId: "+ userId +" -----userEmail "  + email);
-        };
-
-    }
-
     /** Gestion du click sur signUp **/
     public void tvSignupClick(android.view.View v) {
 
@@ -208,5 +159,73 @@ public class LoginActivity extends AppCompatActivity {
     public void btnResetPasswordClick(View v) {
         startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
     }
+
+
+
+
+
+
+
+
+
+
+//
+//
+//    private void LoadUserData() {
+//        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+////                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserEmail : " + globalVariables.getUserEmail());
+////                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+////                                    Log.i(TAG, "LoginActivity : btnLoginClick addOnCompleteListener: UserRole : " + globalVariables.getUserRole());
+//
+//        Log.i(TAG, "LoginActivity : onDestroy ");
+//        FirebaseFirestore db;
+//        FirebaseUser user;
+//        String userId = "";
+//
+//        try {
+//
+//
+//
+//            db      = FirebaseFirestore.getInstance();
+//            user    = FirebaseAuth.getInstance().getCurrentUser();
+//
+//            if (user != null){
+//                userId  = user.getUid();
+//            }
+//            globalVariables.setUser(user);
+//            globalVariables.setUserId(userId);
+//            globalVariables.setUserEmail(email);
+//            globalVariables.setUserCountryLanguage("XX"); // FR valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
+//            globalVariables.setUserRole(0); //Célibataire valeur par défaut avant de charger des données depuis la collection user / doc >> Userid
+//
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : user : " + globalVariables.getUser());
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : userId : " + globalVariables.getUserId());
+//
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
+//
+//
+//            globalVariables.LoadUserDataFromFirestore();
+//            Log.i(TAGAPP, "******** LoginActivity LoadUserDataFromFirestore *************");
+//
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : UserEmail : " + globalVariables.getUserEmail());
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : userCountryLanguage : " + globalVariables.getUserCountryLanguage());
+//            Log.i(TAGAPP, "LoginActivity : onDestroy : UserRole : " + globalVariables.getUserRole());
+//
+//        }
+//        catch (Exception e) {
+//            Log.e(TAG, "----- LoginActivity : onDestroy error on userId: "+ userId +" -----" );
+//            Log.e(TAG, "----- LoginActivity : onDestroy onComplete error on userId: "+ userId +" -----userEmail "  + email);
+//        };
+//
+//    }
+
+
+
+
+
+
+
 
 }

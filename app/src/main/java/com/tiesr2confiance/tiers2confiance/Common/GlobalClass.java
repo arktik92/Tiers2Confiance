@@ -188,160 +188,6 @@ public class GlobalClass extends Application {
     /************************************************************************************************/
     /************************************************************************************************/
 
-    public void LoadUserDataWithNoCallback() {
-        final String[] msg = {"Sans Callback : pas de message"};
-        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            msg[0] =   "SansCallback User Trouvé";
-                        } else {
-                            msg[0] =   "SansCallback User n'existe pas";
-                        }
-                    }
-                });
-        Log.w(TAGAPP, msg[0]);
-    }
-
-    /************************************************************************************************/
-    /************************************************************************************************/
-
-    interface UserDataCallback {
-        void userExist(boolean exist);
-    }
-
-
-    public void LoadUserData(UserDataCallback userDataCallback) {
-
-        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            userDataCallback.userExist(true);
-
-                        } else {
-                            userDataCallback.userExist(false);
-                        }
-                    }
-                });
-
-    }
-
-    public void LoadUserDataWithCallBack(){
-
-        LoadUserData(new UserDataCallback() {
-            @Override
-            public void userExist(boolean exist) {
-                String msg = "Avec Callback : pas de message";
-//                Log.d(TAG, "CallBack");
-                if (exist) {
-                    msg =   "TASK avec CallBack : User exists";
-                    Log.d(TAGAPP, msg);
-                } else {
-                    msg =   "Task CallBack : User does not exist";
-                    Log.d(TAGAPP, msg);
-                }
-            }
-        });
-
-    }
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/************************************************************************************************/
-/************************************************************************************************/
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//public void LoadUserDataFromFirestore_OK() {
-////    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
-//
-//    if (userId == null){
-//        try {
-//            db      = FirebaseFirestore.getInstance();
-//            user    = FirebaseAuth.getInstance().getCurrentUser();
-//
-//            if (user != null){
-//                userId  = user.getUid();
-//            }
-//
-////                userNickName = ;
-////                userEmail = "userEmail : Not Retrieved Yet From FS";
-////                userCountryLanguage = "FR";
-//
-//        }catch (Exception e) {
-//            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
-//        }
-//
-//        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore : "+ userId +"-----" );
-//
-//    }
-//
-//    Log.i(TAG, "XXXXXXXX GlobalClass : LoadUserDataFromFirestore(): userId : " + userId);
-//
-//    DocumentReference docRefUserConnected;
-//
-//    try {
-//        docRefUserConnected = db.document("users/"+ userId); //bSfRUKasZ7PyHnew1jwqG6jksl03
-//        //docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03");
-//
-//        docRefUserConnected.get()
-//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) { //asynchrone
-//                        ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
-//
-//                        userNickName        = connectedUser.getUs_nickname();
-//                        userEmail           = connectedUser.getUs_email();
-//                        userCountryLanguage = connectedUser.getUs_country_lang();
-//                        userRole            = connectedUser.getUs_role();
-//
-//                    }
-//                })
-//
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e(TAG, "LoadUserDataFromFirestore() onFailure: ");
-//                    }
-//                });
-//
-//
-//
-//    }
-//    catch (Exception e) {
-//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----" );
-//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userNickName "  + userNickName);
-//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
-//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
-//    };
-//
-//
-//
-//
-//    Log.i(TAG, "----- END getUserDataFromFirestore -----");
-//} // END LoadUserDataFromFirestore()
-//
-
-
-
-
 
 
 
@@ -411,43 +257,43 @@ public class GlobalClass extends Application {
 
                 }
             })
-
-            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot myDocSnapshot) {
-                    Log.d(TAG,"******************** LoadUserDataFromFirestore() addOnSuccessListener ********************");
-
-                    if (myDocSnapshot.exists()) {
-
-//                        userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
-//                        userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
-                        //  ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class); // Méthode pour onComplete
-
-                        ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
-                        userNickName        = connectedUser.getUs_nickname();
-                        userEmail           = connectedUser.getUs_email();
-                        userCountryLanguage = connectedUser.getUs_country_lang();
-                        userRole            = connectedUser.getUs_role();
-                        loadedUserDataOK    =   1;
-
-                        DisplayAttributes();
-
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userId : " + userId);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userNickName : " + userNickName);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userCountryLanguage : " + userCountryLanguage);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userEmail : " + userEmail);
-
-                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess -----");
-
-//                    Toast.makeText(getApplicationContext(),"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-                        userNickName = "No USER FOUND";
-//                    Toast.makeText(getApplicationContext(),"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            })
+//
+//            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot myDocSnapshot) {
+//                    Log.d(TAG,"******************** LoadUserDataFromFirestore() addOnSuccessListener ********************");
+//
+//                    if (myDocSnapshot.exists()) {
+//
+////                        userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
+////                        userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
+//                        //  ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class); // Méthode pour onComplete
+//
+//                        ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
+//                        userNickName        = connectedUser.getUs_nickname();
+//                        userEmail           = connectedUser.getUs_email();
+//                        userCountryLanguage = connectedUser.getUs_country_lang();
+//                        userRole            = connectedUser.getUs_role();
+//                        loadedUserDataOK    =   1;
+//
+//                        DisplayAttributes();
+//
+////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userId : " + userId);
+////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userNickName : " + userNickName);
+////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userCountryLanguage : " + userCountryLanguage);
+////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userEmail : " + userEmail);
+//
+//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess -----");
+//
+////                    Toast.makeText(getApplicationContext(),"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
+//
+//                    } else {
+//
+//                        userNickName = "No USER FOUND";
+////                    Toast.makeText(getApplicationContext(),"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            })
 
             .addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -734,5 +580,169 @@ public class GlobalClass extends Application {
 //        LoadGendersDataFromFirestore();
 //        LoadHobbiesDataFromFirestore();
     }
+
+
+
+
+
+    /*****************************************************************************************************/
+    public void LoadUserDataWithNoCallback() {
+        final String[] msg = {"Sans Callback : pas de message"};
+        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            msg[0] =   "SansCallback User Trouvé";
+                        } else {
+                            msg[0] =   "SansCallback User n'existe pas";
+                        }
+                    }
+                });
+        Log.w(TAGAPP, msg[0]);
+    }
+
+    /************************************************************************************************/
+    /************************************************************************************************/
+
+    interface UserDataCallback {
+        void userExist(boolean exist);
+    }
+
+
+    public void LoadUserData(UserDataCallback userDataCallback) {
+
+        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            userDataCallback.userExist(true);
+
+                        } else {
+                            userDataCallback.userExist(false);
+                        }
+                    }
+                });
+
+    }
+
+    public void LoadUserDataWithCallBack(){
+
+        LoadUserData(new UserDataCallback() {
+            @Override
+            public void userExist(boolean exist) {
+                String msg = "Avec Callback : pas de message";
+//                Log.d(TAG, "CallBack");
+                if (exist) {
+                    msg =   "TASK avec CallBack : User exists";
+                    Log.d(TAGAPP, msg);
+                } else {
+                    msg =   "Task CallBack : User does not exist";
+                    Log.d(TAGAPP, msg);
+                }
+            }
+        });
+
+    }
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/************************************************************************************************/
+/************************************************************************************************/
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//public void LoadUserDataFromFirestore_OK() {
+////    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
+//
+//    if (userId == null){
+//        try {
+//            db      = FirebaseFirestore.getInstance();
+//            user    = FirebaseAuth.getInstance().getCurrentUser();
+//
+//            if (user != null){
+//                userId  = user.getUid();
+//            }
+//
+////                userNickName = ;
+////                userEmail = "userEmail : Not Retrieved Yet From FS";
+////                userCountryLanguage = "FR";
+//
+//        }catch (Exception e) {
+//            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
+//        }
+//
+//        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore : "+ userId +"-----" );
+//
+//    }
+//
+//    Log.i(TAG, "XXXXXXXX GlobalClass : LoadUserDataFromFirestore(): userId : " + userId);
+//
+//    DocumentReference docRefUserConnected;
+//
+//    try {
+//        docRefUserConnected = db.document("users/"+ userId); //bSfRUKasZ7PyHnew1jwqG6jksl03
+//        //docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03");
+//
+//        docRefUserConnected.get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) { //asynchrone
+//                        ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+//
+//                        userNickName        = connectedUser.getUs_nickname();
+//                        userEmail           = connectedUser.getUs_email();
+//                        userCountryLanguage = connectedUser.getUs_country_lang();
+//                        userRole            = connectedUser.getUs_role();
+//
+//                    }
+//                })
+//
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.e(TAG, "LoadUserDataFromFirestore() onFailure: ");
+//                    }
+//                });
+//
+//
+//
+//    }
+//    catch (Exception e) {
+//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----" );
+//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userNickName "  + userNickName);
+//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+//        Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+//    };
+//
+//
+//
+//
+//    Log.i(TAG, "----- END getUserDataFromFirestore -----");
+//} // END LoadUserDataFromFirestore()
+//
+
+
+
+
+
+
+
+
 
 } // END OF CLASS
