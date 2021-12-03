@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -49,6 +51,9 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     private static final String TAG = "CreationProfilActivity";
     private static final String TAGAPP = "LOGAPP";
+
+    private static final String filePrefs = R.class.getPackage().getName() + ".prefs";
+
     // Variable Widgets
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
@@ -277,6 +282,9 @@ public class CreationProfilActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+
+                        SetRoleInFilePrefs();
+
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
@@ -310,5 +318,30 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    private void SetRoleInFilePrefs() {
+        // Création ou mise à jour des préférences en local
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+
+        Context context     = getApplicationContext();
+        Long    userRole    = globalVariables.getUserRole();
+        Boolean isUserSingle;
+        isUserSingle = userRole != 2L;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // On place le boolean  isusersingle
+        editor.putBoolean("isusersingle", isUserSingle); // est-ce un célib ?
+        editor.commit();
+
+    }
+
+
+
+
+
+}
 
 }

@@ -3,7 +3,9 @@ package com.tiesr2confiance.tiers2confiance.Login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -74,7 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             etPassword.setError("Enter password");
         } else {
 
-
+            // On récupère la role de l'utilisateur dans SharedPreferences
+            GetRoleFromFilePrefs();
 
             //vérification de la connection internet
             if (Util.connectionAvailable(this))
@@ -161,6 +164,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+    private void GetRoleFromFilePrefs() {
+        // On récupère la role de l'utilisateur dans SharedPreferences
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
+                + ".prefs", Context.MODE_PRIVATE);
+
+        // La vérifcation du boolean
+        if(!sharedPreferences.getBoolean("isusersingle", true)){
+            globalVariables.setUserRole(1L);
+        }else {
+            globalVariables.setUserRole(2L);
+        };
+
+    }
 
 
 
