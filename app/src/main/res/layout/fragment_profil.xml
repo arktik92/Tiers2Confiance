@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".Profil.ProfilFragment">
 
+
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -26,6 +29,7 @@
             android:text="Profil" />
 
     </com.google.android.material.tabs.TabLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -133,4 +137,6 @@
             android:onClick="updateNote"
             android:text="Update" />
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardView"
+    android:backgroundTint="@color/cardView"
     tools:context=".Menu">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,29 +14,26 @@
         android:theme="@style/Theme.Tiers2Confiance.AppBarOverlay">
 
 
-
-
         <!-- Ce qui est visible quand le menu est fermé -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Tiers2Confiance.PopupOverlay" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/Theme.Tiers2Confiance.PopupOverlay" />
 
 
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
+            </FrameLayout>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -50,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/cardView"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_principal_godfather" />
 
