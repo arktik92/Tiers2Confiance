@@ -1,6 +1,7 @@
 package com.tiesr2confiance.tiers2confiance.Profil;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
@@ -63,9 +64,9 @@ public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
-    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole;
+    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole, tvBalance;
     private ImageView ivProfilAvatarShape, ivGender;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather ;
     private LinearLayout llProfil;
 
     /*** BDD ***/
@@ -83,6 +84,8 @@ public class ViewProfilFragment extends Fragment {
     private Long usRole;
     private String usNephew;
     private String usGodfather;
+    private String usNephewRequestFrom;
+    private String usGodfatherRequestFrom;
     private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
@@ -123,6 +126,7 @@ public class ViewProfilFragment extends Fragment {
         tvProfilCity = view.findViewById(R.id.tvProfilCity);
         tvDescription = view.findViewById(R.id.tvDescription);
         tvHobbies = view.findViewById(R.id.tvHobbies);
+        tvBalance = view.findViewById(R.id.tvBalance);
         ivGender = view.findViewById(R.id.ivGender);
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
@@ -134,8 +138,10 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
         btnUpdateProfil = view.findViewById(R.id.btn_update_profil);
+        btnAcceptNephew = view.findViewById(R.id.btn_accept_nephew);
+        btnAcceptGodfather = view.findViewById(R.id.btn_accept_godfather);
 
-        // Les boutons n'existe pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
+        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
         btnPflCrediter.setVisibility(View.GONE);
         btnPflEnvoyer.setVisibility(View.GONE);
         btnLinkSupp.setVisibility(View.GONE);
@@ -143,11 +149,15 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
         btnUpdateProfil.setVisibility(View.GONE);
+        btnAcceptNephew.setVisibility(View.GONE);
+        btnAcceptGodfather.setVisibility(View.GONE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
-        // ACTION BOUTON ROLE=PARRAIN : Redirige vers le fragment permettant de créditer son filleul
+        // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
+
+        // Le parrain connecté est redirigé vers le fragment permettant de créditer son filleul
         btnPflCrediter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +170,8 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN : Supprime le lien entre le parrain et le filleul
+
+        // Le parrain connecté supprime le lien avec son filleul
         btnLinkSupp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,11 +186,15 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkSupp.setText("Lien supprimé");
+                btnLinkSupp.setEnabled(false);
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN : Le parrain demande à un célibataire (Parrain en recherche de filleul)
+        // Le parrain connecté envoie ce profil de célibataire à son filleul
+        // TODO
+
+        // Le parrain connecté demande à un célibataire d'être son parrain (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,12 +218,50 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkRequest.setText("Demande envoyée");
+                btnLinkRequest.setEnabled(false);
             }
         });
 
 
-        // ACTION BOUTON ROLE=CELIBATAIRE : Supprime le lien entre le parrain et le célibataire connecté
+        // Le parrain connecté accepte d'être le parrain du célibataire qui lui a demandé
+        btnAcceptNephew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                                            // Replace
+                                            String ListDemands = contenuUser.getUs_nephews_request_from();
+                                            String ListDemandsNew = ListDemands.replace(userDisplayed.getId() + ";", "");
+                                            userConnected.update("us_nephews_request_from", ListDemandsNew );
+
+                                            userDisplayed.update("us_godfather", userConnected.getId() );
+                                            userDisplayed.update("us_godfather_request_to", "");
+                                            Log.i(TAG, "LOGPGO Demande du célibataire acceptée par le parrain");
+//                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
+                                        }
+                                    });
+                        }
+                    }
+                });
+                btnAcceptNephew.setText("Lien accepté");
+                btnAcceptNephew.setEnabled(false);
+            }
+        });
+
+        // ************************************   ACTIONS BOUTONS _  ROLE = CELIBATAIRE *****************************************************
+
+        // Le célibataire connecté supprime le lien avec son parrain
         btnLinkSuppTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,11 +276,12 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkSuppTiers.setText("Lien supprimé");
+                btnLinkSuppTiers.setEnabled(false);
             }
         });
 
-        // ACTION BOUTON ROLE=CELIBATAIRE : Le célibataire demande à être parrainé par un parrain
+        // Le célibataire connecté demande à être parrainé par l'utilisateur du profil
         btnLinkRequestTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,11 +305,49 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkRequestTiers.setText("Demande envoyée");
+                btnLinkRequestTiers.setEnabled(false);
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN OU CELIBATAIRE : Redirige vers la modification de son profil
+        // Le célibataire connecté accepte d'être le filleul du tier qui lui a demandé
+        btnAcceptGodfather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            userConnected.update("us_godfather", userDisplayed.getId() );
+                                            // Replace
+                                            String ListDemands = contenuUser.getUs_godfather_request_from();
+                                            String ListDemandsNew = ListDemands.replace(userDisplayed.getId()+ ";", "");
+                                            userConnected.update("us_godfather_request_from", ListDemandsNew);
+
+                                            userDisplayed.update("us_nephews",   userConnected.getId());
+                                            userDisplayed.update("us_nephews_request_to", "" ); // Replace
+                                            Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
+                                        }
+                                    });
+                        }
+                    }
+                });
+                btnAcceptGodfather.setText("Lien accepté");
+                btnAcceptGodfather.setEnabled(false);
+            }
+        });
+
+
+        // ************************************   ACTIONS BOUTONS _  LES DEUX ROLES = CELIBATAIRE OU PARRAIN *****************************************************
+
+        // L'utilisateur connecté est redirigé vers la modification de son profil
         btnUpdateProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -267,9 +359,6 @@ public class ViewProfilFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
-
-
     }
 
     public void showProfil() {
@@ -286,6 +375,7 @@ public class ViewProfilFragment extends Fragment {
                             String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
                             String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+                            Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
                             // Si l'utilisateur à afficher est un célibataire
                             if (role.equals(1L)){
@@ -295,6 +385,7 @@ public class ViewProfilFragment extends Fragment {
                                 // sinon, s'il est Tiers de confiance (parrain)
                                 tvRole.setText("Tiers");
                             }
+                            tvBalance.setText(String.valueOf(balance));
 
                             tvProfilCity.setText(city);
                             tvProfilName.setText(nickname);
@@ -355,9 +446,9 @@ public class ViewProfilFragment extends Fragment {
                             */
 
                                 if (genderUser.equals("1")){
-                                    ivGender.setImageResource(R.drawable.ic_female);
-                                }else if (genderUser.equals("2")){
                                     ivGender.setImageResource(R.drawable.ic_male);
+                                }else if (genderUser.equals("2")){
+                                    ivGender.setImageResource(R.drawable.ic_female);
                                 }else {
                                     ivGender.setImageResource(R.drawable.ic_transgenre);
                                 }
@@ -369,6 +460,8 @@ public class ViewProfilFragment extends Fragment {
                         }
 
 
+                        // ************************   QUELS SONT LES BOUTONS AFFICHES EN FONCTION DU CONTEXTE ?????? *************************
+
                         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshotConnected) {
@@ -378,7 +471,9 @@ public class ViewProfilFragment extends Fragment {
 
                                     usRole = contenuUser.getUs_role();
                                     usNephew = contenuUser.getUs_nephews();
+                                    usNephewRequestFrom = contenuUser.getUs_nephews_request_from();
                                     usGodfather = contenuUser.getUs_godfather();
+                                    usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
                                         btnUpdateProfil.setVisibility(View.VISIBLE);
@@ -399,8 +494,13 @@ public class ViewProfilFragment extends Fragment {
                                                 // Si le profil consulté n'est pas le filleul du parrain
                                                 //on peut envoyer faire un envoi du profil à son filleul (Proposition)
                                                 if (TextUtils.isEmpty(usNephew)){
-                                                    // On peut demander à parrainer le célibataire si on n'a pas de filleul
-                                                    btnLinkRequest.setVisibility(View.VISIBLE);
+                                                    if (usNephewRequestFrom.indexOf(documentSnapshotDisplayed.getId()) == -1 ){
+                                                        // Sinon on peut demander au célibataire de le parrainer si on n'a pas de filleul
+                                                        btnLinkRequest.setVisibility(View.VISIBLE);
+                                                    } else{
+                                                        // On peut accepter la demande du célibataire
+                                                        btnAcceptNephew.setVisibility(View.VISIBLE);
+                                                    }
                                                 }else{
                                                     // On peut envoyer le profil à son filleul si on en a un
                                                     btnPflEnvoyer.setVisibility(View.VISIBLE);
@@ -414,8 +514,13 @@ public class ViewProfilFragment extends Fragment {
                                                 btnLinkSuppTiers.setVisibility(View.VISIBLE);
                                             }else{
                                                 if (TextUtils.isEmpty(usGodfather)){
-                                                    // On fait une demande au parrain si on a pas de parrain
-                                                    btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                    if (usGodfatherRequestFrom.indexOf(documentSnapshotDisplayed.getId())== -1){
+                                                        // Sinon on peur faire une demande au parrain si on a pas de parrain
+                                                        btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                    }else {
+                                                        // On peut accepter la demande du parrain
+                                                        btnAcceptGodfather.setVisibility(View.VISIBLE);
+                                                    }
                                                 }
                                             }
                                         }

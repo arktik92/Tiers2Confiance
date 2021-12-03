@@ -2,10 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:shape="rectangle">
-    <solid android:color="#ffffffff"/>
+    <solid android:color="@color/cardView"/>
 
     <stroke android:width="3dp"
-        android:color="#ffffff" />
+        android:color="@color/cardView" />
 
     <padding android:left="1dp"
         android:top="1dp"

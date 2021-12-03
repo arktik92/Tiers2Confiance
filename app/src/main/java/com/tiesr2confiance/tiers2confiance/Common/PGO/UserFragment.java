@@ -91,8 +91,10 @@ public class UserFragment extends Fragment {
 	private TextView    tvCountryLanguage;
 	private TextView    tvEmail;
 	private TextView    tvRole;
-
-
+	Button btnInitVar1;
+	Button btnInitVar2;
+	Button btndisplaygenders;
+	Button btndisplayhobbies;
 
 
 	/* Décalaration des variables */
@@ -118,10 +120,10 @@ public class UserFragment extends Fragment {
 		binding = FragmentUserBinding.inflate(inflater, container, false);
 
 
-		//tvUserNickName  =   (TextView) getView().myView.findViewById(R.id.tv_nick_name);
 
 		return binding.getRoot();
 	}
+
 
 
 	/** Initialisation des composants  **/
@@ -134,60 +136,68 @@ public class UserFragment extends Fragment {
 		/*************************************************************/
 
 		GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+		BindComponents(myView);
+		InitVariables(myView);
 
-		Button btnInitVar1;
-		btnInitVar1 = myView.findViewById(R.id.btn_init_var1);
+		Toast.makeText(getContext(),"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
+
+
+
+
 		btnInitVar1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
+//				BindComponents(myView);
 				InitVariables(myView);
-				InitComponents(myView);
+				globalVariables.DisplayAttributes();
 			}
 		});
 
-		Button btnInitVar2;
-		btnInitVar2 = myView.findViewById(R.id.btn_init_var2);
+
 		btnInitVar2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
 				globalVariables.LoadGendersDataFromFirestore();
 				globalVariables.LoadHobbiesDataFromFirestore();
+				globalVariables.DisplayAttributes();
 			}
 		});
 
 
-		Button btndisplaygenders;
-		btndisplaygenders = myView.findViewById(R.id.btn_display_genders);
+
+
 		btndisplaygenders.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
-				DisplayGenders();
+				// DisplayGenders();
+				globalVariables.DisplayGenders();
+
 			}
 		});
 
-		Button btndisplayhobbies;
-		btndisplayhobbies = myView.findViewById(R.id.btn_display_hobbies);
+
+
 		btndisplayhobbies.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
-				DisplayHobbies();
+				globalVariables.DisplayHobbies();
 			}
 		});
 
 
+		try {
+			globalVariables.LoadUserDataFromFirestore();
+			globalVariables.LoadGendersDataFromFirestore();
+			globalVariables.LoadHobbiesDataFromFirestore();
+		}
+	        catch (Exception e) {
+			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
+			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
-		globalVariables.LoadUserDataFromFirestore();
-		globalVariables.LoadGendersDataFromFirestore();
-		globalVariables.LoadHobbiesDataFromFirestore();
 //        LoadUserData();
 //        LoadGenders();
 //        LoadHobbies();
 
-		InitVariables(myView);
-		InitComponents(myView);
-
-		InitComponents(myView);
-		Toast.makeText(getContext(),"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -212,22 +222,6 @@ public class UserFragment extends Fragment {
 		userEmail           =   globalVariables.getUserEmail();
 		userRole            =   globalVariables.getUserRole();
 
-		Log.i(TAGAPP, "userId : " + userId);
-		Log.i(TAGAPP, "userNickName : " + userNickName);
-		Log.i(TAGAPP, "userCountryLanguage : " + userCountryLanguage);
-		Log.i(TAGAPP, "userEmail : " + userEmail);
-		Log.i(TAGAPP, "------- END OF initGlobalVariables ---------");
-		Toast.makeText(getContext(),"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
-
-	}
-	private void InitComponents(View myView) {
-		tvUserId            = myView.findViewById(R.id.tv_user_id);
-		tvUserNickName      = myView.findViewById(R.id.tv_nick_name);
-		tvCountryLanguage   = myView.findViewById(R.id.tv_country_language);
-		tvEmail             = myView.findViewById(R.id.tv_email);
-		tvRole              = myView.findViewById(R.id.tv_role);
-
-
 		/************** init des TextViews ***-******************/
 		tvUserId.setText(userId);
 		tvUserNickName.setText(userNickName);
@@ -238,11 +232,28 @@ public class UserFragment extends Fragment {
 				tvRole.setText(userRole +" - CELIB");
 				break;
 			case 2:
-			tvRole.setText(userRole +" - PARRAIN");
+				tvRole.setText(userRole +" - PARRAIN");
 				break;
 		}
 
+		Log.i(TAGAPP, "userId : " + userId);
+		Log.i(TAGAPP, "userNickName : " + userNickName);
+		Log.i(TAGAPP, "userCountryLanguage : " + userCountryLanguage);
+		Log.i(TAGAPP, "userEmail : " + userEmail);
+		Log.i(TAGAPP, "------- END OF initGlobalVariables ---------");
+		Toast.makeText(getContext(),"CONNECTED USER : " + userId + "/" + userNickName, Toast.LENGTH_SHORT).show();
 
+	}
+	private void BindComponents(View myView) {
+		tvUserId            = myView.findViewById(R.id.tv_user_id);
+		tvUserNickName      = myView.findViewById(R.id.tv_nick_name);
+		tvCountryLanguage   = myView.findViewById(R.id.tv_country_language);
+		tvEmail             = myView.findViewById(R.id.tv_email);
+		tvRole              = myView.findViewById(R.id.tv_role);
+		btnInitVar1         = myView.findViewById(R.id.btn_init_var1);
+		btnInitVar2         = myView.findViewById(R.id.btn_init_var2);
+		btndisplaygenders   = myView.findViewById(R.id.btn_display_genders);
+		btndisplayhobbies   = myView.findViewById(R.id.btn_display_hobbies);
 	}
 
 

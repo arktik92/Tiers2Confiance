@@ -1,12 +1,10 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,8 +76,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         holder.tv_nickname_request.setText(us_nickname);
         holder.tv_city_request.setText(us_city);
 
-        String str = String.format("%tc", us_birth_day);
-        holder.tv_birth_day_request.setText(str);
+        //String str = String.format("%tc", us_birth_day);
 
         // Récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -101,56 +98,6 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.iv_photo_profil_request);
-
-        // Association du listener au bouton Accepter la demande (de parrainage, de filleul)
-        holder.btn_request_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userPosition = usersCollectionRef.document(getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
-                userConnected.get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
-                                assert contenuUser != null;
-
-                                // Si l'utilisateur connecté est un célibataire, il accepte la demande d'un parrain
-                                if (contenuUser.getUs_role() == 1) {
-                                    userConnected.update("us_godfather", userPosition.getId() );
-                                    // Replace
-                                    String ListDemands = contenuUser.getUs_godfather_request_from();
-                                    String ListDemandsNew = ListDemands.replace(userPosition.getId()+ ";", "");
-                                    userConnected.update("us_godfather_request_from", ListDemandsNew);
-
-                                    userPosition.update("us_nephews",   userConnected.getId()+  ";");
-                                    userPosition.update("us_nephews_request_to", "" ); // Replace
-                                    Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
-                                }
-
-                                // Si l'utilisateur connecté est un parrain, il cherche et demande à des célibataires de les parrainer
-                                if (contenuUser.getUs_role() == 2) {
-                                    userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userPosition.getId()+  ";");
-                                    // Replace
-                                    String ListDemands = contenuUser.getUs_nephews_request_from();
-                                    String ListDemandsNew = ListDemands.replace(userPosition.getId() + ";", "");
-                                    userConnected.update("us_nephews_request_from", ListDemandsNew );
-
-                                    userPosition.update("us_godfather", userConnected.getId() );
-                                    userPosition.update("us_godfather_request_to", "");
-                                    Log.i(TAG, "LOGPGO Demande du célibataire acceptée par le parrain");
-//                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
-                                }
-                                holder.btn_request_request.setText("Demande acceptée");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e(TAG, "erreur" + currentUser.getUid());
-                            }
-                        });
-            }
-        });
     }
 
     @NonNull
@@ -158,26 +105,34 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.activity_pending_requests_item_recycler, parent, false);
+                .inflate(R.layout.fragment_pending_requests_item_recycler, parent, false);
         return new PendingRequestsAdapter.ItemViewHolder(view);
     }
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tv_nickname_request, tv_city_request, tv_birth_day_request;
+        public TextView tv_nickname_request, tv_city_request;
         public ImageView iv_photo_profil_request;
-        public Button btn_request_request;
         public CardView cv_profil_user_request;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_nickname_request = itemView.findViewById(R.id.tv_nickname_request);
             tv_city_request = itemView.findViewById(R.id.tv_city_request);
-            tv_birth_day_request = itemView.findViewById(R.id.tv_birth_day_request);
             iv_photo_profil_request = itemView.findViewById(R.id.iv_photo_profil_request);
-            btn_request_request = itemView.findViewById(R.id.btn_request_request);
             cv_profil_user_request = itemView.findViewById(R.id.cv_profil_user_request);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getBindingAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && mOnItemClickListener != null){
+                        DocumentSnapshot userSnapshot = getSnapshots().getSnapshot(position);
+                        mOnItemClickListener.onItemClick(userSnapshot, position);
+                    }
+                }
+            });
         }
     }
 

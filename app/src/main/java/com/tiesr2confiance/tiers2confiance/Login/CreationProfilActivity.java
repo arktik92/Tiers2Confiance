@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -29,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
@@ -47,6 +50,9 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
     private static final String TAG = "CreationProfilActivity";
+    private static final String TAGAPP = "LOGAPP";
+
+    private static final String filePrefs = R.class.getPackage().getName() + ".prefs";
 
     // Variable Widgets
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
@@ -57,7 +63,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
-    public static long role;
+    public  long role;
     private long  genre,  balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup,hairColor,
             hairLength, eyeColor, smoker;
     private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId,
@@ -97,12 +103,31 @@ public class CreationProfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+        role    =   globalVariables.getUserRole();
+
+        Log.i(TAGAPP, "CreationProfilActivity onCreate role : " + role);
+
         // Définition de la contentView en fonction du rôle
-        if(role == 1) {
-            setContentView(R.layout.activity_creation_profil_celibataire);
-        } else {
-            setContentView(R.layout.activity_creation_profil_parrain);
+
+        switch((int) role) {
+            case 1:
+                setContentView(R.layout.activity_creation_profil_celibataire);
+                break;
+            case 2:
+                setContentView(R.layout.activity_creation_profil_parrain);
+                break;
+            default:
+                setContentView(R.layout.activity_creation_profil_parrain);
+                break;
         }
+
+//
+//        if((int) role == 1) {
+//            setContentView(R.layout.activity_creation_profil_celibataire);
+//        } else {
+//            setContentView(R.layout.activity_creation_profil_parrain);
+//        }
 
         // Rappel de la méthode init
         init();
@@ -257,6 +282,9 @@ public class CreationProfilActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+
+                        SetRoleInFilePrefs();
+
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
@@ -289,6 +317,31 @@ public class CreationProfilActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+
+    private void SetRoleInFilePrefs() {
+        // Création ou mise à jour des préférences en local
+        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+
+        Context context     = getApplicationContext();
+        Long    userRole    = globalVariables.getUserRole();
+        Boolean isUserSingle;
+        isUserSingle = userRole != 2L;
+
+        Log.d(TAGAPP, "SetRoleInFilePrefs userRole" + userRole);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // On place le boolean  isusersingle
+        editor.putBoolean("isusersingle", isUserSingle); // est-ce un célib ?
+        editor.commit();
+
+    }
+
+
+
 
 
 }

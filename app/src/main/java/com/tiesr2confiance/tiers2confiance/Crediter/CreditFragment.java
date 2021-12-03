@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,7 +73,6 @@ public class CreditFragment extends Fragment {
             public void onClick(View view) {
                 // ici on determine le rôle de l'utilisateur connecté et on stock le rôle dans la variable usRole
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
                 assert currentUser != null;
                 userConnected = usersCollectionRef.document(currentUser.getUid());
 
@@ -95,8 +95,8 @@ public class CreditFragment extends Fragment {
                             userConnected.update("us_balance", usSoldeNew);
                         } else {
                             // je suis parrain => Créditer mon filleul
-                            Log.e(TAG, "onComplete: " + "PARRAIN" );
                             usNephews = contenuUser.getUs_nephews();
+                            Log.e(TAG, "onComplete: " + contenuUser.getUs_nephews() );
                             if (TextUtils.isEmpty(usNephews) == false){
                                 userFilleul = usersCollectionRef.document(usNephews);
                                 userFilleul.get()
@@ -106,16 +106,17 @@ public class CreditFragment extends Fragment {
                                                 Toast.makeText(getContext(), "Le filleul n'a pas été trouvé", Toast.LENGTH_SHORT).show();
                                             }
                                         })
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                // Je crédite le célibataire connecté
-                                                    ModelUsers contenuFilleul = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
-                                                    assert contenuFilleul != null;
-                                                    usSolde = contenuFilleul.getUs_balance() ;
-                                                    usSoldeNew = usSolde + Long.parseLong(etCredit.getText().toString()) ;
-                                                    userFilleul.update("us_balance", usSoldeNew);
-                                                Toast.makeText(getContext(), "Solde créditer, merci!", Toast.LENGTH_SHORT).show();
+                                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                                // Je crédite le célibataire
+                                                Log.e(TAG, "onSuccess: " + userFilleul.getId() );
+                                                ModelUsers contenuFilleul = documentSnapshot.toObject(ModelUsers.class);
+                                                assert contenuUser != null;
+                                                usSolde = contenuFilleul.getUs_balance();
+                                                usSoldeNew = usSolde + Long.parseLong(etCredit.getText().toString()) ;
+                                                userFilleul.update("us_balance", usSoldeNew);
+                                                Toast.makeText(getContext(), "Solde crédité, merci!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }else{

@@ -11,7 +11,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -77,6 +79,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private final CollectionReference usersCollectionRef = db.collection("users");
     DocumentReference userConnected;
 
+    /********* Gestion du Role **********/
+    long role;
+
 
     /**
      * Faire le lien entre les widgets et le design
@@ -93,13 +98,28 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         super.onCreate(savedInstanceState);
 
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        globalVariables.LoadUserDataFromFirestore();
-        globalVariables.LoadGendersDataFromFirestore();
-        globalVariables.LoadHobbiesDataFromFirestore();
+        String userId       = globalVariables.getUserId();
+        String userEmail    = globalVariables.getUserEmail();
+        try {
+            globalVariables.LoadUserDataFromFirestore();
+            globalVariables.LoadGendersDataFromFirestore();
+            globalVariables.LoadHobbiesDataFromFirestore();
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
-        long role = globalVariables.getUserRole();
+        globalVariables.DisplayAttributes();
 
-        Log.d(TAG, "onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
+
+        role = globalVariables.getUserRole();
+        if (role == 0) {
+            GetRoleFromFilePrefs();
+        }
+
+        Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
+
+       // role = 1L;
 
         if( role == 1L) {
             setContentView(R.layout.activity_main_celibataire);
@@ -284,6 +304,45 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer_layout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
+/*****************************************************************************************************************/
+
+private void GetRoleFromFilePrefs() {
+    // On récupère la role de l'utilisateur dans SharedPreferences
+    GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+    //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
+            + ".prefs", Context.MODE_PRIVATE);
+
+
+    // La vérifcation du boolean
+    if (!sharedPreferences.getBoolean("isusersingle", true)) {
+        globalVariables.setUserRole(1L);
+
+        role = globalVariables.getUserRole();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // On place le boolean  isusersingle
+
+        editor.putBoolean("isusersingle", true); //
+        editor.commit();
+    } else {
+        globalVariables.setUserRole(2L);
+
+        role = globalVariables.getUserRole();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // On place le boolean  isusersingle
+        editor.putBoolean("isusersingle", false); //
+        editor.commit();
+    }
+
+
+
+
+}
+
 
 
 }
