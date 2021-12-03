@@ -33,7 +33,7 @@
 
 
     <Button
-        android:id="@+id/btnAddPhoto"
+        android:id="@+id/btnAddPhotoGallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="openGallery"
@@ -52,5 +52,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddPhoto" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAddPhotoGallery" />
 </androidx.constraintlayout.widget.ConstraintLayout>

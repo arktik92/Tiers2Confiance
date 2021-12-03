@@ -3,10 +3,14 @@ package com.tiesr2confiance.tiers2confiance;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,11 +18,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.LogDescriptor;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -28,33 +30,34 @@ import java.util.UUID;
 
 public class CameraFragment extends AppCompatActivity {
 
-    private ImageView profilPic;
-    private Button btnImportPhoto, btnImportCamera;
+    ImageView ivProfilImage;
+    private Button btnAddPhotoGallery, btnAddCamera;
 
-    public Uri imageUri;
+    public Uri imageUri, imageCameraUri;
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
-    private static final String TAG = "CAMERA *******";
+    private static final String TAG = "CAMERA";
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAMERA_CAPTURE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        profilPic = findViewById(R.id.ivProfilImage);
-        btnImportPhoto = findViewById(R.id.btnAddPhoto);
-        btnImportCamera = findViewById(R.id.btnAddCamera);
+        ivProfilImage = findViewById(R.id.ivProfilImage);
+        btnAddPhotoGallery = findViewById(R.id.btnAddPhotoGallery);
+        btnAddCamera = findViewById(R.id.btnAddCamera);
 
         storage = FirebaseStorage.getInstance();
 
         storageReference = storage.getReference();
 
 
-        btnImportPhoto.setOnClickListener(new View.OnClickListener() {
+        btnAddPhotoGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectPicture();
@@ -90,17 +93,33 @@ public class CameraFragment extends AppCompatActivity {
 
         cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
-        startActivityForResult(cameraIntent, 1);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
 
             uploadPhoto();
+        }
+
+
+        if(requestCode == REQUEST_IMAGE_CAMERA_CAPTURE){
+            Bitmap bitmap = (Bitmap) data.getExtras().get("Data");
+            ivProfilImage.setImageBitmap(bitmap);
+
+
+            imageCameraUri = data.getData();
+
+
+
+          uploadCameraPhoto();
+
+
+
         }
     }
 
@@ -151,6 +170,65 @@ public class CameraFragment extends AppCompatActivity {
     }
 
 
+
+
+
+    /***** Send from camera ****/
+
+
+    private void uploadCameraPhoto() {
+
+        Log.d(TAG, "***** UploadPhoto ***** ");
+
+        final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, "***** ProgressDialog ***** ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+        final String randomKey = UUID.randomUUID().toString();
+
+        // Create the reference to "images/mountain.jpg
+
+        Log.d(TAG, "RandomKey: " + randomKey);
+
+
+
+        StorageReference riversRef = storageReference.child("images/" + randomKey);
+
+        riversRef.putFile(imageCameraUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: SUCCESS");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: FAILED");
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
+
+
+    }
+
+
+
+
+    /*****/
+
+
     public void getCameraPhoto(View view) {
         Log.d(TAG, "GET PHOTO STEP");
 
@@ -159,20 +237,23 @@ public class CameraFragment extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 
+        // Request for camera runtime permission
 
-        /****
-        Intent intent = new Intent (CameraFragment.this, CameraDevice.class);
-        startActivity(intent);
+        if(ContextCompat.checkSelfPermission(CameraFragment.this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( CameraFragment.this, new String [ ] {
+                    Manifest.permission.CAMERA
+            }, 100);
+        }
 
+        btnAddCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent  = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 100);
 
-
-        ***/
-
-        /***
-         Intent intent = new Intent(CameraFragment.this, CameraDeviceFragment.class);
-         startActivity(intent);
-         System.out.println("ENTER proccess getCameraPhoto >> ");
-         ***/
+            }
+        });
 
     }
 
