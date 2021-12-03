@@ -46,7 +46,7 @@ public class CameraFragment extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
 
         profilPic = findViewById(R.id.ivProfilImage);
-        btnImportPhoto = findViewById(R.id.btnAddPhoto);
+        btnImportPhoto = findViewById(R.id.btnAddPhotoGallery);
         btnImportCamera = findViewById(R.id.btnAddCamera);
 
         storage = FirebaseStorage.getInstance();
