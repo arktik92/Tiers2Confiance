@@ -66,6 +66,7 @@ public class CameraDevice extends AppCompatActivity {
     public void getPhoto(){
         Log.d(TAG, "getPhoto: ");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 100);
     }
 
 

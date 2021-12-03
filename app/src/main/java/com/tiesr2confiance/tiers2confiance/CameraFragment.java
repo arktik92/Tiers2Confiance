@@ -154,8 +154,19 @@ public class CameraFragment extends AppCompatActivity {
     public void getCameraPhoto(View view) {
         Log.d(TAG, "GET PHOTO STEP");
 
+
+        Log.d(TAG, "getPhoto: ");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+
+        /****
         Intent intent = new Intent (CameraFragment.this, CameraDevice.class);
         startActivity(intent);
+
+
+
+        ***/
 
         /***
          Intent intent = new Intent(CameraFragment.this, CameraDeviceFragment.class);
