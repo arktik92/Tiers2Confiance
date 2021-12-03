@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                         assert contenuUser != null;
                         Long usRole = contenuUser.getUs_role();
-                        if (usRole.equals(2)){
+                        if (usRole.equals(2L)){
                             if (TextUtils.isEmpty(contenuUser.getUs_nephews())){
                                 getSupportFragmentManager().
                                         beginTransaction().

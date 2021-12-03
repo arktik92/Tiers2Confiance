@@ -155,6 +155,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                             }
                         });
                 holder.btn_request.setText("Demande envoyée");
+                holder.btn_request.setEnabled(false);
             }
         });
     }
