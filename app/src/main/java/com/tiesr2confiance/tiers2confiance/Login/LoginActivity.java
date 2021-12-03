@@ -172,12 +172,38 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
                 + ".prefs", Context.MODE_PRIVATE);
 
-        // La vérifcation du boolean
-        if(!sharedPreferences.getBoolean("isusersingle", true)){
-            globalVariables.setUserRole(1L);
+        if(globalVariables.getUserRole() != 0L)
+        {
+            Long    userRole    = globalVariables.getUserRole();
+            Boolean isUserSingle;
+            isUserSingle = userRole != 2L;
+
+            Log.d(TAGAPP, "SetRoleInFilePrefs userRole" + userRole);
+
+//            sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            // On place le boolean  isusersingle
+            editor.putBoolean("isusersingle", isUserSingle); // est-ce un célib ?
+            editor.commit();
+
         }else {
-            globalVariables.setUserRole(2L);
-        };
+            // La vérifcation du boolean
+            if (!sharedPreferences.getBoolean("isusersingle", true)) {
+                globalVariables.setUserRole(1L);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // On place le boolean  isusersingle
+                editor.putBoolean("isusersingle", true); //
+                editor.commit();
+            } else {
+                globalVariables.setUserRole(2L);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // On place le boolean  isusersingle
+                editor.putBoolean("isusersingle", false); //
+                editor.commit();
+            }
+            ;
+        }
+
 
     }
 

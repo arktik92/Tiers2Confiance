@@ -18,8 +18,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
+import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHairLength;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
+import com.tiesr2confiance.tiers2confiance.Models.ModelLanguage;
+import com.tiesr2confiance.tiers2confiance.Models.ModelMaritalStatus;
+import com.tiesr2confiance.tiers2confiance.Models.ModelOuiNon;
+import com.tiesr2confiance.tiers2confiance.Models.ModelPersonality;
+import com.tiesr2confiance.tiers2confiance.Models.ModelRoles;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSexualOrientation;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSports;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 
 import java.util.ArrayList;
@@ -38,15 +50,32 @@ public class GlobalClass extends Application {
     private String userEmail;
     private long userRole;// = 1L;
 
-    private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
     private ArrayList<ModelHobbies> arrayListHobbies = new ArrayList<>();
+//    private ArrayList<ModelPersonality> arrayListPersonality = new ArrayList<>();
+//private  ArrayList<ModelSports> arrayListSports = new ArrayList<>();
+
+    private  ArrayList<ModelRoles> arrayListRoles = new ArrayList<>();
+    private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
+
+
+    private ArrayList<ModelLanguage> arrayListLanguage = new ArrayList<>();
+    //TODO Alimentation des arraylists suivants
+    private  ArrayList<ModelEthnicGroup> arrayListEthnicGroup = new ArrayList<>();
+    private ArrayList<ModelEyeColor> arrayListEyeColors = new ArrayList<>();
+    private  ArrayList<ModelHairColor> arrayListHairColor = new ArrayList<>();
+    private  ArrayList<ModelHairLength> arrayListHairLength = new ArrayList<>();
+    private  ArrayList<ModelMaritalStatus> arrayListMaritalStatus = new ArrayList<>();
+    private ArrayList<ModelOuiNon> arrayListOuiNon = new ArrayList<>();
+    private  ArrayList<ModelSexualOrientation> arrayList = new ArrayList<>();
+    private  ArrayList<ModelSmoker> arrayListSmoker = new ArrayList<>();
 
     /************************* Constructors     ***************/
     public GlobalClass() {
 
     }
 
-    public GlobalClass(FirebaseFirestore db, FirebaseUser user, String userId, String userCountryLanguage, String userNickName, String userEmail, long userRole, ArrayList<ModelGenders> arrayListGenders, ArrayList<ModelHobbies> arrayListHobbies) {
+    public GlobalClass(int loadedUserDataOK, FirebaseFirestore db, FirebaseUser user, String userId, String userCountryLanguage, String userNickName, String userEmail, long userRole, ArrayList<ModelHobbies> arrayListHobbies, ArrayList<ModelRoles> arrayListRoles, ArrayList<ModelGenders> arrayListGenders, ArrayList<ModelLanguage> arrayListLanguage, ArrayList<ModelEthnicGroup> arrayListEthnicGroup, ArrayList<ModelEyeColor> arrayListEyeColors, ArrayList<ModelHairColor> arrayListHairColor, ArrayList<ModelHairLength> arrayListHairLength, ArrayList<ModelMaritalStatus> arrayListMaritalStatus, ArrayList<ModelOuiNon> arrayListOuiNon, ArrayList<ModelSexualOrientation> arrayList, ArrayList<ModelSmoker> arrayListSmoker) {
+        this.loadedUserDataOK = loadedUserDataOK;
         this.db = db;
         this.user = user;
         this.userId = userId;
@@ -54,11 +83,25 @@ public class GlobalClass extends Application {
         this.userNickName = userNickName;
         this.userEmail = userEmail;
         this.userRole = userRole;
-        this.arrayListGenders = arrayListGenders;
         this.arrayListHobbies = arrayListHobbies;
+        this.arrayListRoles = arrayListRoles;
+        this.arrayListGenders = arrayListGenders;
+        this.arrayListLanguage = arrayListLanguage;
+        this.arrayListEthnicGroup = arrayListEthnicGroup;
+        this.arrayListEyeColors = arrayListEyeColors;
+        this.arrayListHairColor = arrayListHairColor;
+        this.arrayListHairLength = arrayListHairLength;
+        this.arrayListMaritalStatus = arrayListMaritalStatus;
+        this.arrayListOuiNon = arrayListOuiNon;
+        this.arrayList = arrayList;
+        this.arrayListSmoker = arrayListSmoker;
     }
 
     /************************* Setters     ***************/
+    public void setLoadedUserDataOK(int loadedUserDataOK) {
+        this.loadedUserDataOK = loadedUserDataOK;
+    }
+
     public void setDb(FirebaseFirestore db) {
         this.db = db;
     }
@@ -87,16 +130,65 @@ public class GlobalClass extends Application {
         this.userRole = userRole;
     }
 
+    public void setArrayListHobbies(ArrayList<ModelHobbies> arrayListHobbies) {
+        this.arrayListHobbies = arrayListHobbies;
+    }
+
+    public void setArrayListRoles(ArrayList<ModelRoles> arrayListRoles) {
+        this.arrayListRoles = arrayListRoles;
+    }
+
     public void setArrayListGenders(ArrayList<ModelGenders> arrayListGenders) {
         this.arrayListGenders = arrayListGenders;
     }
 
-    public void setArrayListHobbies(ArrayList<ModelHobbies> arrayListHobbies) {
-        this.arrayListHobbies = arrayListHobbies;
+    public void setArrayListLanguage(ArrayList<ModelLanguage> arrayListLanguage) {
+        this.arrayListLanguage = arrayListLanguage;
     }
-/************************* Getters     ***************/
+
+    public void setArrayListEthnicGroup(ArrayList<ModelEthnicGroup> arrayListEthnicGroup) {
+        this.arrayListEthnicGroup = arrayListEthnicGroup;
+    }
+
+    public void setArrayListEyeColors(ArrayList<ModelEyeColor> arrayListEyeColors) {
+        this.arrayListEyeColors = arrayListEyeColors;
+    }
+
+    public void setArrayListHairColor(ArrayList<ModelHairColor> arrayListHairColor) {
+        this.arrayListHairColor = arrayListHairColor;
+    }
+
+    public void setArrayListHairLength(ArrayList<ModelHairLength> arrayListHairLength) {
+        this.arrayListHairLength = arrayListHairLength;
+    }
+
+    public void setArrayListMaritalStatus(ArrayList<ModelMaritalStatus> arrayListMaritalStatus) {
+        this.arrayListMaritalStatus = arrayListMaritalStatus;
+    }
+
+    public void setArrayListOuiNon(ArrayList<ModelOuiNon> arrayListOuiNon) {
+        this.arrayListOuiNon = arrayListOuiNon;
+    }
+
+    public void setArrayList(ArrayList<ModelSexualOrientation> arrayList) {
+        this.arrayList = arrayList;
+    }
+
+    public void setArrayListSmoker(ArrayList<ModelSmoker> arrayListSmoker) {
+        this.arrayListSmoker = arrayListSmoker;
+    }
+
+    /************************* Getters     ***************/
     public static String getTAG() {
         return TAG;
+    }
+
+    public static String getTAGAPP() {
+        return TAGAPP;
+    }
+
+    public int getLoadedUserDataOK() {
+        return loadedUserDataOK;
     }
 
     public FirebaseFirestore getDb() {
@@ -127,12 +219,52 @@ public class GlobalClass extends Application {
         return userRole;
     }
 
+    public ArrayList<ModelHobbies> getArrayListHobbies() {
+        return arrayListHobbies;
+    }
+
+    public ArrayList<ModelRoles> getArrayListRoles() {
+        return arrayListRoles;
+    }
+
     public ArrayList<ModelGenders> getArrayListGenders() {
         return arrayListGenders;
     }
 
-    public ArrayList<ModelHobbies> getArrayListHobbies() {
-        return arrayListHobbies;
+    public ArrayList<ModelLanguage> getArrayListLanguage() {
+        return arrayListLanguage;
+    }
+
+    public ArrayList<ModelEthnicGroup> getArrayListEthnicGroup() {
+        return arrayListEthnicGroup;
+    }
+
+    public ArrayList<ModelEyeColor> getArrayListEyeColors() {
+        return arrayListEyeColors;
+    }
+
+    public ArrayList<ModelHairColor> getArrayListHairColor() {
+        return arrayListHairColor;
+    }
+
+    public ArrayList<ModelHairLength> getArrayListHairLength() {
+        return arrayListHairLength;
+    }
+
+    public ArrayList<ModelMaritalStatus> getArrayListMaritalStatus() {
+        return arrayListMaritalStatus;
+    }
+
+    public ArrayList<ModelOuiNon> getArrayListOuiNon() {
+        return arrayListOuiNon;
+    }
+
+    public ArrayList<ModelSexualOrientation> getArrayList() {
+        return arrayList;
+    }
+
+    public ArrayList<ModelSmoker> getArrayListSmoker() {
+        return arrayListSmoker;
     }
 
     /************************* Displayers for Arrays  (in LOGCAT)   ***************/
@@ -183,6 +315,42 @@ public class GlobalClass extends Application {
         Log.d(TAGAPP, "----------------");
 
     }
+
+    public void DisplayRoles() {
+        Log.d(TAGAPP, "DisplayHobbies() ");
+
+        Log.d(TAGAPP, "------- myArrayListRoles ---------");
+        Log.d(TAGAPP, "------- myArrayListRoles Size---------" + arrayListRoles.size());
+        Log.d(TAGAPP, "------- myArrayListRoles ---------" + arrayListRoles);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListRoles.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListHobbies.get(i).getHo_id() + " "
+                    + arrayListHobbies.get(i).getHo_country() + " "
+                    + arrayListHobbies.get(i).getHo_label());
+        }
+        Log.d(TAGAPP, "----------------");
+
+    }
+
+    public void DisplayLanguages() {
+        Log.d(TAGAPP, "DisplayHobbies() ");
+
+        Log.d(TAGAPP, "------- myArrayListLanguage ---------");
+        Log.d(TAGAPP, "------- myArrayListLanguage Size---------" + arrayListLanguage.size());
+        Log.d(TAGAPP, "------- myArrayListLanguage ---------" + arrayListLanguage);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListLanguage.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListLanguage.get(i).la_code + " "
+                    + arrayListLanguage.get(i).la_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
     /************************* Loaders     ***************/
     /************************************************************************************************/
     /************************************************************************************************/
@@ -194,8 +362,8 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
 /************************************************************************************************/
 /************************************************************************************************/
-    /************************************************************************************************/
-    public void LoadUserDataFromFirestore() {
+/************************************************************************************************/
+        public void LoadUserDataFromFirestore() {
 //    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
         loadedUserDataOK    =   0;
 
@@ -363,18 +531,7 @@ public class GlobalClass extends Application {
 //                || (userCountryLanguage == "FR")
                 || ((userId == "") ? null : userCountryLanguage) == null
         ){
-//            db      = FirebaseFirestore.getInstance();
-//            user    = FirebaseAuth.getInstance().getCurrentUser();
-//            userId  = user.getUid();
-//            userNickName = "userNickName : Not Retrieved Yet from FS";
-//            userEmail = "userEmail : Not Retrieved Yet From FS";
-//            userCountryLanguage = "FR";
             LoadUserDataFromFirestore();
-
-//            while (loadedUserDataOK    ==   0){
-//                Util.waitfor(500);
-//            }
-
 
             Log.i(TAG, "----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
@@ -453,6 +610,9 @@ public class GlobalClass extends Application {
 
 
 
+
+
+
     public void LoadHobbiesDataFromFirestore() {
         Log.i(TAG, "START ----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         if (
@@ -479,52 +639,52 @@ public class GlobalClass extends Application {
             Query queryHobbies = db.collection("hobbies")
                     .whereEqualTo("ho_country", userCountryLanguage);
 
-                queryHobbies.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot documentSnapshots) {
-                        if (documentSnapshots.isEmpty()) {
-                            Log.i(TAG, "Loading Hobbies onSuccess but  LIST EMPTY");
+            queryHobbies.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Hobbies onSuccess but  LIST EMPTY");
 
-                        } else {
-                            for (DocumentSnapshot documentSnapshot : documentSnapshots) {
-                                if (documentSnapshot.exists()) {
-                                    String hobbieDocId = documentSnapshot.getId();
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String hobbieDocId = documentSnapshot.getId();
 
-                                    Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-                                    DocumentReference docRefhobbie = db.document("hobbies/"+ hobbieDocId);
-                                    docRefhobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefhobbie = db.document("hobbies/"+ hobbieDocId);
+                                        docRefhobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                            ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
-                                            Log.i(TAG, "onSuccess ******** hobby : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
-                                            myArrayListHobbies.add(hobbie);
-        //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListhobbies : " + myArrayListhobbies);
-        //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListhobbies.size() *********** " + myArrayListhobbies.size());
+                                                ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
+                                                Log.i(TAG, "onSuccess ******** hobby : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
+                                                myArrayListHobbies.add(hobbie);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListhobbies : " + myArrayListhobbies);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListhobbies.size() *********** " + myArrayListhobbies.size());
 
-                                        }
+                                            }
 
 
-                                    });
+                                        });
+                                    }
                                 }
+
+
+
                             }
-
-
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
 
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
-                        Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
-
-                    }
-                });
+                    });
         }
-                catch (Exception e) {
+        catch (Exception e) {
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
@@ -550,7 +710,178 @@ public class GlobalClass extends Application {
 
 
 
+    public void LoadRolesDataFromFirestore() {
+        Log.i(TAG, "START ----- GlobalClass : LoadRolesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+//            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadRolesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
 
+        Log.i(TAG, "loadRolesDataFromFirestore: BEGIN");
+        ArrayList<ModelRoles> myArrayListRoles = new ArrayList<>();
+        Log.i(TAG, "loadRolesDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
+
+        try
+        {
+            Query queryRoles = db.collection("roles")
+                    .whereEqualTo("ro_country", userCountryLanguage);
+
+            queryRoles.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String rolesDocId = documentSnapshot.getId();
+
+                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefRoles = db.document("roles/"+ rolesDocId);
+                                        docRefRoles.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelRoles roles = documentSnapshot.toObject(ModelRoles.class);
+                                                Log.i(TAG, "onSuccess ******** hobby : " + roles.getRo_id() + " " + roles.getRo_country() + " " + roles.getRo_label());
+                                                myArrayListRoles.add(roles);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListRoles : " + myArrayListRoles);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListRoles.size() *********** " + myArrayListRoles.size());
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Roles from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Roles from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadRolesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadRolesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadRolesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadRolesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+
+//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListRoles : " + myArrayListRoles);
+//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListRoles.size() *********** " + myArrayListRoles.size());
+
+        arrayListRoles = myArrayListRoles;
+
+//        Util.waitfor(2000);
+
+        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles : " + arrayListRoles);
+        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles.size() *********** " + arrayListRoles.size());
+
+        Log.i(TAG, "loadRolesDataFromFirestore: END");
+
+    } // END loadRolesDataFromFirestore()
+
+
+
+
+
+
+    public void LoadLanguageDataFromFirestore() {
+        Log.i(TAG, "START ----- GlobalClass : LoadLanguageDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+//            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadRolesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+        Log.i(TAG, "loadLanguageDataFromFirestore: BEGIN");
+        ArrayList<ModelLanguage> myArrayListLanguage = new ArrayList<>();
+        Log.i(TAG, "loadLanguageDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
+
+        try
+        {
+            Query queryLanguage = db.collection("roles")
+                    .whereEqualTo("ro_country", userCountryLanguage);
+
+            queryLanguage.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String languagesDocId = documentSnapshot.getId();
+
+                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefRoles = db.document("roles/"+ languagesDocId);
+                                        docRefRoles.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelLanguage language = documentSnapshot.toObject(ModelLanguage.class);
+                                                Log.i(TAG, "onSuccess ******** hobby : " + language.getLa_code() + " " + language.getLa_label() );
+                                                myArrayListLanguage.add(language);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Language from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Language from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+
+//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListLanguage : " + myArrayListLanguage);
+//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListLanguage.size() *********** " + myArrayListLanguage.size());
+
+        arrayListLanguage = myArrayListLanguage;
+
+//        Util.waitfor(2000);
+
+        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage : " + arrayListLanguage);
+        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage.size() *********** " + arrayListLanguage.size());
+
+        Log.i(TAG, "loadLanguageDataFromFirestore: END");
+
+    } // END loadLanguageDataFromFirestore()
 
     /************************* Cycle of Life     ***************/
     @Override

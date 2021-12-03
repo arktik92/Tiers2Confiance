@@ -330,6 +330,8 @@ public class CreationProfilActivity extends AppCompatActivity {
         Boolean isUserSingle;
         isUserSingle = userRole != 2L;
 
+        Log.d(TAGAPP, "SetRoleInFilePrefs userRole" + userRole);
+
         SharedPreferences sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // On place le boolean  isusersingle
@@ -341,7 +343,5 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
 
-
-}
 
 }
