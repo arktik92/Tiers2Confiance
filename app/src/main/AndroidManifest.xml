@@ -39,7 +39,15 @@
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
-            android:exported="false"/>
+            android:exported="true">
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+        </activity>
 
         <activity
             android:name=".Login.RoleChoiceActivity"
@@ -47,6 +55,7 @@
         <activity
             android:name=".Login.SignInActivity"
             android:exported="false" />
+
         <activity
             android:name=".Login.CreationProfilActivity"
             android:exported="false" />
@@ -55,13 +64,8 @@
             android:exported="false" />
         <activity
             android:name=".CameraFragment"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
 
     </application>
 

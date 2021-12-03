@@ -220,6 +220,10 @@ public class CameraFragment extends AppCompatActivity {
 
         File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
 
+
+
+        //StorageReference riversRef = storageReference.child("images/" + randomKey);
+
         Log.d(TAG, "imagesFolder: " + imagesFolder);
 
 
@@ -237,34 +241,14 @@ public class CameraFragment extends AppCompatActivity {
         Log.d(TAG, "uploadImageToFireBase >> ");
         uploadImageToFireBase(f.getName(), contentUri);
 
-
-        //StorageReference riversRef = storageReference.child("images/" + randomKey);
-/****
- riversRef.putFile(imageUri)
- .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-@Override public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-prDial.dismiss();
-Log.d(TAG, "upload: SUCCESS");
-}
-})
- .addOnFailureListener(new OnFailureListener() {
-@Override public void onFailure(@NonNull Exception e) {
-prDial.dismiss();
-Log.d(TAG, "upload: FAILED");
-}
-})
- .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-@Override public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-prDial.setMessage("Percentage:" + (int) progressPercent + "%");
-}
-});
- ****/
     }
 
 
     public void uploadImageToFireBase(String name, Uri contentUri) {
+
         StorageReference image = storageReference.child("images/" + name);
+
+
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
