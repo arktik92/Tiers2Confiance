@@ -125,6 +125,7 @@ public class UserFragment extends Fragment {
 	}
 
 
+
 	/** Initialisation des composants  **/
 	@Override
 	public void  onViewCreated(View myView, @Nullable Bundle savedInstanceState) {
@@ -170,6 +171,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 				// DisplayGenders();
 				globalVariables.DisplayGenders();
+
 			}
 		});
 
@@ -178,7 +180,7 @@ public class UserFragment extends Fragment {
 		btndisplayhobbies.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
-				DisplayHobbies();
+				globalVariables.DisplayHobbies();
 			}
 		});
 
@@ -211,7 +213,7 @@ public class UserFragment extends Fragment {
 		final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
 		Log.d(TAGAPP, "InitGlobalVariablesStep1");
 
-        globalVariables.LoadUserDataFromFirestore();
+//        globalVariables.LoadUserDataFromFirestore();
 
 
 		userId              =   globalVariables.getUserId();
