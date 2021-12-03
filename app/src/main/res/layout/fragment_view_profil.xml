@@ -153,6 +153,25 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/lbl_personnalite" />
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="Mon solde"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBalance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            tools:text="solde" />
                     </LinearLayout>
 
                     <LinearLayout
