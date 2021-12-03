@@ -194,7 +194,6 @@ public class ViewProfilFragment extends Fragment {
         // Le parrain connecté envoie ce profil de célibataire à son filleul
         // TODO
 
-
         // Le parrain connecté demande à un célibataire d'être son parrain (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +225,39 @@ public class ViewProfilFragment extends Fragment {
 
 
         // Le parrain connecté accepte d'être le parrain du célibataire qui lui a demandé
-        //TODO
+        btnAcceptNephew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                                            // Replace
+                                            String ListDemands = contenuUser.getUs_nephews_request_from();
+                                            String ListDemandsNew = ListDemands.replace(userDisplayed.getId() + ";", "");
+                                            userConnected.update("us_nephews_request_from", ListDemandsNew );
+
+                                            userDisplayed.update("us_godfather", userConnected.getId() );
+                                            userDisplayed.update("us_godfather_request_to", "");
+                                            Log.i(TAG, "LOGPGO Demande du célibataire acceptée par le parrain");
+//                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
+                                        }
+                                    });
+                        }
+                    }
+                });
+                btnAcceptNephew.setText("Lien accepté");
+                btnAcceptNephew.setEnabled(false);
+            }
+        });
 
         // ************************************   ACTIONS BOUTONS _  ROLE = CELIBATAIRE *****************************************************
 
@@ -279,8 +310,39 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // Le parrain connecté accepte d'être le parrain du célibataire qui lui a demandé
-        // TODO
+        // Le célibataire connecté accepte d'être le filleul du tier qui lui a demandé
+        btnAcceptGodfather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            userConnected.update("us_godfather", userDisplayed.getId() );
+                                            // Replace
+                                            String ListDemands = contenuUser.getUs_godfather_request_from();
+                                            String ListDemandsNew = ListDemands.replace(userDisplayed.getId()+ ";", "");
+                                            userConnected.update("us_godfather_request_from", ListDemandsNew);
+
+                                            userDisplayed.update("us_nephews",   userConnected.getId());
+                                            userDisplayed.update("us_nephews_request_to", "" ); // Replace
+                                            Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
+                                        }
+                                    });
+                        }
+                    }
+                });
+                btnAcceptGodfather.setText("Lien accepté");
+                btnAcceptGodfather.setEnabled(false);
+            }
+        });
 
 
         // ************************************   ACTIONS BOUTONS _  LES DEUX ROLES = CELIBATAIRE OU PARRAIN *****************************************************
