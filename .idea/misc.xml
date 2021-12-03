@@ -44,6 +44,35 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.25" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.1" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/drawable/shape_avatar_profil.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_camera.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_camera_device_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_creation_profil_celibataire.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_creation_profil_parrain.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_lier_parrain_filleul_item_recycler.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_main_celibataire.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_main_parrain.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_menu.xml" value="0.33" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_pending_requests_adapter.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_pending_requests_item_recycler.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_profil_hobbie_item.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_reset_password.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_role_choice.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/activity_show_media.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/content_menu.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_crediter.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_first.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_lier_parrain_filleul.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_pending_requests.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_profil.xml" value="0.25" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_user.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/fragment_view_profil.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/gallery_item_image.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/nav_header.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/layout/nav_header_parrain.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/esteban/Desktop/correction/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.20520833333333333" />
       </map>
     </option>
   </component>
