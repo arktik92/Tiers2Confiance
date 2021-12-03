@@ -23,8 +23,9 @@
 
             <ImageView
                 android:id="@+id/iv_photo_profil_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="5dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <LinearLayout
@@ -36,37 +37,23 @@
                 <TextView
                     android:id="@+id/tv_nickname_request"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:gravity="center"
                     android:text="TextView"
-                    android:textSize="16sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_city_request"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:gravity="center"
                     android:text="TextView"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/tv_birth_day_request"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="TextView" />
-
             </LinearLayout>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_request_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_btn"
-            android:backgroundTint="@color/btnCelib"
-            android:text="@string/btn_accept" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

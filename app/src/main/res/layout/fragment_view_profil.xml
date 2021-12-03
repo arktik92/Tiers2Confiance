@@ -194,12 +194,6 @@
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
                             android:text="Ne plus être le parrain" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
 
                         <Button
                             android:id="@+id/btn_pfl_envoyer"
@@ -207,7 +201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Envoyer le profil à mon filleul" />
+                            android:text="Envoyer ce profil à mon filleul" />
 
                         <Button
                             android:id="@+id/btn_link_request"
@@ -215,7 +209,15 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Demander à parrainer" />
+                            android:text="Demander d'être le parrain" />
+
+                        <Button
+                            android:id="@+id/btn_accept_nephew"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/shape_btn_parrain"
+                            android:text="Accepter d'être son parrain" />
 
                     </LinearLayout>
 
@@ -230,7 +232,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Ne plus être le filleule" />
+                            android:text="Ne plus être le filleul" />
 
                         <Button
                             android:id="@+id/btn_link_request_tiers"
@@ -238,7 +240,15 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Demander au parrain" />
+                            android:text="Demander d'être le filleul" />
+
+                        <Button
+                            android:id="@+id/btn_accept_godfather"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/shape_btn_parrain"
+                            android:text="Accepter d'être son filleul" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -252,7 +262,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Modifier mon profil" />
+                            android:text="Modifier son profil" />
                     </LinearLayout>
 
                 </LinearLayout>

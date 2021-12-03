@@ -66,7 +66,7 @@ public class ViewProfilFragment extends Fragment {
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole, tvBalance;
     private ImageView ivProfilAvatarShape, ivGender;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil ;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather ;
     private LinearLayout llProfil;
 
     /*** BDD ***/
@@ -84,6 +84,8 @@ public class ViewProfilFragment extends Fragment {
     private Long usRole;
     private String usNephew;
     private String usGodfather;
+    private String usNephewRequestFrom;
+    private String usGodfatherRequestFrom;
     private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
@@ -136,8 +138,10 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
         btnUpdateProfil = view.findViewById(R.id.btn_update_profil);
+        btnAcceptNephew = view.findViewById(R.id.btn_accept_nephew);
+        btnAcceptGodfather = view.findViewById(R.id.btn_accept_godfather);
 
-        // Les boutons n'existe pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
+        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
         btnPflCrediter.setVisibility(View.GONE);
         btnPflEnvoyer.setVisibility(View.GONE);
         btnLinkSupp.setVisibility(View.GONE);
@@ -145,11 +149,15 @@ public class ViewProfilFragment extends Fragment {
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
         btnUpdateProfil.setVisibility(View.GONE);
+        btnAcceptNephew.setVisibility(View.GONE);
+        btnAcceptGodfather.setVisibility(View.GONE);
 
         /** Glide image **/
         ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
-        // ACTION BOUTON ROLE=PARRAIN : Redirige vers le fragment permettant de créditer son filleul
+        // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
+
+        // Le parrain connecté est redirigé vers le fragment permettant de créditer son filleul
         btnPflCrediter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +170,8 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN : Supprime le lien entre le parrain et le filleul
+
+        // Le parrain connecté supprime le lien avec son filleul
         btnLinkSupp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,7 +191,11 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN : Le parrain demande à un célibataire (Parrain en recherche de filleul)
+        // Le parrain connecté envoie ce profil de célibataire à son filleul
+        // TODO
+
+
+        // Le parrain connecté demande à un célibataire d'être son parrain (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,8 +225,12 @@ public class ViewProfilFragment extends Fragment {
         });
 
 
+        // Le parrain connecté accepte d'être le parrain du célibataire qui lui a demandé
+        //TODO
 
-        // ACTION BOUTON ROLE=CELIBATAIRE : Supprime le lien entre le parrain et le célibataire connecté
+        // ************************************   ACTIONS BOUTONS _  ROLE = CELIBATAIRE *****************************************************
+
+        // Le célibataire connecté supprime le lien avec son parrain
         btnLinkSuppTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,7 +250,7 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // ACTION BOUTON ROLE=CELIBATAIRE : Le célibataire demande à être parrainé par un parrain
+        // Le célibataire connecté demande à être parrainé par l'utilisateur du profil
         btnLinkRequestTiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,7 +279,13 @@ public class ViewProfilFragment extends Fragment {
             }
         });
 
-        // ACTION BOUTON ROLE=PARRAIN OU CELIBATAIRE : Redirige vers la modification de son profil
+        // Le parrain connecté accepte d'être le parrain du célibataire qui lui a demandé
+        // TODO
+
+
+        // ************************************   ACTIONS BOUTONS _  LES DEUX ROLES = CELIBATAIRE OU PARRAIN *****************************************************
+
+        // L'utilisateur connecté est redirigé vers la modification de son profil
         btnUpdateProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -375,6 +398,8 @@ public class ViewProfilFragment extends Fragment {
                         }
 
 
+                        // ************************   QUELS SONT LES BOUTONS AFFICHES EN FONCTION DU CONTEXTE ?????? *************************
+
                         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshotConnected) {
@@ -384,7 +409,9 @@ public class ViewProfilFragment extends Fragment {
 
                                     usRole = contenuUser.getUs_role();
                                     usNephew = contenuUser.getUs_nephews();
+                                    usNephewRequestFrom = contenuUser.getUs_nephews_request_from();
                                     usGodfather = contenuUser.getUs_godfather();
+                                    usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
                                         btnUpdateProfil.setVisibility(View.VISIBLE);
@@ -405,8 +432,13 @@ public class ViewProfilFragment extends Fragment {
                                                 // Si le profil consulté n'est pas le filleul du parrain
                                                 //on peut envoyer faire un envoi du profil à son filleul (Proposition)
                                                 if (TextUtils.isEmpty(usNephew)){
-                                                    // On peut demander à parrainer le célibataire si on n'a pas de filleul
-                                                    btnLinkRequest.setVisibility(View.VISIBLE);
+                                                    if (usNephewRequestFrom.indexOf(documentSnapshotDisplayed.getId()) == -1 ){
+                                                        // Sinon on peut demander au célibataire de le parrainer si on n'a pas de filleul
+                                                        btnLinkRequest.setVisibility(View.VISIBLE);
+                                                    } else{
+                                                        // On peut accepter la demande du célibataire
+                                                        btnAcceptNephew.setVisibility(View.VISIBLE);
+                                                    }
                                                 }else{
                                                     // On peut envoyer le profil à son filleul si on en a un
                                                     btnPflEnvoyer.setVisibility(View.VISIBLE);
@@ -420,8 +452,13 @@ public class ViewProfilFragment extends Fragment {
                                                 btnLinkSuppTiers.setVisibility(View.VISIBLE);
                                             }else{
                                                 if (TextUtils.isEmpty(usGodfather)){
-                                                    // On fait une demande au parrain si on a pas de parrain
-                                                    btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                    if (usGodfatherRequestFrom.indexOf(documentSnapshotDisplayed.getId())== -1){
+                                                        // Sinon on peur faire une demande au parrain si on a pas de parrain
+                                                        btnLinkRequestTiers.setVisibility(View.VISIBLE);
+                                                    }else {
+                                                        // On peut accepter la demande du parrain
+                                                        btnAcceptGodfather.setVisibility(View.VISIBLE);
+                                                    }
                                                 }
                                             }
                                         }
