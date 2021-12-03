@@ -175,7 +175,8 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkSupp.setText("Lien supprimé");
+                btnLinkSupp.setEnabled(false);
             }
         });
 
@@ -203,9 +204,11 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkRequest.setText("Demande envoyée");
+                btnLinkRequest.setEnabled(false);
             }
         });
+
 
 
         // ACTION BOUTON ROLE=CELIBATAIRE : Supprime le lien entre le parrain et le célibataire connecté
@@ -223,7 +226,8 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkSuppTiers.setText("Lien supprimé");
+                btnLinkSuppTiers.setEnabled(false);
             }
         });
 
@@ -251,7 +255,8 @@ public class ViewProfilFragment extends Fragment {
                         }
                     }
                 });
-
+                btnLinkRequestTiers.setText("Demande envoyée");
+                btnLinkRequestTiers.setEnabled(false);
             }
         });
 
@@ -267,9 +272,6 @@ public class ViewProfilFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
-
-
     }
 
     public void showProfil() {

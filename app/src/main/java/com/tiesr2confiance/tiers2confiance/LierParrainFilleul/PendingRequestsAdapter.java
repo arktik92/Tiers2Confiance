@@ -141,6 +141,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
 //                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
                                 }
                                 holder.btn_request_request.setText("Demande acceptée");
+                                holder.btn_request_request.setEnabled(false);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -178,6 +179,17 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
             iv_photo_profil_request = itemView.findViewById(R.id.iv_photo_profil_request);
             btn_request_request = itemView.findViewById(R.id.btn_request_request);
             cv_profil_user_request = itemView.findViewById(R.id.cv_profil_user_request);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getBindingAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && mOnItemClickListener != null){
+                        DocumentSnapshot userSnapshot = getSnapshots().getSnapshot(position);
+                        mOnItemClickListener.onItemClick(userSnapshot, position);
+                    }
+                }
+            });
         }
     }
 
