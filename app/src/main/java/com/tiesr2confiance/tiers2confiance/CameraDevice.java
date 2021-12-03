@@ -80,7 +80,6 @@ public class CameraDevice extends AppCompatActivity {
             ivProfil.setImageBitmap(bitmap);
 
 
-            /*****
             try{
 
 
@@ -98,7 +97,7 @@ public class CameraDevice extends AppCompatActivity {
                 Toast.makeText(CameraDevice.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
 
-***/
+
         }
 
 
