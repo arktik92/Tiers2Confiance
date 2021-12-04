@@ -102,8 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     Log.d(TAGAPP, ">>>>> firebaseAuth.signInWithEmailAndPassword addOnCompleteListener");
-//                                    LoadUserData();
-//
+
                                     startActivity(new Intent(LoginActivity.this, SplashScreenActivity.class));
                                     finish();
                                 } else {
