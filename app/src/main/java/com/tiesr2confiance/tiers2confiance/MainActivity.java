@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         globalVariables.DisplayAttributes();
 
 
-        role = globalVariables.getUserRole();
-        if (role == 0) {
-            GetRoleFromFilePrefs();
-        }
+//        role = globalVariables.getUserRole();
+//        if (role == 0) {
+//            GetRoleFromFilePrefs();
+//        }
 
         Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
@@ -310,38 +310,35 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 /*****************************************************************************************************************/
 
-private void GetRoleFromFilePrefs() {
-    // On récupère la role de l'utilisateur dans SharedPreferences
-    GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-    //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
-    SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
-            + ".prefs", Context.MODE_PRIVATE);
-
-
-    // La vérifcation du boolean
-    if (!sharedPreferences.getBoolean("isusersingle", true)) {
-        globalVariables.setUserRole(1L);
-
-        role = globalVariables.getUserRole();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // On place le boolean  isusersingle
-
-        editor.putBoolean("isusersingle", true); //
-        editor.commit();
-    } else {
-        globalVariables.setUserRole(2L);
-
-        role = globalVariables.getUserRole();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // On place le boolean  isusersingle
-        editor.putBoolean("isusersingle", false); //
-        editor.commit();
-    }
-
-
-
-
-}
+//    private void GetRoleFromFilePrefs() {
+//        // On récupère la role de l'utilisateur dans SharedPreferences
+//        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//        //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
+//                + ".prefs", Context.MODE_PRIVATE);
+//
+//
+//        // La vérifcation du boolean
+//        if (!sharedPreferences.getBoolean("isusersingle", true)) {
+//            globalVariables.setUserRole(1L);
+//
+//            role = globalVariables.getUserRole();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            // On place le boolean  isusersingle
+//
+//            editor.putBoolean("isusersingle", true); //
+//            editor.commit();
+//        } else {
+//            globalVariables.setUserRole(2L);
+//
+//            role = globalVariables.getUserRole();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            // On place le boolean  isusersingle
+//            editor.putBoolean("isusersingle", false); //
+//            editor.commit();
+//        }
+//
+//    }
 
 
 

@@ -290,9 +290,9 @@ public class GlobalClass extends Application {
         Log.d(TAGAPP, "----------------");
         for (int i = 0; i < arrayListGenders.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListGenders.get(i).getGe_id() + " "
-                    + arrayListGenders.get(i).getGe_country() + " "
-                    + arrayListGenders.get(i).getGe_label());
+                    + arrayListGenders.get(i).ge_id + " "
+                    + arrayListGenders.get(i).ge_country + " "
+                    + arrayListGenders.get(i).ge_label);
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -308,9 +308,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListHobbies.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListHobbies.get(i).getHo_id() + " "
-                    + arrayListHobbies.get(i).getHo_country() + " "
-                    + arrayListHobbies.get(i).getHo_label());
+                    + arrayListHobbies.get(i).ho_id + " "
+                    + arrayListHobbies.get(i).ho_country + " "
+                    + arrayListHobbies.get(i).ho_label);
         }
         Log.d(TAGAPP, "----------------");
 
@@ -327,9 +327,11 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListRoles.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListHobbies.get(i).getHo_id() + " "
-                    + arrayListHobbies.get(i).getHo_country() + " "
-                    + arrayListHobbies.get(i).getHo_label());
+                    + arrayListRoles.get(i).ro_id + " "
+                    + arrayListRoles.get(i).ro_country + " "
+                    + arrayListRoles.get(i).ro_label  + " "
+                    + arrayListRoles.get(i).ro_is_godfather
+            );
         }
         Log.d(TAGAPP, "----------------");
 
@@ -358,12 +360,12 @@ public class GlobalClass extends Application {
 
 
 
-
 /************************************************************************************************/
 /************************************************************************************************/
+/********************* USER DATA                                    *****************************/
 /************************************************************************************************/
-/************************************************************************************************/
-        public void LoadUserDataFromFirestore() {
+    /************************************************************************************************/
+    public void LoadUserDataFromFirestore() {
 //    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
         loadedUserDataOK    =   0;
 
@@ -397,122 +399,50 @@ public class GlobalClass extends Application {
             //docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03");
 
             docRefUserConnected.get()
-            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) { //asynchrone
-                        Log.d(TAG,"******************** LoadUserDataFromFirestore() addOnCompleteListener ********************");
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) { //asynchrone
+                            Log.d(TAG,"******************** LoadUserDataFromFirestore() addOnCompleteListener ********************");
 
-                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : " + userId + "-----");
-                        ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : " + userId + "-----");
+                            ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
 
-                        userNickName        = connectedUser.getUs_nickname();
-                        userEmail           = connectedUser.getUs_email();
-                        userCountryLanguage = connectedUser.getUs_country_lang();
-                        userRole            = connectedUser.getUs_role();
+                            userNickName        = connectedUser.getUs_nickname();
+                            userEmail           = connectedUser.getUs_email();
+                            userCountryLanguage = connectedUser.getUs_country_lang();
+                            userRole            = connectedUser.getUs_role();
 
-                        loadedUserDataOK    =   1;
+                            loadedUserDataOK    =   1;
 
-                        DisplayAttributes();
+                            DisplayAttributes();
 
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userId : " + userId);
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userNickName : " + userNickName);
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userCountryLanguage : " + userCountryLanguage);
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userEmail : " + userEmail);
 
-                        Log.i(TAG, "----- Update on getUserDataFromFirestore -----");
+                            Log.i(TAG, "----- Update on getUserDataFromFirestore -----");
 
-                        //                        Toast.makeText(getApplicationContext(), "USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
+                            //                        Toast.makeText(getApplicationContext(), "USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
 
-                }
-            })
-//
-//            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot myDocSnapshot) {
-//                    Log.d(TAG,"******************** LoadUserDataFromFirestore() addOnSuccessListener ********************");
-//
-//                    if (myDocSnapshot.exists()) {
-//
-////                        userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
-////                        userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
-//                        //  ModelUsers connectedUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class); // Méthode pour onComplete
-//
-//                        ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
-//                        userNickName        = connectedUser.getUs_nickname();
-//                        userEmail           = connectedUser.getUs_email();
-//                        userCountryLanguage = connectedUser.getUs_country_lang();
-//                        userRole            = connectedUser.getUs_role();
-//                        loadedUserDataOK    =   1;
-//
-//                        DisplayAttributes();
-//
-////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userId : " + userId);
-////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userNickName : " + userNickName);
-////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userCountryLanguage : " + userCountryLanguage);
-////                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userEmail : " + userEmail);
-//
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess -----");
-//
-////                    Toast.makeText(getApplicationContext(),"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-//
-//                        userNickName = "No USER FOUND";
-////                    Toast.makeText(getApplicationContext(),"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            })
+                        }
+                    })
 
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    loadedUserDataOK    =   1;
-                    Log.e(TAG, "LoadUserDataFromFirestore() onFailure: ");
-                }
-            });
-
-
-
-//            docRefUserConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot myDocSnapshot) {
-//
-//                    if (myDocSnapshot.exists()) {
-//
-////                        userNickName    = myDocSnapshot.getString("us_nickname");// + " " + userId;
-////                        userEmail       = myDocSnapshot.getString("us_email");// + " " + userId;
-//
-//                        ModelUsers connectedUser = myDocSnapshot.toObject(ModelUsers.class);
-//                        userNickName        = connectedUser.getUs_nickname();
-//                        userEmail           = connectedUser.getUs_email();
-//                        userCountryLanguage = connectedUser.getUs_country_lang();
-//                        userRole            = connectedUser.getUs_role();
-//
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userId : " + userId);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userNickName : " + userNickName);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userCountryLanguage : " + userCountryLanguage);
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess userEmail : " + userEmail);
-//
-//                        Log.i(TAG, "----- Update on getUserDataFromFirestore addOnSuccessListener onSuccess -----");
-//
-////                    Toast.makeText(getApplicationContext(),"USER FOUND in collection \"users\"", Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-//
-//                        userNickName = "No USER FOUND";
-////                    Toast.makeText(getApplicationContext(),"No Document found in collection \"users\" for this LOGIN/USER", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            loadedUserDataOK    =   1;
+                            Log.e(TAG, "LoadUserDataFromFirestore() onFailure: ");
+                        }
+                    });
 
 
         }
         catch (Exception e) {
-                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----" );
-                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userNickName "  + userNickName);
-                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
-                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
 
 
@@ -523,13 +453,16 @@ public class GlobalClass extends Application {
 
 /************************************************************************************************/
 /************************************************************************************************/
+/********************* GENDERS                                      *****************************/
+/************************************************************************************************/
+    /************************************************************************************************/
     public void LoadGendersDataFromFirestore() {
         loadedUserDataOK    =   0;
         Log.i(TAG, "START ----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
 //                || (userCountryLanguage == "FR")
-                || ((userId == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
         ){
             LoadUserDataFromFirestore();
 
@@ -546,52 +479,50 @@ public class GlobalClass extends Application {
                     .whereEqualTo("ge_country", userCountryLanguage);
 
             queryGenders.get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot documentSnapshots) {
-                    if (documentSnapshots.isEmpty()) {
-                        Log.i(TAG, "Loading Genders onSuccess but LIST EMPTY");
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Genders onSuccess but LIST EMPTY");
 
-                    } else {
-                        for (DocumentSnapshot documentSnapshot : documentSnapshots) {
-                            if (documentSnapshot.exists()) {
-                                String genderDocId = documentSnapshot.getId();
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String genderDocId = documentSnapshot.getId();
 
-                                Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-                                DocumentReference docRefGender = db.document("genders/"+ genderDocId);
-                                docRefGender.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefGender = db.document("genders/"+ genderDocId);
+                                        docRefGender.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                        ModelGenders gender= documentSnapshot.toObject(ModelGenders.class);
-                                        Log.i(TAG, "onSuccess ******** gender : " + gender.getGe_id() + " " + gender.getGe_country() + " " + gender.getGe_label());
-                                        myArrayListGenders.add(gender);
-    //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListGenders : " + myArrayListGenders);
-    //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListGenders.size() *********** " + myArrayListGenders.size());
+                                                ModelGenders gender= documentSnapshot.toObject(ModelGenders.class);
+                                                Log.i(TAG, "onSuccess ******** gender : " + gender.getGe_id() + " " + gender.getGe_country() + " " + gender.getGe_label());
+                                                myArrayListGenders.add(gender);
 
+                                            }
+
+
+
+                                        });
                                     }
+                                }
 
 
 
-                                });
                             }
                         }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting genders from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting genders from FireStore!!!");
 
-
-
-                    }
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Error getting genders from FireStore!!!", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "onFailure : Error getting genders from FireStore!!!");
-
-                }
-            });
+                        }
+                    });
         }
-            catch (Exception e) {
+        catch (Exception e) {
             Log.e(TAG, "----- GlobalClass : LoadGendersDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
             Log.e(TAG, "----- GlobalClass : LoadGendersDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
             Log.e(TAG, "----- GlobalClass : LoadGendersDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
@@ -707,6 +638,11 @@ public class GlobalClass extends Application {
 
 
 
+/************************************************************************************************/
+/************************************************************************************************/
+/********************* Language                                      *****************************/
+/************************************************************************************************/
+    /************************************************************************************************/
 
 
 
@@ -797,6 +733,11 @@ public class GlobalClass extends Application {
 
 
 
+/************************************************************************************************/
+/************************************************************************************************/
+/********************* ROLES                                        *****************************/
+/************************************************************************************************/
+    /************************************************************************************************/
 
 
 
@@ -883,7 +824,326 @@ public class GlobalClass extends Application {
 
     } // END loadLanguageDataFromFirestore()
 
-    /************************* Cycle of Life     ***************/
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************        EthnicGroup                               *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************         Eye Color                              *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************             Gender                          *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************              HairColor                         *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                HairLength                       *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                 Oui Non                      *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                  Marital Status                     *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************               Personality                        *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************          SexualOrientation                             *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************           shape                            *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************           Smoker                            *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************           Sports                            *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*************************                     Cycle of Life                      ***************/
+/************************************************************************************************/
+    /************************************************************************************************/
+
+
+
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -1070,7 +1330,11 @@ public class GlobalClass extends Application {
 
 
 
-
+/************************************************************************************************/
+/************************************************************************************************/
+/********************* Hobbies                                      *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
 
 
 
