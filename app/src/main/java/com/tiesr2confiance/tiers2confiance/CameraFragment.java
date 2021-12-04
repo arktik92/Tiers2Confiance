@@ -8,10 +8,12 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,8 @@ public class CameraFragment extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_CAMERA_CAPTURE = 100;
 
+   // Bitmap photo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +91,13 @@ public class CameraFragment extends AppCompatActivity {
 
         cameraIntent.setType("image/*"); // image/jpg
 
-        cameraIntent.putExtra("crop", true);
+       /* cameraIntent.putExtra("crop", true);
         cameraIntent.putExtra("scale", true);
 
         // Output image dim
         cameraIntent.putExtra("outputX", 256);
         cameraIntent.putExtra("outputY", 256);
-
+*/
         // Ratio
         cameraIntent.putExtra("aspectX", 1);
         cameraIntent.putExtra("aspectY", 1);
@@ -116,12 +120,25 @@ public class CameraFragment extends AppCompatActivity {
         }
 
 
-        if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE) {
+        if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == RESULT_OK) {
 
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            ivProfilImage.setImageBitmap(bitmap);
+
+            Log.d(TAG, "REQUEST_IMAGE_CAMERA_CAPTURE >> ");
+
+            imageCameraUri =  data.getData(); // Bitmap  data.getExtras().get("Data");
+
+            ivProfilImage.setImageURI(imageCameraUri);
+
+            //imageCameraUri = data.getData();
+
+            Log.d(TAG, "imageCameraUri >> "+imageCameraUri);
+
+            /**
             Bitmap bitmap = (Bitmap) data.getExtras().get("Data");
             ivProfilImage.setImageBitmap(bitmap);
 
-            /*****/
 
             Intent phptoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -132,7 +149,7 @@ public class CameraFragment extends AppCompatActivity {
 
             imageCameraUri = data.getData();
 
-            Log.d(TAG, "onActivityResult: " + imageCameraUri);
+            Log.d(TAG, "onActivityResult: " + imageCameraUri);*/
 
             uploadCameraPhoto();
 
@@ -157,6 +174,7 @@ public class CameraFragment extends AppCompatActivity {
         // Create the reference to "images/mountain.jpg
 
         Log.d(TAG, "RandomKey: " + randomKey);
+
 
 
         StorageReference riversRef = storageReference.child("images/" + randomKey);
@@ -191,23 +209,92 @@ public class CameraFragment extends AppCompatActivity {
     /***** Send from camera ****/
 
 
+    /***
+    private void uploadCameraPhoto() {
+        Toast.makeText(CameraFragment.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        photo.compress(Bitmap.CompressFormat.JPEG,100, stream);
+
+        byte[] b = stream.toByteArray();
+
+        StorageReference storageReference =  FirebaseStorage.getInstance().getReference().child("documentImages").child("noplateImg");
+
+        Toast.makeText(CameraFragment.this, "storageReference"+storageReference, Toast.LENGTH_SHORT).show();
+
+        storageReference.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                Uri downloadUrI = taskSnapshot.getUploadSessionUri();
+
+                Toast.makeText(CameraFragment.this, "downloadUrI"+downloadUrI, Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(CameraFragment.this, "uploaded", Toast.LENGTH_SHORT).show();
+            }
+        })
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(CameraFragment.this, "FAiled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
+
+**/
     private void uploadCameraPhoto() {
 
+        // Create a storage reference from our app
+        StorageReference storageRef = storageReference.getStorage().getReference();
+
+        // Create a reference to file
+       // StorageReference mountainsRef = storageRef.child("toto.jpg");
+
+        //Create a reference to "images/toto.jpg"
+        StorageReference mountainsImagesRef = storageRef.child("imagess/toto.jpg");
+
+        // while the file names are the same, the reference poinr to different ilfes
+     //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
+       // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
+
+        Toast.makeText(CameraFragment.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
+
+
+
+        ivProfilImage.setDrawingCacheEnabled(true);
+        ivProfilImage.buildDrawingCache();
+
+
+        Bitmap bitmap = ((BitmapDrawable) ivProfilImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CameraFragment.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+            }
+        })
+
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(CameraFragment.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        /***
 
         Log.d(TAG, "***** UploadPhoto ***** ");
 
 
-
-        /****
-        final ProgressDialog prDial = new ProgressDialog(this);
-
-        Log.d(TAG, "***** ProgressDialog ***** ");
-
-        prDial.setTitle("Uploading Image...");
-        prDial.show();
-
-
-        ***/
 
         final String randomKey = UUID.randomUUID().toString();
 
@@ -218,10 +305,54 @@ public class CameraFragment extends AppCompatActivity {
 
 
 
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
+        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "DCIM");
+
+        Log.d(TAG, "uploadCameraPhoto: "+imagesFolder);
 
 
 
+        final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, "***** ProgressDialog ***** ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+        // Create the reference to "images/mountain.jpg
+
+        Log.d(TAG, "RandomKey: " + randomKey);
+
+
+        StorageReference riversRef = storageReference.child("images/" + randomKey);
+
+        riversRef.putFile(imageCameraUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: SUCCESS");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: FAILED");
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
+
+
+
+
+
+/**
         //StorageReference riversRef = storageReference.child("images/" + randomKey);
 
         Log.d(TAG, "imagesFolder: " + imagesFolder);
@@ -238,14 +369,18 @@ public class CameraFragment extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
 
 
-        Log.d(TAG, "uploadImageToFireBase >> ");
-        uploadImageToFireBase(f.getName(), contentUri);
+        Log.d(TAG, "uploadImageToFireBase >> ");**/
+       // uploadImageToFireBase(f.getName(), contentUri);
+
+
 
     }
 
 
-    public void uploadImageToFireBase(String name, Uri contentUri) {
+   /** public void uploadImageToFireBase(String name, Uri contentUri) {
 
+
+        /*
         StorageReference image = storageReference.child("images/" + name);
 
 
@@ -268,7 +403,7 @@ public class CameraFragment extends AppCompatActivity {
                         Toast.makeText(CameraFragment.this, "Upload Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
+    }*/
 
     //images/image.jpg
 
@@ -277,9 +412,6 @@ public class CameraFragment extends AppCompatActivity {
         Log.d(TAG, "GET PHOTO STEP");
 
 
-        Log.d(TAG, "getPhoto: ");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
 
         // Request for camera runtime permission
 
@@ -287,7 +419,11 @@ public class CameraFragment extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(CameraFragment.this, new String[]{
                     Manifest.permission.CAMERA
-            }, 100);
+            }, REQUEST_IMAGE_CAMERA_CAPTURE);
+        }else{
+            Log.d(TAG, "getPhoto: ");
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
         }
 
         btnAddCamera.setOnClickListener(new View.OnClickListener() {
