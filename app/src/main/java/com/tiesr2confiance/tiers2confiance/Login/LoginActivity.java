@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.window.SplashScreen;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +30,7 @@ import com.tiesr2confiance.tiers2confiance.Common.Util;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Common.NoInternetActivity;
 import com.tiesr2confiance.tiers2confiance.R;
+import com.tiesr2confiance.tiers2confiance.SplashScreenActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -102,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAGAPP, ">>>>> firebaseAuth.signInWithEmailAndPassword addOnCompleteListener");
 //                                    LoadUserData();
 //
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, SplashScreenActivity.class));
                                     finish();
                                 } else {
 

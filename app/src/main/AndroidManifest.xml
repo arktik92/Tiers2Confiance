@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tiesr2confiance.tiers2confiance" >
+    package="com.tiesr2confiance.tiers2confiance">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -25,6 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance.NoActionBar">
+        <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true" />
         <activity
             android:name=".CameraDeviceFragment"
             android:exported="false" />
@@ -54,10 +57,10 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".CameraFragment"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

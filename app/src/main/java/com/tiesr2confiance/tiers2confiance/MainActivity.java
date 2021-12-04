@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     DocumentReference userConnected;
 
     /********* Gestion du Role **********/
-    long role;
+    long userRole;
 
 
     /**
@@ -96,32 +96,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        String userId       = globalVariables.getUserId();
-        String userEmail    = globalVariables.getUserEmail();
-        try {
-            globalVariables.LoadUserDataFromFirestore();
-            globalVariables.LoadGendersDataFromFirestore();
-            globalVariables.LoadHobbiesDataFromFirestore();
-        }
-        catch (Exception e) {
-            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
-            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
-        globalVariables.DisplayAttributes();
+        userRole = globalVariables.getUserRole();
 
-
-//        role = globalVariables.getUserRole();
-//        if (role == 0) {
-//            GetRoleFromFilePrefs();
-//        }
-
-        Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
-
-       // role = 1L;
-
-        if( role == 1L) {
+        if( userRole == 1L) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
             setContentView(R.layout.activity_main_parrain);
@@ -311,7 +290,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 /*****************************************************************************************************************/
 
 //    private void GetRoleFromFilePrefs() {
-//        // On récupère la role de l'utilisateur dans SharedPreferences
+//        // On récupère la userRole de l'utilisateur dans SharedPreferences
 //        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
 //        //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
 //        SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
@@ -322,7 +301,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //        if (!sharedPreferences.getBoolean("isusersingle", true)) {
 //            globalVariables.setUserRole(1L);
 //
-//            role = globalVariables.getUserRole();
+//            userRole = globalVariables.getUserRole();
 //            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            // On place le boolean  isusersingle
 //
@@ -331,7 +310,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //        } else {
 //            globalVariables.setUserRole(2L);
 //
-//            role = globalVariables.getUserRole();
+//            userRole = globalVariables.getUserRole();
 //            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            // On place le boolean  isusersingle
 //            editor.putBoolean("isusersingle", false); //
