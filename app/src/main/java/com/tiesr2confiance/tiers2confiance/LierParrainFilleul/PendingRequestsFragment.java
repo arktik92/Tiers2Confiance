@@ -101,6 +101,7 @@ public class PendingRequestsFragment extends Fragment {
                 ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                 assert contenuUser != null;
 
+                critere.clear();
                 usRole = contenuUser.getUs_role();
                 usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
                 usNephewsRequestFrom = contenuUser.getUs_nephews_request_from();

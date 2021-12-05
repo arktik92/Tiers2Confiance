@@ -71,7 +71,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
         // Récupération des attributs des utilisateurs de la liste
         String us_nickname = model.getUs_nickname();
         String us_city = model.getUs_city();
-        Date us_birth_day = model.getUs_birth_date();
+        String avatar_match = model.getUs_avatar();
 
         holder.tv_nickname_request.setText(us_nickname);
         holder.tv_city_request.setText(us_city);
@@ -88,12 +88,8 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                 .placeholder(R.mipmap.ic_launcher);
 
         Context context = holder.iv_photo_profil_request.getContext();
-        // Fonctionne soit avec un contexte ou une vue (with), puis avec un load d'url,
-        // puis le chargement des options précédemment crées, puis centrer l'image,
-        // puis diskCacheStrategy
-        // puis l'emplacement où mettre l'image, dans le holder crée.
         Glide.with(context)
-                .load(R.mipmap.ic_launcher)
+                .load(avatar_match)
                 .apply(options)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

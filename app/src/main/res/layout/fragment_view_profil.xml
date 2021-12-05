@@ -235,6 +235,14 @@
                             android:text="Ne plus être le filleul" />
 
                         <Button
+                            android:id="@+id/btn_accept_match"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/shape_btn_parrain"
+                            android:text="Accepter le match" />
+
+                        <Button
                             android:id="@+id/btn_link_request_tiers"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

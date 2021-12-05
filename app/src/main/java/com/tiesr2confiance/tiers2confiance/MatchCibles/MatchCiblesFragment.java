@@ -121,7 +121,6 @@ public class MatchCiblesFragment extends Fragment {
                     }
                 }else {
                     // Appel la fonction qui affiche la liste
-
                     if (usRole.equals(1L)) {
                        // Filleul : On affiche les célibataires proposés par son parrain, ou les célibataires d'un autre parrain dont on est la cible
                         ArrayList<String> ListIn = new ArrayList<>();
@@ -129,9 +128,8 @@ public class MatchCiblesFragment extends Fragment {
                         ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_to().split(";")));
                         ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_from().split(";")));
                         displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
-                        adapterUser.startListening();
                     } else {
-                        // Parrain : On affiche les célibataires qu'on n'a pas encore proposé à notre filleul
+                        // Parrain : On affiche les célibataires qu'on n'a pas encore proposé à notre filleul, et qui ne sont pas encore matché
                         assert currentUser != null;
                         DocumentReference userNephew = usersCollectionRef.document(contenuUser.getUs_nephews());
                         userNephew.get()
@@ -143,8 +141,8 @@ public class MatchCiblesFragment extends Fragment {
                                         ArrayList<String> ListIn = new ArrayList<>();
                                         ArrayList<String> ListNotIn = new ArrayList<>();
                                         ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
+                                        ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs.split(";")));
                                         displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
-                                        adapterUser.startListening();
                                     }
                                 });
                     }
@@ -157,12 +155,13 @@ public class MatchCiblesFragment extends Fragment {
 
     @SuppressLint("LongLogTag")
     private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) {
-
+        critere.clear();
         critere.add("1");
         Query query = db.collection("users");
         //Célibataire
         if (usRole.equals(1L)) {
             critere.addAll(listIn);
+            Log.e(TAG, "displayPossibleMatchList: criteere" +  critere);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
                     .whereIn("us_auth_uid", critere);
@@ -182,7 +181,6 @@ public class MatchCiblesFragment extends Fragment {
         adapterUser = new MatchCiblesAdapter(users);
         rvListCible.setAdapter(adapterUser);
         adapterUser.startListening();
-
 
         adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
             @Override

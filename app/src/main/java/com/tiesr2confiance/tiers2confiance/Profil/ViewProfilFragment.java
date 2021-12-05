@@ -60,13 +60,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.xml.transform.sax.SAXResult;
+
 public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole, tvBalance;
     private ImageView ivProfilAvatarShape, ivGender;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather ;
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
 
     /*** BDD ***/
@@ -87,6 +89,8 @@ public class ViewProfilFragment extends Fragment {
     private String usGodfather;
     private String usNephewRequestFrom;
     private String usGodfatherRequestFrom;
+    private String usMatchsRequestFrom;
+    private String usMatchsRequestTo;
     private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
@@ -134,6 +138,7 @@ public class ViewProfilFragment extends Fragment {
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
+        btnAcceptMatch =view.findViewById(R.id.btn_accept_match);
         btnLinkSupp = view.findViewById(R.id.btn_link_supp);
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
@@ -145,6 +150,7 @@ public class ViewProfilFragment extends Fragment {
         // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
         btnPflCrediter.setVisibility(View.GONE);
         btnPflEnvoyer.setVisibility(View.GONE);
+        btnAcceptMatch.setVisibility(View.GONE);
         btnLinkSupp.setVisibility(View.GONE);
         btnLinkRequest.setVisibility(View.GONE);
         btnLinkSuppTiers.setVisibility(View.GONE);
@@ -197,13 +203,11 @@ public class ViewProfilFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 userConnected.get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                     assert contenuUser != null;
-
                                     // userNephew, récupération du filleul du parrain connecté
                                     userNephew = db.document(KEY_FS_COLLECTION + "/" + contenuUser.getUs_nephews());
                                     userNephew.get()
@@ -213,7 +217,6 @@ public class ViewProfilFragment extends Fragment {
                                             ModelUsers nephewUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                             assert nephewUser != null;
                                             String usMatchRequestTo = nephewUser.getUs_matchs_request_to();
-
                                             userDisplayed.get()
                                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                         @Override
@@ -230,8 +233,6 @@ public class ViewProfilFragment extends Fragment {
                                     });
                                     btnPflEnvoyer.setText("Demande de match envoyée");
                                     btnPflEnvoyer.setEnabled(false);
-                                }
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -327,6 +328,38 @@ public class ViewProfilFragment extends Fragment {
                 });
                 btnLinkSuppTiers.setText("Lien supprimé");
                 btnLinkSuppTiers.setEnabled(false);
+            }
+        });
+
+        // Le célibataire accepte un match proposé par son parrain, ou reçu d'un autre parrain
+        btnAcceptMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                            assert contenuUser != null;
+                            userConnected.update("us_matchs_request_to", contenuUser.getUs_matchs_request_to().replace(userDisplayed.getId() + ";", ""));
+                            userConnected.update("us_matchs_request_from", contenuUser.getUs_matchs_request_from().replace(userDisplayed.getId() + ";", ""));
+                            userDisplayed.get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            ModelUsers contenuDisplayedUser = documentSnapshot.toObject(ModelUsers.class);
+                                            assert contenuDisplayedUser != null;
+                                            userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
+                                            userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
+                                            userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") );
+                                            userDisplayed.update("us_matchs_request_from", contenuDisplayedUser.getUs_matchs_request_from().replace(userConnected.getId()+ ";", "") );
+                                        }
+                                    });
+                        }
+                    }
+                });
+                btnAcceptMatch.setText("Match accepté");
+                btnAcceptMatch.setEnabled(false);
             }
         });
 
@@ -522,6 +555,8 @@ public class ViewProfilFragment extends Fragment {
                                     usNephew = contenuUser.getUs_nephews();
                                     usNephewRequestFrom = contenuUser.getUs_nephews_request_from();
                                     usGodfather = contenuUser.getUs_godfather();
+                                    usMatchsRequestFrom = contenuUser.getUs_matchs_request_from();
+                                    usMatchsRequestTo = contenuUser.getUs_matchs_request_to();
                                     usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
@@ -561,8 +596,13 @@ public class ViewProfilFragment extends Fragment {
                                             if (usGodfather.equals(documentSnapshotDisplayed.getId())){
                                                 // on peut supprimer le lien de parrainage
                                                 btnLinkSuppTiers.setVisibility(View.VISIBLE);
-                                            }else{
-                                                if (TextUtils.isEmpty(usGodfather)){
+                                            }else if (TextUtils.isEmpty(usGodfather) == false){
+                                                Log.e(TAG, "onSuccess: false" + usMatchsRequestFrom + " et " + usMatchsRequestTo);
+                                                if (usMatchsRequestFrom.indexOf(documentSnapshotDisplayed.getId()) >= 0 || usMatchsRequestTo.indexOf(documentSnapshotDisplayed.getId()) >= 0 ){
+                                                    btnAcceptMatch.setVisibility(View.VISIBLE);
+                                                }
+                                            }
+                                                else{
                                                     if (usGodfatherRequestFrom.indexOf(documentSnapshotDisplayed.getId())== -1){
                                                         // Sinon on peur faire une demande au parrain si on a pas de parrain
                                                         btnLinkRequestTiers.setVisibility(View.VISIBLE);
@@ -574,11 +614,9 @@ public class ViewProfilFragment extends Fragment {
                                             }
                                         }
                                     }
-                                }
                             }
                         });
                     }
-
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override

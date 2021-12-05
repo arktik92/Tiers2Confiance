@@ -135,6 +135,7 @@ public class LierParrainFilleulFragment extends Fragment {
 
         //Ici on affiche la liste en fonction du rôle de l'utilisateur connecté
         // Si l'user connecté est un célibataire (il a un rôle us_role = 1), on veut donc afficher la liste des parrains à qui il n'a pas encore fait de demande
+        critere.clear();
         critere.add("1");
        if (usRole.equals(1L)) {
             roleInverse = 2;

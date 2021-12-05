@@ -1,15 +1,20 @@
 package com.tiesr2confiance.tiers2confiance.MatchCibles;
 
+import android.content.Context;
 import android.graphics.ColorSpace;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.common.data.BitmapTeleporter;
@@ -61,6 +66,18 @@ public class MatchCiblesAdapter extends FirestoreRecyclerAdapter<ModelUsers, Mat
         holder.tvNicknameMatch.setText(nickname_match);
         holder.tvCityMatch.setText(city_match);
 
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .error(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.ic_launcher);
+
+        Context context = holder.ivPhotoProfilMatch.getContext();
+        Glide.with(context)
+                .load(avatar_match)
+                .apply(options)
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.ivPhotoProfilMatch);
 
     }
 
@@ -76,12 +93,14 @@ public class MatchCiblesAdapter extends FirestoreRecyclerAdapter<ModelUsers, Mat
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvNicknameMatch, tvCityMatch;
+        private ImageView ivPhotoProfilMatch;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvNicknameMatch = itemView.findViewById(R.id.tv_nickname_match);
             tvCityMatch = itemView.findViewById(R.id.tv_city_match);
+            ivPhotoProfilMatch = itemView.findViewById(R.id.iv_photo_profil_match);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
