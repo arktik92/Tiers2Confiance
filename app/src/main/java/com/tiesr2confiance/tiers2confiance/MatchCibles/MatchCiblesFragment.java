@@ -120,39 +120,14 @@ public class MatchCiblesFragment extends Fragment {
                     }
                 }else {
                     // Appel la fonction qui affiche la liste
+                    displayPossibleMatchList(usRole, view);
 
                     if (usRole.equals(1L)) {
-                        // FILLEUL (deux listes : celle des célibataires proposés par le parrain
-                        // et celle des célibataires qui ont reçu mon profil en proposition de match
-                        String usMatchRequestTo = contenuUser.getUs_matchs_request_from();
-                        String usMatchRequestFrom = contenuUser.getUs_matchs_request_to();
-                        ArrayList<String> SingleAlreadyProposed = null;
-                        ArrayList<String> usMatchRequestList = new ArrayList<>();
-                        usMatchRequestList.add("1");
-                        ArrayList<String> usMatchRequestToList = new ArrayList<>(Arrays.asList(usMatchRequestTo.split(";")));
-                        ArrayList<String> usMatchRequestFromList = new ArrayList<>(Arrays.asList(usMatchRequestFrom.split(";")));
-                        usMatchRequestList.addAll(usMatchRequestToList);
-                        usMatchRequestList.addAll(usMatchRequestFromList);
-
-                        displayPossibleMatchList(usRole, SingleAlreadyProposed, usMatchRequestList, view);
-                        adapterUser.startListening();
+                       // Filleul
                     } else {
-                        // PARRAIN
-                        // userNephew, récupération du filleul du parrain connecté
-                        DocumentReference userNephew;
-                        userNephew = db.document(KEY_FS_COLLECTION + "/" + contenuUser.getUs_nephews());
-                        userNephew.get()
-                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        ModelUsers NephewContenuUser =    task.getResult().toObject(ModelUsers.class);
-                                        ArrayList<String> usMatchRequestList = null;
-                                        ArrayList<String> SingleAlreadyProposed = new ArrayList<>(Arrays.asList(NephewContenuUser.getUs_matchs_request_to().split(";")));
-                                        displayPossibleMatchList(usRole,SingleAlreadyProposed, usMatchRequestList, view);
-                                        adapterUser.startListening();
-                                    }
-                                });
+                        // Parrain
                     }
+                    adapterUser.startListening();
                 }
             }
         });
@@ -161,25 +136,18 @@ public class MatchCiblesFragment extends Fragment {
     }
 
     @SuppressLint("LongLogTag")
-    private void displayPossibleMatchList(Long usRole, ArrayList<String> SingleAlreadyProposed,  ArrayList<String> usMatchRequestList, View view) {
+    private void displayPossibleMatchList(Long usRole, View view) {
 
-        Query query = db.collection("users");
         critere.add("1");
         if (usRole.equals(1L)) {
-            // si l'user connecté est un filleul, (role =1), il affiche seulement la liste des célibataires qui lui sont proposé par son parrain (us_request_to) ou d'autres parrains (us_request_from)
-            critere = usMatchRequestList;
-            /** Récupération de la collection Users dans Firestore **/
-            query = db.collection("users")
-                    .whereEqualTo("us_role", 1)
-                    .whereIn("us_auth_uid", critere);
+
         } else {
-            // Si l'user connecté est un parrain (il a un rôle us_role = 2), il cherche dans la liste des célibataires qu'il n' a pas déjà envoyé
-            critere = SingleAlreadyProposed;
-            /** Récupération de la collection Users dans Firestore **/
-            query = db.collection("users")
-                    .whereEqualTo("us_role", 1)
-                    .whereNotIn("us_auth_uid", critere);
+
         }
+
+        Query query = db.collection("users")
+                .whereEqualTo("us_role", 1)
+                .whereNotIn("us_auth_uid", critere);
 
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()
