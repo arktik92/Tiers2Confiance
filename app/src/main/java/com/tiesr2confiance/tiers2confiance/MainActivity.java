@@ -38,6 +38,7 @@ import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesFragment;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.Profil.ProfilFragment;
 import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
+import com.tiesr2confiance.tiers2confiance.chat.ChatFragment;
 
 import java.util.Objects;
 
@@ -209,16 +210,27 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         switch (item.getItemId()) {
 
             // MOI (Pseudo)
-            case R.id.nav_photos:
-                Intent intent = new Intent(MainActivity.this, CameraFragment.class);
-                startActivity(intent);
+        //    case R.id.nav_photos:
+        //        Intent intent = new Intent(MainActivity.this, CameraFragment.class);
+        //        startActivity(intent);
+        //        break;
 
-                break;
+            // CHAT
+                case R.id.nav_chat:
+                    Bundle b = new Bundle();
+                    b.putString("idUser", userConnected.getId());
+                    Fragment fragment = new ChatFragment();
+                    fragment.setArguments(b);
+                    getSupportFragmentManager().
+                            beginTransaction().
+                            replace(R.id.fragment_container, fragment).
+                            commit();
+                    break;
             // MOI (Pseudo)
             case R.id.nav_profil:
-                Bundle b = new Bundle();
+                b = new Bundle();
                 b.putString("idUser", userConnected.getId());
-                Fragment fragment = new ViewProfilFragment();
+                fragment = new ViewProfilFragment();
                 fragment.setArguments(b);
                 getSupportFragmentManager().
                         beginTransaction().

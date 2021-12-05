@@ -15,7 +15,7 @@
     </item>
 
 
-    <group android:id="@+id/group2"
+    <group android:id="@+id/group1"
         android:checkableBehavior="single">
         <item
             android:title="Propositions reçues"
@@ -23,11 +23,11 @@
             android:icon="@drawable/ic_propositions" />
     </group>
 
-    <group android:id="@+id/groupPGO"
+    <group android:id="@+id/group2"
         android:checkableBehavior="single">
         <item
             android:title="Chat"
-            android:id="@+id/nav_photos"
+            android:id="@+id/nav_chat"
             android:icon="@drawable/ic_messages" />
     </group>
 
