@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
+import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesFragment;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.Profil.ProfilFragment;
 import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
@@ -224,6 +225,20 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, fragment).
                         commit();
                 break;
+
+            // Chercher des célibataires pour mon filleul, ou consulter les propositions de match
+            // reçues de mon parrain , ou de parrains d'autres célibataires
+            case R.id.nav_cibles:
+                b = new Bundle();
+                b.putString("idUser", userConnected.getId());
+                fragment = new MatchCiblesFragment();
+                fragment.setArguments(b);
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_container, fragment).
+                        commit();
+                break;
+
             // Mon Parrain ou Mon filleul
             case R.id.nav_view_profil:
                 userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

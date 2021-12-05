@@ -44,6 +44,9 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.25" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_lier_deux_celibataires_item_recycler.xml" value="0.18125" />
+        <entry key="app/src/main/res/layout/fragment_match_cibles.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_match_cibles_item_recycler.xml" value="0.11666666666666667" />
       </map>
     </option>
   </component>

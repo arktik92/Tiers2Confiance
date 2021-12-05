@@ -26,10 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUsers, LierParrainFilleulAdapter.ItemViewHolder> {
 
     private static final String TAG = "Lier P/F ADAPTER :";
@@ -120,10 +116,10 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNickname = itemView.findViewById(R.id.tv_nickname);
-            tvCity = itemView.findViewById(R.id.tv_city);
-            ivPhotoProfil = itemView.findViewById(R.id.iv_photo_profil);
-            cvProfilUser = itemView.findViewById(R.id.cv_profil_user);
+            tvNickname = itemView.findViewById(R.id.tv_nickname_match);
+            tvCity = itemView.findViewById(R.id.tv_city_match);
+            ivPhotoProfil = itemView.findViewById(R.id.iv_photo_profil_match);
+            cvProfilUser = itemView.findViewById(R.id.cv_profil_user_match);
             ivLink = itemView.findViewById(R.id.iv_link);
 
             itemView.setOnClickListener(new View.OnClickListener() {

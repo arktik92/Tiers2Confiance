@@ -17,6 +17,14 @@
             android:icon="@drawable/ic_messages"/>
     </group>
 
+    <group android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:title="Chercher des célibataires"
+            android:id="@+id/nav_cibles"
+            android:icon="@drawable/ic_cible"/>
+    </group>
+
     <item android:title="Mon filleul">
         <menu>
             <item android:title="Voir son profil"

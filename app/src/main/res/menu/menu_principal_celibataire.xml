@@ -19,7 +19,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Propositions reçues"
-            android:id="@+id/nav_fragment_7"
+            android:id="@+id/nav_cibles"
             android:icon="@drawable/ic_propositions" />
     </group>
 
