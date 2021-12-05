@@ -47,6 +47,7 @@
         <entry key="app/src/main/res/layout/fragment_lier_deux_celibataires_item_recycler.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/fragment_match_cibles.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_match_cibles_item_recycler.xml" value="0.11666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_view_profil.xml" value="0.25" />
       </map>
     </option>
   </component>

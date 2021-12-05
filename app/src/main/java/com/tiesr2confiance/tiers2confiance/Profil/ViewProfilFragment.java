@@ -79,6 +79,7 @@ public class ViewProfilFragment extends Fragment {
     /** ID Document Connected **/
     private FirebaseUser currentUser;
     private DocumentReference userConnected;
+    private DocumentReference userNephew;
 
     /** Variables **/
     private Long usRole;
@@ -192,7 +193,55 @@ public class ViewProfilFragment extends Fragment {
         });
 
         // Le parrain connecté envoie ce profil de célibataire à son filleul
-        // TODO
+        btnPflEnvoyer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userConnected.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                                    assert contenuUser != null;
+
+                                    // userNephew, récupération du filleul du parrain connecté
+                                    userNephew = db.document(KEY_FS_COLLECTION + "/" + contenuUser.getUs_nephews());
+                                    userNephew.get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()  {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            ModelUsers nephewUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                            assert nephewUser != null;
+                                            String usMatchRequestTo = nephewUser.getUs_matchs_request_from();
+
+                                            userDisplayed.get()
+                                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                            ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                                            assert celibUser != null;
+                                                            String usMatchRequestFrom = celibUser.getUs_matchs_request_from();
+                                                            // Ici on ajoute les IDs respectifs des deux célibataires à matcher dans la list des demandes (From ou To selon si le célibataire est la cible ou le filleul d parrain connecté)
+                                                            userDisplayed.update("us_matchs_request_from", usMatchRequestFrom + userNephew.getId()+  ";");
+                                                            userNephew.update("us_matchs_request_to", usMatchRequestTo + userDisplayed.getId()+  ";");
+                                                        }
+                                                    });
+                                        }
+                                    });
+                                    btnPflEnvoyer.setText("Demande de match envoyée");
+                                    btnPflEnvoyer.setEnabled(false);
+                                }
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "onFailure: " + "Error Connected User" );
+                            }
+                        });
+            }
+        });
 
         // Le parrain connecté demande à un célibataire d'être son parrain (Parrain en recherche de filleul)
         btnLinkRequest.setOnClickListener(new View.OnClickListener() {
