@@ -37,6 +37,7 @@ import com.tiesr2confiance.tiers2confiance.databinding.FragmentMatchCiblesBindin
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -120,14 +121,33 @@ public class MatchCiblesFragment extends Fragment {
                     }
                 }else {
                     // Appel la fonction qui affiche la liste
-                    displayPossibleMatchList(usRole, view);
 
                     if (usRole.equals(1L)) {
-                       // Filleul
+                       // Filleul : On affiche les célibataires proposés par son parrain, ou les célibataires d'un autre parrain dont on est la cible
+                        ArrayList<String> ListIn = new ArrayList<>();
+                        ArrayList<String> ListNotIn = new ArrayList<>();
+                        ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_to().split(";")));
+                        ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_from().split(";")));
+                        displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                        adapterUser.startListening();
                     } else {
-                        // Parrain
+                        // Parrain : On affiche les célibataires qu'on n'a pas encore proposé à notre filleul
+                        assert currentUser != null;
+                        DocumentReference userNephew = usersCollectionRef.document(contenuUser.getUs_nephews());
+                        userNephew.get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        ModelUsers contenunephewUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                        assert contenunephewUser != null;
+                                        ArrayList<String> ListIn = new ArrayList<>();
+                                        ArrayList<String> ListNotIn = new ArrayList<>();
+                                        ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
+                                        displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                                        adapterUser.startListening();
+                                    }
+                                });
                     }
-                    adapterUser.startListening();
                 }
             }
         });
@@ -136,18 +156,23 @@ public class MatchCiblesFragment extends Fragment {
     }
 
     @SuppressLint("LongLogTag")
-    private void displayPossibleMatchList(Long usRole, View view) {
+    private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) {
 
         critere.add("1");
+        Query query = db.collection("users");
+        //Célibataire
         if (usRole.equals(1L)) {
-
+            critere.addAll(listIn);
+            query = db.collection("users")
+                    .whereEqualTo("us_role", 1)
+                    .whereIn("us_auth_uid", critere);
         } else {
-
+        //Parrain
+            critere.addAll(listNotIn);
+            query = db.collection("users")
+                    .whereEqualTo("us_role", 1)
+                    .whereNotIn("us_auth_uid", critere);
         }
-
-        Query query = db.collection("users")
-                .whereEqualTo("us_role", 1)
-                .whereNotIn("us_auth_uid", critere);
 
         FirestoreRecyclerOptions<ModelUsers> users =
                 new FirestoreRecyclerOptions.Builder<ModelUsers>()

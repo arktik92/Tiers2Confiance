@@ -369,7 +369,7 @@ public class ViewProfilFragment extends Fragment {
                         if (documentSnapshot.exists()) {
                             ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
                             assert contenuUser != null;
-                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to() + userDisplayed.getId()+  ";");
+                            userConnected.update("us_godfather_request_to", contenuUser.getUs_godfather_request_to().replace(userDisplayed.getId() + ";", ""));
                             userDisplayed.get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
