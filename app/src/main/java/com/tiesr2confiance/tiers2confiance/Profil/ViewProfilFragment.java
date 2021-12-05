@@ -212,7 +212,7 @@ public class ViewProfilFragment extends Fragment {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             ModelUsers nephewUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
                                             assert nephewUser != null;
-                                            String usMatchRequestTo = nephewUser.getUs_matchs_request_from();
+                                            String usMatchRequestTo = nephewUser.getUs_matchs_request_to();
 
                                             userDisplayed.get()
                                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
