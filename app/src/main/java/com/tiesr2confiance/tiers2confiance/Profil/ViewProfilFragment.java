@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -43,6 +44,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,8 +56,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesAdapter;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
@@ -73,6 +77,7 @@ import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ViewProfilFragment extends Fragment {
@@ -85,6 +90,7 @@ public class ViewProfilFragment extends Fragment {
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
     private RecyclerView rvListPhotos;
+    private ViewPhotosAdapter adapterPhotos;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -151,6 +157,8 @@ public class ViewProfilFragment extends Fragment {
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
         rvListPhotos = view.findViewById(R.id.rv_list_photos);
+        rvListPhotos.setHasFixedSize(true);
+        rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         tvHobbies = view.findViewById(R.id.tv_hobbies);
         tvBalance = view.findViewById(R.id.tv_balance);
         tvEthnie = view.findViewById(R.id.tv_ethnical_group);
@@ -539,7 +547,13 @@ public class ViewProfilFragment extends Fragment {
                                 // Si l'utilisateur à afficher est Tiers de confiance (parrain)
                                 tvRole.setText("Tiers");
                             }else{
-                                // Si l'utilisateur à afficher est un célibataire
+                                ArrayList<String> imgPhotosList = new ArrayList<>();
+                                imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
+                                Log.e(TAG, "onSuccess LISTPHOYO: " + imgPhotosList.size() );
+                                adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
+                                rvListPhotos.setAdapter(adapterPhotos);
+
+
                                 tvRole.setText("Célib");
                                 llProfil.setVisibility(View.VISIBLE);
                                 tvBalance.setText(String.valueOf(balance));
