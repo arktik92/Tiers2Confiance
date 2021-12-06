@@ -30,8 +30,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 		try
 		{
 			globalVariables.LoadUserDataFromFirestore();
-			globalVariables.LoadArraysDataFromFirestore();
-
 		}
 		catch (Exception e) {
 			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: -----");
@@ -41,8 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				//This method will be executed once the timer is over
-				// Start MainActivity
+				globalVariables.LoadArraysDataFromFirestore();
 				Intent myIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
 				startActivity(myIntent);
 				globalVariables.DisplayAttributes();

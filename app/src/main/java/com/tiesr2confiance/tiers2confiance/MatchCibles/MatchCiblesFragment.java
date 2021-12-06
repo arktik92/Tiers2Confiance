@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -49,6 +51,8 @@ public class MatchCiblesFragment extends Fragment {
 
     private static final String TAG = "Match Cibles Fragment - ";
     private RecyclerView rvListCible;
+    private SeekBar sbMax, sbMin;
+    private TextView tvCurrentMin, tvCurrentMax;
     private FragmentMatchCiblesBinding binding;
 
     ArrayList<String> critere = new ArrayList<>();
@@ -161,12 +165,12 @@ public class MatchCiblesFragment extends Fragment {
         //Célibataire
         if (usRole.equals(1L)) {
             critere.addAll(listIn);
-            Log.e(TAG, "displayPossibleMatchList: criteere" +  critere);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
                     .whereIn("us_auth_uid", critere);
         } else {
         //Parrain
+            Log.e(TAG, "displayPossibleMatchList: " + critere );
             critere.addAll(listNotIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
@@ -206,6 +210,56 @@ public class MatchCiblesFragment extends Fragment {
         rvListCible = view.findViewById(R.id.rv_list_cibles);
         rvListCible.setHasFixedSize(true);
         rvListCible.setLayoutManager(new LinearLayoutManager(getContext()));
+        sbMin = view.findViewById(R.id.sb_min);
+        tvCurrentMin = view.findViewById(R.id.tv_min);
+        sbMax = view.findViewById(R.id.sb_max);
+        tvCurrentMax = view.findViewById(R.id.tv_max);
+
+        sbMin.setMin((int) 18);
+        sbMin.setMax((int) 99);
+        sbMin.setProgress((int) 30);
+        tvCurrentMin.setText(String.valueOf(18));
+
+        sbMax.setMin((int)18);
+        sbMax.setMax((int) 99);
+        sbMax.setProgress((int) 30);
+        tvCurrentMax.setText(String.valueOf(18));
+
+        sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvCurrentMin.setText(String.valueOf(sbMin.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sbMax.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvCurrentMax.setText(String.valueOf(sbMax.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
 
     }
 }
