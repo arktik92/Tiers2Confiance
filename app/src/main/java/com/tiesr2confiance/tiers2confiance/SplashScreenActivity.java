@@ -36,21 +36,35 @@ public class SplashScreenActivity extends AppCompatActivity {
 			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: -----");
 		};
 
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				// Ce code s'execute après 3000ms
+				// les data de ArrayLists se charge quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
+				globalVariables.LoadArraysDataFromFirestore();
+			}
+		}, 1000);
+
 
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				// Ce code s'execute après 3000ms
-				// les data de ArrayLists se charge quand les Data User, notament
-				globalVariables.LoadArraysDataFromFirestore();
+				// les data de ArrayLists se charge quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
+//				globalVariables.LoadArraysDataFromFirestore();
+
+				globalVariables.DisplayAttributes();
+				globalVariables.DisplayArraysCount();
 
 				// Start MainActivity
 				Intent myIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
 				startActivity(myIntent);
-				globalVariables.DisplayAttributes();
+
 				// close this activity
 				finish();
 			}
-		}, 3000);
+		}, 2000);
 	}
+
+
 }

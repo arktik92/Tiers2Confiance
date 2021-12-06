@@ -149,7 +149,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 //				BindComponents(myView);
 				InitVariables(myView);
-				globalVariables.DisplayAttributes();
+//				globalVariables.DisplayAttributes();
 			}
 		});
 
@@ -159,7 +159,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 				globalVariables.LoadGendersDataFromFirestore();
 				globalVariables.LoadHobbiesDataFromFirestore();
-				globalVariables.DisplayAttributes();
+//				globalVariables.DisplayAttributes();
 			}
 		});
 
@@ -180,7 +180,9 @@ public class UserFragment extends Fragment {
 		btndisplayhobbies.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View myView) {
+
 				globalVariables.DisplayHobbies();
+				globalVariables.DisplayArraysCount();
 			}
 		});
 
