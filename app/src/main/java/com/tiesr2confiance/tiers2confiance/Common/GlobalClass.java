@@ -374,26 +374,44 @@ public class GlobalClass extends Application {
 //    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
         loadedUserDataOK    =   0;
 
-        if (userId == null){
-            try {
-                db      = FirebaseFirestore.getInstance();
-                user    = FirebaseAuth.getInstance().getCurrentUser();
 
-                if (user != null){
-                    userId  = user.getUid();
-                }
+        try
+        {
+            db      = FirebaseFirestore.getInstance();
+            user    = FirebaseAuth.getInstance().getCurrentUser();
 
-//                userNickName = ;
-//                userEmail = "userEmail : Not Retrieved Yet From FS";
-//                userCountryLanguage = "FR";
-
-            }catch (Exception e) {
-                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
+            if (user != null){
+                userId  = user.getUid();
             }
-
-            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore : "+ userId +"-----" );
-
         }
+        catch (Exception e)
+        {
+            Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
+        }
+
+
+
+
+//        if (userId == null){
+//            try {
+//                db      = FirebaseFirestore.getInstance();
+//                user    = FirebaseAuth.getInstance().getCurrentUser();
+//
+//                if (user != null){
+//                    userId  = user.getUid();
+//                }
+//
+////                userNickName = ;
+////                userEmail = "userEmail : Not Retrieved Yet From FS";
+////                userCountryLanguage = "FR";
+//
+//            }catch (Exception e) {
+//                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
+//            }
+//
+//            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore : "+ userId +"-----" );
+//
+//        }
 
         Log.i(TAG, "XXXXXXXX GlobalClass : LoadUserDataFromFirestore(): userId : " + userId);
 

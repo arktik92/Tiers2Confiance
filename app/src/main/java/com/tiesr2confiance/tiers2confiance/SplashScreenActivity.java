@@ -22,16 +22,20 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
 		GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-		String userId       = globalVariables.getUserId();
-		String userEmail    = globalVariables.getUserEmail();
-		try {
+//		String userId       = globalVariables.getUserId();
+//		String userEmail    = globalVariables.getUserEmail();
+
+		Log.i(TAGAPP, "SplashScreenActivity onCreate: ");
+
+		try
+		{
 			globalVariables.LoadUserDataFromFirestore();
 			globalVariables.LoadArraysDataFromFirestore();
 
 		}
 		catch (Exception e) {
-			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: "+ userId +" -----" );
-			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: "+ userId +" -----userEmail "  + userEmail);        };
+			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: -----");
+		};
 
 
 		new Handler().postDelayed(new Runnable() {

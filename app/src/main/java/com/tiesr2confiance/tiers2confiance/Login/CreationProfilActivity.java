@@ -75,8 +75,8 @@ public class CreationProfilActivity extends AppCompatActivity {
     FirebaseUser user;
 
     /** Variables Firestore **/
-        private FirebaseFirestore db;
-        private DocumentReference docRef;
+    private FirebaseFirestore db;
+    private DocumentReference docRef;
 
     /** Initialisation des composants **/
     public void init() {

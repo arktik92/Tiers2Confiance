@@ -78,10 +78,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
-    DocumentReference userConnected;
+    DocumentReference currentUserDoc;
 
-    /********* Gestion du Role **********/
+    /********* Gestion du User / Role **********/
+    FirebaseUser currentUser;
+    String userId;
     long userRole;
+
 
 
     /**
@@ -98,19 +101,16 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        userRole = globalVariables.getUserRole();
+
+        userId          = globalVariables.getUserId();
+        userRole        = globalVariables.getUserRole();
+        currentUser     = globalVariables.getUser();
+        //currentUserDoc   = usersCollectionRef.document(userId);
+        currentUserDoc = usersCollectionRef.document(userId);
 
 
+//        Log.i(TAG, "XXXXXXXX MainActivity onCreate : userId : " + userId);
 
-        Log.e(TAGAPP, " Handler().postDelayed TESTTEST  A UserRole" + userRole + " " + globalVariables.getUserId());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.e(TAGAPP, "Handler().postDelayed TESTTEST  B UserRole" + userRole + " " + globalVariables.getUserId());
-            };
-        }, 3000);
-
-        Log.e(TAGAPP, "Handler().postDelayed TESTTEST  C UserRole" + userRole + " " + globalVariables.getUserId());
 
 
         if( userRole == 1L) {
@@ -144,36 +144,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //            navigationView.setCheckedItem(R.id.nav_fragment_1);
 //        }
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        userConnected = usersCollectionRef.document(currentUser.getUid());
+
 
     }
-
-
-    private void LoadUserData() {
-        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore START *************");
-        globalVariables.LoadUserDataFromFirestore();
-        Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore FINISH *************");
-
-    }
-
-    private void LoadGenders() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "LoadGenders()");
-
-        globalVariables.LoadGendersDataFromFirestore();
-    }
-
-
-    private void LoadHobbies() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "LoadHobbies()");
-
-        globalVariables.LoadHobbiesDataFromFirestore();
-    }
-
 
 
     private void addFragment() {
@@ -208,7 +181,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // MOI (Pseudo)
             case R.id.nav_profil:
                 Bundle b = new Bundle();
-                b.putString("idUser", userConnected.getId());
+                b.putString("idUser", currentUserDoc.getId());
                 Fragment fragment = new ViewProfilFragment();
                 fragment.setArguments(b);
                 getSupportFragmentManager().
@@ -218,7 +191,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             // Mon Parrain ou Mon filleul
             case R.id.nav_view_profil:
-                userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                currentUserDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
