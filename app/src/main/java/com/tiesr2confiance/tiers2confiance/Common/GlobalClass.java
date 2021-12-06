@@ -371,9 +371,9 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
     /************************************************************************************************/
     public void LoadUserDataFromFirestore() {
-        Log.i(TAG, "----- getUserDataFromFirestore START -----");
+        Log.i(TAG, "----- GlobalClass getUserDataFromFirestore START -----");
 
-        loadedUserDataOK    =   0;
+//        loadedUserDataOK    =   0;
 
 
         try
@@ -415,8 +415,6 @@ public class GlobalClass extends Application {
 
                             loadedUserDataOK    =   1;
 
-                            DisplayAttributes();
-
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userId : " + userId);
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userNickName : " + userNickName);
 //                        Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore addOnCompleteListener onComplete : userCountryLanguage : " + userCountryLanguage);
@@ -448,8 +446,9 @@ public class GlobalClass extends Application {
 
 
 
+        DisplayAttributes();
 
-        Log.i(TAG, "----- getUserDataFromFirestore END -----");
+        Log.i(TAG, "----- GlobalClass getUserDataFromFirestore END -----");
     } // END LoadUserDataFromFirestore()
 
 /************************************************************************************************/
@@ -458,14 +457,14 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
     /************************************************************************************************/
     public void LoadGendersDataFromFirestore() {
-        Log.i(TAG, "loadGendersDataFromFirestore: START");
+        Log.i(TAG, "GlobalClass loadGendersDataFromFirestore: START");
 
-        loadedUserDataOK    =   0;
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
-            LoadUserDataFromFirestore();
+//            LoadUserDataFromFirestore();
+
         }
 
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
@@ -499,13 +498,9 @@ public class GlobalClass extends Application {
 
                                             }
 
-
-
                                         });
                                     }
                                 }
-
-
 
                             }
                         }
@@ -531,7 +526,7 @@ public class GlobalClass extends Application {
 //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders : " + arrayListGenders);
 //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders.size() *********** " + arrayListGenders.size());
 
-        Log.i(TAG, "loadGendersDataFromFirestore: END");
+        Log.i(TAG, "GlobalClass loadGendersDataFromFirestore: END");
 
     } // END loadGendersDataFromFirestore()
 
@@ -542,25 +537,18 @@ public class GlobalClass extends Application {
 
 
     public void LoadHobbiesDataFromFirestore() {
-        Log.i(TAG, "START ----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        Log.i(TAG, "START ----- GlobalClass : LoadRolesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+
+        Log.i(TAG, "GlobalClass LoadHobbiesDataFromFirestore: START");
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
 //                        || (userCountryLanguage == "FR")
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
-//            db      = FirebaseFirestore.getInstance();
-//            user    = FirebaseAuth.getInstance().getCurrentUser();
-//            userId  = user.getUid();
-//            userNickName = "userNickName : Not Retrieved Yet from FS";
-//            userEmail = "userEmail : Not Retrieved Yet From FS";
-//            userCountryLanguage = "FR";
-            LoadUserDataFromFirestore();
             Log.i(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 
-        Log.i(TAG, "loadHobbiesDataFromFirestore: BEGIN");
         ArrayList<ModelHobbies> myArrayListHobbies = new ArrayList<>();
-        Log.i(TAG, "loadHobbiesDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
 
         try
         {
@@ -619,17 +607,13 @@ public class GlobalClass extends Application {
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
 
-//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListhobbies : " + myArrayListhobbies);
-//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListhobbies.size() *********** " + myArrayListhobbies.size());
-
         arrayListHobbies = myArrayListHobbies;
 
-//        Util.waitfor(2000);
 
         Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies : " + arrayListHobbies);
         Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies.size() *********** " + arrayListHobbies.size());
 
-        Log.i(TAG, "loadHobbiesDataFromFirestore: END");
+        Log.i(TAG, "GlobalClass loadHobbiesDataFromFirestore: END");
 
     } // END loadhobbiesDataFromFirestore()
 
@@ -714,15 +698,10 @@ public class GlobalClass extends Application {
             Log.e(TAG, "----- GlobalClass : LoadRolesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
 
-//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListRoles : " + myArrayListRoles);
-//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListRoles.size() *********** " + myArrayListRoles.size());
-
         arrayListRoles = myArrayListRoles;
 
-//        Util.waitfor(2000);
-
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles : " + arrayListRoles);
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles.size() *********** " + arrayListRoles.size());
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles : " + arrayListRoles);
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListRoles.size() *********** " + arrayListRoles.size());
 
         Log.i(TAG, "loadRolesDataFromFirestore: END");
 
@@ -739,7 +718,7 @@ public class GlobalClass extends Application {
 
 
     public void LoadLanguageDataFromFirestore() {
-        Log.i(TAG, "START ----- GlobalClass : LoadLanguageDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        Log.i(TAG, "START ----- GlobalClass : LoadRolesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
                         || ((userId == "") ? null : userCountryLanguage) == null
@@ -806,16 +785,10 @@ public class GlobalClass extends Application {
             Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
             Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
-
-//        Log.i(TAG, "**** INIT GlobalClass ***** mArrayListLanguage : " + myArrayListLanguage);
-//        Log.i(TAG, "**** INIT GlobalClass ***** myArrayListLanguage.size() *********** " + myArrayListLanguage.size());
-
         arrayListLanguage = myArrayListLanguage;
 
-//        Util.waitfor(2000);
-
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage : " + arrayListLanguage);
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage.size() *********** " + arrayListLanguage.size());
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage : " + arrayListLanguage);
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage.size() *********** " + arrayListLanguage.size());
 
         Log.i(TAG, "loadLanguageDataFromFirestore: END");
 
