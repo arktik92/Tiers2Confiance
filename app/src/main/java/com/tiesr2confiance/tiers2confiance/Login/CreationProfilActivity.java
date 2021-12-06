@@ -5,6 +5,9 @@ import static android.graphics.Color.TRANSPARENT;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -13,9 +16,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
@@ -42,13 +51,15 @@ import java.util.Map;
 
 public class CreationProfilActivity extends AppCompatActivity {
 
-    /** Variables globales **/
-
+    /**
+     * Variables globales
+     **/
 
 
     private static final String TAG = "CreationProfilActivity";
 
     // Variable Widgets
+    private ImageView imgAvatar;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
@@ -58,29 +69,37 @@ public class CreationProfilActivity extends AppCompatActivity {
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
     public static long role;
-    private long  genre,  balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup,hairColor,
+    private long genre, balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup, hairColor,
             hairLength, eyeColor, smoker;
-    private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId,
+    private String hobbies, lastName, firstName, nickName, dateOfBirth, zipCode, city, userId,
             userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo,
-            godfatherRequestFrom, godfather, image, avatar, country,presentation,profession, personality, sports, photos;
+            godfatherRequestFrom, godfather, image, avatar, country, presentation, profession, personality, sports, photos;
 
 
-    /** Variable Firebase Auth **/
+    /**
+     * Variable Firebase Auth
+     **/
     FirebaseUser user;
 
-    /** Variables Firestore **/
-        private FirebaseFirestore db;
-        private DocumentReference docRef;
+    /**
+     * Variables Firestore
+     **/
+    private FirebaseFirestore db;
+    private DocumentReference docRef;
 
-    /** Initialisation des composants **/
+    /**
+     * Initialisation des composants
+     **/
     public void init() {
+
+        imgAvatar = findViewById(R.id.imgAvatar);
         etLastName = findViewById(R.id.et_creation_nom);
         etFistName = findViewById(R.id.et_creation_prenom);
         etNickName = findViewById(R.id.et_creation_pseudo);
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
         etZipCode = findViewById(R.id.et_creation_code_postal);
         etCity = findViewById(R.id.et_creation_ville);
-        radioGroupGenre =findViewById(R.id.radio_group_genre);
+        radioGroupGenre = findViewById(R.id.radio_group_genre);
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
@@ -90,7 +109,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
         db = FirebaseFirestore.getInstance();
-        docRef = db.document("users/"+ userId);
+        docRef = db.document("users/" + userId);
     }
 
     @Override
@@ -98,7 +117,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Définition de la contentView en fonction du rôle
-        if(role == 1) {
+        if (role == 1) {
             setContentView(R.layout.activity_creation_profil_celibataire);
         } else {
             setContentView(R.layout.activity_creation_profil_parrain);
@@ -106,9 +125,6 @@ public class CreationProfilActivity extends AppCompatActivity {
 
         // Rappel de la méthode init
         init();
-
-
-
 
 
         /** Méthode OnClickListener du Date Picker **/
@@ -124,7 +140,7 @@ public class CreationProfilActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(CreationProfilActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         (DatePickerDialog.OnDateSetListener) mDateSetListener,
-                        year,month,day);
+                        year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(TRANSPARENT));
                 dialog.show();
             }
@@ -135,7 +151,7 @@ public class CreationProfilActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month + 1;
-                 dateOfBirth = dayOfMonth + "-" + month + "-" + year;
+                dateOfBirth = dayOfMonth + "-" + month + "-" + year;
                 tvDateOfBirth.setText(dateOfBirth);
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
                 try {
@@ -148,7 +164,12 @@ public class CreationProfilActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+        // Inflate the menu; tjos adds items to the action bar if it is present
 
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     /** Méthode de création de l'utilisateur  **/
@@ -165,7 +186,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         nephewsRequestfrom = "";
         nephews = "";
         godfatherRequestTo = "";
-        godfatherRequestFrom= "";
+        godfatherRequestFrom = "";
         image = "";
         godfather = "";
         hobbies = "";
@@ -191,7 +212,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
         // Méthode de la date de dernière connection
-        if(registeredDate == null) {
+        if (registeredDate == null) {
             registeredDate = Timestamp.now();
         } else {
             registeredDate = registeredDate;
@@ -207,11 +228,11 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_role", role);
         userList.put("us_balance", balance);
         userList.put("us_nephews", nephews);
-        userList.put("us_nephews_request_from",nephewsRequestfrom);
-        userList.put("us_nephews_request_to",nephewsRequestTo);
+        userList.put("us_nephews_request_from", nephewsRequestfrom);
+        userList.put("us_nephews_request_to", nephewsRequestTo);
         userList.put("us_godfather", godfather);
         userList.put("us_godfather_request_from", godfatherRequestFrom);
-        userList.put("us_godfather_request_to",godfatherRequestTo);
+        userList.put("us_godfather_request_to", godfatherRequestTo);
         userList.put("us_photos", photos);
         userList.put("us_birth_date", timestamp);
         userList.put("us_country_lang", country);
@@ -239,19 +260,6 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_image", image);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Envoi de l'objet sur la Database
         docRef.set(userList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -266,7 +274,7 @@ public class CreationProfilActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(CreationProfilActivity.this, "Erreur dans la creation du profil", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "onFailure: ", e );
+                        Log.e(TAG, "onFailure: ", e);
                     }
                 });
 
@@ -275,20 +283,45 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     public void radioButtonGender(View view) {
 
-        boolean checked = ((RadioButton)view).isChecked();
+        boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.rb_homme:
-                if(checked)
+                if (checked)
                     genre = 1;
                 break;
             case R.id.rb_femme:
-                if(checked)
+                if (checked)
                     genre = 2;
                 break;
         }
 
     }
+
+
+    /**
+     * upload picture
+     **/
+
+    public void showGetPhoto(View view) {
+        Log.d(TAG, "showGetPhoto ");
+
+        PopupMenu popMenu = new PopupMenu(this, view);
+        MenuInflater menuInflater = popMenu.getMenuInflater();
+
+        // call Inflater Menu
+        menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
+
+        // Add Menu Event
+         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
+        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
+
+        // Show Popup menu
+        popMenu.show();
+
+    }
+
+
 
 
 }

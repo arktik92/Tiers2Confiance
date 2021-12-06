@@ -25,13 +25,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+
+
+/*****/
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -205,47 +218,18 @@ public class CameraFragment extends AppCompatActivity {
 
     }
 
+    String fileName = "toto.jpg";
 
-    /***** Send from camera ****/
-
-
-    /***
     private void uploadCameraPhoto() {
-        Toast.makeText(CameraFragment.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-        photo.compress(Bitmap.CompressFormat.JPEG,100, stream);
-
-        byte[] b = stream.toByteArray();
-
-        StorageReference storageReference =  FirebaseStorage.getInstance().getReference().child("documentImages").child("noplateImg");
-
-        Toast.makeText(CameraFragment.this, "storageReference"+storageReference, Toast.LENGTH_SHORT).show();
-
-        storageReference.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                Uri downloadUrI = taskSnapshot.getUploadSessionUri();
-
-                Toast.makeText(CameraFragment.this, "downloadUrI"+downloadUrI, Toast.LENGTH_SHORT).show();
-
-                Toast.makeText(CameraFragment.this, "uploaded", Toast.LENGTH_SHORT).show();
-            }
-        })
-
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CameraFragment.this, "FAiled", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
-    }
+        final ProgressDialog prDial = new ProgressDialog(this);
 
-**/
-    private void uploadCameraPhoto() {
+        Log.d(TAG, "***** uploadCameraPhoto ***** ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
 
         // Create a storage reference from our app
         StorageReference storageRef = storageReference.getStorage().getReference();
@@ -254,7 +238,9 @@ public class CameraFragment extends AppCompatActivity {
        // StorageReference mountainsRef = storageRef.child("toto.jpg");
 
         //Create a reference to "images/toto.jpg"
-        StorageReference mountainsImagesRef = storageRef.child("imagess/toto.jpg");
+        StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
+
+
 
         // while the file names are the same, the reference poinr to different ilfes
      //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
@@ -280,6 +266,7 @@ public class CameraFragment extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(CameraFragment.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+                prDial.dismiss();
             }
         })
 
@@ -287,59 +274,12 @@ public class CameraFragment extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(CameraFragment.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        /***
-
-        Log.d(TAG, "***** UploadPhoto ***** ");
-
-
-
-        final String randomKey = UUID.randomUUID().toString();
-
-        // Create the reference to "images/mountain.jpg
-
-        Log.d(TAG, "RandomKey: " + randomKey);
-
-
-
-
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "DCIM");
-
-        Log.d(TAG, "uploadCameraPhoto: "+imagesFolder);
-
-
-
-        final ProgressDialog prDial = new ProgressDialog(this);
-
-        Log.d(TAG, "***** ProgressDialog ***** ");
-
-        prDial.setTitle("Uploading Image...");
-        prDial.show();
-
-        // Create the reference to "images/mountain.jpg
-
-        Log.d(TAG, "RandomKey: " + randomKey);
-
-
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
-
-        riversRef.putFile(imageCameraUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        prDial.dismiss();
-                        Log.d(TAG, "upload: SUCCESS");
+                  prDial.dismiss();
+                        Log.d(TAG, "FILENAME DONE "+fileName);
+                  uploadProfilFireBase(new File(fileName));
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        prDial.dismiss();
-                        Log.d(TAG, "upload: FAILED");
-                    }
-                })
+
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
@@ -349,61 +289,9 @@ public class CameraFragment extends AppCompatActivity {
                 });
 
 
-
-
-
-/**
-        //StorageReference riversRef = storageReference.child("images/" + randomKey);
-
-        Log.d(TAG, "imagesFolder: " + imagesFolder);
-
-
-        File f = new File(String.valueOf(imagesFolder));
-        ivProfilImage.setImageURI(Uri.fromFile(f));
-
-        Log.d(TAG, "Uri.fromFile(f): " + Uri.fromFile(f));
-
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-
-
-        Log.d(TAG, "uploadImageToFireBase >> ");**/
-       // uploadImageToFireBase(f.getName(), contentUri);
-
-
-
     }
 
 
-   /** public void uploadImageToFireBase(String name, Uri contentUri) {
-
-
-        /*
-        StorageReference image = storageReference.child("images/" + name);
-
-
-        image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(@NonNull Uri uri) {
-                        Log.d(TAG, "onSuccess: Uploaded Image URI is"+uri.toString());
-                    }
-                });
-                Toast.makeText(CameraFragment.this, "Image is Uploaded", Toast.LENGTH_SHORT).show();
-            }
-        })
-
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CameraFragment.this, "Upload Failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }*/
 
     //images/image.jpg
 
@@ -437,5 +325,66 @@ public class CameraFragment extends AppCompatActivity {
 
     }
 
+private static final String US_AVATAR ="us_avatar";
+
+
+    private FirebaseFirestore db;
+    private DocumentReference Documentref;
+    private  CollectionReference collectionReference;
+
+    public void uploadProfilFireBase(File file){
+
+
+
+    /**** Upload the picture on the FireBase ***/
+
+    Log.d(TAG, "UPLOADPROFIL FILE : "+file);
+
+/** BDD connexion */
+
+db = FirebaseFirestore.getInstance();
+        Documentref = db.document("users");
+
+        Documentref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error != null){
+                    Toast.makeText(CameraFragment.this, "Erreur lors du chargement", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, error.toString());
+                    return; // pour pas que l'application plante
+                }
+
+                if(value.exists()){
+                    String us_avatar = value.getString("us_avatar");
+                    Log.d(TAG, "Value exist: ");
+                }
+
+
+
+            }
+        });
+
+
+                /***
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+
+                        if(documentSnapshot.exists()){
+                            String us_avatar = documentSnapshot.getString("us_avatar");
+                            Log.d(TAG, "onSuccess: us_avatar "+us_avatar);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: us_avatar");
+                    }
+                });
+
+**/
+
+}
 
 }

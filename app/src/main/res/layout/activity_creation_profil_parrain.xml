@@ -32,6 +32,21 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
+            tools:layout_editor_absoluteY="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+
+                    android:onClick="showGetPhoto"
+                    app:srcCompat="@drawable/ic_add_a_photo_24"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
 
             <EditText
                 android:id="@+id/et_creation_nom"

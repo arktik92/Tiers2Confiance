@@ -26,12 +26,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance.NoActionBar">
         <activity
-            android:name=".CameraDevice"
-            android:exported="false" />
-        <activity
-            android:name=".CameraDeviceFragment"
-            android:exported="false" />
-        <activity
             android:name=".Login.ResetPasswordActivity"
             android:exported="false" />
         <activity
@@ -39,15 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
-            android:exported="true">
-
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
-        </activity>
+            android:exported="false"/>
 
         <activity
             android:name=".Login.RoleChoiceActivity"
@@ -58,7 +44,16 @@
 
         <activity
             android:name=".Login.CreationProfilActivity"
-            android:exported="false" />
+            android:exported="true">
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
