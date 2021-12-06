@@ -313,6 +313,7 @@ public class GlobalClass extends Application {
 
 
     public void DisplayGenders() {
+
         Log.d(TAGAPP, "DisplayGenders()");
 
         Comparator<ModelGenders> compareByLabel =
