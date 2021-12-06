@@ -39,7 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				// Ce code s'execute après 3000ms
+				// Ce code s'execute après 1000ms
 				// les data de ArrayLists se charge quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
 				globalVariables.LoadArraysDataFromFirestore();
 			}
@@ -49,9 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				// Ce code s'execute après 3000ms
-				// les data de ArrayLists se charge quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
-//				globalVariables.LoadArraysDataFromFirestore();
+				// Ce code s'execute après 2000ms, le temps que les Arrays soient chargés dans la clase GlobalClass
 
 				globalVariables.DisplayAttributes();
 				globalVariables.DisplayArraysCount();

@@ -27,9 +27,12 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelLanguage;
 import com.tiesr2confiance.tiers2confiance.Models.ModelMaritalStatus;
 import com.tiesr2confiance.tiers2confiance.Models.ModelOuiNon;
+import com.tiesr2confiance.tiers2confiance.Models.ModelPersonality;
 import com.tiesr2confiance.tiers2confiance.Models.ModelRoles;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSexualOrientation;
+import com.tiesr2confiance.tiers2confiance.Models.ModelShapes;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSports;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 
 import java.util.ArrayList;
@@ -48,24 +51,25 @@ public class GlobalClass extends Application {
     private String userEmail;
     private long userRole;// = 1L;
 
-    private ArrayList<ModelHobbies> arrayListHobbies = new ArrayList<>();
-//    private ArrayList<ModelPersonality> arrayListPersonality = new ArrayList<>();
-//private  ArrayList<ModelSports> arrayListSports = new ArrayList<>();
 
-    private  ArrayList<ModelRoles> arrayListRoles = new ArrayList<>();
     private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
-
-
-    private ArrayList<ModelLanguage> arrayListLanguage = new ArrayList<>();
-    //TODO Alimentation des arraylists suivants
+    private  ArrayList<ModelRoles> arrayListRoles = new ArrayList<>();
+    private  ArrayList<ModelLanguage> arrayListLanguage = new ArrayList<>();
     private  ArrayList<ModelEthnicGroup> arrayListEthnicGroup = new ArrayList<>();
-    private ArrayList<ModelEyeColor> arrayListEyeColors = new ArrayList<>();
+    private  ArrayList<ModelEyeColor> arrayListEyeColors = new ArrayList<>();
     private  ArrayList<ModelHairColor> arrayListHairColor = new ArrayList<>();
     private  ArrayList<ModelHairLength> arrayListHairLength = new ArrayList<>();
     private  ArrayList<ModelMaritalStatus> arrayListMaritalStatus = new ArrayList<>();
-    private ArrayList<ModelOuiNon> arrayListOuiNon = new ArrayList<>();
+    private  ArrayList<ModelOuiNon> arrayListOuiNon = new ArrayList<>();
     private  ArrayList<ModelSexualOrientation> arrayListSexualOrientation = new ArrayList<>();
     private  ArrayList<ModelSmoker> arrayListSmoker = new ArrayList<>();
+    private  ArrayList<ModelShapes> arrayListShapes = new ArrayList<>();
+
+
+    private  ArrayList<ModelHobbies> arrayListHobbies = new ArrayList<>();
+    private  ArrayList<ModelPersonality> arrayListPersonality = new ArrayList<>();
+    private  ArrayList<ModelSports> arrayListSports = new ArrayList<>();
+
 
     /************************* Constructors     ***************/
     public GlobalClass() {
@@ -357,10 +361,28 @@ public class GlobalClass extends Application {
     /************************************************************************************************/
     /************************************************************************************************/
     public void LoadArraysDataFromFirestore() {
-        LoadGendersDataFromFirestore();
         LoadHobbiesDataFromFirestore();
+        LoadPersonnalityDataFromFirestore();
+        LoadSportsDataFromFirestore();
+
+        LoadGendersDataFromFirestore();
         LoadRolesDataFromFirestore();
         LoadLanguageDataFromFirestore();
+
+        LoadEthnicGroupDataFromFirestore();
+        LoadEyeColorDataFromFirestore();
+        LoadHairColorDataFromFirestore();
+        LoadHairLengthDataFromFirestore();
+        LoadMaritalStatusDataFromFirestore();
+        LoadOuiNonDataFromFirestore();
+        LoadSexualOrientationDataFromFirestore();
+        LoadShapesDataFromFirestore();
+        LoadSmokerDataFromFirestore();
+        LoadSportsDataFromFirestore();
+
+
+
+
 
         // DisplayArraysCount();
     }
@@ -369,7 +391,6 @@ public class GlobalClass extends Application {
     public void DisplayArraysCount() {
         Log.d(TAGAPP, "------- arrayListGenders Size---------" + arrayListGenders.size());
         Log.d(TAGAPP, "------- arrayListRoles Size---------" + arrayListRoles.size());
-        Log.d(TAGAPP, "------- arrayListHobbies Size---------" + arrayListHobbies.size());
         Log.d(TAGAPP, "------- arrayListLanguage Size---------" + arrayListLanguage.size());
         Log.d(TAGAPP, "------- arrayListEthnicGroup Size---------" + arrayListEthnicGroup.size());
         Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
@@ -378,7 +399,13 @@ public class GlobalClass extends Application {
         Log.d(TAGAPP, "------- arrayListMaritalStatus Size---------" + arrayListMaritalStatus.size());
         Log.d(TAGAPP, "------- arrayListOuiNon Size---------" + arrayListOuiNon.size());
         Log.d(TAGAPP, "------- arrayListSexualOrientation Size---------" + arrayListSexualOrientation.size());
+        Log.d(TAGAPP, "------- arrayListShapes Size---------" + arrayListShapes.size());
         Log.d(TAGAPP, "------- arrayListSmoker Size---------" + arrayListSmoker.size());
+
+
+        Log.d(TAGAPP, "------- arrayListHobbies Size---------" + arrayListHobbies.size());
+        Log.d(TAGAPP, "------- arrayListPersonality Size---------" + arrayListPersonality.size());
+        Log.d(TAGAPP, "------- arrayListSports Size---------" + arrayListSports.size());
     }
 
 
@@ -468,11 +495,207 @@ public class GlobalClass extends Application {
         Log.i(TAG, "----- GlobalClass getUserDataFromFirestore END -----");
     } // END LoadUserDataFromFirestore()
 
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************        EthnicGroup                               *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+public void LoadEthnicGroupDataFromFirestore() {
+    Log.i(TAG, "GlobalClass LoadEthnicGroupDataFromFirestore: FINISH");
+
+    if (
+            ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                    || ((userId == "") ? null : userCountryLanguage) == null
+    ){
+        //            LoadUserDataFromFirestore();
+        Log.i(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+    }
+
+
+    ArrayList<ModelEthnicGroup> myArrayListEthnicGroup = new ArrayList<>();
+
+
+    try
+    {
+        Query queryEthnicGroup = db.collection("ethnic_group")
+                .whereEqualTo("et_country", userCountryLanguage);
+
+        queryEthnicGroup.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
+
+                        } else {
+                            for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                if (documentSnapshot.exists()) {
+                                    String EthnicGroupDocId = documentSnapshot.getId();
+
+                                    //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                    DocumentReference docRefEthnicGroup = db.document("ethnic_group/"+ EthnicGroupDocId);
+                                    docRefEthnicGroup.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            ModelEthnicGroup EthnicGroup = documentSnapshot.toObject(ModelEthnicGroup.class);
+                                            myArrayListEthnicGroup.add(EthnicGroup);
+
+                                        }
+
+
+                                    });
+                                }
+                            }
+
+
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting EthnicGroup from FireStore!!!", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "onFailure : Error getting EthnicGroup from FireStore!!!");
+
+                    }
+                });
+    }
+    catch (Exception e) {
+        Log.e(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+        Log.e(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+        Log.e(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+        Log.e(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+    };
+    arrayListEthnicGroup = myArrayListEthnicGroup;
+
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListEthnicGroup : " + arrayListEthnicGroup);
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListEthnicGroup.size() *********** " + arrayListEthnicGroup.size());
+
+    Log.i(TAG, "GlobalClass LoadEthnicGroupDataFromFirestore: FINISH");
+
+} // END loadEthnicGroupDataFromFirestore()
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************         Eye Color                              *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+    public void LoadEyeColorDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadEyeColorDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+    //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadEyeColorDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelEyeColor> myArrayListEyeColors = new ArrayList<>();
+
+
+        try
+        {
+            Query queryEyeColor = db.collection("eye_color")
+                    .whereEqualTo("ey_country", userCountryLanguage);
+
+            queryEyeColor.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading EyeColor onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String EyeColorDocId = documentSnapshot.getId();
+
+    //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefEyeColor = db.document("eye_color/"+ EyeColorDocId);
+                                        docRefEyeColor.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelEyeColor EyeColor = documentSnapshot.toObject(ModelEyeColor.class);
+                                                myArrayListEyeColors.add(EyeColor);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting EyeColor from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting EyeColor from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadEyeColorDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadEyeColorDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadEyeColorDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadEyeColorDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListEyeColors = myArrayListEyeColors;
+
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListEyeColor : " + arrayListEyeColor);
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListEyeColor.size() *********** " + arrayListEyeColor.size());
+
+        Log.i(TAG, "GlobalClass LoadEyeColorDataFromFirestore: FINISH");
+
+    } // END loadEyeColorDataFromFirestore()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /************************************************************************************************/
 /************************************************************************************************/
 /********************* GENDERS                                      *****************************/
 /************************************************************************************************/
-/************************************************************************************************/
+    /************************************************************************************************/
     public void LoadGendersDataFromFirestore() {
         Log.i(TAG, "GlobalClass loadGendersDataFromFirestore: START");
 
@@ -554,47 +777,57 @@ public class GlobalClass extends Application {
 
 
 
-    public void LoadHobbiesDataFromFirestore() {
-        Log.i(TAG, "GlobalClass LoadHobbiesDataFromFirestore: START");
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************              HairColor                         *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+public void LoadHairColorDataFromFirestore() {
+
+        Log.i(TAG, "GlobalClass LoadHairColorDataFromFirestore: FINISH");
 
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
-//                        || (userCountryLanguage == "FR")
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
-            Log.i(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadHairColorDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 
-        ArrayList<ModelHobbies> myArrayListHobbies = new ArrayList<>();
+
+        ArrayList<ModelHairColor> myArrayListHairColor = new ArrayList<>();
+
 
         try
         {
-            Query queryHobbies = db.collection("hobbies")
-                    .whereEqualTo("ho_country", userCountryLanguage);
+            Query queryHairColor = db.collection("hair_color")
+                    .whereEqualTo("hc_country", userCountryLanguage);
 
-            queryHobbies.get()
+            queryHairColor.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot documentSnapshots) {
                             if (documentSnapshots.isEmpty()) {
-                                Log.i(TAG, "Loading Hobbies onSuccess but  LIST EMPTY");
+                                Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
 
                             } else {
                                 for (DocumentSnapshot documentSnapshot : documentSnapshots) {
                                     if (documentSnapshot.exists()) {
-                                        String hobbieDocId = documentSnapshot.getId();
+                                        String HairColorDocId = documentSnapshot.getId();
 
-//                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-                                        DocumentReference docRefhobbie = db.document("hobbies/"+ hobbieDocId);
-                                        docRefhobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefHairColor = db.document("hair_color/"+ HairColorDocId);
+                                        docRefHairColor.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                                ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
-//                                                Log.i(TAG, "onSuccess ******** hobby : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
-                                                myArrayListHobbies.add(hobbie);
-                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListhobbies : " + myArrayListhobbies);
-                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListhobbies.size() *********** " + myArrayListhobbies.size());
+                                                ModelHairColor HairColor = documentSnapshot.toObject(ModelHairColor.class);
+                                                myArrayListHairColor.add(HairColor);
 
                                             }
 
@@ -611,28 +844,446 @@ public class GlobalClass extends Application {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
-                            Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
+                            Toast.makeText(getApplicationContext(), "Error getting HairColor from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting HairColor from FireStore!!!");
 
                         }
                     });
         }
         catch (Exception e) {
-            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
-            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
-            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
-            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+            Log.e(TAG, "----- GlobalClass : LoadHairColorDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadHairColorDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadHairColorDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadHairColorDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
+        arrayListHairColor = myArrayListHairColor;
 
-        arrayListHobbies = myArrayListHobbies;
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHairColor : " + arrayListHairColor);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHairColor.size() *********** " + arrayListHairColor.size());
+
+        Log.i(TAG, "GlobalClass LoadHairColorDataFromFirestore: FINISH");
+
+    } // END loadHairColorDataFromFirestore()
 
 
-//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies : " + arrayListHobbies);
-//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies.size() *********** " + arrayListHobbies.size());
 
-        Log.i(TAG, "GlobalClass loadHobbiesDataFromFirestore: FINISH");
 
-    } // END loadhobbiesDataFromFirestore()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                HairLength                       *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+
+
+public void LoadHairLengthDataFromFirestore() {
+
+    Log.i(TAG, "GlobalClass LoadHairLengthDataFromFirestore: FINISH");
+
+    if (
+            ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                    || ((userId == "") ? null : userCountryLanguage) == null
+    ){
+        //            LoadUserDataFromFirestore();
+        Log.i(TAG, "----- GlobalClass : LoadHairLengthDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+    }
+
+
+    ArrayList<ModelHairLength> myArrayListHairLength = new ArrayList<>();
+
+
+    try
+    {
+        Query queryHairLength = db.collection("hair_length")
+                .whereEqualTo("hl_country", userCountryLanguage);
+
+        queryHairLength.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.i(TAG, "Loading HairLength onSuccess but  LIST EMPTY");
+
+                        } else {
+                            for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                if (documentSnapshot.exists()) {
+                                    String HairLengthDocId = documentSnapshot.getId();
+
+                                    //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                    DocumentReference docRefHairLength = db.document("hair_length/"+ HairLengthDocId);
+                                    docRefHairLength.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            ModelHairLength HairLength = documentSnapshot.toObject(ModelHairLength.class);
+                                            myArrayListHairLength.add(HairLength);
+
+                                        }
+
+
+                                    });
+                                }
+                            }
+
+
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting HairLength from FireStore!!!", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "onFailure : Error getting HairLength from FireStore!!!");
+
+                    }
+                });
+    }
+    catch (Exception e) {
+        Log.e(TAG, "----- GlobalClass : LoadHairLengthDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+        Log.e(TAG, "----- GlobalClass : LoadHairLengthDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+        Log.e(TAG, "----- GlobalClass : LoadHairLengthDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+        Log.e(TAG, "----- GlobalClass : LoadHairLengthDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+    };
+    arrayListHairLength = myArrayListHairLength;
+
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHairLength : " + arrayListHairLength);
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHairLength.size() *********** " + arrayListHairLength.size());
+
+    Log.i(TAG, "GlobalClass LoadHairLengthDataFromFirestore: FINISH");
+
+} // END loadHairLengthDataFromFirestore()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/********************* Language                                        **************************/
+/************************************************************************************************/
+    /************************************************************************************************/
+
+
+
+    public void LoadLanguageDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadLanguageDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+//            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelLanguage> myArrayListLanguage = new ArrayList<>();
+
+
+        try
+        {
+            Query queryLanguage = db.collection("language")
+                    .whereEqualTo("la_code", userCountryLanguage);
+
+            queryLanguage.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading languages onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String languagesDocId = documentSnapshot.getId();
+
+//                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefLanguages = db.document("language/"+ languagesDocId);
+                                        docRefLanguages.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelLanguage language = documentSnapshot.toObject(ModelLanguage.class);
+//                                                Log.i(TAG, "onSuccess ******** hobby : " + language.getLa_code() + " " + language.getLa_label() );
+                                                myArrayListLanguage.add(language);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Languages from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Languages from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListLanguage = myArrayListLanguage;
+
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage : " + arrayListLanguage);
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage.size() *********** " + arrayListLanguage.size());
+
+        Log.i(TAG, "GlobalClass LoadLanguageDataFromFirestore: FINISH");
+
+    } // END loadLanguageDataFromFirestore()
+
+
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                  Marital Status                     *****************************/
+/************************************************************************************************/
+    /************************************************************************************************/
+
+    public void LoadMaritalStatusDataFromFirestore() {
+
+        Log.i(TAG, "GlobalClass LoadMaritalStatusDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadMaritalStatusDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelMaritalStatus> myArrayListMaritalStatus = new ArrayList<>();
+
+
+        try
+        {
+            Query queryMaritalStatus = db.collection("marital_status")
+                    .whereEqualTo("ma_country", userCountryLanguage);
+
+            queryMaritalStatus.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading MaritalStatus onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String MaritalStatusDocId = documentSnapshot.getId();
+
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefMaritalStatus = db.document("marital_status/"+ MaritalStatusDocId);
+                                        docRefMaritalStatus.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelMaritalStatus MaritalStatus = documentSnapshot.toObject(ModelMaritalStatus.class);
+                                                myArrayListMaritalStatus.add(MaritalStatus);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting MaritalStatus from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting MaritalStatus from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadMaritalStatusDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadMaritalStatusDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadMaritalStatusDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadMaritalStatusDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListMaritalStatus = myArrayListMaritalStatus;
+
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListMaritalStatus : " + arrayListMaritalStatus);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListMaritalStatus.size() *********** " + arrayListMaritalStatus.size());
+
+        Log.i(TAG, "GlobalClass LoadMaritalStatusDataFromFirestore: FINISH");
+
+    } // END loadMaritalStatusDataFromFirestore()
+
+
+
+/************************************************************************************************/
+/************************************************************************************************/
+/*********************                 Oui Non                      *****************************/
+/************************************************************************************************/
+/************************************************************************************************/
+
+
+public void LoadOuiNonDataFromFirestore() {
+
+    Log.i(TAG, "GlobalClass LoadOuiNonDataFromFirestore: FINISH");
+
+    if (
+            ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                    || ((userId == "") ? null : userCountryLanguage) == null
+    ){
+        //            LoadUserDataFromFirestore();
+        Log.i(TAG, "----- GlobalClass : LoadOuiNonDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+    }
+
+
+    ArrayList<ModelOuiNon> myArrayListOuiNon = new ArrayList<>();
+
+
+    try
+    {
+        Query queryOuiNon = db.collection("oui_non")
+                .whereEqualTo("ou_country", userCountryLanguage);
+
+        queryOuiNon.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
+
+                        } else {
+                            for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                if (documentSnapshot.exists()) {
+                                    String OuiNonDocId = documentSnapshot.getId();
+
+                                    //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                    DocumentReference docRefOuiNon = db.document("oui_non/"+ OuiNonDocId);
+                                    docRefOuiNon.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            ModelOuiNon OuiNon = documentSnapshot.toObject(ModelOuiNon.class);
+                                            myArrayListOuiNon.add(OuiNon);
+
+                                        }
+
+
+                                    });
+                                }
+                            }
+
+
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting OuiNon from FireStore!!!", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "onFailure : Error getting OuiNon from FireStore!!!");
+
+                    }
+                });
+    }
+    catch (Exception e) {
+        Log.e(TAG, "----- GlobalClass : LoadOuiNonDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+        Log.e(TAG, "----- GlobalClass : LoadOuiNonDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+        Log.e(TAG, "----- GlobalClass : LoadOuiNonDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+        Log.e(TAG, "----- GlobalClass : LoadOuiNonDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+    };
+    arrayListOuiNon = myArrayListOuiNon;
+
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListOuiNon : " + arrayListOuiNon);
+    //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListOuiNon.size() *********** " + arrayListOuiNon.size());
+
+    Log.i(TAG, "GlobalClass LoadOuiNonDataFromFirestore: FINISH");
+
+} // END loadOuiNonDataFromFirestore()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -640,7 +1291,7 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
 /********************* Roles                                      *******************************/
 /************************************************************************************************/
-/************************************************************************************************/
+    /************************************************************************************************/
 
 
 
@@ -727,53 +1378,50 @@ public class GlobalClass extends Application {
 
 /************************************************************************************************/
 /************************************************************************************************/
-/********************* Language                                        **************************/
+/*********************                  SexualOrientation                     *****************************/
 /************************************************************************************************/
-/************************************************************************************************/
+    /************************************************************************************************/
 
-
-
-    public void LoadLanguageDataFromFirestore() {
-        Log.i(TAG, "GlobalClass LoadLanguageDataFromFirestore: FINISH");
+    public void LoadSexualOrientationDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadSexualOrientationDataFromFirestore: FINISH");
 
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
-//            LoadUserDataFromFirestore();
-            Log.i(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadSexualOrientationDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 
 
-        ArrayList<ModelLanguage> myArrayListLanguage = new ArrayList<>();
+        ArrayList<ModelSexualOrientation> myArrayListSexualOrientation = new ArrayList<>();
 
 
         try
         {
-            Query queryLanguage = db.collection("roles")
-                    .whereEqualTo("ro_country", userCountryLanguage);
+            Query querySexualOrientation = db.collection("sexual_orientation")
+                    .whereEqualTo("se_country", userCountryLanguage);
 
-            queryLanguage.get()
+            querySexualOrientation.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot documentSnapshots) {
                             if (documentSnapshots.isEmpty()) {
-                                Log.i(TAG, "Loading Roles onSuccess but  LIST EMPTY");
+                                Log.i(TAG, "Loading SexualOrientation onSuccess but  LIST EMPTY");
 
                             } else {
                                 for (DocumentSnapshot documentSnapshot : documentSnapshots) {
                                     if (documentSnapshot.exists()) {
-                                        String languagesDocId = documentSnapshot.getId();
+                                        String SexualOrientationDocId = documentSnapshot.getId();
 
-//                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
-                                        DocumentReference docRefLanguages = db.document("language/"+ languagesDocId);
-                                        docRefLanguages.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefSexualOrientation = db.document("sexual_orientation/"+ SexualOrientationDocId);
+                                        docRefSexualOrientation.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                                ModelLanguage language = documentSnapshot.toObject(ModelLanguage.class);
-//                                                Log.i(TAG, "onSuccess ******** hobby : " + language.getLa_code() + " " + language.getLa_label() );
-                                                myArrayListLanguage.add(language);
+                                                ModelSexualOrientation SexualOrientation = documentSnapshot.toObject(ModelSexualOrientation.class);
+                                                myArrayListSexualOrientation.add(SexualOrientation);
 
                                             }
 
@@ -790,37 +1438,26 @@ public class GlobalClass extends Application {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error getting Language from FireStore!!!", Toast.LENGTH_LONG).show();
-                            Log.e(TAG, "onFailure : Error getting Language from FireStore!!!");
+                            Toast.makeText(getApplicationContext(), "Error getting SexualOrientation from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting SexualOrientation from FireStore!!!");
 
                         }
                     });
         }
         catch (Exception e) {
-            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
-            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
-            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
-            Log.e(TAG, "----- GlobalClass : LoadLanguageDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+            Log.e(TAG, "----- GlobalClass : LoadSexualOrientationDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadSexualOrientationDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadSexualOrientationDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadSexualOrientationDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
-        arrayListLanguage = myArrayListLanguage;
+        arrayListSexualOrientation = myArrayListSexualOrientation;
 
-//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage : " + arrayListLanguage);
-//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListLanguage.size() *********** " + arrayListLanguage.size());
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSexualOrientation : " + arrayListSexualOrientation);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSexualOrientation.size() *********** " + arrayListSexualOrientation.size());
 
-        Log.i(TAG, "GlobalClass LoadLanguageDataFromFirestore: FINISH");
+        Log.i(TAG, "GlobalClass LoadSexualOrientationDataFromFirestore: FINISH");
 
-    } // END loadLanguageDataFromFirestore()
-
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************        EthnicGroup                               *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
-
-
-
+    } // END loadSexualOrientationDataFromFirestore()
 
 
 
@@ -828,224 +1465,446 @@ public class GlobalClass extends Application {
 
 /************************************************************************************************/
 /************************************************************************************************/
-/*********************         Eye Color                              *****************************/
+/*********************                  Shapes                     *****************************/
 /************************************************************************************************/
-/************************************************************************************************/
+    /************************************************************************************************/
 
+    public void LoadShapesDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadShapesDataFromFirestore: FINISH");
 
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadShapesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
 
 
+        ArrayList<ModelShapes> myArrayListShapes = new ArrayList<>();
 
 
+        try
+        {
+            Query queryShapes = db.collection("shapes")
+                    .whereEqualTo("sh_country", userCountryLanguage);
 
+            queryShapes.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Shapes onSuccess but  LIST EMPTY");
 
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String ShapesDocId = documentSnapshot.getId();
 
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefShape = db.document("shapes/"+ ShapesDocId);
+                                        docRefShape.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
+                                                ModelShapes Shapes = documentSnapshot.toObject(ModelShapes.class);
+                                                myArrayListShapes.add(Shapes);
 
+                                            }
 
 
+                                        });
+                                    }
+                                }
 
 
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************             Gender                          *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
 
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Shapes from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Shapes from FireStore!!!");
 
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadShapesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadShapesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadShapesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadShapesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListShapes = myArrayListShapes;
 
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListShapes : " + arrayListShapes);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListShapes.size() *********** " + arrayListShapes.size());
 
+        Log.i(TAG, "GlobalClass LoadShapesDataFromFirestore: FINISH");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************              HairColor                         *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************                HairLength                       *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } // END loadShapesDataFromFirestore()
 
 
 
 /************************************************************************************************/
 /************************************************************************************************/
-/*********************                 Oui Non                      *****************************/
+/*********************                  Smoker                     *****************************/
+/************************************************************************************************/
+    /************************************************************************************************/
+
+    public void LoadSmokerDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadSmokerDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadSmokerDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelSmoker> myArrayListSmoker = new ArrayList<>();
+
+
+        try
+        {
+            Query querySmoker = db.collection("smoker")
+                    .whereEqualTo("sm_country", userCountryLanguage);
+
+            querySmoker.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Smoker onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String SmokerDocId = documentSnapshot.getId();
+
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefShape = db.document("smoker/"+ SmokerDocId);
+                                        docRefShape.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelSmoker Smoker = documentSnapshot.toObject(ModelSmoker.class);
+                                                myArrayListSmoker.add(Smoker);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Smoker from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Smoker from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadSmokerDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadSmokerDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadSmokerDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadSmokerDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListSmoker = myArrayListSmoker;
+
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSmoker : " + arrayListSmoker);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSmoker.size() *********** " + arrayListSmoker.size());
+
+        Log.i(TAG, "GlobalClass LoadSmokerDataFromFirestore: FINISH");
+
+    } // END loadSmokerDataFromFirestore()
+
+
+
+
+
+
+
+
+
 /************************************************************************************************/
 /************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/********************* Hobbies                                      *****************************/
 /************************************************************************************************/
 /************************************************************************************************/
-/*********************                  Marital Status                     *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
+    public void LoadHobbiesDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadHobbiesDataFromFirestore: START");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+//                        || (userCountryLanguage == "FR")
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            Log.i(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+        ArrayList<ModelHobbies> myArrayListHobbies = new ArrayList<>();
+
+        try
+        {
+            Query queryHobbies = db.collection("hobbies")
+                    .whereEqualTo("ho_country", userCountryLanguage);
+
+            queryHobbies.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Hobbies onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String hobbieDocId = documentSnapshot.getId();
+
+//                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefhobbie = db.document("hobbies/"+ hobbieDocId);
+                                        docRefhobbie.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelHobbies hobbie= documentSnapshot.toObject(ModelHobbies.class);
+//                                                Log.i(TAG, "onSuccess ******** hobby : " + hobbie.getHo_id() + " " + hobbie.getHo_country() + " " + hobbie.getHo_label());
+                                                myArrayListHobbies.add(hobbie);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// mArrayListhobbies : " + myArrayListhobbies);
+                                                //                                    Log.i(TAG, "XXXXXX VarGlobale Ligne XXXXXX////// myArrayListhobbies.size() *********** " + myArrayListhobbies.size());
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
 
 
 
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting hobbies from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting hobbies from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+
+        arrayListHobbies = myArrayListHobbies;
 
 
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies : " + arrayListHobbies);
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListHobbies.size() *********** " + arrayListHobbies.size());
 
+        Log.i(TAG, "GlobalClass loadHobbiesDataFromFirestore: FINISH");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } // END loadhobbiesDataFromFirestore()
 
 /************************************************************************************************/
 /************************************************************************************************/
 /*********************               Personality                        *****************************/
 /************************************************************************************************/
+    /************************************************************************************************/
+    public void LoadPersonnalityDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadPersonalityDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadPersonalityDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelPersonality> myArrayListPersonality = new ArrayList<>();
+
+
+        try
+        {
+            Query queryPersonality = db.collection("personality")
+                    .whereEqualTo("pe_country", userCountryLanguage);
+
+            queryPersonality.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Personality onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String PersonalityDocId = documentSnapshot.getId();
+
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefShape = db.document("personality/"+ PersonalityDocId);
+                                        docRefShape.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelPersonality Personality = documentSnapshot.toObject(ModelPersonality.class);
+                                                myArrayListPersonality.add(Personality);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Personality from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Personality from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadPersonalityDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadPersonalityDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadPersonalityDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadPersonalityDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListPersonality = myArrayListPersonality;
+
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListPersonality : " + arrayListPersonality);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListPersonality.size() *********** " + arrayListPersonality.size());
+
+        Log.i(TAG, "GlobalClass LoadPersonalityDataFromFirestore: FINISH");
+
+    } // END loadPersonalityDataFromFirestore()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /************************************************************************************************/
+/*********************                  sports                     *****************************/
 /************************************************************************************************/
-/*********************          SexualOrientation                             *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
+    /************************************************************************************************/
+
+    public void LoadSportsDataFromFirestore() {
+        Log.i(TAG, "GlobalClass LoadSportsDataFromFirestore: FINISH");
+
+        if (
+                ((userCountryLanguage == "") ? null : userCountryLanguage) == null
+                        || ((userId == "") ? null : userCountryLanguage) == null
+        ){
+            //            LoadUserDataFromFirestore();
+            Log.i(TAG, "----- GlobalClass : LoadSportsDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
+        }
+
+
+        ArrayList<ModelSports> myArrayListSports = new ArrayList<>();
+
+
+        try
+        {
+            Query querySports = db.collection("sports")
+                    .whereEqualTo("sp_country", userCountryLanguage);
+
+            querySports.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            if (documentSnapshots.isEmpty()) {
+                                Log.i(TAG, "Loading Sports onSuccess but  LIST EMPTY");
+
+                            } else {
+                                for (DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                    if (documentSnapshot.exists()) {
+                                        String SportsDocId = documentSnapshot.getId();
+
+                                        //                                        Log.i(TAG, "onSuccess: DOCUMENT => " + documentSnapshot.getId() + " ; " + documentSnapshot.getData());
+                                        DocumentReference docRefShape = db.document("sports/"+ SportsDocId);
+                                        docRefShape.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                ModelSports Sports = documentSnapshot.toObject(ModelSports.class);
+                                                myArrayListSports.add(Sports);
+
+                                            }
+
+
+                                        });
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error getting Sports from FireStore!!!", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "onFailure : Error getting Sports from FireStore!!!");
+
+                        }
+                    });
+        }
+        catch (Exception e) {
+            Log.e(TAG, "----- GlobalClass : LoadSportsDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----" );
+            Log.e(TAG, "----- GlobalClass : LoadSportsDataFromFirestore addOnSuccessListener error on userId: "+ userId +" -----userNickName "  + userNickName);
+            Log.e(TAG, "----- GlobalClass : LoadSportsDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
+            Log.e(TAG, "----- GlobalClass : LoadSportsDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
+        };
+        arrayListSports = myArrayListSports;
+
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSports : " + arrayListSports);
+        //        Log.i(TAG, "**** INIT GlobalClass ***** arrayListSports.size() *********** " + arrayListSports.size());
+
+        Log.i(TAG, "GlobalClass LoadSportsDataFromFirestore: FINISH");
+
+    } // END loadSportsDataFromFirestore()
 
 
 
@@ -1060,11 +1919,6 @@ public class GlobalClass extends Application {
 
 
 
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************           shape                            *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
 
 
 
@@ -1073,39 +1927,6 @@ public class GlobalClass extends Application {
 
 
 
-
-
-
-
-
-
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************           Smoker                            *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/************************************************************************************************/
-/************************************************************************************************/
-/*********************           Sports                            *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
 
 
 
@@ -1318,12 +2139,6 @@ public class GlobalClass extends Application {
 //
 
 
-
-/************************************************************************************************/
-/************************************************************************************************/
-/********************* Hobbies                                      *****************************/
-/************************************************************************************************/
-/************************************************************************************************/
 
 
 
