@@ -3,10 +3,12 @@ package com.tiesr2confiance.tiers2confiance.MatchCibles;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,11 +20,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,8 +42,11 @@ import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentMatchCiblesBinding;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,12 +59,23 @@ public class MatchCiblesFragment extends Fragment {
 
     private static final String TAG = "Match Cibles Fragment - ";
     private RecyclerView rvListCible;
+    private SeekBar sbMax, sbMin;
+    private TextView tvCurrentMin, tvCurrentMax;
+    private Button btnSearchSingle;
+    private EditText ptCodePostal;
     private FragmentMatchCiblesBinding binding;
 
     ArrayList<String> critere = new ArrayList<>();
 
     private MatchCiblesAdapter adapterUser;
     private Boolean usAlreadyLinked = true;
+
+    /** Critère de recherche **/
+    private long codePostalCritere;
+    private long ageMinCritere;
+    private long ageMaxCritere;
+    private long genreCritere;
+
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
@@ -155,16 +176,35 @@ public class MatchCiblesFragment extends Fragment {
 
     @SuppressLint("LongLogTag")
     private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) {
+        Query query;
+
         critere.clear();
         critere.add("1");
-        Query query = db.collection("users");
+
+        // Récupération des attributs indiqué dans la recherche
+       // codePostalCritere =  Double.parseDouble(ptCodePostal.getText());
+        ageMinCritere = sbMin.getProgress();
+        ageMaxCritere = sbMax.getProgress();
+       // genreCritere = ;
+
+        long ageMin = ageMinCritere * 31556952;
+        long ageMax = ageMaxCritere * 31556952;
+        long today =  Calendar.getInstance().getTimeInMillis()/1000;
+
+        long Min = ageMin - today ;
+        long Max = ageMax - today ;
+
+        Log.e(TAG, "displayPossibleMatchList: " +  Min/31556952 );
+        Log.e(TAG, "displayPossibleMatchList: " +  Max/31556952 );
+
         //Célibataire
         if (usRole.equals(1L)) {
             critere.addAll(listIn);
-            Log.e(TAG, "displayPossibleMatchList: criteere" +  critere);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                    .whereIn("us_auth_uid", critere);
+                    .whereIn("us_auth_uid", critere)
+                    .whereLessThan("us_birth_date", "01/01/1986")
+                    .whereGreaterThan("us_birth_date", "01/01/1992");
         } else {
         //Parrain
             critere.addAll(listNotIn);
@@ -200,12 +240,70 @@ public class MatchCiblesFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvListCible = view.findViewById(R.id.rv_list_cibles);
         rvListCible.setHasFixedSize(true);
         rvListCible.setLayoutManager(new LinearLayoutManager(getContext()));
+        sbMin = view.findViewById(R.id.sb_min);
+        tvCurrentMin = view.findViewById(R.id.tv_min);
+        sbMax = view.findViewById(R.id.sb_max);
+        tvCurrentMax = view.findViewById(R.id.tv_max);
+        btnSearchSingle = view.findViewById(R.id.btn_search_single);
+        ptCodePostal = view.findViewById(R.id.pt_code_postal);
+
+        sbMin.setMin((int) 18);
+        sbMin.setMax((int) 99);
+        sbMin.setProgress((int) 30);
+        tvCurrentMin.setText(String.valueOf(18));
+
+        sbMax.setMin((int)18);
+        sbMax.setMax((int) 99);
+        sbMax.setProgress((int) 30);
+        tvCurrentMax.setText(String.valueOf(18));
+
+        sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvCurrentMin.setText(String.valueOf(sbMin.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sbMax.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvCurrentMax.setText(String.valueOf(sbMax.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        btnSearchSingle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDataMatchFromFirestore(view);
+            }
+        });
 
     }
 }
