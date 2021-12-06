@@ -90,7 +90,6 @@ public class ViewProfilFragment extends Fragment {
     private String usGodfatherRequestFrom;
     private String usMatchsRequestFrom;
     private String usMatchsRequestTo;
-    private String list_hobbies;
 
     private FragmentViewProfilBinding binding;
 
@@ -452,9 +451,10 @@ public class ViewProfilFragment extends Fragment {
                             String nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
                             String city = documentSnapshotDisplayed.getString(KEY_CITY);
                             String imgPhoto = documentSnapshotDisplayed.getString(KEY_PHOTOS);
-                            String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
+                            String imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
                             String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
-                            String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            String listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            String genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
                             Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
                             Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
@@ -481,7 +481,7 @@ public class ViewProfilFragment extends Fragment {
                             /** Loading Avatar **/
                             Glide
                                     .with(context)
-                                    .load(imgUrl_avatar)
+                                    .load(imgUrlAvatar)
                                     .apply(options)
                                     .fitCenter()
                                     .circleCrop()
@@ -490,9 +490,7 @@ public class ViewProfilFragment extends Fragment {
 
                             // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                             String split_key = ";";
-                            list_hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
-                            String[] hobbiesListUser = list_hobbies.split(split_key);
-                            String genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
+                            String[] hobbiesListUser = listHobbies.split(split_key);
 
                             // Appel de la classe global pour charger les listes d'attributs
                             final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
