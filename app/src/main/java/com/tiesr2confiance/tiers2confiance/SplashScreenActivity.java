@@ -18,7 +18,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
 
-		Log.i(TAG, "SplashScreenActivity onCreate: ");
+		Log.i(TAGAPP, "SplashScreenActivity onCreate: ");
 
 
 		GlobalClass globalVariables = (GlobalClass) getApplicationContext();
@@ -26,26 +26,21 @@ public class SplashScreenActivity extends AppCompatActivity {
 		String userEmail    = globalVariables.getUserEmail();
 		try {
 			globalVariables.LoadUserDataFromFirestore();
-//			globalVariables.LoadGendersDataFromFirestore();
-//			globalVariables.LoadHobbiesDataFromFirestore();
+			globalVariables.LoadArraysDataFromFirestore();
+
 		}
 		catch (Exception e) {
-			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
-			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
-
-		globalVariables.DisplayAttributes();
-
-		Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
-
+			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: "+ userId +" -----" );
+			Log.e(TAGAPP, "----- SplashScreen : onCreate error on Loading data in SPLASH: "+ userId +" -----userEmail "  + userEmail);        };
 
 
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				//This method will be executed once the timer is over
-				// Start your app main activity
-				Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-				startActivity(i);
+				// Start MainActivity
+				Intent myIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+				startActivity(myIntent);
 				globalVariables.DisplayAttributes();
 				// close this activity
 				finish();

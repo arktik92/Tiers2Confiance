@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -97,8 +98,20 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-
         userRole = globalVariables.getUserRole();
+
+
+
+        Log.e(TAGAPP, " Handler().postDelayed TESTTEST  A UserRole" + userRole + " " + globalVariables.getUserId());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAGAPP, "Handler().postDelayed TESTTEST  B UserRole" + userRole + " " + globalVariables.getUserId());
+            };
+        }, 3000);
+
+        Log.e(TAGAPP, "Handler().postDelayed TESTTEST  C UserRole" + userRole + " " + globalVariables.getUserId());
+
 
         if( userRole == 1L) {
             setContentView(R.layout.activity_main_celibataire);
