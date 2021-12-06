@@ -185,14 +185,14 @@ public class UserFragment extends Fragment {
 		});
 
 
-		try {
-			globalVariables.LoadUserDataFromFirestore();
-			globalVariables.LoadGendersDataFromFirestore();
-			globalVariables.LoadHobbiesDataFromFirestore();
-		}
-	        catch (Exception e) {
-			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
-			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
+//		try {
+//			globalVariables.LoadUserDataFromFirestore();
+//			globalVariables.LoadGendersDataFromFirestore();
+//			globalVariables.LoadHobbiesDataFromFirestore();
+//		}
+//	        catch (Exception e) {
+//			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
+//			Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
 //        LoadUserData();
 //        LoadGenders();

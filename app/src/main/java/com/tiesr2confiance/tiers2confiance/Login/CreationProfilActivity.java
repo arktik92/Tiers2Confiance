@@ -75,8 +75,8 @@ public class CreationProfilActivity extends AppCompatActivity {
     FirebaseUser user;
 
     /** Variables Firestore **/
-        private FirebaseFirestore db;
-        private DocumentReference docRef;
+    private FirebaseFirestore db;
+    private DocumentReference docRef;
 
     /** Initialisation des composants **/
     public void init() {
@@ -283,7 +283,7 @@ public class CreationProfilActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
 
-                        SetRoleInFilePrefs();
+
 
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
@@ -320,25 +320,25 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
 
-
-    private void SetRoleInFilePrefs() {
-        // Création ou mise à jour des préférences en local
-        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-
-        Context context     = getApplicationContext();
-        Long    userRole    = globalVariables.getUserRole();
-        Boolean isUserSingle;
-        isUserSingle = userRole != 2L;
-
-        Log.d(TAGAPP, "SetRoleInFilePrefs userRole" + userRole);
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // On place le boolean  isusersingle
-        editor.putBoolean("isusersingle", isUserSingle); // est-ce un célib ?
-        editor.commit();
-
-    }
+//
+//    private void SetRoleInFilePrefs() {
+//        // Création ou mise à jour des préférences en local
+//        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//
+//        Context context     = getApplicationContext();
+//        Long    userRole    = globalVariables.getUserRole();
+//        Boolean isUserSingle;
+//        isUserSingle = userRole != 2L;
+//
+//        Log.d(TAGAPP, "SetRoleInFilePrefs userRole" + userRole);
+//
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(filePrefs, Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        // On place le boolean  isusersingle
+//        editor.putBoolean("isusersingle", isUserSingle); // est-ce un célib ?
+//        editor.commit();
+//
+//    }
 
 
 

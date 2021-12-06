@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -79,10 +80,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
-    DocumentReference userConnected;
+    DocumentReference currentUserDoc;
 
-    /********* Gestion du Role **********/
-    long role;
+    /********* Gestion du User / Role **********/
+    FirebaseUser currentUser;
+    String userId;
+    long userRole;
+
 
 
     /**
@@ -98,32 +102,19 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        String userId       = globalVariables.getUserId();
-        String userEmail    = globalVariables.getUserEmail();
-        try {
-            globalVariables.LoadUserDataFromFirestore();
-            globalVariables.LoadGendersDataFromFirestore();
-            globalVariables.LoadHobbiesDataFromFirestore();
-        }
-        catch (Exception e) {
-            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----" );
-            Log.e(TAG, "----- MainActivity : onCreate error on userId: "+ userId +" -----userEmail "  + userEmail);        };
 
-        globalVariables.DisplayAttributes();
-
-
-        role = globalVariables.getUserRole();
-        if (role == 0) {
-            GetRoleFromFilePrefs();
-        }
+        userId          = globalVariables.getUserId();
+        userRole        = globalVariables.getUserRole();
+        currentUser     = globalVariables.getUser();
+        //currentUserDoc   = usersCollectionRef.document(userId);
+        currentUserDoc = usersCollectionRef.document(userId);
 
         Log.d(TAG, "MainActivity onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
        // role = 1L;
 
-        if( role == 1L) {
+        if( userRole == 1L) {
             setContentView(R.layout.activity_main_celibataire);
         } else {
             setContentView(R.layout.activity_main_parrain);
@@ -154,36 +145,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //            navigationView.setCheckedItem(R.id.nav_fragment_1);
 //        }
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        userConnected = usersCollectionRef.document(currentUser.getUid());
+
 
     }
-
-
-    private void LoadUserData() {
-        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore START *************");
-        globalVariables.LoadUserDataFromFirestore();
-        Log.i(TAGAPP, "******** CreationProfilActivity LoadUserDataFromFirestore FINISH *************");
-
-    }
-
-    private void LoadGenders() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "LoadGenders()");
-
-        globalVariables.LoadGendersDataFromFirestore();
-    }
-
-
-    private void LoadHobbies() {
-        final GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-        Log.d(TAGAPP, "LoadHobbies()");
-
-        globalVariables.LoadHobbiesDataFromFirestore();
-    }
-
 
 
     private void addFragment() {
@@ -218,7 +182,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // CHAT
                 case R.id.nav_chat:
                     Bundle b = new Bundle();
-                    b.putString("idUser", userConnected.getId());
+                    b.putString("idUser", userId);
                     Fragment fragment = new ChatFragment();
                     fragment.setArguments(b);
                     getSupportFragmentManager().
@@ -229,7 +193,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // MOI (Pseudo)
             case R.id.nav_profil:
                 b = new Bundle();
-                b.putString("idUser", userConnected.getId());
+                b.putString("idUser", userId);
                 fragment = new ViewProfilFragment();
                 fragment.setArguments(b);
                 getSupportFragmentManager().
@@ -242,7 +206,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             // reçues de mon parrain , ou de parrains d'autres célibataires
             case R.id.nav_cibles:
                 b = new Bundle();
-                b.putString("idUser", userConnected.getId());
+                b.putString("idUser", userId);
                 fragment = new MatchCiblesFragment();
                 fragment.setArguments(b);
                 getSupportFragmentManager().
@@ -250,10 +214,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         replace(R.id.fragment_container, fragment).
                         commit();
                 break;
-
             // Mon Parrain ou Mon filleul
             case R.id.nav_view_profil:
-                userConnected.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                currentUserDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         ModelUsers contenuUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
@@ -337,38 +300,35 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 /*****************************************************************************************************************/
 
-private void GetRoleFromFilePrefs() {
-    // On récupère la role de l'utilisateur dans SharedPreferences
-    GlobalClass globalVariables = (GlobalClass) getApplicationContext();
-    //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
-    SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
-            + ".prefs", Context.MODE_PRIVATE);
-
-
-    // La vérifcation du boolean
-    if (!sharedPreferences.getBoolean("isusersingle", true)) {
-        globalVariables.setUserRole(1L);
-
-        role = globalVariables.getUserRole();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // On place le boolean  isusersingle
-
-        editor.putBoolean("isusersingle", true); //
-        editor.commit();
-    } else {
-        globalVariables.setUserRole(2L);
-
-        role = globalVariables.getUserRole();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // On place le boolean  isusersingle
-        editor.putBoolean("isusersingle", false); //
-        editor.commit();
-    }
-
-
-
-
-}
+//    private void GetRoleFromFilePrefs() {
+//        // On récupère la userRole de l'utilisateur dans SharedPreferences
+//        GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+//        //        SharedPreferences sharedPreferences = getSharedPreferences("com.example.myapp.prefs", Context.MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = getSharedPreferences(R.class.getPackage().getName()
+//                + ".prefs", Context.MODE_PRIVATE);
+//
+//
+//        // La vérifcation du boolean
+//        if (!sharedPreferences.getBoolean("isusersingle", true)) {
+//            globalVariables.setUserRole(1L);
+//
+//            userRole = globalVariables.getUserRole();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            // On place le boolean  isusersingle
+//
+//            editor.putBoolean("isusersingle", true); //
+//            editor.commit();
+//        } else {
+//            globalVariables.setUserRole(2L);
+//
+//            userRole = globalVariables.getUserRole();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            // On place le boolean  isusersingle
+//            editor.putBoolean("isusersingle", false); //
+//            editor.commit();
+//        }
+//
+//    }
 
 
 
