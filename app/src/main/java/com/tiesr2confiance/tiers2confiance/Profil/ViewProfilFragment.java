@@ -1,6 +1,5 @@
 package com.tiesr2confiance.tiers2confiance.Profil;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
@@ -41,7 +40,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,11 +53,7 @@ import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-
-import javax.xml.transform.sax.SAXResult;
 
 public class ViewProfilFragment extends Fragment {
 
@@ -124,13 +118,13 @@ public class ViewProfilFragment extends Fragment {
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        tvProfilName = view.findViewById(R.id.tvProfilName);
-        tvRole = view.findViewById(R.id.tvRole);
-        tvProfilCity = view.findViewById(R.id.tvProfilCity);
-        tvDescription = view.findViewById(R.id.tvDescription);
-        tvHobbies = view.findViewById(R.id.tvHobbies);
-        tvBalance = view.findViewById(R.id.tvBalance);
-        ivGender = view.findViewById(R.id.ivGender);
+        tvProfilName = view.findViewById(R.id.tv_profil_name);
+        tvRole = view.findViewById(R.id.tv_role_display);
+        tvProfilCity = view.findViewById(R.id.tv_profil_city);
+        tvDescription = view.findViewById(R.id.tv_description);
+        tvHobbies = view.findViewById(R.id.tv_hobbies);
+        tvBalance = view.findViewById(R.id.tv_balance);
+        ivGender = view.findViewById(R.id.iv_gender);
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
 
@@ -158,7 +152,7 @@ public class ViewProfilFragment extends Fragment {
         btnAcceptGodfather.setVisibility(View.GONE);
 
         /** Glide image **/
-        ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
+        ivProfilAvatarShape = view.findViewById(R.id.iv_profil_avatar_shape);
 
         // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
 
