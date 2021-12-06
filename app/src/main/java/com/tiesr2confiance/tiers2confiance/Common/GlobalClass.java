@@ -36,6 +36,8 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelSports;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class GlobalClass extends Application {
@@ -284,8 +286,41 @@ public class GlobalClass extends Application {
         Log.d(TAGAPP, "---------------------------------------------------------------------------");
 
     }
+
+
+    public void DisplayAllArrayLists()
+    {
+
+        DisplayGenders();
+        DisplayRoles();
+        DisplayLanguages();
+
+        DisplayEthnicGroup();
+        DisplayEyeColors();
+        DisplayHairColor();
+        DisplayHairLength();
+        DisplayMaritalStatus();
+        DisplayOuiNon();
+        DisplaySexualOrientation();
+        DisplaySmoker();
+        DisplayShapes();
+
+        DisplayHobbies();
+        DisplayPersonality();
+        DisplaySports();
+
+    }
+
+
     public void DisplayGenders() {
         Log.d(TAGAPP, "DisplayGenders()");
+
+        Comparator<ModelGenders> compareByLabel =
+                (ModelGenders o1, ModelGenders o2) -> o1.getGe_label().compareTo( o2.getGe_label() );
+
+        Collections.sort(arrayListGenders, compareByLabel);
+
+//        Collections.sort(arrayListGenders, compareByLabel.reversed());
 
         Log.d(TAGAPP, "------- arrayListGenders ---------");
         Log.d(TAGAPP, "------- arrayListGenders Size ---------" + arrayListGenders.size());
@@ -298,25 +333,6 @@ public class GlobalClass extends Application {
                     + arrayListGenders.get(i).ge_label);
         }
         Log.d(TAGAPP, "----------------");
-    }
-
-    public void DisplayHobbies() {
-        Log.d(TAGAPP, "DisplayHobbies() ");
-
-        Log.d(TAGAPP, "------- arrayListHobbies ---------");
-        Log.d(TAGAPP, "------- arrayListHobbies Size---------" + arrayListHobbies.size());
-        Log.d(TAGAPP, "------- arrayListHobbies ---------" + arrayListHobbies);
-        Log.d(TAGAPP, "----------------");
-
-
-        for (int i = 0; i < arrayListHobbies.size(); i++) {
-            Log.d(TAGAPP, ">>"
-                    + arrayListHobbies.get(i).ho_id + " "
-                    + arrayListHobbies.get(i).ho_country + " "
-                    + arrayListHobbies.get(i).ho_label);
-        }
-        Log.d(TAGAPP, "----------------");
-
     }
 
     public void DisplayRoles() {
@@ -356,6 +372,230 @@ public class GlobalClass extends Application {
         }
         Log.d(TAGAPP, "----------------");
     }
+
+    public void DisplayEthnicGroup() {
+        Log.d(TAGAPP, "DisplayEthnicGroup() ");
+
+        Log.d(TAGAPP, "------- arrayListEthnicGroup ---------");
+        Log.d(TAGAPP, "------- arrayListEthnicGroup Size---------" + arrayListEthnicGroup.size());
+        Log.d(TAGAPP, "------- arrayListEthnicGroup ---------" + arrayListEthnicGroup);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListEthnicGroup.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListEthnicGroup.get(i).et_country + " "
+                    + arrayListEthnicGroup.get(i).et_id + " "
+                    + arrayListEthnicGroup.get(i).et_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
+
+
+    public void DisplayEyeColors(){
+        Log.d(TAGAPP, "DisplayEyeColors() ");
+
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------");
+        Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListEyeColors.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListEyeColors.get(i).ey_country + " "
+                    + arrayListEyeColors.get(i).ey_id + " "
+                    + arrayListEyeColors.get(i).ey_label);
+        }
+        Log.d(TAGAPP, "----------------");
+
+    }
+
+    public void DisplayHairColor(){
+        Log.d(TAGAPP, "DisplayHairColor() ");
+
+        Log.d(TAGAPP, "------- arrayListHairColor ---------");
+        Log.d(TAGAPP, "------- arrayListHairColor Size---------" + arrayListHairColor.size());
+        Log.d(TAGAPP, "------- arrayListHairColor ---------" + arrayListHairColor);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListHairColor.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListHairColor.get(i).hc_country + " "
+                    + arrayListHairColor.get(i).hc_id + " "
+                    + arrayListHairColor.get(i).hc_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+    public void DisplayHairLength(){
+        Log.d(TAGAPP, "DisplayHairLength() ");
+
+        Log.d(TAGAPP, "------- arrayListHairLength ---------");
+        Log.d(TAGAPP, "------- arrayListHairLength Size---------" + arrayListHairLength.size());
+        Log.d(TAGAPP, "------- arrayListHairLength ---------" + arrayListHairLength);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListHairLength.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListHairLength.get(i).hl_country + " "
+                    + arrayListHairLength.get(i).hl_id + " "
+                    + arrayListHairLength.get(i).hl_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+    public void DisplayMaritalStatus(){
+        Log.d(TAGAPP, "DisplayMaritalStatus() ");
+
+        Log.d(TAGAPP, "------- arrayListMaritalStatus ---------");
+        Log.d(TAGAPP, "------- arrayListMaritalStatus Size---------" + arrayListMaritalStatus.size());
+        Log.d(TAGAPP, "------- arrayListMaritalStatus ---------" + arrayListMaritalStatus);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListMaritalStatus.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListMaritalStatus.get(i).ma_country + " "
+                    + arrayListMaritalStatus.get(i).ma_id + " "
+                    + arrayListMaritalStatus.get(i).ma_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+    public void DisplayOuiNon(){
+        Log.d(TAGAPP, "DisplayOuiNon() ");
+
+        Log.d(TAGAPP, "------- arrayListOuiNon ---------");
+        Log.d(TAGAPP, "------- arrayListOuiNon Size---------" + arrayListOuiNon.size());
+        Log.d(TAGAPP, "------- arrayListOuiNon ---------" + arrayListOuiNon);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListOuiNon.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListOuiNon.get(i).ou_country + " "
+                    + arrayListOuiNon.get(i).ou_id + " "
+                    + arrayListOuiNon.get(i).ou_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
+    public void DisplaySexualOrientation(){
+        Log.d(TAGAPP, "DisplaySexualOrientation() ");
+
+        Log.d(TAGAPP, "------- arrayListSexualOrientation ---------");
+        Log.d(TAGAPP, "------- arrayListSexualOrientation Size---------" + arrayListSexualOrientation.size());
+        Log.d(TAGAPP, "------- arrayListSexualOrientation ---------" + arrayListSexualOrientation);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListSexualOrientation.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListSexualOrientation.get(i).se_country + " "
+                    + arrayListSexualOrientation.get(i).se_id + " "
+                    + arrayListSexualOrientation.get(i).se_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
+    public void DisplayShapes(){
+        Log.d(TAGAPP, "DisplayShapes() ");
+
+        Log.d(TAGAPP, "------- arrayListShapes ---------");
+        Log.d(TAGAPP, "------- arrayListShapes Size---------" + arrayListShapes.size());
+        Log.d(TAGAPP, "------- arrayListShapes ---------" + arrayListShapes);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListShapes.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListShapes.get(i).sh_country + " "
+                    + arrayListShapes.get(i).sh_id + " "
+                    + arrayListShapes.get(i).sh_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
+    public void DisplaySmoker(){
+        Log.d(TAGAPP, "DisplaySmoker() ");
+
+        Log.d(TAGAPP, "------- arrayListSmoker ---------");
+        Log.d(TAGAPP, "------- arrayListSmoker Size---------" + arrayListSmoker.size());
+        Log.d(TAGAPP, "------- arrayListSmoker ---------" + arrayListSmoker);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListSmoker.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListSmoker.get(i).sm_country + " "
+                    + arrayListSmoker.get(i).sm_id + " "
+                    + arrayListSmoker.get(i).sm_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
+    /****************************************************************************/
+    public void DisplayHobbies() {
+        Log.d(TAGAPP, "DisplayHobbies() ");
+
+        Log.d(TAGAPP, "------- arrayListHobbies ---------");
+        Log.d(TAGAPP, "------- arrayListHobbies Size---------" + arrayListHobbies.size());
+        Log.d(TAGAPP, "------- arrayListHobbies ---------" + arrayListHobbies);
+        Log.d(TAGAPP, "----------------");
+
+        Comparator<ModelHobbies> compareByLabel =
+                (ModelHobbies o1, ModelHobbies o2) -> o1.getHo_label().compareTo( o2.getHo_label() );
+
+        Collections.sort(arrayListHobbies, compareByLabel);
+
+        Collections.sort(arrayListHobbies, compareByLabel.reversed());
+
+        for (int i = 0; i < arrayListHobbies.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListHobbies.get(i).ho_id + " "
+                    + arrayListHobbies.get(i).ho_country + " "
+                    + arrayListHobbies.get(i).ho_label);
+        }
+        Log.d(TAGAPP, "----------------");
+
+    }
+
+    public void DisplayPersonality(){
+        Log.d(TAGAPP, "DisplayPersonality() ");
+
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------");
+        Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListEyeColors.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListEyeColors.get(i).ey_country + " "
+                    + arrayListEyeColors.get(i).ey_id + " "
+                    + arrayListEyeColors.get(i).ey_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+    public void DisplaySports(){
+        Log.d(TAGAPP, "DisplaySports() ");
+
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------");
+        Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
+        Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
+        Log.d(TAGAPP, "----------------");
+
+
+        for (int i = 0; i < arrayListEyeColors.size(); i++) {
+            Log.d(TAGAPP, ">>"
+                    + arrayListEyeColors.get(i).ey_country + " "
+                    + arrayListEyeColors.get(i).ey_id + " "
+                    + arrayListEyeColors.get(i).ey_label);
+        }
+        Log.d(TAGAPP, "----------------");
+    }
+
     /************************* Loaders     ***************/
     /************************************************************************************************/
     /************************************************************************************************/
@@ -1713,6 +1953,7 @@ public void LoadOuiNonDataFromFirestore() {
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userCountryLanguage "  + userCountryLanguage);
             Log.e(TAG, "----- GlobalClass : LoadHobbiesDataFromFirestore addOnSuccessListener onComplete error on userId: "+ userId +" -----userEmail "  + userEmail);
         };
+
 
         arrayListHobbies = myArrayListHobbies;
 

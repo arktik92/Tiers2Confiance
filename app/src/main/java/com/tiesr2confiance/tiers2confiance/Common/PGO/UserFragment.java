@@ -181,8 +181,9 @@ public class UserFragment extends Fragment {
 			@Override
 			public void onClick(View myView) {
 
-				globalVariables.DisplayHobbies();
+//				globalVariables.DisplayHobbies();
 				globalVariables.DisplayArraysCount();
+				globalVariables.DisplayAllArrayLists();
 			}
 		});
 
