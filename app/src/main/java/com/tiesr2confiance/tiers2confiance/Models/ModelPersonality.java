@@ -18,16 +18,16 @@ public class ModelPersonality {
     /******************** SETTERS ************************************/
 
     /******************** GETTERS ************************************/
-    public void setPe_id(int pe_id) {
-        this.pe_id = pe_id;
+    public int getPe_id() {
+        return pe_id;
     }
 
-    public void setPe_country(String pe_country) {
-        this.pe_country = pe_country;
+    public String getPe_country() {
+        return pe_country;
     }
 
-    public void setPe_label(String pe_label) {
-        this.pe_label = pe_label;
+    public String getPe_label() {
+        return pe_label;
     }
 /*******************************************************************************************/
 /*******************************************************************************************/

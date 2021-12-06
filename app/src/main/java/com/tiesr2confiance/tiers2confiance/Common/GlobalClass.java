@@ -291,6 +291,7 @@ public class GlobalClass extends Application {
     public void DisplayAllArrayLists()
     {
 
+
         DisplayGenders();
         DisplayRoles();
         DisplayLanguages();
@@ -316,13 +317,9 @@ public class GlobalClass extends Application {
 
         Log.d(TAGAPP, "DisplayGenders()");
 
-        Comparator<ModelGenders> compareByLabel =
+        Comparator<ModelGenders> compareGendersByLabel =
                 (ModelGenders o1, ModelGenders o2) -> o1.getGe_label().compareTo( o2.getGe_label() );
-
-        Collections.sort(arrayListGenders, compareByLabel);
-
-
-
+        Collections.sort(arrayListGenders, compareGendersByLabel);
 //        Collections.sort(arrayListGenders, compareByLabel.reversed());
 
         Log.d(TAGAPP, "------- arrayListGenders ---------");
@@ -340,6 +337,11 @@ public class GlobalClass extends Application {
 
     public void DisplayRoles() {
         Log.d(TAGAPP, "DisplayHobbies() ");
+
+        Comparator<ModelRoles> compareRolesByLabel =
+                (ModelRoles o1, ModelRoles o2) -> o1.getRo_label().compareTo( o2.getRo_label() );
+        Collections.sort(arrayListRoles, compareRolesByLabel);
+
 
         Log.d(TAGAPP, "------- arrayListRoles ---------");
         Log.d(TAGAPP, "------- arrayListRoles Size---------" + arrayListRoles.size());
@@ -360,7 +362,11 @@ public class GlobalClass extends Application {
     }
 
     public void DisplayLanguages() {
-        Log.d(TAGAPP, "DisplayHobbies() ");
+        Log.d(TAGAPP, "DisplayLanguages() ");
+
+        Comparator<ModelLanguage> compareLanguagesByLabel =
+                (ModelLanguage o1, ModelLanguage o2) -> o1.getLa_label().compareTo( o2.getLa_label() );
+        Collections.sort(arrayListLanguage, compareLanguagesByLabel);
 
         Log.d(TAGAPP, "------- arrayListLanguage ---------");
         Log.d(TAGAPP, "------- arrayListLanguage Size---------" + arrayListLanguage.size());
@@ -378,6 +384,10 @@ public class GlobalClass extends Application {
 
     public void DisplayEthnicGroup() {
         Log.d(TAGAPP, "DisplayEthnicGroup() ");
+
+        Comparator<ModelEthnicGroup> compareEthnicGroupByLabel =
+                (ModelEthnicGroup o1, ModelEthnicGroup o2) -> o1.getEt_label().compareTo( o2.getEt_label() );
+        Collections.sort(arrayListEthnicGroup, compareEthnicGroupByLabel);
 
         Log.d(TAGAPP, "------- arrayListEthnicGroup ---------");
         Log.d(TAGAPP, "------- arrayListEthnicGroup Size---------" + arrayListEthnicGroup.size());
@@ -399,6 +409,10 @@ public class GlobalClass extends Application {
     public void DisplayEyeColors(){
         Log.d(TAGAPP, "DisplayEyeColors() ");
 
+        Comparator<ModelEyeColor> compareEyeColorByLabel =
+                (ModelEyeColor o1, ModelEyeColor o2) -> o1.getEy_label().compareTo( o2.getEy_label() );
+        Collections.sort(arrayListEyeColors, compareEyeColorByLabel);
+
         Log.d(TAGAPP, "------- arrayListEyeColors ---------");
         Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
         Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
@@ -418,6 +432,10 @@ public class GlobalClass extends Application {
     public void DisplayHairColor(){
         Log.d(TAGAPP, "DisplayHairColor() ");
 
+        Comparator<ModelHairColor> compareHairColorByLabel =
+                (ModelHairColor o1, ModelHairColor o2) -> o1.getHc_label().compareTo( o2.getHc_label() );
+        Collections.sort(arrayListHairColor, compareHairColorByLabel);
+
         Log.d(TAGAPP, "------- arrayListHairColor ---------");
         Log.d(TAGAPP, "------- arrayListHairColor Size---------" + arrayListHairColor.size());
         Log.d(TAGAPP, "------- arrayListHairColor ---------" + arrayListHairColor);
@@ -434,6 +452,10 @@ public class GlobalClass extends Application {
     }
     public void DisplayHairLength(){
         Log.d(TAGAPP, "DisplayHairLength() ");
+
+        Comparator<ModelHairLength> compareHairLengthByLabel =
+                (ModelHairLength o1, ModelHairLength o2) -> o1.getHl_label().compareTo( o2.getHl_label() );
+        Collections.sort(arrayListHairLength, compareHairLengthByLabel);
 
         Log.d(TAGAPP, "------- arrayListHairLength ---------");
         Log.d(TAGAPP, "------- arrayListHairLength Size---------" + arrayListHairLength.size());
@@ -452,6 +474,10 @@ public class GlobalClass extends Application {
     public void DisplayMaritalStatus(){
         Log.d(TAGAPP, "DisplayMaritalStatus() ");
 
+        Comparator<ModelMaritalStatus> compareMaritalStatusByLabel =
+                (ModelMaritalStatus o1, ModelMaritalStatus o2) -> o1.getMa_label().compareTo( o2.getMa_label() );
+        Collections.sort(arrayListMaritalStatus, compareMaritalStatusByLabel);
+
         Log.d(TAGAPP, "------- arrayListMaritalStatus ---------");
         Log.d(TAGAPP, "------- arrayListMaritalStatus Size---------" + arrayListMaritalStatus.size());
         Log.d(TAGAPP, "------- arrayListMaritalStatus ---------" + arrayListMaritalStatus);
@@ -468,6 +494,11 @@ public class GlobalClass extends Application {
     }
     public void DisplayOuiNon(){
         Log.d(TAGAPP, "DisplayOuiNon() ");
+
+        Comparator<ModelOuiNon> compareOuiNonByLabel =
+                (ModelOuiNon o1, ModelOuiNon o2) -> o1.getOu_label().compareTo( o2.getOu_label() );
+        Collections.sort(arrayListOuiNon, compareOuiNonByLabel);
+//        Collections.sort(arrayListOuiNon, compareOuiNonByLabel.reversed());
 
         Log.d(TAGAPP, "------- arrayListOuiNon ---------");
         Log.d(TAGAPP, "------- arrayListOuiNon Size---------" + arrayListOuiNon.size());
@@ -487,6 +518,10 @@ public class GlobalClass extends Application {
     public void DisplaySexualOrientation(){
         Log.d(TAGAPP, "DisplaySexualOrientation() ");
 
+        Comparator<ModelSexualOrientation> compareSexualOrientationByLabel =
+                (ModelSexualOrientation o1, ModelSexualOrientation o2) -> o1.getSe_label().compareTo( o2.getSe_label() );
+        Collections.sort(arrayListSexualOrientation, compareSexualOrientationByLabel);
+
         Log.d(TAGAPP, "------- arrayListSexualOrientation ---------");
         Log.d(TAGAPP, "------- arrayListSexualOrientation Size---------" + arrayListSexualOrientation.size());
         Log.d(TAGAPP, "------- arrayListSexualOrientation ---------" + arrayListSexualOrientation);
@@ -505,6 +540,10 @@ public class GlobalClass extends Application {
     public void DisplayShapes(){
         Log.d(TAGAPP, "DisplayShapes() ");
 
+        Comparator<ModelShapes> compareShapesByLabel =
+                (ModelShapes o1, ModelShapes o2) -> o1.getSh_label().compareTo( o2.getSh_label() );
+        Collections.sort(arrayListShapes, compareShapesByLabel);
+
         Log.d(TAGAPP, "------- arrayListShapes ---------");
         Log.d(TAGAPP, "------- arrayListShapes Size---------" + arrayListShapes.size());
         Log.d(TAGAPP, "------- arrayListShapes ---------" + arrayListShapes);
@@ -522,6 +561,10 @@ public class GlobalClass extends Application {
 
     public void DisplaySmoker(){
         Log.d(TAGAPP, "DisplaySmoker() ");
+
+        Comparator<ModelSmoker> compareSmokerByLabel =
+                (ModelSmoker o1, ModelSmoker o2) -> o1.getSm_label().compareTo( o2.getSm_label());
+        Collections.sort(arrayListSmoker, compareSmokerByLabel);
 
         Log.d(TAGAPP, "------- arrayListSmoker ---------");
         Log.d(TAGAPP, "------- arrayListSmoker Size---------" + arrayListSmoker.size());
@@ -551,8 +594,8 @@ public class GlobalClass extends Application {
                 (ModelHobbies o1, ModelHobbies o2) -> o1.getHo_label().compareTo( o2.getHo_label() );
 
         Collections.sort(arrayListHobbies, compareByLabel);
-
-        Collections.sort(arrayListHobbies, compareByLabel.reversed());
+//
+//        Collections.sort(arrayListHobbies, compareByLabel.reversed());
 
         for (int i = 0; i < arrayListHobbies.size(); i++) {
             Log.d(TAGAPP, ">>"
@@ -567,34 +610,44 @@ public class GlobalClass extends Application {
     public void DisplayPersonality(){
         Log.d(TAGAPP, "DisplayPersonality() ");
 
-        Log.d(TAGAPP, "------- arrayListEyeColors ---------");
-        Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
-        Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
+        Comparator<ModelPersonality> comparePersonalityByLabel =
+                (ModelPersonality o1, ModelPersonality o2) -> o1.getPe_label().compareTo( o2.getPe_label());
+        Collections.sort(arrayListPersonality, comparePersonalityByLabel);
+
+        Log.d(TAGAPP, "------- arrayListPersonality ---------");
+        Log.d(TAGAPP, "------- arrayListPersonality Size---------" + arrayListPersonality.size());
+        Log.d(TAGAPP, "------- arrayListPersonality ---------" + arrayListPersonality);
         Log.d(TAGAPP, "----------------");
 
 
-        for (int i = 0; i < arrayListEyeColors.size(); i++) {
+        for (int i = 0; i < arrayListPersonality.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListEyeColors.get(i).ey_country + " "
-                    + arrayListEyeColors.get(i).ey_id + " "
-                    + arrayListEyeColors.get(i).ey_label);
+                    + arrayListPersonality.get(i).pe_country + " "
+                    + arrayListPersonality.get(i).pe_id + " "
+                    + arrayListPersonality.get(i).pe_label);
         }
         Log.d(TAGAPP, "----------------");
     }
     public void DisplaySports(){
         Log.d(TAGAPP, "DisplaySports() ");
 
-        Log.d(TAGAPP, "------- arrayListEyeColors ---------");
-        Log.d(TAGAPP, "------- arrayListEyeColors Size---------" + arrayListEyeColors.size());
-        Log.d(TAGAPP, "------- arrayListEyeColors ---------" + arrayListEyeColors);
+
+        Comparator<ModelSports> compareSportsByLabel =
+                (ModelSports o1, ModelSports o2) -> o1.getSp_label().compareTo( o2.getSp_label());
+        Collections.sort(arrayListSports, compareSportsByLabel);
+
+
+        Log.d(TAGAPP, "------- arrayListSports ---------");
+        Log.d(TAGAPP, "------- arrayListSports Size---------" + arrayListSports.size());
+        Log.d(TAGAPP, "------- arrayListSports ---------" + arrayListSports);
         Log.d(TAGAPP, "----------------");
 
 
-        for (int i = 0; i < arrayListEyeColors.size(); i++) {
+        for (int i = 0; i < arrayListSports.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListEyeColors.get(i).ey_country + " "
-                    + arrayListEyeColors.get(i).ey_id + " "
-                    + arrayListEyeColors.get(i).ey_label);
+                    + arrayListSports.get(i).sp_country + " "
+                    + arrayListSports.get(i).sp_id + " "
+                    + arrayListSports.get(i).sp_label);
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -622,10 +675,6 @@ public class GlobalClass extends Application {
         LoadShapesDataFromFirestore();
         LoadSmokerDataFromFirestore();
         LoadSportsDataFromFirestore();
-
-
-
-
 
         // DisplayArraysCount();
     }
@@ -764,6 +813,7 @@ public void LoadEthnicGroupDataFromFirestore() {
         //            LoadUserDataFromFirestore();
         Log.i(TAG, "----- GlobalClass : LoadEthnicGroupDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
     }
+
 
 
     ArrayList<ModelEthnicGroup> myArrayListEthnicGroup = new ArrayList<>();
@@ -951,6 +1001,7 @@ public void LoadEthnicGroupDataFromFirestore() {
 
         }
 
+
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
 
         try
@@ -979,6 +1030,8 @@ public void LoadEthnicGroupDataFromFirestore() {
                                                 ModelGenders gender= documentSnapshot.toObject(ModelGenders.class);
 //                                                Log.i(TAG, "onSuccess ******** gender : " + gender.getGe_id() + " " + gender.getGe_country() + " " + gender.getGe_label());
                                                 myArrayListGenders.add(gender);
+
+
 
                                             }
 
