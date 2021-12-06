@@ -16,6 +16,7 @@ public class NodesNames {
     public static final String KEY_DESCRIPTION = "us_presentation";
     public static final String KEY_GENDER = "us_gender";
     public static final String KEY_SEXUAL_ORIENTATION = "us_sexual_orientation";
+    public static final String KEY_ETHNIE = "us_ethnic_group";
     public static final String KEY_HOBBIES = "us_hobbies";
     public static final String KEY_MARITAL_STATUS = "us_marital_status";
     public static final String KEY_HAS_KID = "us_has_kids";
