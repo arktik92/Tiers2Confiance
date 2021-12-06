@@ -320,6 +320,8 @@ public class GlobalClass extends Application {
 
         Collections.sort(arrayListGenders, compareByLabel);
 
+
+
 //        Collections.sort(arrayListGenders, compareByLabel.reversed());
 
         Log.d(TAGAPP, "------- arrayListGenders ---------");
