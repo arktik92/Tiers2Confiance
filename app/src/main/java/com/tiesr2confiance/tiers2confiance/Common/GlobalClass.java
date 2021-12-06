@@ -371,7 +371,8 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
     /************************************************************************************************/
     public void LoadUserDataFromFirestore() {
-//    public void LoadUserDataFromFirestore(UserDataCallback userDataCallback) {
+        Log.i(TAG, "----- getUserDataFromFirestore START -----");
+
         loadedUserDataOK    =   0;
 
 
@@ -389,29 +390,6 @@ public class GlobalClass extends Application {
             Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
         }
 
-
-
-
-//        if (userId == null){
-//            try {
-//                db      = FirebaseFirestore.getInstance();
-//                user    = FirebaseAuth.getInstance().getCurrentUser();
-//
-//                if (user != null){
-//                    userId  = user.getUid();
-//                }
-//
-////                userNickName = ;
-////                userEmail = "userEmail : Not Retrieved Yet From FS";
-////                userCountryLanguage = "FR";
-//
-//            }catch (Exception e) {
-//                Log.e(TAG, "----- GlobalClass : LoadUserDataFromFirestore : CAN\'T LOAD db, user, userid-----" );
-//            }
-//
-//            Log.i(TAG, "----- GlobalClass : LoadUserDataFromFirestore : "+ userId +"-----" );
-//
-//        }
 
         Log.i(TAG, "XXXXXXXX GlobalClass : LoadUserDataFromFirestore(): userId : " + userId);
 
@@ -471,7 +449,7 @@ public class GlobalClass extends Application {
 
 
 
-        Log.i(TAG, "----- END getUserDataFromFirestore -----");
+        Log.i(TAG, "----- getUserDataFromFirestore END -----");
     } // END LoadUserDataFromFirestore()
 
 /************************************************************************************************/
@@ -480,21 +458,17 @@ public class GlobalClass extends Application {
 /************************************************************************************************/
     /************************************************************************************************/
     public void LoadGendersDataFromFirestore() {
+        Log.i(TAG, "loadGendersDataFromFirestore: START");
+
         loadedUserDataOK    =   0;
-        Log.i(TAG, "START ----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         if (
                 ((userCountryLanguage == "") ? null : userCountryLanguage) == null
-//                || (userCountryLanguage == "FR")
                         || ((userId == "") ? null : userCountryLanguage) == null
         ){
             LoadUserDataFromFirestore();
-
-            Log.i(TAG, "----- GlobalClass : LoadGendersDataFromFirestore userCountryLanguage : "+ userCountryLanguage +"-----");
         }
 
-        Log.i(TAG, "loadGendersDataFromFirestore: BEGIN");
         ArrayList<ModelGenders> myArrayListGenders = new ArrayList<>();
-        Log.i(TAG, "loadGendersDataFromFirestore: BEGIN userCountryLanguage >>>>" + userCountryLanguage);
 
         try
         {
@@ -554,8 +528,8 @@ public class GlobalClass extends Application {
 
         arrayListGenders = myArrayListGenders;
 
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders : " + arrayListGenders);
-        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders.size() *********** " + arrayListGenders.size());
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders : " + arrayListGenders);
+//        Log.i(TAG, "**** INIT GlobalClass ***** arrayListGenders.size() *********** " + arrayListGenders.size());
 
         Log.i(TAG, "loadGendersDataFromFirestore: END");
 

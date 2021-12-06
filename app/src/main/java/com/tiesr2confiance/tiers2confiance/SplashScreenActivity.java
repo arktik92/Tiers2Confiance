@@ -30,7 +30,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 		try
 		{
 			globalVariables.LoadUserDataFromFirestore();
-			globalVariables.LoadArraysDataFromFirestore();
 
 		}
 		catch (Exception e) {
@@ -41,7 +40,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				//This method will be executed once the timer is over
+				// Ce code s'execute après 3000ms
+				// les data de ArrayLists se charge quand les Data User, notament
+				globalVariables.LoadArraysDataFromFirestore();
+
 				// Start MainActivity
 				Intent myIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
 				startActivity(myIntent);
