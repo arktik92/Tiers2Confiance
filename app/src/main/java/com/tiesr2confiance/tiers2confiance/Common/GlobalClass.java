@@ -291,7 +291,6 @@ public class GlobalClass extends Application {
     public void DisplayAllArrayLists()
     {
 
-
         DisplayGenders();
         DisplayRoles();
         DisplayLanguages();
