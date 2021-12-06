@@ -7,10 +7,9 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPT
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_GENDER;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
-import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG;
-import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_IMG_AVATAR;
-import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NAME;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_AVATAR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NICKNAME;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_PHOTOS;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
 
 import androidx.annotation.NonNull;
@@ -452,8 +451,8 @@ public class ViewProfilFragment extends Fragment {
                         if (documentSnapshotDisplayed.exists()) {
                             String nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
                             String city = documentSnapshotDisplayed.getString(KEY_CITY);
-                            String imgurl = documentSnapshotDisplayed.getString(KEY_IMG);
-                            String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_IMG_AVATAR);
+                            String imgPhoto = documentSnapshotDisplayed.getString(KEY_PHOTOS);
+                            String imgUrl_avatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
                             String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
                             String hobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);

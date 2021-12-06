@@ -22,7 +22,6 @@ public class ModelUsers {
     public String us_matchs;
     public String us_matchs_request_from;
     public String us_matchs_request_to;
-    public String us_img;
     public Date us_birth_date;
     public String us_country_lang;
     public long us_postal_code;
@@ -50,7 +49,7 @@ public class ModelUsers {
     public ModelUsers() {
     }
 
-    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_nephews_request_from, String us_nephews_request_to,  String us_godfather, String us_godfather_request_from, String us_godfather_request_to, String us_matchs, String us_matchs_request_to, String us_matchs_request_from, String us_img,  Date us_birth_date, String us_country_lang, long us_postal_code, String us_city, String us_presentation, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_avatar, String us_photos) {
+    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_nephews_request_from, String us_nephews_request_to,  String us_godfather, String us_godfather_request_from, String us_godfather_request_to, String us_matchs, String us_matchs_request_to, String us_matchs_request_from,  Date us_birth_date, String us_country_lang, long us_postal_code, String us_city, String us_presentation, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_avatar, String us_photos) {
         this.us_auth_uid = us_auth_uid;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -70,7 +69,6 @@ public class ModelUsers {
         this.us_matchs = us_matchs;
         this.us_matchs_request_from = us_matchs_request_from;
         this.us_matchs_request_to = us_matchs_request_to;
-        this.us_img = us_img;
         this.us_birth_date = us_birth_date;
         this.us_country_lang = us_country_lang;
         this.us_postal_code = us_postal_code;
@@ -157,8 +155,6 @@ public class ModelUsers {
     public void setUs_matchs_request_from(String us_matchs_request_from) { this.us_matchs_request_from = us_matchs_request_from; }
 
     public void setUs_matchs_request_to(String us_matchs_request_to) { this.us_matchs_request_to = us_matchs_request_to; }
-
-    public void setUs_img(String us_img) { this.us_img = us_img; }
 
     public void setUs_birth_date(Date us_birth_date) {
         this.us_birth_date = us_birth_date;
@@ -309,8 +305,6 @@ public class ModelUsers {
     public String getUs_matchs_request_from() { return us_matchs_request_from; }
 
     public String getUs_matchs_request_to() { return us_matchs_request_to; }
-
-    public String getUs_img() { return us_img; }
 
     public Date getUs_birth_date() {
         return us_birth_date;
