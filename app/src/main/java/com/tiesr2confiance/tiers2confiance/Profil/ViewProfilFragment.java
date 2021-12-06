@@ -4,8 +4,11 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ETHNIE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_EYE_COLOR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_GENDER;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_COLOR;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_LENGTH;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_AVATAR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NICKNAME;
@@ -72,7 +75,7 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvRole, tvDescription, tvProfilCity;
-    private TextView tvHobbies, tvBalance, tvEthnie;
+    private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
@@ -146,6 +149,9 @@ public class ViewProfilFragment extends Fragment {
         tvHobbies = view.findViewById(R.id.tv_hobbies);
         tvBalance = view.findViewById(R.id.tv_balance);
         tvEthnie = view.findViewById(R.id.tv_ethnical_group);
+        tvColorEye = view.findViewById(R.id.tv_eyes_color);
+        tvColorHair= view.findViewById(R.id.tv_hair_color);
+        tvLenghHair= view.findViewById(R.id.tv_hair_length);
 
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
@@ -474,6 +480,12 @@ public class ViewProfilFragment extends Fragment {
                             String listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             long ethnie = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
                             String ethnie_val="--";
+                            long colorEye = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
+                            String colorEye_val="--";
+                            long colorHair = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
+                            String colorHair_val="--";
+                            long lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
+                            String lenghHair_val="--";
                             Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
                             /** ON AFFICHE LES INFORMATION COMMUNES **/
@@ -553,6 +565,36 @@ public class ViewProfilFragment extends Fragment {
                                     }
                                 }
                                 tvEthnie.setText(ethnie_val);
+
+                                // COULEUR YEUX : Affichage de de la couleur des yeux avec la liste complète chargée
+                                for (int j = 0; j < ListEyeColorComplete.size(); j++) {
+                                    long key = ListEyeColorComplete.get(j).getEy_id();
+                                    String value = ListEyeColorComplete.get(j).getEy_label();
+                                    if (key == colorEye) {
+                                        colorEye_val = value;
+                                    }
+                                }
+                                tvColorEye.setText(colorEye_val);
+
+                                // COULEUR CHEVEUX : Affichage de la couleur des cheveux avec la liste complète chargée
+                                for (int j = 0; j < ListHairColorComplete.size(); j++) {
+                                    long key = ListHairColorComplete.get(j).getHc_id();
+                                    String value = ListHairColorComplete.get(j).getHc_label();
+                                    if (key == colorHair) {
+                                        colorHair_val = value;
+                                    }
+                                }
+                                tvColorHair.setText(colorHair_val);
+
+                                // LONGUEUR CHEVEUX : Affichage de la longeur des cheveux comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListHairLengthComplete.size(); j++) {
+                                    long key = ListHairLengthComplete.get(j).getHl_id();
+                                    String value = ListHairLengthComplete.get(j).getHl_label();
+                                    if (key == lenghHair) {
+                                        lenghHair_val = value;
+                                    }
+                                }
+                                tvLenghHair.setText(lenghHair_val);
 
                             }
 
