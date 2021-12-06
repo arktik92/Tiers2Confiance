@@ -43,6 +43,8 @@ import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentMatchCiblesBinding;
 
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -64,6 +66,7 @@ public class MatchCiblesFragment extends Fragment {
     private Button btnSearchSingle;
     private EditText ptCodePostal;
     private FragmentMatchCiblesBinding binding;
+    private Timestamp timestampMin, timestampMax;
 
     ArrayList<String> critere = new ArrayList<>();
 
@@ -148,7 +151,11 @@ public class MatchCiblesFragment extends Fragment {
                         ArrayList<String> ListNotIn = new ArrayList<>();
                         ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_to().split(";")));
                         ListIn.addAll(Arrays.asList(contenuUser.getUs_matchs_request_from().split(";")));
-                        displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                        try {
+                            displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         // Parrain : On affiche les célibataires qu'on n'a pas encore proposé à notre filleul, et qui ne sont pas encore matché
                         assert currentUser != null;
@@ -163,7 +170,11 @@ public class MatchCiblesFragment extends Fragment {
                                         ArrayList<String> ListNotIn = new ArrayList<>();
                                         ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
                                         ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs.split(";")));
-                                        displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                                        try {
+                                            displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 });
                     }
@@ -175,7 +186,7 @@ public class MatchCiblesFragment extends Fragment {
     }
 
     @SuppressLint("LongLogTag")
-    private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) {
+    private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) throws ParseException {
         Query query;
 
         critere.clear();
@@ -187,15 +198,19 @@ public class MatchCiblesFragment extends Fragment {
         ageMaxCritere = sbMax.getProgress();
        // genreCritere = ;
 
-        long ageMin = ageMinCritere * 31556952;
-        long ageMax = ageMaxCritere * 31556952;
-        long today =  Calendar.getInstance().getTimeInMillis()/1000;
 
-        long Min = ageMin - today ;
-        long Max = ageMax - today ;
+        Calendar today =  Calendar.getInstance();
+        long Min =  today.get(Calendar.YEAR) - ageMinCritere;
+        long Max =  today.get(Calendar.YEAR) - ageMaxCritere;
 
-        Log.e(TAG, "displayPossibleMatchList: " +  Min/31556952 );
-        Log.e(TAG, "displayPossibleMatchList: " +  Max/31556952 );
+        String critereAgeMin =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Min;
+        String critereAgeMax =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Max;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date dateMax = format.parse(critereAgeMin);
+        Date dateMin = format.parse(critereAgeMax);
+    //    timestampMin = new Timestamp(dateMin);
+    //    timestampMax = new Timestamp(dateMax);
 
         //Célibataire
         if (usRole.equals(1L)) {
@@ -203,14 +218,16 @@ public class MatchCiblesFragment extends Fragment {
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
                     .whereIn("us_auth_uid", critere)
-                    .whereLessThan("us_birth_date", "01/01/1986")
-                    .whereGreaterThan("us_birth_date", "01/01/1992");
+                    .whereLessThan("us_birth_date", dateMax)
+                    .whereGreaterThan("us_birth_date", dateMin);
         } else {
         //Parrain
             critere.addAll(listNotIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                    .whereNotIn("us_auth_uid", critere);
+                    .whereLessThan("us_birth_date", dateMax)
+                    .whereGreaterThan("us_birth_date", dateMin);
+                    //.whereNotIn("us_auth_uid", critere);
         }
 
         FirestoreRecyclerOptions<ModelUsers> users =
@@ -256,13 +273,13 @@ public class MatchCiblesFragment extends Fragment {
 
         sbMin.setMin((int) 18);
         sbMin.setMax((int) 99);
-        sbMin.setProgress((int) 30);
+        sbMin.setProgress((int) 18);
         tvCurrentMin.setText(String.valueOf(18));
 
         sbMax.setMin((int)18);
         sbMax.setMax((int) 99);
-        sbMax.setProgress((int) 30);
-        tvCurrentMax.setText(String.valueOf(18));
+        sbMax.setProgress((int) 99);
+        tvCurrentMax.setText(String.valueOf(99));
 
         sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
