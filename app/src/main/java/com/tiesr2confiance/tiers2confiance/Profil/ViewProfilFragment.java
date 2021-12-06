@@ -11,9 +11,13 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_COL
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_LENGTH;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_AVATAR;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_MARITAL_STATUS;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NICKNAME;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_PHOTOS;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SEXUAL_ORIENTATION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SHAPE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SMOKE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,6 +65,7 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
 import com.tiesr2confiance.tiers2confiance.Models.ModelMaritalStatus;
 import com.tiesr2confiance.tiers2confiance.Models.ModelPersonality;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSexualOrientation;
+import com.tiesr2confiance.tiers2confiance.Models.ModelShapes;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
@@ -75,7 +80,7 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
 
     private TextView tvProfilName, tvRole, tvDescription, tvProfilCity;
-    private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair;
+    private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
@@ -152,6 +157,10 @@ public class ViewProfilFragment extends Fragment {
         tvColorEye = view.findViewById(R.id.tv_eyes_color);
         tvColorHair= view.findViewById(R.id.tv_hair_color);
         tvLenghHair= view.findViewById(R.id.tv_hair_length);
+        tvSmoker= view.findViewById(R.id.tv_smoker);
+        tvSexualOrient = view.findViewById(R.id.tv_sexual_orientation);
+        tvShape= view.findViewById(R.id.tv_shape);
+        tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
 
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
@@ -486,6 +495,14 @@ public class ViewProfilFragment extends Fragment {
                             String colorHair_val="--";
                             long lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
                             String lenghHair_val="--";
+                            long sexualOrient = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
+                            String sexualOrient_val="--";
+                            long maritalStatus = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
+                            String maritalStatus_val="--";
+                            long smoke = documentSnapshotDisplayed.getLong(KEY_SMOKE);
+                            String smoke_val="--";
+                            long shape = documentSnapshotDisplayed.getLong(KEY_SHAPE);
+                            String shape_val="--";
                             Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
                             /** ON AFFICHE LES INFORMATION COMMUNES **/
@@ -538,9 +555,9 @@ public class ViewProfilFragment extends Fragment {
                                 ArrayList<ModelHairColor> ListHairColorComplete = globalVariables.getArrayListHairColor();
                                 ArrayList<ModelHairLength> ListHairLengthComplete = globalVariables.getArrayListHairLength();
                                 ArrayList<ModelMaritalStatus> ListMaritalStatusComplete = globalVariables.getArrayListMaritalStatus();
-                                //ArrayList<ModelPersonality> ListPersonnalityComplete
                                 ArrayList<ModelSexualOrientation> ListSexualOrientationComplete = globalVariables.getArrayListSexualOrientation();
                                 ArrayList<ModelSmoker> ListSmokerComplete = globalVariables.getArrayListSmoker();
+                                //ArrayList<ModelShapes> ListShapeComplete = globalVariables.getArrayListShape();
 
 
                                 // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
@@ -596,6 +613,45 @@ public class ViewProfilFragment extends Fragment {
                                 }
                                 tvLenghHair.setText(lenghHair_val);
 
+                                // STATUS MARITAL : Affichage du statut marital de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListMaritalStatusComplete.size(); j++) {
+                                    long key = ListMaritalStatusComplete.get(j).getMa_id();
+                                    String value = ListMaritalStatusComplete.get(j).getMa_label();
+                                    if (key == maritalStatus) {
+                                        maritalStatus_val = value;
+                                    }
+                                }
+                                tvMaritalStatus.setText(maritalStatus_val);
+
+                                // ORIENTATION SEXUEL : Affichage de l'orientation sexuelle de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListSexualOrientationComplete.size(); j++) {
+                                    long key = ListSexualOrientationComplete.get(j).getSe_id();
+                                    String value = ListSexualOrientationComplete.get(j).getSe_label();
+                                    if (key == sexualOrient) {
+                                        sexualOrient_val = value;
+                                    }
+                                }
+                                tvSexualOrient.setText(sexualOrient_val);
+
+                                // FUMEUR : Affichage du fumeur, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListSmokerComplete.size(); j++) {
+                                    long key = ListSmokerComplete.get(j).getSm_id();
+                                    String value = ListSmokerComplete.get(j).getSm_label();
+                                    if (key == smoke) {
+                                        smoke_val = value;
+                                    }
+                                }
+                                tvSmoker.setText(smoke_val);
+
+                                // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                              //  for (int j = 0; j < ListSmokerComplete.size(); j++) {
+                              //      long key = ListSmokerComplete.get(j).getSm_id();
+                              //      String value = ListSmokerComplete.get(j).getSm_label();
+                              //      if (key == shape) {
+                              //          shape_val = value;
+                              //      }
+                              //  }
+                              //  tvSmoker.setText(shape_val);
                             }
 
                         } else {

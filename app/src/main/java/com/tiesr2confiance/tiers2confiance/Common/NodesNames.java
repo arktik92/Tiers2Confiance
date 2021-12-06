@@ -1,5 +1,6 @@
 package com.tiesr2confiance.tiers2confiance.Common;
 
+import java.security.PublicKey;
 import java.util.Date;
 
 public class NodesNames {
@@ -22,6 +23,9 @@ public class NodesNames {
     public static final String KEY_HAIR_LENGTH = "us_hair_length";
     public static final String KEY_HOBBIES = "us_hobbies";
     public static final String KEY_MARITAL_STATUS = "us_marital_status";
+    public static final String KEY_SMOKE ="us_smoker";
+    public static final String KEY_SHAPE = "us_shape";
+
     public static final String KEY_HAS_KID = "us_has_kids";
     public static final String KEY_BALANCE = "us_balance";
 
