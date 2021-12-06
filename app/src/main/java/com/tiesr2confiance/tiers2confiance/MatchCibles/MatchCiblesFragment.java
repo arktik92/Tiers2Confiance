@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,8 +67,9 @@ public class MatchCiblesFragment extends Fragment {
     private TextView tvCurrentMin, tvCurrentMax;
     private Button btnSearchSingle;
     private EditText ptCodePostal;
+    private RadioGroup radioGroupGenre;
+    private RadioButton btnRadioGenre1, btnRadioGenre2, btnRadioGenre3;
     private FragmentMatchCiblesBinding binding;
-    private Timestamp timestampMin, timestampMax;
 
     ArrayList<String> critere = new ArrayList<>();
 
@@ -196,8 +199,14 @@ public class MatchCiblesFragment extends Fragment {
        // codePostalCritere =  Double.parseDouble(ptCodePostal.getText());
         ageMinCritere = sbMin.getProgress();
         ageMaxCritere = sbMax.getProgress();
-       // genreCritere = ;
 
+        int choix = radioGroupGenre.getCheckedRadioButtonId();
+        if (choix == -1 ){
+          // PAs de choix
+            genreCritere = -1;
+        }else{
+            genreCritere = choix;
+        }
 
         Calendar today =  Calendar.getInstance();
         long Min =  today.get(Calendar.YEAR) - ageMinCritere;
@@ -220,13 +229,15 @@ public class MatchCiblesFragment extends Fragment {
                     .whereIn("us_auth_uid", critere)
                     .whereLessThan("us_birth_date", dateMax)
                     .whereGreaterThan("us_birth_date", dateMin);
+                    //.whereEqualTo("us_gender", genreCritere);
         } else {
         //Parrain
             critere.addAll(listNotIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
                     .whereLessThan("us_birth_date", dateMax)
-                    .whereGreaterThan("us_birth_date", dateMin);
+                    .whereGreaterThan("us_birth_date", dateMin)
+                    .whereEqualTo("us_gender", genreCritere);
                     //.whereNotIn("us_auth_uid", critere);
         }
 
@@ -270,6 +281,15 @@ public class MatchCiblesFragment extends Fragment {
         tvCurrentMax = view.findViewById(R.id.tv_max);
         btnSearchSingle = view.findViewById(R.id.btn_search_single);
         ptCodePostal = view.findViewById(R.id.pt_code_postal);
+        radioGroupGenre = view.findViewById(R.id.btn_radio_genre);
+        btnRadioGenre1 = view.findViewById(R.id.btn_radio_genre_1);
+        btnRadioGenre2 = view.findViewById(R.id.btn_radio_genre_2);
+        btnRadioGenre3 = view.findViewById(R.id.btn_radio_genre_3);
+
+        btnRadioGenre1.setId((int) 1);
+        btnRadioGenre1.setChecked(true);
+        btnRadioGenre2.setId((int) 2);
+        btnRadioGenre3.setId((int) 3);
 
         sbMin.setMin((int) 18);
         sbMin.setMax((int) 99);
@@ -280,6 +300,7 @@ public class MatchCiblesFragment extends Fragment {
         sbMax.setMax((int) 99);
         sbMax.setProgress((int) 99);
         tvCurrentMax.setText(String.valueOf(99));
+
 
         sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
