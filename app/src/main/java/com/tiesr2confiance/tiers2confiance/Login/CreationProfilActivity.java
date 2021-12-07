@@ -8,13 +8,18 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,21 +46,34 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.OnProgressListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tiesr2confiance.tiers2confiance.CameraFragment;
+import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
+import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
+import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
+import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,17 +81,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
-public class CreationProfilActivity extends AppCompatActivity {
+public class CreationProfilActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    /**
-     * Variables globales
-     **/
+    /** Variables globales **/
     private static int REQUEST_IMAGE_CAPTURE = 1;
     private static int REQUEST_IMAGE_CAMERA_CAPTURE = 100;
     private static final String TAG = "CreationProfilActivity";
 
-    // Variable Widgets
+    /** Variable Widgets **/
     private ImageView imgAvatar;
     public Uri imageUri, imageCameraUri;;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
@@ -81,16 +100,37 @@ public class CreationProfilActivity extends AppCompatActivity {
     private RadioButton rbHomme, rbFemme;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private Button btnAddPhotoGallery, btnAddPhotoCamera;
-
-    //Variable du code
+    /** Variable du code **/
     private Timestamp currentDate, registeredDate, timestamp;
     public static long role;
     private long genre, balance, sexualOrientation, maritalStatus, hasKids, height, shape, ethnicGroup, hairColor,
             hairLength, eyeColor, smoker;
-    private String hobbies, lastName, firstName, nickName, dateOfBirth, zipCode, city, userId,
-            userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo,
-            godfatherRequestFrom, godfather, image, avatar, country, presentation, profession, personality, sports, photos;
+
+    private String hobbies,
+            lastName,
+            firstName,
+            nickName,
+            dateOfBirth,
+            zipCode,
+            city,
+            userId,
+            userEmail,
+            nephewsRequestTo,
+            nephewsRequestfrom,
+            nephews,
+            godfatherRequestTo,
+            godfatherRequestFrom,
+            godfather,
+            image,
+            avatar,
+            country,
+            presentation,
+            profession,
+            personality,
+            sports,
+            urlImage,
+            photos,
+            uriPath;
 
 
     private FirebaseStorage storage;
@@ -106,6 +146,7 @@ public class CreationProfilActivity extends AppCompatActivity {
      **/
     private FirebaseFirestore db;
     private DocumentReference docRef;
+    private CollectionReference collectionReference;
 
     /**
      * Initialisation des composants
@@ -124,33 +165,25 @@ public class CreationProfilActivity extends AppCompatActivity {
         rbFemme = findViewById(R.id.rb_femme);
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
 
-
-        /** button **/
-        btnAddPhotoGallery = findViewById(R.id.btnAddPhotoGallery);
-        btnAddPhotoCamera = findViewById(R.id.btnAddPhotoCamera);
-
-
         // Init des composants Firebase
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
         db = FirebaseFirestore.getInstance();
         docRef = db.document("users/" + userId);
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Définition de la contentView en fonction du rôle
         if (role == 1) {
             setContentView(R.layout.activity_creation_profil_celibataire);
         } else {
             setContentView(R.layout.activity_creation_profil_parrain);
         }
-
         // Rappel de la méthode init
         init();
-
 
         /** Méthode OnClickListener du Date Picker **/
         tvDateOfBirth.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +203,6 @@ public class CreationProfilActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -187,30 +219,12 @@ public class CreationProfilActivity extends AppCompatActivity {
                 }
             }
         };
-
-
-
-        btnAddPhotoGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPicture();
-            }
-        });
-
-
-        btnAddPhotoCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadCameraPhoto();
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
         // Inflate the menu; tjos adds items to the action bar if it is present
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -249,9 +263,8 @@ public class CreationProfilActivity extends AppCompatActivity {
         smoker = 1;
         personality = "";
         sports = "";
-        avatar = "";
+        avatar = uriPath;
         photos = "";
-
 
         // Méthode de la date de dernière connection
         if (registeredDate == null) {
@@ -302,6 +315,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_image", image);
 
 
+
         // Envoi de l'objet sur la Database
         docRef.set(userList)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -319,12 +333,9 @@ public class CreationProfilActivity extends AppCompatActivity {
                         Log.e(TAG, "onFailure: ", e);
                     }
                 });
-
     }
 
-
     public void radioButtonGender(View view) {
-
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
         switch (view.getId()) {
@@ -337,14 +348,11 @@ public class CreationProfilActivity extends AppCompatActivity {
                     genre = 2;
                 break;
         }
-
     }
-
 
     /**
      * upload picture
      **/
-
     public void showGetPhoto(View view) {
         Log.d(TAG, "showGetPhoto ");
 
@@ -355,11 +363,29 @@ public class CreationProfilActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
 
         // Add Menu Event
-         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
-        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
+//         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
+//        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
 
+        popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                // En fonction du résultat, lancement de l'action appropriée
+                if (id == R.id.takeCameraPicture) {
+                    getCameraPhotoNew();
+                } else if (id == R.id.takePicture) {
+                    getImageLibrary();
+                }
+                return false;
+
+            }
+        });
         // Show Popup menu
         popMenu.show();
+
+
+
 
     }
 
@@ -400,7 +426,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
 
-            selectPicture();
+            uploadPhoto();
         }
 
 
@@ -421,7 +447,7 @@ public class CreationProfilActivity extends AppCompatActivity {
             Log.d(TAG, "imageCameraUri >> "+imageCameraUri);
 
 
-            uploadCameraPhoto();
+            uploadCameraPhotoNew();
 
 
         }
@@ -432,7 +458,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
     String fileName = "toto.jpg";
 
-    private void uploadCameraPhoto() {
+    private void uploadCameraPhotoNew() {
 
 
         final ProgressDialog prDial = new ProgressDialog(this);
@@ -451,6 +477,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
         //Create a reference to "images/toto.jpg"
         StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
+
 
 
 
@@ -487,7 +514,8 @@ public class CreationProfilActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
-                        Log.d(TAG, "FILENAME DONE "+fileName);
+                        System.out.println("FILENAME DONE "+fileName);
+
                      //   uploadProfilFireBase();
                     }
                 })
@@ -504,4 +532,208 @@ public class CreationProfilActivity extends AppCompatActivity {
 
 
     }
+
+//    public void clickCameraButton() {
+//        btnAddPhotoCamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getCameraPhotoNew();
+//            }
+//        });
+//    }
+
+    public void getCameraPhotoNew() {
+        Log.d(TAG, "GET PHOTO STEP");
+
+
+
+        // Request for camera runtime permission
+
+        if (ContextCompat.checkSelfPermission(CreationProfilActivity.this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(CreationProfilActivity.this, new String[]{
+                    Manifest.permission.CAMERA
+            }, REQUEST_IMAGE_CAMERA_CAPTURE);
+        }else{
+            Log.d(TAG, "getPhoto: ");
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
+        }
+    }
+    public void getImageLibrary(){
+        System.out.println(">> getImageLibrary");
+
+
+        Log.d(TAG, "***** SelectPicture *******");
+
+        final Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        //  Bundle camerabundle = new Bundle();
+
+        cameraIntent.setType("image/*"); // image/jpg
+
+       /* cameraIntent.putExtra("crop", true);
+        cameraIntent.putExtra("scale", true);
+
+        // Output image dim
+        cameraIntent.putExtra("outputX", 256);
+        cameraIntent.putExtra("outputY", 256);
+*/
+        // Ratio
+        cameraIntent.putExtra("aspectX", 1);
+        cameraIntent.putExtra("aspectY", 1);
+
+        cameraIntent.putExtra("return-data", true);
+
+        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+    private void uploadPhoto() {
+
+        Log.d(TAG, " UploadPhoto  ");
+
+        final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, " ProgressDialog  ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+
+
+        final String randomKey = UUID.randomUUID().toString();
+
+        // Create the reference to "images/mountain.jpg
+
+        Log.d(TAG, "RandomKey: " + randomKey);
+
+
+
+        StorageReference riversRef = storageReference.child("images/" + randomKey);
+
+        riversRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        prDial.dismiss();
+
+
+                        imgAvatar.setImageURI(imageUri);
+
+                        Log.d(TAG, "upload: SUCCESS");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: FAILED");
+                    }
+                })
+                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
+    }
+
+    private void uploadCameraPhoto() {
+
+
+        final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, " uploadCameraPhoto  ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+
+        // Create a storage reference from our app
+        StorageReference storageRef = storageReference.getStorage().getReference();
+
+        // Create a reference to file
+        // StorageReference mountainsRef = storageRef.child("toto.jpg");
+
+        //Create a reference to "images/toto.jpg"
+        StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
+
+       urlImage = "gs://tiers2confiance-21525.appspot.com/images/" + fileName;
+        uriPath = Uri.parse(urlImage).toString();
+
+
+        // while the file names are the same, the reference poinr to different ilfes
+        //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
+        // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
+
+        Toast.makeText(CreationProfilActivity.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
+        imgAvatar.setDrawingCacheEnabled(true);
+        imgAvatar.buildDrawingCache();
+
+
+        Bitmap bitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreationProfilActivity.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+                prDial.dismiss();
+            }
+        })
+
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
+                        prDial.dismiss();
+                        Log.d(TAG, "FILENAME DONE "+fileName);
+                        //uploadProfilFireBase(new File(fileName));
+                    }
+                })
+                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
+
+
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.takePicture:
+               // getImageLibrary();
+                uploadPhoto();
+
+                break;
+
+            case R.id.takeCameraPicture:
+//                getCameraPhotoNew();
+                String fileName = "toto.jpg";
+                uploadCameraPhoto();
+
+                break;
+
+        }
+
+
+        return true;
+    }
+
+
+
+
 }
