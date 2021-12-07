@@ -36,7 +36,7 @@
 
     <string name="lbl_code_postal">Code Postal</string>
     <string name="lbl_ville">Ville</string>
-    <string name="lbl_presentation">Présentaion</string>
+    <string name="lbl_presentation">Présentation</string>
     <string name="lbl_genre">Genre</string>
     <string name="lbl_orientation_sexuelle">Orientation Sexuelle</string>
     <string name="lbl_statut_matrimonial">Statut Matrimonial</string>
