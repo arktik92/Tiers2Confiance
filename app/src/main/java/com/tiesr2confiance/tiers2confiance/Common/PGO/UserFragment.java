@@ -182,7 +182,7 @@ public class UserFragment extends Fragment {
 			public void onClick(View myView) {
 
 //				globalVariables.DisplayHobbies();
-				globalVariables.DisplayArraysCount();
+//				globalVariables.DisplayArraysCount();
 				globalVariables.DisplayAllArrayLists();
 			}
 		});

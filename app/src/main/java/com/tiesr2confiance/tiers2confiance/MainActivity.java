@@ -14,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -41,6 +42,7 @@ import com.tiesr2confiance.tiers2confiance.Profil.ProfilFragment;
 import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.chat.ChatFragment;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,6 +105,17 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+
+        String userCountryLanguage = globalVariables.getUserCountryLanguage();
+        if (userCountryLanguage == "EN") {
+            String languageToLoad = "en"; // your language
+            Locale locale = new Locale(languageToLoad);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
 
         userId          = globalVariables.getUserId();
         userRole        = globalVariables.getUserRole();

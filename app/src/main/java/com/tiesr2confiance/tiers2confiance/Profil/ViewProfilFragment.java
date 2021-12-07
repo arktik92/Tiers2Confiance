@@ -1,6 +1,5 @@
 package com.tiesr2confiance.tiers2confiance.Profil;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
@@ -26,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,7 +41,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,11 +54,9 @@ import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
-
-import javax.xml.transform.sax.SAXResult;
 
 public class ViewProfilFragment extends Fragment {
 
@@ -69,12 +66,13 @@ public class ViewProfilFragment extends Fragment {
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
+    private LinearLayout llHobbies;
 
     /*** BDD ***/
     private FirebaseFirestore db;
 
     /** ID Document To Displayed **/
-    private String UserId;
+    private String userId;
     private DocumentReference userDisplayed;
 
     /** ID Document Connected **/
@@ -83,6 +81,17 @@ public class ViewProfilFragment extends Fragment {
     private DocumentReference userNephew;
 
     /** Variables **/
+    String nickname;
+    String city;
+    String imgPhoto;
+    String imgUrlAvatar;
+    String description;
+    String  listHobbies;
+    String genderUser;
+    Long role;
+    Long balance;
+
+
     private Long usRole;
     private String usNephew;
     private String usGodfather;
@@ -90,6 +99,8 @@ public class ViewProfilFragment extends Fragment {
     private String usGodfatherRequestFrom;
     private String usMatchsRequestFrom;
     private String usMatchsRequestTo;
+
+
 
     private FragmentViewProfilBinding binding;
 
@@ -102,11 +113,13 @@ public class ViewProfilFragment extends Fragment {
         // Récupération de l'ID de l'utilisateur à afficher
         Bundle bundle = getArguments();
         String myStrings =bundle.getString("idUser");
-        UserId = myStrings;
+        userId = myStrings;
+
+
 
         // userDisplayed, récupération de l'utilisateur à afficher
         db = FirebaseFirestore.getInstance();
-        userDisplayed = db.document(KEY_FS_COLLECTION + "/" + UserId);
+        userDisplayed = db.document(KEY_FS_COLLECTION + "/" + userId);
 
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -133,6 +146,7 @@ public class ViewProfilFragment extends Fragment {
         ivGender = view.findViewById(R.id.ivGender);
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
+        llHobbies =view.findViewById(R.id.ll_hobbies);
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
@@ -439,6 +453,71 @@ public class ViewProfilFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        InitComponents(view);
+    }
+
+    private void InitComponents(View v) {
+        InitLlPresentation(v);
+        InitLlHobbies(v);
+
+    }
+
+    private void InitLlHobbies(View v) {
+        tvHobbies = v.findViewById(R.id.tvHobbies);
+        llHobbies =v.findViewById(R.id.ll_hobbies);
+
+        llHobbies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String hobbies =  listHobbies;
+
+                Bundle data = new Bundle();
+                data.putString("hobbies", listHobbies);//
+                data.putString("userid", userId);// tvDescription.getText().toString());
+
+                Fragment updatePresentationFragment = new UpdateHobbiesFragment();
+                updatePresentationFragment.setArguments(data);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, updatePresentationFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
+        });
+    }
+
+    private void InitLlPresentation(View v) {
+
+        LinearLayout    llPresentation;
+        llPresentation = v.findViewById(R.id.ll_presentation);
+
+        llPresentation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String presentation =  tvDescription.getText().toString();
+
+                Bundle data = new Bundle();
+                data.putString("presentation", presentation);//
+                data.putString("userid", userId);// tvDescription.getText().toString());
+
+                Fragment updatePresentationFragment = new UpdatePresentationFragment();
+                updatePresentationFragment.setArguments(data);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, updatePresentationFragment)
+                            .addToBackStack(null)
+                            .commit();
+
+
+
+            }
+        });
     }
 
     public void showProfil() {
@@ -448,15 +527,15 @@ public class ViewProfilFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
-                            String nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
-                            String city = documentSnapshotDisplayed.getString(KEY_CITY);
-                            String imgPhoto = documentSnapshotDisplayed.getString(KEY_PHOTOS);
-                            String imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
-                            String description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
-                            String listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
-                            String genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
-                            Long role = documentSnapshotDisplayed.getLong(KEY_ROLE);
-                            Long balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
+                            nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
+                            city = documentSnapshotDisplayed.getString(KEY_CITY);
+                            imgPhoto = documentSnapshotDisplayed.getString(KEY_PHOTOS);
+                            imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
+                            description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
+                            listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
+                            role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+                            balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
                             // Si l'utilisateur à afficher est un célibataire
                             if (role.equals(1L)){
@@ -494,8 +573,9 @@ public class ViewProfilFragment extends Fragment {
 
                             // Appel de la classe global pour charger les listes d'attributs
                             final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
-                            ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
                             ArrayList<ModelGenders> ListGendersComplete = globalVariables.getArrayListGenders();
+                            ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
+
 
                             // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
                             int i;
@@ -504,8 +584,13 @@ public class ViewProfilFragment extends Fragment {
                                 for (int j = 0; j < ListHobbiesComplete.size(); j++) {
                                     String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
                                     String value = ListHobbiesComplete.get(j).getHo_label();
+                                    String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
                                     if (key.equals(hobbiesListUser[i])) {
-                                        hobbiesToDisplay += value + " -- ";
+                                        //hobbiesToDisplay += value + " -- ";
+                                        TextView tvHobby = new TextView(getActivity().getApplicationContext());
+                                        tvHobby.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvHobby.setText(hobbieLabel);
+                                        llHobbies.addView(tvHobby);
                                     }
                                 }
                             }

@@ -100,13 +100,46 @@
                             android:gravity="center"
                             android:text="city" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_presentation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/lbl_presentation"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="0"
+                                android:foreground="@drawable/ic_baseline_mode_edit_24"
+                                android:text=" " />
+
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/tvDescription"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:text="description" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -116,24 +149,45 @@
                         android:layout_marginBottom="25dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/textView11"
-                            android:layout_width="match_parent"
-                            android:layout_height="28dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="2dp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="Mes hobbies"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvHobbies"
+                        <LinearLayout
+                            android:id="@+id/ll_hobbies"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/lbl_hobbies" />
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_hobbies_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="28dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/lbl_hobbies"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView12"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_weight="0"
+                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
+                                    android:text=" " />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvHobbies"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/lbl_hobbies" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/textView4"
@@ -143,7 +197,7 @@
                             android:layout_marginBottom="2dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="Ma personnalité"
+                            android:text="@string/lbl_personnalite"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -162,7 +216,7 @@
                             android:layout_marginBottom="2dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="Mon solde"
+                            android:text="@string/lbl_solde"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
