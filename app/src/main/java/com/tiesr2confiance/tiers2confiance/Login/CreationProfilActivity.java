@@ -80,7 +80,8 @@ public class CreationProfilActivity extends AppCompatActivity {
             hairLength, eyeColor, smoker;
     private String hobbies,lastName,firstName,nickName, dateOfBirth, zipCode,city, userId,
             userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo,
-            godfatherRequestFrom, godfather, image, avatar, country,presentation,profession, personality, sports, photos;
+            godfatherRequestFrom, godfather, image, avatar, country,presentation,profession, personality, sports, photos,
+            matchRequestFrom, matchRequestTo, match;
 
 
     /** Variable Firebase Auth **/
@@ -232,7 +233,9 @@ public class CreationProfilActivity extends AppCompatActivity {
         sports = "";
         avatar = "";
         photos = "";
-
+        match = "";
+        matchRequestFrom = "";
+        matchRequestTo = "";
 
         // Méthode de la date de dernière connection
         if(registeredDate == null) {
@@ -281,19 +284,9 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
         userList.put("us_image", image);
-
-
-
-
-
-
-
-
-
-
-
-
-
+        userList.put("us_match_request_from", matchRequestFrom);
+        userList.put("us_match_request_to", matchRequestTo);
+        userList.put("us_match", match);
 
 
         // Envoi de l'objet sur la Database
