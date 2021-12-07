@@ -653,15 +653,12 @@ public class ViewProfilFragment extends Fragment {
                                 tvRole.setText("Tiers");
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
-//                                Log.i(TAGAPP, "onSuccess LISTPHOTO after new : " + imgPhotosList.size() );
 
                                 if (imgPhotos != "" & imgPhotos != ";"){
                                     imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
-//                                    Log.i(TAGAPP, "onSuccess LISTPHOTO after imgPhotosList.addAll : " + imgPhotosList.size() );
                                 }
 
 
-//                                Log.i(TAGAPP, "onSuccess LISTPHOTO: " + imgPhotosList);
 
                                 if(imgPhotosList.size() == 0){
                                     rvListPhotos.setVisibility(View.GONE);
