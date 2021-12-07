@@ -2,9 +2,13 @@ package com.tiesr2confiance.tiers2confiance.Login;
 
 import static android.graphics.Color.TRANSPARENT;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -15,9 +19,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
@@ -55,6 +66,7 @@ public class CreationProfilActivity extends AppCompatActivity {
     private static final String filePrefs = R.class.getPackage().getName() + ".prefs";
 
     // Variable Widgets
+    private ImageView imgAvatar;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
@@ -75,11 +87,13 @@ public class CreationProfilActivity extends AppCompatActivity {
     FirebaseUser user;
 
     /** Variables Firestore **/
-    private FirebaseFirestore db;
-    private DocumentReference docRef;
+        private FirebaseFirestore db;
+        private DocumentReference docRef;
 
     /** Initialisation des composants **/
     public void init() {
+
+        imgAvatar = findViewById(R.id.imgAvatar);
         etLastName = findViewById(R.id.et_creation_nom);
         etFistName = findViewById(R.id.et_creation_prenom);
         etNickName = findViewById(R.id.et_creation_pseudo);
@@ -173,7 +187,12 @@ public class CreationProfilActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+        // Inflate the menu; tjos adds items to the action bar if it is present
 
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     /** Méthode de création de l'utilisateur  **/
@@ -261,6 +280,7 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_avatar", avatar);
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
+        userList.put("us_image", image);
 
 
 
@@ -281,9 +301,6 @@ public class CreationProfilActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
-
-
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
@@ -316,6 +333,31 @@ public class CreationProfilActivity extends AppCompatActivity {
         }
 
     }
+
+
+    /**
+     * upload picture
+     **/
+
+    public void showGetPhoto(View view) {
+        Log.d(TAG, "showGetPhoto ");
+
+        PopupMenu popMenu = new PopupMenu(this, view);
+        MenuInflater menuInflater = popMenu.getMenuInflater();
+
+        // call Inflater Menu
+        menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
+
+        // Add Menu Event
+         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
+        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
+
+        // Show Popup menu
+        popMenu.show();
+
+    }
+
+
 
 
 
