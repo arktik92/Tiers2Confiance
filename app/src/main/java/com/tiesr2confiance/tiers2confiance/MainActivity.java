@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Commencer la discussion
         fragmentTransaction = fragmentManager.beginTransaction();
         // Appel du nouveau fragment
-        CameraFragment cameraFragment = new CameraFragment();
+        //CameraFragment cameraFragment = new CameraFragment();
         // Ajouter au container de fragment
         fragmentTransaction.add(R.id.fragment_container, new Fragment());
         // Finalisation de la création du fragment
@@ -189,8 +189,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
             // MOI (Pseudo)
             case R.id.nav_photos:
-                Intent intent = new Intent(MainActivity.this, CameraFragment.class);
-                startActivity(intent);
+           //     Intent intent = new Intent(MainActivity.this, CameraFragment.class);
+             //   startActivity(intent);
 
                 break;
             // MOI (Pseudo)

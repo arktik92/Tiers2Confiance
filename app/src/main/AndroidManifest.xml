@@ -33,7 +33,9 @@
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
-            android:exported="false"/>
+            android:exported="false">
+
+        </activity>
 
         <activity
             android:name=".Login.RoleChoiceActivity"
@@ -45,7 +47,6 @@
         <activity
             android:name=".Login.CreationProfilActivity"
             android:exported="true">
-
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -54,13 +55,18 @@
         </activity>
 
 
+
+
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity
+
+
+       <!-- <activity
             android:name=".CameraFragment"
             android:exported="false" />
-
+-->
 
     </application>
 

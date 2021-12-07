@@ -1,42 +1,18 @@
 package com.tiesr2confiance.tiers2confiance.Login;
 
-import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.common.net.InternetDomainName;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.tiesr2confiance.tiers2confiance.CameraFragment;
-import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
-import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
-import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.R;
-
-import java.util.UUID;
 
 
 public class PopupAddAvatarMenuEventHandle extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
@@ -59,13 +35,13 @@ public class PopupAddAvatarMenuEventHandle extends AppCompatActivity implements 
 
 
            if(menuItem.getItemId() == R.id.takePicture){
-               Log.d(TAG, "takePicture: ");
-            // selectPicture();
+               System.out.println("takePicture");
+               getImageLibrary();
            }else if(menuItem.getItemId() == R.id.takeCameraPicture){
 
                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
               startActivityForResult(intent, 100);
-               Log.d(TAG, "takeCameraPicture: ");
+               System.out.println("takeCameraPicture");
            }
 
 
@@ -74,31 +50,36 @@ public class PopupAddAvatarMenuEventHandle extends AppCompatActivity implements 
         return false;
     }
 
-    private void selectPicture(){
 
-        Log.d(TAG, "***** SelectPicture *******");
+public void getImageLibrary(){
+        System.out.println(">> getImageLibrary");
 
-        Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        startActivity(cameraIntent);
-        /****
-        Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    Log.d(TAG, "***** SelectPicture *******");
 
-        cameraIntent.putExtra("aspectX", 1);
-        cameraIntent.putExtra("aspectY", 1);
+   final Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        cameraIntent.putExtra("return-data", true);
+    //  Bundle camerabundle = new Bundle();
 
-        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+    cameraIntent.setType("image/*"); // image/jpg
 
-        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+       /* cameraIntent.putExtra("crop", true);
+        cameraIntent.putExtra("scale", true);
 
-        **/
+        // Output image dim
+        cameraIntent.putExtra("outputX", 256);
+        cameraIntent.putExtra("outputY", 256);
+*/
+    // Ratio
+    cameraIntent.putExtra("aspectX", 1);
+    cameraIntent.putExtra("aspectY", 1);
 
-        Log.d(TAG, "***** END SelectPicture *******");
+    cameraIntent.putExtra("return-data", true);
 
-    }
+    final Intent intent = cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
+    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+}
 
 
     @Override
@@ -107,138 +88,10 @@ public class PopupAddAvatarMenuEventHandle extends AppCompatActivity implements 
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            Log.d(TAG, "onActivityResult: DATA ");
+System.out.println("imageUri"+imageUri);
            // uploadPhoto();
         }
-
-
-        if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == RESULT_OK) {
-
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-
-            ImageView imgAvatar = findViewById(R.id.imgAvatar);
-
-            imgAvatar.setImageBitmap(bitmap);
-
-            Log.d(TAG, "REQUEST_IMAGE_CAMERA_CAPTURE >> ");
-
-            imageCameraUri =  data.getData(); // Bitmap  data.getExtras().get("Data");
-
-            imgAvatar.setImageURI(imageCameraUri);
-
-            //imageCameraUri = data.getData();
-
-            Log.d(TAG, "imageCameraUri >> "+imageCameraUri);
-
-            /**
-             Bitmap bitmap = (Bitmap) data.getExtras().get("Data");
-             ivProfilImage.setImageBitmap(bitmap);
-
-
-             Intent phptoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-             File ImageFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
-
-             Log.d(TAG, "onActivityResult: " + ImageFolder);
-
-
-             imageCameraUri = data.getData();
-
-             Log.d(TAG, "onActivityResult: " + imageCameraUri);*/
-
-         //   uploadCameraPhoto();
-
-
-        }
     }
-
-    private void uploadPhoto(){
-        Log.d(TAG, "uploadPhoto: saasasasasasasasasasass");
-    }
-    
-    
-/***
-    private void uploadPhoto() {
-
-        Log.d(TAG, "***** UploadPhoto ***** ");
-
-        final ProgressDialog prDial = new ProgressDialog(this);
-
-        Log.d(TAG, "***** ProgressDialog ***** ");
-
-        prDial.setTitle("Uploading Image...");
-        prDial.show();
-
-        final String randomKey = UUID.randomUUID().toString();
-
-        // Create the reference to "images/mountain.jpg
-
-        Log.d(TAG, "RandomKey: " + randomKey);
-
-
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
-
-        riversRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        prDial.dismiss();
-                        Log.d(TAG, "upload: SUCCESS");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        prDial.dismiss();
-                        Log.d(TAG, "upload: FAILED");
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
-                    }
-                });
-
-
-    }
-    
-    
-    **/
-
-
-    public void uploadCameraPhoto(View view) {
-        Log.d(TAG, "GET PHOTO STEP");
-
-
-
-        // Request for camera runtime permission
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.CAMERA
-            }, REQUEST_IMAGE_CAMERA_CAPTURE);
-        }else{
-            Log.d(TAG, "getPhoto: ");
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
-        }
-
-
-        /***
-        btnAddCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
-
-            }
-        });**/
-
-    }
-
 
 
 }
