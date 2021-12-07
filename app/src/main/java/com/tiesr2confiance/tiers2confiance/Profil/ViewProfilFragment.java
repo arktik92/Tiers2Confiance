@@ -94,7 +94,7 @@ public class ViewProfilFragment extends Fragment {
     private LinearLayout llProfil;
     private RecyclerView rvListPhotos;
     private ViewPhotosAdapter adapterPhotos;
-    private LinearLayout llHobbies;
+    private LinearLayout llHobbies, llPresentation;
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -176,6 +176,7 @@ public class ViewProfilFragment extends Fragment {
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
         llHobbies =view.findViewById(R.id.ll_hobbies);
+        llPresentation = view.findViewById(R.id.ll_presentation);
         rvListPhotos = view.findViewById(R.id.rv_list_photos);
         rvListPhotos.setHasFixedSize(true);
         rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
@@ -554,11 +555,9 @@ public class ViewProfilFragment extends Fragment {
                 fragmentTransaction.replace(R.id.fragment_container, updatePresentationFragment)
                             .addToBackStack(null)
                             .commit();
-
-
-
             }
         });
+        llPresentation.setClickable(false);
     }
 
     public void showProfil() {
@@ -783,7 +782,13 @@ public class ViewProfilFragment extends Fragment {
                                     usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
-                                        btnUpdateProfil.setVisibility(View.VISIBLE);
+
+
+
+                                        //btnUpdateProfil.setVisibility(View.VISIBLE);
+                                        llPresentation.setClickable(true);
+
+
                                         // Sinon on affiche d'autres boutons
                                     }else{
                                         // Si le user connecté est un Parrain, on affiche les boutons qui vont bien
