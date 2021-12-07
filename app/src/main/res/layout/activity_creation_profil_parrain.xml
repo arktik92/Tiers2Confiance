@@ -45,6 +45,34 @@
                     android:onClick="showGetPhoto"
                     app:srcCompat="@drawable/ic_add_a_photo_24"
                     tools:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/btnAddPhotoGallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ajouter Gallerie " />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:id="@+id/btnAddPhotoCamera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ajouter CAméra " />
+
+                </LinearLayout>
+
+
+
+
             </LinearLayout>
 
 

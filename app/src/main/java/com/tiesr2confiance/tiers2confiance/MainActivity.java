@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     // Gestion de la NavigationView
     private NavigationView navigationView;
 
+
+
     // Variable emplacement
     private static final String emplacement
             = MainActivity.class.getSimpleName();
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     // ******************************** NAVIGATION
     private AppBarConfiguration appBarConfiguration;
     private ProfilFragment binding;
+
 
     /** Var Firebase **/
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -98,6 +101,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         globalVariables.LoadHobbiesDataFromFirestore();
 
         long role = globalVariables.getUserRole();
+
+
 
         Log.d(TAG, "onCreate: USERROLE" + globalVariables.getUserRole() + globalVariables.getUserEmail());
 
@@ -136,7 +141,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         assert currentUser != null;
         userConnected = usersCollectionRef.document(currentUser.getUid());
 
+
+
+
     }
+
 
 
     private void LoadUserData() {
@@ -284,6 +293,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         drawer_layout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 
 
 }

@@ -4,6 +4,7 @@ import static android.graphics.Color.TRANSPARENT;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -14,6 +15,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,17 +60,19 @@ public class CreationProfilActivity extends AppCompatActivity {
     /**
      * Variables globales
      **/
-
-
+    private static int REQUEST_IMAGE_CAPTURE = 1;
     private static final String TAG = "CreationProfilActivity";
 
     // Variable Widgets
     private ImageView imgAvatar;
+    public Uri imageUri;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
     private RadioButton rbHomme, rbFemme;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    private Button btnAddPhotoGallery;
 
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
@@ -106,6 +111,10 @@ public class CreationProfilActivity extends AppCompatActivity {
         rbHomme = findViewById(R.id.rb_homme);
         rbFemme = findViewById(R.id.rb_femme);
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth);
+
+
+        /** button **/
+        btnAddPhotoGallery = findViewById(R.id.btnAddPhotoGallery);
 
 
         // Init des composants Firebase
@@ -165,6 +174,13 @@ public class CreationProfilActivity extends AppCompatActivity {
                 }
             }
         };
+
+        btnAddPhotoGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPicture();
+            }
+        });
     }
 
     @Override
@@ -325,6 +341,50 @@ public class CreationProfilActivity extends AppCompatActivity {
     }
 
 
+    private void selectPicture() {
+
+        Log.d(TAG, "***** SelectPicture *******");
+
+        Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        //  Bundle camerabundle = new Bundle();
+
+        cameraIntent.setType("image/*"); // image/jpg
+
+       /* cameraIntent.putExtra("crop", true);
+        cameraIntent.putExtra("scale", true);
+
+        // Output image dim
+        cameraIntent.putExtra("outputX", 256);
+        cameraIntent.putExtra("outputY", 256);
+*/
+        // Ratio
+        cameraIntent.putExtra("aspectX", 1);
+        cameraIntent.putExtra("aspectY", 1);
+
+        cameraIntent.putExtra("return-data", true);
+
+        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+
+            uploadPhoto();
+        }
+
+
+    }
+
+
+    public void  uploadPhoto(){
+        Toast.makeText(CreationProfilActivity.this, "okokokookk", Toast.LENGTH_SHORT).show();
+    }
 }

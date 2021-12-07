@@ -76,7 +76,7 @@ public void getImageLibrary(){
 
     cameraIntent.putExtra("return-data", true);
 
-    final Intent intent = cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+    cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
     startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
 }
