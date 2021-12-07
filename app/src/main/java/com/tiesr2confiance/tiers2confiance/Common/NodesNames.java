@@ -22,6 +22,8 @@ public class NodesNames {
     public static final String KEY_HAIR_COLOR = "us_hair_color";
     public static final String KEY_HAIR_LENGTH = "us_hair_length";
     public static final String KEY_HOBBIES = "us_hobbies";
+    public static final String KEY_PERSONALITY = "us_personality";
+    public static final String KEY_SPORTS = "us_sports";
     public static final String KEY_MARITAL_STATUS = "us_marital_status";
     public static final String KEY_SMOKE ="us_smoker";
     public static final String KEY_SHAPE = "us_shape";
@@ -32,6 +34,7 @@ public class NodesNames {
 
 
     public static final String KEY_FS_COLLECTION = "users";
+    public static final String KEY_USERS_COLLECTION = "users";
 
 
 
