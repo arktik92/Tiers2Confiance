@@ -12,8 +12,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -44,9 +47,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.OnProgressListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,18 +69,19 @@ public class CreationProfilActivity extends AppCompatActivity {
      * Variables globales
      **/
     private static int REQUEST_IMAGE_CAPTURE = 1;
+    private static int REQUEST_IMAGE_CAMERA_CAPTURE = 100;
     private static final String TAG = "CreationProfilActivity";
 
     // Variable Widgets
     private ImageView imgAvatar;
-    public Uri imageUri;
+    public Uri imageUri, imageCameraUri;;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
     private RadioButton rbHomme, rbFemme;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private Button btnAddPhotoGallery;
+    private Button btnAddPhotoGallery, btnAddPhotoCamera;
 
     //Variable du code
     private Timestamp currentDate, registeredDate, timestamp;
@@ -83,6 +92,9 @@ public class CreationProfilActivity extends AppCompatActivity {
             userEmail, nephewsRequestTo, nephewsRequestfrom, nephews, godfatherRequestTo,
             godfatherRequestFrom, godfather, image, avatar, country, presentation, profession, personality, sports, photos;
 
+
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     /**
      * Variable Firebase Auth
@@ -115,6 +127,7 @@ public class CreationProfilActivity extends AppCompatActivity {
 
         /** button **/
         btnAddPhotoGallery = findViewById(R.id.btnAddPhotoGallery);
+        btnAddPhotoCamera = findViewById(R.id.btnAddPhotoCamera);
 
 
         // Init des composants Firebase
@@ -175,10 +188,20 @@ public class CreationProfilActivity extends AppCompatActivity {
             }
         };
 
+
+
         btnAddPhotoGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectPicture();
+            }
+        });
+
+
+        btnAddPhotoCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadCameraPhoto();
             }
         });
     }
@@ -377,14 +400,108 @@ public class CreationProfilActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
 
-            uploadPhoto();
+            selectPicture();
         }
 
 
+
+        if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == RESULT_OK) {
+
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            imgAvatar.setImageBitmap(bitmap);
+
+            Log.d(TAG, "REQUEST_IMAGE_CAMERA_CAPTURE >> ");
+
+            imageCameraUri =  data.getData(); // Bitmap  data.getExtras().get("Data");
+
+            imgAvatar.setImageURI(imageCameraUri);
+
+            //imageCameraUri = data.getData();
+
+            Log.d(TAG, "imageCameraUri >> "+imageCameraUri);
+
+
+            uploadCameraPhoto();
+
+
+        }
     }
 
 
-    public void  uploadPhoto(){
-        Toast.makeText(CreationProfilActivity.this, "okokokookk", Toast.LENGTH_SHORT).show();
+
+
+    String fileName = "toto.jpg";
+
+    private void uploadCameraPhoto() {
+
+
+        final ProgressDialog prDial = new ProgressDialog(this);
+
+        Log.d(TAG, "***** uploadCameraPhoto ***** ");
+
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+
+        // Create a storage reference from our app
+        StorageReference storageRef = storageReference.getStorage().getReference();
+
+        // Create a reference to file
+        // StorageReference mountainsRef = storageRef.child("toto.jpg");
+
+        //Create a reference to "images/toto.jpg"
+        StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
+
+
+
+        // while the file names are the same, the reference poinr to different ilfes
+        //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
+        // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
+
+        Toast.makeText(CreationProfilActivity.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
+
+
+
+        imgAvatar.setDrawingCacheEnabled(true);
+        imgAvatar.buildDrawingCache();
+
+
+        Bitmap bitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreationProfilActivity.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+                prDial.dismiss();
+            }
+        })
+
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
+                        prDial.dismiss();
+                        Log.d(TAG, "FILENAME DONE "+fileName);
+                     //   uploadProfilFireBase();
+                    }
+                })
+
+                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+
+                    }
+                });
+
+
+
     }
 }
