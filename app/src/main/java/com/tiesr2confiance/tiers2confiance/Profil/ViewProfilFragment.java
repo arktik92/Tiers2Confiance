@@ -86,6 +86,7 @@ import java.util.Objects;
 public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
+    private static final String TAGAPP = "LOGAPP";
 
     private TextView tvProfilName, tvRole, tvDescription, tvProfilCity;
     private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
@@ -118,6 +119,15 @@ public class ViewProfilFragment extends Fragment {
     String genderUser;
     Long role;
     Long balance;
+
+    long ethnie;
+    long colorEye;
+    long colorHair;
+    long lenghHair;
+    long sexualOrient;
+    long maritalStatus;
+    long smoker;
+    long shape;
 
 
     private Long usRole;
@@ -178,6 +188,7 @@ public class ViewProfilFragment extends Fragment {
         llHobbies =view.findViewById(R.id.ll_hobbies);
         llPresentation = view.findViewById(R.id.ll_presentation);
         rvListPhotos = view.findViewById(R.id.rv_list_photos);
+        rvListPhotos.setVisibility(view.GONE);
         rvListPhotos.setHasFixedSize(true);
         rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         tvBalance = view.findViewById(R.id.tv_balance);
@@ -189,6 +200,7 @@ public class ViewProfilFragment extends Fragment {
         tvSexualOrient = view.findViewById(R.id.tv_sexual_orientation);
         tvShape= view.findViewById(R.id.tv_shape);
         tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
+
 
 
 
@@ -534,7 +546,7 @@ public class ViewProfilFragment extends Fragment {
 
     private void InitLlPresentation(View v) {
 
-        LinearLayout    llPresentation;
+
         llPresentation = v.findViewById(R.id.ll_presentation);
 
         llPresentation.setOnClickListener(new View.OnClickListener() {
@@ -568,35 +580,43 @@ public class ViewProfilFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
 
-                            // Variables communes
-                            nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
-                            city = documentSnapshotDisplayed.getString(KEY_CITY);
-                            imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
-                            description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
-                            genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
-                            role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+                            try {
+                                // Variables communes
+                                nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
+                                city = documentSnapshotDisplayed.getString(KEY_CITY);
+                                imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
+                                description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
+                                genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
+                                role = documentSnapshotDisplayed.getLong(KEY_ROLE);
 
 
-                            // Variables spéciales célibataires
-                            imgPhotos = documentSnapshotDisplayed.getString(KEY_PHOTOS);
-                            listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
-                            long ethnie = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
+                                // Variables spéciales célibataires
+                                imgPhotos = documentSnapshotDisplayed.getString(KEY_PHOTOS);
+                                listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                                ethnie = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
+                                colorEye = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
+                                colorHair = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
+                                lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
+                                sexualOrient = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
+                                maritalStatus = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
+                                smoker = documentSnapshotDisplayed.getLong(KEY_SMOKE);
+                                shape = documentSnapshotDisplayed.getLong(KEY_SHAPE);
+                                balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
+                            }catch(Exception e){
+                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
+                            }
+
                             String ethnie_val="--";
-                            long colorEye = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
                             String colorEye_val="--";
-                            long colorHair = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
                             String colorHair_val="--";
-                            long lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
                             String lenghHair_val="--";
-                            long sexualOrient = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
                             String sexualOrient_val="--";
-                            long maritalStatus = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
                             String maritalStatus_val="--";
-                            long smoke = documentSnapshotDisplayed.getLong(KEY_SMOKE);
-                            String smoke_val="--";
-                            long shape = documentSnapshotDisplayed.getLong(KEY_SHAPE);
+                            String smoker_val="--";
                             String shape_val="--";
-                            balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
+                            balance = 0L;
+
+
 
                             /** ON AFFICHE LES INFORMATION COMMUNES **/
                             tvProfilCity.setText(city);
@@ -633,10 +653,25 @@ public class ViewProfilFragment extends Fragment {
                                 tvRole.setText("Tiers");
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
-                                imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
-                                Log.e(TAG, "onSuccess LISTPHOYO: " + imgPhotosList.size() );
-                                adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
-                                rvListPhotos.setAdapter(adapterPhotos);
+//                                Log.i(TAGAPP, "onSuccess LISTPHOTO after new : " + imgPhotosList.size() );
+
+                                if (imgPhotos != "" & imgPhotos != ";"){
+                                    imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
+//                                    Log.i(TAGAPP, "onSuccess LISTPHOTO after imgPhotosList.addAll : " + imgPhotosList.size() );
+                                }
+
+
+//                                Log.i(TAGAPP, "onSuccess LISTPHOTO: " + imgPhotosList);
+
+                                if(imgPhotosList.size() == 0){
+                                    rvListPhotos.setVisibility(View.GONE);
+
+                                }else{
+                                    rvListPhotos.setVisibility(View.VISIBLE);
+                                    adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
+                                    rvListPhotos.setAdapter(adapterPhotos);
+                                }
+
 
 
                                 tvRole.setText("Célib");
@@ -742,11 +777,11 @@ public class ViewProfilFragment extends Fragment {
                                 for (int j = 0; j < ListSmokerComplete.size(); j++) {
                                     long key = ListSmokerComplete.get(j).getSm_id();
                                     String value = ListSmokerComplete.get(j).getSm_label();
-                                    if (key == smoke) {
-                                        smoke_val = value;
+                                    if (key == smoker) {
+                                        smoker_val = value;
                                     }
                                 }
-                                tvSmoker.setText(smoke_val);
+                                tvSmoker.setText(smoker_val);
 
                                 // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
                               //  for (int j = 0; j < ListSmokerComplete.size(); j++) {
