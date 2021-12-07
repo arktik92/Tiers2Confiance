@@ -35,13 +35,13 @@ public class PopupAddAvatarMenuEventHandle extends AppCompatActivity implements 
 
 
            if(menuItem.getItemId() == R.id.takePicture){
-               System.out.println("takePicture");
-               getImageLibrary();
+             //  System.out.println("takePicture");
+             //  getImageLibrary();
            }else if(menuItem.getItemId() == R.id.takeCameraPicture){
 
-               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-              startActivityForResult(intent, 100);
-               System.out.println("takeCameraPicture");
+             //  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+             // startActivityForResult(intent, 100);
+             //  System.out.println("takeCameraPicture");
            }
 
 

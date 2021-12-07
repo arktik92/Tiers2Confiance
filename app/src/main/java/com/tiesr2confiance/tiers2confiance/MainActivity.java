@@ -163,16 +163,16 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     }
 
 
-    private void addFragment() {
-        fragmentManager = getSupportFragmentManager();
-        // Commencer la discussion
-        fragmentTransaction = fragmentManager.beginTransaction();
-        // Appel du nouveau fragment
-        CameraFragment cameraFragment = new CameraFragment();
-        // Ajouter au container de fragment
-        fragmentTransaction.add(R.id.fragment_container, new Fragment());
-        // Finalisation de la création du fragment
-        fragmentTransaction.commit();
+//    private void addFragment() {
+//        fragmentManager = getSupportFragmentManager();
+//        // Commencer la discussion
+//        fragmentTransaction = fragmentManager.beginTransaction();
+//        // Appel du nouveau fragment
+//        CameraFragment cameraFragment = new CameraFragment();
+//        // Ajouter au container de fragment
+//        fragmentTransaction.add(R.id.fragment_container, new Fragment());
+//        // Finalisation de la création du fragment
+//        fragmentTransaction.commit();
 
 
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                beginTransaction().
 //                add(R.id.fragment_container, new Fragment_01()).
 //                commit();
-    }
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
