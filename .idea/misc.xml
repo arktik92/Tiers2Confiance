@@ -33,7 +33,10 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_lier_parrain_filleul.xml" value="0.1" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_lier_parrain_filleul_item_recycler.xml" value="0.5" />
+<<<<<<< HEAD
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_match_cibles.xml" value="0.2990936555891239" />
+=======
+>>>>>>> a7934a7c7f808aca8356cd26029e15c39d5d6a0c
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_pending_requests.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_pending_requests_adapter.xml" value="0.2640625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_pending_requests_item_recycler.xml" value="0.25" />
@@ -45,6 +48,13 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.25" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_lier_deux_celibataires_item_recycler.xml" value="0.18125" />
+        <entry key="app/src/main/res/layout/fragment_match_cibles.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_match_cibles_item_recycler.xml" value="0.11666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_view_profil.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_view_profil_item_recycler.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_media.xml" value="0.1" />
       </map>
     </option>
   </component>
