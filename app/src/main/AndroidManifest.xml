@@ -29,9 +29,6 @@
             android:name=".SplashScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraDeviceFragment"
-            android:exported="false" />
-        <activity
             android:name=".Login.ResetPasswordActivity"
             android:exported="false" />
         <activity
@@ -46,6 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
         <activity
             android:name=".Login.RoleChoiceActivity"
             android:exported="false" />
@@ -54,13 +54,18 @@
             android:exported="false" />
         <activity
             android:name=".Login.CreationProfilActivity"
-            android:exported="false" />
+            android:exported="false"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity
+
+
+       <!-- <activity
             android:name=".CameraFragment"
             android:exported="false" />
+-->
+
     </application>
 
 </manifest>
