@@ -261,7 +261,6 @@ public class CreationProfilActivity extends AppCompatActivity {
         userList.put("us_avatar", avatar);
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
-        userList.put("us_image", image);
 
 
 

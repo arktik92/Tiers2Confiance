@@ -43,7 +43,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 				// les data de ArrayLists se chargent quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
 				globalVariables.LoadArraysDataFromFirestore();
 			}
-		}, 2000);
+		}, 3000);
 
 
 		new Handler().postDelayed(new Runnable() {

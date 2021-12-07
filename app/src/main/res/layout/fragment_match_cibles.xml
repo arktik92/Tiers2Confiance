@@ -112,28 +112,31 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/btn_radio_genre_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Femme" />
+                android:text="Femme"
+                />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/btn_radio_genre_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Homme" />
+                android:text="Homme"
+                />
 
             <RadioButton
-                android:id="@+id/radioButton5"
+                android:id="@+id/btn_radio_genre_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Non genré" />
+                android:text="Non genré"
+                />
 
         </RadioGroup>
 

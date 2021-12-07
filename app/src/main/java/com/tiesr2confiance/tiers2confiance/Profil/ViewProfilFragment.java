@@ -3,19 +3,29 @@ package com.tiesr2confiance.tiers2confiance.Profil;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_BALANCE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_CITY;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_DESCRIPTION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ETHNIE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_EYE_COLOR;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_GENDER;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_COLOR;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HAIR_LENGTH;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_HOBBIES;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_AVATAR;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_MARITAL_STATUS;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_NICKNAME;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_PHOTOS;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_ROLE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SEXUAL_ORIENTATION;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SHAPE;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SMOKE;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,6 +34,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +45,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,15 +57,28 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesAdapter;
+import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
+import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
+import com.tiesr2confiance.tiers2confiance.Models.ModelHairLength;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
+import com.tiesr2confiance.tiers2confiance.Models.ModelMaritalStatus;
+import com.tiesr2confiance.tiers2confiance.Models.ModelPersonality;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSexualOrientation;
+import com.tiesr2confiance.tiers2confiance.Models.ModelShapes;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
@@ -62,10 +87,13 @@ public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
 
-    private TextView tvProfilName, tvDescription, tvProfilCity, tvHobbies, tvRole, tvBalance;
+    private TextView tvProfilName, tvRole, tvDescription, tvProfilCity;
+    private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
+    private RecyclerView rvListPhotos;
+    private ViewPhotosAdapter adapterPhotos;
     private LinearLayout llHobbies;
 
     /*** BDD ***/
@@ -83,7 +111,7 @@ public class ViewProfilFragment extends Fragment {
     /** Variables **/
     String nickname;
     String city;
-    String imgPhoto;
+    String imgPhotos;
     String imgUrlAvatar;
     String description;
     String  listHobbies;
@@ -137,16 +165,31 @@ public class ViewProfilFragment extends Fragment {
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        tvProfilName = view.findViewById(R.id.tvProfilName);
-        tvRole = view.findViewById(R.id.tvRole);
-        tvProfilCity = view.findViewById(R.id.tvProfilCity);
-        tvDescription = view.findViewById(R.id.tvDescription);
-        tvHobbies = view.findViewById(R.id.tvHobbies);
-        tvBalance = view.findViewById(R.id.tvBalance);
-        ivGender = view.findViewById(R.id.ivGender);
+        ivProfilAvatarShape = view.findViewById(R.id.iv_profil_avatar_shape);
+        tvProfilName = view.findViewById(R.id.tv_profil_name);
+        ivGender = view.findViewById(R.id.iv_gender);
+        tvRole = view.findViewById(R.id.tv_role_display);
+        tvProfilCity = view.findViewById(R.id.tv_profil_city);
+        tvDescription = view.findViewById(R.id.tv_description);
+
+        // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
         llHobbies =view.findViewById(R.id.ll_hobbies);
+        rvListPhotos = view.findViewById(R.id.rv_list_photos);
+        rvListPhotos.setHasFixedSize(true);
+        rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        tvBalance = view.findViewById(R.id.tv_balance);
+        tvEthnie = view.findViewById(R.id.tv_ethnical_group);
+        tvColorEye = view.findViewById(R.id.tv_eyes_color);
+        tvColorHair= view.findViewById(R.id.tv_hair_color);
+        tvLenghHair= view.findViewById(R.id.tv_hair_length);
+        tvSmoker= view.findViewById(R.id.tv_smoker);
+        tvSexualOrient = view.findViewById(R.id.tv_sexual_orientation);
+        tvShape= view.findViewById(R.id.tv_shape);
+        tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
+
+
 
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
@@ -171,8 +214,6 @@ public class ViewProfilFragment extends Fragment {
         btnAcceptNephew.setVisibility(View.GONE);
         btnAcceptGodfather.setVisibility(View.GONE);
 
-        /** Glide image **/
-        ivProfilAvatarShape = view.findViewById(R.id.ivProfilAvatarShape);
 
         // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
 
@@ -527,36 +568,55 @@ public class ViewProfilFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
+
+                            // Variables communes
                             nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
                             city = documentSnapshotDisplayed.getString(KEY_CITY);
-                            imgPhoto = documentSnapshotDisplayed.getString(KEY_PHOTOS);
                             imgUrlAvatar = documentSnapshotDisplayed.getString(KEY_AVATAR);
                             description = documentSnapshotDisplayed.getString(KEY_DESCRIPTION);
-                            listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
                             genderUser = String.valueOf(documentSnapshotDisplayed.getLong(KEY_GENDER));
                             role = documentSnapshotDisplayed.getLong(KEY_ROLE);
+
+
+                            // Variables spéciales célibataires
+                            imgPhotos = documentSnapshotDisplayed.getString(KEY_PHOTOS);
+                            listHobbies = documentSnapshotDisplayed.getString(KEY_HOBBIES);
+                            long ethnie = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
+                            String ethnie_val="--";
+                            long colorEye = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
+                            String colorEye_val="--";
+                            long colorHair = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
+                            String colorHair_val="--";
+                            long lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
+                            String lenghHair_val="--";
+                            long sexualOrient = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
+                            String sexualOrient_val="--";
+                            long maritalStatus = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
+                            String maritalStatus_val="--";
+                            long smoke = documentSnapshotDisplayed.getLong(KEY_SMOKE);
+                            String smoke_val="--";
+                            long shape = documentSnapshotDisplayed.getLong(KEY_SHAPE);
+                            String shape_val="--";
                             balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
 
-                            // Si l'utilisateur à afficher est un célibataire
-                            if (role.equals(1L)){
-                                tvRole.setText("Célib");
-                                llProfil.setVisibility(View.VISIBLE);
-                            }else{
-                                // sinon, s'il est Tiers de confiance (parrain)
-                                tvRole.setText("Tiers");
-                            }
-                            tvBalance.setText(String.valueOf(balance));
-
+                            /** ON AFFICHE LES INFORMATION COMMUNES **/
                             tvProfilCity.setText(city);
                             tvProfilName.setText(nickname);
+                            // Le genre
+                            if (genderUser.equals("1")){
+                                ivGender.setImageResource(R.drawable.ic_male);
+                            }else if (genderUser.equals("2")){
+                                ivGender.setImageResource(R.drawable.ic_female);
+                            }else {
+                                ivGender.setImageResource(R.drawable.ic_transgenre);
+                            }
                             tvDescription.setText(description);
-                            /** Glide - Add Picture **/
+                            /** L'avatar : Glide - Add Picture **/
                             Context context = getContext();
                             RequestOptions options = new RequestOptions()
                                     .centerCrop()
                                     .error(R.mipmap.ic_launcher)
                                     .placeholder(R.mipmap.ic_launcher);
-
                             /** Loading Avatar **/
                             Glide
                                     .with(context)
@@ -567,57 +627,138 @@ public class ViewProfilFragment extends Fragment {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(ivProfilAvatarShape);
 
-                            // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
-                            String split_key = ";";
-                            String[] hobbiesListUser = listHobbies.split(split_key);
 
-                            // Appel de la classe global pour charger les listes d'attributs
-                            final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
-                            ArrayList<ModelGenders> ListGendersComplete = globalVariables.getArrayListGenders();
-                            ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
+                            /** ON DIFFERENCIE SELON LE ROLE **/
+                            if (role.equals(2L)){
+                                // Si l'utilisateur à afficher est Tiers de confiance (parrain)
+                                tvRole.setText("Tiers");
+                            }else{
+                                ArrayList<String> imgPhotosList = new ArrayList<>();
+                                imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
+                                Log.e(TAG, "onSuccess LISTPHOYO: " + imgPhotosList.size() );
+                                adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
+                                rvListPhotos.setAdapter(adapterPhotos);
 
 
-                            // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
-                            int i;
-                            String hobbiesToDisplay="-- ";
-                            for (i=0; i< hobbiesListUser.length;i++) {
-                                for (int j = 0; j < ListHobbiesComplete.size(); j++) {
-                                    String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
-                                    String value = ListHobbiesComplete.get(j).getHo_label();
-                                    String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
-                                    if (key.equals(hobbiesListUser[i])) {
-                                        //hobbiesToDisplay += value + " -- ";
-                                        TextView tvHobby = new TextView(getActivity().getApplicationContext());
-                                        tvHobby.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        tvHobby.setText(hobbieLabel);
-                                        llHobbies.addView(tvHobby);
+                                tvRole.setText("Célib");
+                                llProfil.setVisibility(View.VISIBLE);
+                                tvBalance.setText(String.valueOf(balance));
+                                // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
+                                String split_key = ";";
+                                String[] hobbiesListUser = listHobbies.split(split_key);
+
+                                // Appel de la classe global pour charger les listes d'attributs
+                                final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
+                                ArrayList<ModelEthnicGroup> ListEthnicComplete = globalVariables.getArrayListEthnicGroup();
+                                ArrayList<ModelEyeColor> ListEyeColorComplete = globalVariables.getArrayListEyeColors();
+                                ArrayList<ModelHairColor> ListHairColorComplete = globalVariables.getArrayListHairColor();
+                                ArrayList<ModelHairLength> ListHairLengthComplete = globalVariables.getArrayListHairLength();
+                                ArrayList<ModelMaritalStatus> ListMaritalStatusComplete = globalVariables.getArrayListMaritalStatus();
+                                ArrayList<ModelSexualOrientation> ListSexualOrientationComplete = globalVariables.getArrayListSexualOrientation();
+                                ArrayList<ModelSmoker> ListSmokerComplete = globalVariables.getArrayListSmoker();
+                                //ArrayList<ModelShapes> ListShapeComplete = globalVariables.getArrayListShape();
+
+
+                                // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
+                                int i;
+                                String hobbiesToDisplay="-- ";
+                                for (i=0; i< hobbiesListUser.length;i++) {
+                                    for (int j = 0; j < ListHobbiesComplete.size(); j++) {
+                                        String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
+                                        String value = ListHobbiesComplete.get(j).getHo_label();
+                                        String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
+                                        if (key.equals(hobbiesListUser[i])) {
+                                            //hobbiesToDisplay += value + " -- ";
+                                            TextView tvHobby = new TextView(getActivity().getApplicationContext());
+                                            tvHobby.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvHobby.setText(hobbieLabel);
+                                            llHobbies.addView(tvHobby);
+                                        }
                                     }
                                 }
+                                tvHobbies.setText(hobbiesToDisplay);
+
+                                // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListEthnicComplete.size(); j++) {
+                                    long key = ListEthnicComplete.get(j).getEt_id();
+                                    String value = ListEthnicComplete.get(j).getEt_label();
+                                    if (key == ethnie) {
+                                        ethnie_val = value;
+                                    }
+                                }
+                                tvEthnie.setText(ethnie_val);
+
+                                // COULEUR YEUX : Affichage de de la couleur des yeux avec la liste complète chargée
+                                for (int j = 0; j < ListEyeColorComplete.size(); j++) {
+                                    long key = ListEyeColorComplete.get(j).getEy_id();
+                                    String value = ListEyeColorComplete.get(j).getEy_label();
+                                    if (key == colorEye) {
+                                        colorEye_val = value;
+                                    }
+                                }
+                                tvColorEye.setText(colorEye_val);
+
+                                // COULEUR CHEVEUX : Affichage de la couleur des cheveux avec la liste complète chargée
+                                for (int j = 0; j < ListHairColorComplete.size(); j++) {
+                                    long key = ListHairColorComplete.get(j).getHc_id();
+                                    String value = ListHairColorComplete.get(j).getHc_label();
+                                    if (key == colorHair) {
+                                        colorHair_val = value;
+                                    }
+                                }
+                                tvColorHair.setText(colorHair_val);
+
+                                // LONGUEUR CHEVEUX : Affichage de la longeur des cheveux comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListHairLengthComplete.size(); j++) {
+                                    long key = ListHairLengthComplete.get(j).getHl_id();
+                                    String value = ListHairLengthComplete.get(j).getHl_label();
+                                    if (key == lenghHair) {
+                                        lenghHair_val = value;
+                                    }
+                                }
+                                tvLenghHair.setText(lenghHair_val);
+
+                                // STATUS MARITAL : Affichage du statut marital de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListMaritalStatusComplete.size(); j++) {
+                                    long key = ListMaritalStatusComplete.get(j).getMa_id();
+                                    String value = ListMaritalStatusComplete.get(j).getMa_label();
+                                    if (key == maritalStatus) {
+                                        maritalStatus_val = value;
+                                    }
+                                }
+                                tvMaritalStatus.setText(maritalStatus_val);
+
+                                // ORIENTATION SEXUEL : Affichage de l'orientation sexuelle de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListSexualOrientationComplete.size(); j++) {
+                                    long key = ListSexualOrientationComplete.get(j).getSe_id();
+                                    String value = ListSexualOrientationComplete.get(j).getSe_label();
+                                    if (key == sexualOrient) {
+                                        sexualOrient_val = value;
+                                    }
+                                }
+                                tvSexualOrient.setText(sexualOrient_val);
+
+                                // FUMEUR : Affichage du fumeur, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                for (int j = 0; j < ListSmokerComplete.size(); j++) {
+                                    long key = ListSmokerComplete.get(j).getSm_id();
+                                    String value = ListSmokerComplete.get(j).getSm_label();
+                                    if (key == smoke) {
+                                        smoke_val = value;
+                                    }
+                                }
+                                tvSmoker.setText(smoke_val);
+
+                                // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                              //  for (int j = 0; j < ListSmokerComplete.size(); j++) {
+                              //      long key = ListSmokerComplete.get(j).getSm_id();
+                              //      String value = ListSmokerComplete.get(j).getSm_label();
+                              //      if (key == shape) {
+                              //          shape_val = value;
+                              //      }
+                              //  }
+                              //  tvSmoker.setText(shape_val);
                             }
-                            tvHobbies.setText(hobbiesToDisplay);
-
-                            // GENDERS VALEURS :  des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
-                            // En fait , pas besoin de récupérer le label du genre, puisqu'on affiche une icone en fonciton de l'id renseigné dans us_genre
-                            /*
-                            String genderToDisplay="";
-                                for (int j = 0; j < ListGendersComplete.size(); j++) {
-                                    String key = String.valueOf(ListGendersComplete.get(j).getGe_id());
-                                    String value = ListGendersComplete.get(j).getGe_label();
-                                    if (key.equals(genderUser)) {
-                                        genderToDisplay = value;
-                                    }
-                                }
-                            */
-
-                                if (genderUser.equals("1")){
-                                    ivGender.setImageResource(R.drawable.ic_male);
-                                }else if (genderUser.equals("2")){
-                                    ivGender.setImageResource(R.drawable.ic_female);
-                                }else {
-                                    ivGender.setImageResource(R.drawable.ic_transgenre);
-                                }
-
-
 
                         } else {
                             Toast.makeText(getContext(), "Any Document", Toast.LENGTH_SHORT).show();
