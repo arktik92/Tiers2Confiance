@@ -34,6 +34,7 @@ public class NodesNames {
 
 
     public static final String KEY_FS_COLLECTION = "users";
+    public static final String KEY_USERS_COLLECTION = "users";
 
 
 
