@@ -80,6 +80,8 @@ public class LierParrainFilleulFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+
     /** Initialisation des composants et affichage de la liste d'utilisateurs avec la recherche associée **/
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -167,9 +169,12 @@ public class LierParrainFilleulFragment extends Fragment {
 
         // Actions à effectuer lorsque l'utilisateur tape du texte dans la barre de recherche
 
+
+
         svTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                Log.e(TAG, "onQueryTextSubmit: marche pas" );
                 return false;
             }
 
