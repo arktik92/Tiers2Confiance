@@ -226,8 +226,8 @@ public class MatchCiblesFragment extends Fragment {
             critere.addAll(listIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                    .whereIn("us_auth_uid", critere)
-                    .whereLessThan("us_birth_date", dateMax)
+                    //.whereIn("us_auth_uid", critere)
+                    //.whereLessThan("us_birth_date", dateMax)
                     .whereGreaterThan("us_birth_date", dateMin);
                     //.whereEqualTo("us_gender", genreCritere);
         } else {
@@ -235,8 +235,8 @@ public class MatchCiblesFragment extends Fragment {
             critere.addAll(listNotIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                    .whereLessThan("us_birth_date", dateMax)
-                    .whereGreaterThan("us_birth_date", dateMin)
+                   // .whereLessThan("us_birth_date", dateMax)
+                   // .whereGreaterThan("us_birth_date", dateMin)
                     .whereEqualTo("us_gender", genreCritere);
                     //.whereNotIn("us_auth_uid", critere);
         }
