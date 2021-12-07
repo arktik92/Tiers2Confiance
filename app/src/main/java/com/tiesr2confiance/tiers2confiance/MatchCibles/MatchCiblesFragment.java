@@ -31,7 +31,7 @@ import android.widget.Toast;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -39,19 +39,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentMatchCiblesBinding;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -86,7 +85,6 @@ public class MatchCiblesFragment extends Fragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersCollectionRef = db.collection("users");
     private Long usRole;
-
 
     public MatchCiblesFragment() {
         // Required empty public constructor
@@ -184,8 +182,6 @@ public class MatchCiblesFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     @SuppressLint("LongLogTag")
@@ -196,7 +192,10 @@ public class MatchCiblesFragment extends Fragment {
         critere.add("1");
 
         // Récupération des attributs indiqué dans la recherche
-       // codePostalCritere =  Double.parseDouble(ptCodePostal.getText());
+        Log.e(TAG, "displayPossibleMatchList: " + ptCodePostal.getText() );
+        if (!String.valueOf(ptCodePostal.getText()).equals("")){
+            codePostalCritere = Long.parseLong(String.valueOf(ptCodePostal.getText()));
+        }
         ageMinCritere = sbMin.getProgress();
         ageMaxCritere = sbMax.getProgress();
 
@@ -209,63 +208,109 @@ public class MatchCiblesFragment extends Fragment {
         }
 
         Calendar today =  Calendar.getInstance();
-        long Min =  today.get(Calendar.YEAR) - ageMinCritere;
-        long Max =  today.get(Calendar.YEAR) - ageMaxCritere;
+        long Min =  today.get(Calendar.YEAR) - ageMinCritere -1;
+        long Max =  today.get(Calendar.YEAR) - ageMaxCritere -1;
 
         String critereAgeMin =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Min;
         String critereAgeMax =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Max;
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateMax = format.parse(critereAgeMin);
-        Date dateMin = format.parse(critereAgeMax);
-    //    timestampMin = new Timestamp(dateMin);
-    //    timestampMax = new Timestamp(dateMax);
-
+        Date dateMax = format.parse(critereAgeMax);
+        Date dateMin = format.parse(critereAgeMin);
         //Célibataire
         if (usRole.equals(1L)) {
             critere.addAll(listIn);
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                    //.whereIn("us_auth_uid", critere)
-                    //.whereLessThan("us_birth_date", dateMax)
-                    .whereGreaterThan("us_birth_date", dateMin);
-                    //.whereEqualTo("us_gender", genreCritere);
+                    .whereEqualTo("us_gender", genreCritere)
+                    .whereLessThan("us_birth_date",dateMin )
+                    .whereGreaterThan("us_birth_date", dateMax)
+                    .whereIn("us_auth_uid", critere);
+            if (!String.valueOf(ptCodePostal.getText()).equals("")){
+                query = query.whereEqualTo("us_postal_code", codePostalCritere);
+            }
+
+            Query finalQuery = query;
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    FirestoreRecyclerOptions<ModelUsers> users =
+                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                    .setQuery(finalQuery, ModelUsers.class)
+                                    .build();
+
+                    adapterUser = new MatchCiblesAdapter(users);
+                    rvListCible.setAdapter(adapterUser);
+                    adapterUser.startListening();
+                    adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DocumentSnapshot snapshot, int position) {
+                            String idUser = snapshot.getId();
+                            Bundle b = new Bundle();
+                            b.putString("idUser", idUser);
+                            Fragment fragment = new ViewProfilFragment();
+                            fragment.setArguments(b);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    });
+
+
+                }
+            });
+
         } else {
         //Parrain
             critere.addAll(listNotIn);
+
             query = db.collection("users")
                     .whereEqualTo("us_role", 1)
-                   // .whereLessThan("us_birth_date", dateMax)
-                   // .whereGreaterThan("us_birth_date", dateMin)
-                    .whereEqualTo("us_gender", genreCritere);
+                    .whereEqualTo("us_gender", genreCritere)
+                    .whereLessThan("us_birth_date",dateMin )
+                    .whereGreaterThan("us_birth_date", dateMax);
                     //.whereNotIn("us_auth_uid", critere);
+
+            Query finalQuery1 = query;
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    FirestoreRecyclerOptions<ModelUsers> users =
+                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                    .setQuery(finalQuery1, ModelUsers.class)
+                                    .build();
+
+                    adapterUser = new MatchCiblesAdapter(users);
+                    rvListCible.setAdapter(adapterUser);
+                    adapterUser.startListening();
+                    adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(DocumentSnapshot snapshot, int position) {
+                            String idUser = snapshot.getId();
+                            Bundle b = new Bundle();
+                            b.putString("idUser", idUser);
+                            Fragment fragment = new ViewProfilFragment();
+                            fragment.setArguments(b);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    });
+
+
+                }
+            });
+
+      //    test = query.whereLessThan("us_birth_date", dateMin).whereGreaterThan("us_birth_date", dateMax);
+
         }
 
-        FirestoreRecyclerOptions<ModelUsers> users =
-                new FirestoreRecyclerOptions.Builder<ModelUsers>()
-                        .setQuery(query, ModelUsers.class)
-                        .build();
-
-        adapterUser = new MatchCiblesAdapter(users);
-        rvListCible.setAdapter(adapterUser);
-        adapterUser.startListening();
-
-        adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot snapshot, int position) {
-
-                String idUser = snapshot.getId();
-                Bundle b = new Bundle();
-                b.putString("idUser", idUser);
-                Fragment fragment = new ViewProfilFragment();
-                fragment.setArguments(b);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -301,18 +346,15 @@ public class MatchCiblesFragment extends Fragment {
         sbMax.setProgress((int) 99);
         tvCurrentMax.setText(String.valueOf(99));
 
-
         sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvCurrentMin.setText(String.valueOf(sbMin.getProgress()));
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -324,15 +366,11 @@ public class MatchCiblesFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvCurrentMax.setText(String.valueOf(sbMax.getProgress()));
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
