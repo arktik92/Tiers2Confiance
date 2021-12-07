@@ -29,6 +29,18 @@ public class ModelSports {
     public String getSp_label() {
         return sp_label;
     }
+
+    public int get_id() {
+        return sp_id;
+    }
+
+    public String get_country() {
+        return sp_country;
+    }
+
+    public String get_label() {
+        return sp_label;
+    }
 /*******************************************************************************************/
 /*******************************************************************************************/
 /*******************************************************************************************/

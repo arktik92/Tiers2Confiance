@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/mediaContainer"
-        android:layout_width="400dp"
-        android:layout_height="300dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

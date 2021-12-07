@@ -264,6 +264,10 @@ public class GlobalClass extends Application {
         return arrayListOuiNon;
     }
 
+    public ArrayList<ModelPersonality> getArrayListPersonnality() {
+        return arrayListPersonality;
+    }
+
     public ArrayList<ModelSexualOrientation> getArrayListSexualOrientation() {
         return arrayListSexualOrientation;
     }
@@ -271,6 +275,12 @@ public class GlobalClass extends Application {
     public ArrayList<ModelSmoker> getArrayListSmoker() {
         return arrayListSmoker;
     }
+
+    public ArrayList<ModelSports> getArrayListSports() {
+        return arrayListSports;
+    }
+
+    public ArrayList<ModelShapes> getArrayListShapes() { return arrayListShapes; }
 
     /************************* Displayers for Arrays  (in LOGCAT)   ***************/
     public void DisplayAttributes() {

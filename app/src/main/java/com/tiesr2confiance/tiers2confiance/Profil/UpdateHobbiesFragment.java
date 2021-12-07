@@ -41,8 +41,6 @@ import io.reactivex.rxjava3.internal.util.BlockingIgnoringReceiver;
 public class UpdateHobbiesFragment extends Fragment {
 
 	private static final String TAGAPP = "LOGAPP";
-
-
 	private static final String ARG_PARAM1 = "hobbies";
 
 

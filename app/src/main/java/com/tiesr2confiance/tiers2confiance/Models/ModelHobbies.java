@@ -32,6 +32,18 @@ public class ModelHobbies {
     public String getHo_label() {
         return ho_label;
     }
+
+    public int get_id() {
+        return ho_id;
+    }
+
+    public String get_country() {
+        return ho_country;
+    }
+
+    public String get_label() {
+        return ho_label;
+    }
     /*******************************************************************************************/
     /*******************************************************************************************/
     /*******************************************************************************************/
