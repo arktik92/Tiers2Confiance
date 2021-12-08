@@ -86,11 +86,22 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
     private static final String TAGAPP = "LOGAPP";
 
-    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity, tvPersonality, tvSports;
-    private TextView tvHobbies, tvBalance, tvEthnicGroup, tvEyeColor, tvHairColor, tvHairLength, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
+    /** ---------------- DECLARATION DES VARIABLES ------------------------ **/
+
+    /** Champs Commun **/
+    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity;
     private ImageView ivProfilAvatarShape, ivGender;
-    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
+
+    /** Champs Celibataire **/
+    private TextView tvPersonality, tvSports,tvHobbies, tvBalance, tvEthnicGroup, tvEyeColor, tvHairColor, tvHairLength, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
     private LinearLayout llPhoto;
+
+     /** Champs Edit (crayon) **/
+    private TextView tvPersonalityEdit, tvSportsEdit,tvHobbiesEdit, tvPresentationEdit, tvEthnicGroupEdit, tvEyeColorEdit, tvHairColorEdit, tvHairLengthEdit, tvSmokerEdit, tvSexualOrientEdit, tvMaritalStatusEdit, tvShapeEdit;
+
+    /** Bontons Action   **/
+    private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
+
     private RecyclerView rvListPhotos;
     private ViewPhotosAdapter adapterPhotos;
     private LinearLayout
@@ -107,7 +118,6 @@ public class ViewProfilFragment extends Fragment {
             , llSexualOrientation
             , llSmoker
             , llBalance;
-
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -144,7 +154,6 @@ public class ViewProfilFragment extends Fragment {
     long smokerId;
     long shapeId;
 
-
     private Long   usRole;
     private String usNephew;
     private String usGodfather;
@@ -155,8 +164,6 @@ public class ViewProfilFragment extends Fragment {
 
     String upadtedField;
     String userAge;
-
-
 
     private FragmentViewProfilBinding binding;
 
@@ -170,8 +177,6 @@ public class ViewProfilFragment extends Fragment {
         Bundle bundle = getArguments();
         String myStrings =bundle.getString("idUser");
         userId = myStrings;
-
-
 
         // userDisplayed, récupération de l'utilisateur à afficher
         db = FirebaseFirestore.getInstance();
@@ -200,11 +205,9 @@ public class ViewProfilFragment extends Fragment {
         tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
         tvPresentation = view.findViewById(R.id.tv_presentation);
-        tvPersonality = view.findViewById(R.id.tv_personnality);
-        tvSports = view.findViewById(R.id.tv_sport);
 
 
-        // On instancie tous les éléments du layout
+        /** On instancie tous les éléments du layout **/
         llPhoto             = view.findViewById(R.id.ll_photo);
         llBalance           = view.findViewById(R.id.ll_balance);
         llHobbies           = view.findViewById(R.id.ll_hobbies);
@@ -221,7 +224,6 @@ public class ViewProfilFragment extends Fragment {
         llSmoker            = view.findViewById(R.id.ll_smoker);
 
         rvListPhotos = view.findViewById(R.id.rv_list_photos);
-        rvListPhotos.setVisibility(view.GONE);
         rvListPhotos.setHasFixedSize(true);
         rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         tvBalance = view.findViewById(R.id.tv_balance);
@@ -234,6 +236,19 @@ public class ViewProfilFragment extends Fragment {
         tvShape= view.findViewById(R.id.tv_shape);
         tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
 
+        tvPersonalityEdit = view.findViewById(R.id.tv_personnality_edit);
+        tvSportsEdit = view.findViewById(R.id.tv_sport_edit);
+        tvHobbiesEdit = view.findViewById(R.id.tv_hobbies_edit);
+        tvPresentationEdit = view.findViewById(R.id.tv_presentation_edit);
+        tvEthnicGroupEdit= view.findViewById(R.id.tv_ethnic_edit);
+        tvEyeColorEdit = view.findViewById(R.id.tv_eyes_color_edit);
+        tvHairColorEdit = view.findViewById(R.id.tv_hair_color_edit);
+        tvHairLengthEdit = view.findViewById(R.id.tv_hair_length_edit);
+        tvSmokerEdit  = view.findViewById(R.id.tv_smoker_edit);
+        tvSexualOrientEdit = view.findViewById(R.id.tv_sexual_orientation_edit);
+        tvMaritalStatusEdit = view.findViewById(R.id.tv_marital_status_edit);
+        tvShapeEdit = view.findViewById(R.id.tv_shape_edit);
+
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnAcceptMatch =view.findViewById(R.id.btn_accept_match);
@@ -244,15 +259,17 @@ public class ViewProfilFragment extends Fragment {
         btnAcceptNephew = view.findViewById(R.id.btn_accept_nephew);
         btnAcceptGodfather = view.findViewById(R.id.btn_accept_godfather);
 
-        // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
+        /** Par defaut, on masque toute la partie du profil CELIBATAIRE **/
         makeInvisible();
+        /** Par defaut, on ne peut pas modifier les informations **/
+        makeNotUpdate();
 
         // On initie les comosants à afficher
         InitComponents(view);
 
 
 
-        // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
+        /** ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN ****************************************************** **/
 
         // Le parrain connecté est redirigé vers le fragment permettant de créditer son filleul
         btnPflCrediter.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +396,7 @@ public class ViewProfilFragment extends Fragment {
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                                            userConnected.update("us_nephews", userDisplayed.getId());
                                             // Replace
                                             String ListDemands = contenuUser.getUs_nephews_request_from();
                                             String ListDemandsNew = ListDemands.replace(userDisplayed.getId() + ";", "");
@@ -557,11 +574,10 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
+        llPresentation.setClickable(false);
     }
 
-
     private void InitLlHobbies(View v) {
-        tvHobbies = v.findViewById(R.id.tvHobbies);
         llHobbies =v.findViewById(R.id.ll_hobbies);
 
         llHobbies.setOnClickListener(new View.OnClickListener() {
@@ -580,10 +596,10 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
+        llHobbies.setClickable(false);
     }
 
     private void InitLlPersonality(View v) {
-        tvPersonality = v.findViewById(R.id.tv_personnality);
         llPersonality =v.findViewById(R.id.ll_personality);
 
         llPersonality.setOnClickListener(new View.OnClickListener() {
@@ -602,11 +618,10 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
+        llPersonality.setClickable(false);
     }
 
-
     private void InitLlSports(View v) {
-        tvSports = v.findViewById(R.id.tv_sport);
         llSports = v.findViewById(R.id.ll_sports);
 
         llSports.setOnClickListener(new View.OnClickListener() {
@@ -625,6 +640,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
+        llSports.setClickable(false);
     }
 
     private void InitLlEthnicGroup(View v) {
@@ -649,7 +665,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llEthnicGroup.setClickable(false);
     }
 
     private void InitLlEyeColor(View v) {
@@ -674,9 +690,8 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llEyeColor.setClickable(false);
     }
-
 
     private void InitLlHairColor(View v) {
         tvHairColor = v.findViewById(R.id.tv_hair_color);
@@ -700,9 +715,8 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llHairColor.setClickable(false);
     }
-
 
     private void InitLlHairLength(View v) {
         tvHairLength = v.findViewById(R.id.tv_hair_length);
@@ -726,7 +740,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llHairLength.setClickable(false);
     }
 
     private void InitLlMaritalStatus(View v) {
@@ -751,7 +765,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llMaritalStatus.setClickable(false);
     }
 
     private void InitLlSexualOrientation(View v) {
@@ -776,7 +790,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-
+        llSexualOrientation.setClickable(false);
     }
 
 
@@ -803,7 +817,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+        llSmoker.setClickable(false);
     }
 
 
@@ -829,7 +843,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+        llShape.setClickable(false);
     }
 
     private void OpenFragment(View v, Bundle dataBundle, Fragment myFragment) {
@@ -852,6 +866,16 @@ public class ViewProfilFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
+
+                            String ethnie_val="--";
+                            String colorEye_val="--";
+                            String colorHair_val="--";
+                            String lenghHair_val="--";
+                            String sexualOrient_val="--";
+                            String maritalStatus_val="--";
+                            String smoker_val="--";
+                            String shape_val="--";
+                            balance = 0L;
 
                             try {
                                 ModelUsers currentUser = documentSnapshotDisplayed.toObject(ModelUsers.class);
@@ -887,17 +911,6 @@ public class ViewProfilFragment extends Fragment {
                             }catch(Exception e){
                                 Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
                             }
-
-                            String ethnie_val="--";
-                            String colorEye_val="--";
-                            String colorHair_val="--";
-                            String lenghHair_val="--";
-                            String sexualOrient_val="--";
-                            String maritalStatus_val="--";
-                            String smoker_val="--";
-                            String shape_val="--";
-                            balance = 0L;
-
 
 
                             /** ON AFFICHE LES INFORMATION COMMUNES **/
@@ -937,17 +950,16 @@ public class ViewProfilFragment extends Fragment {
 //                                tvRole.setText("Tiers");
                                 tvRole.setText(getString(R.string.lbl_tiers));
                             }else{
+                                tvBalance.setText(balance.toString());
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
-
                                 if (imgPhotos != "" & imgPhotos != ";"){
                                     imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
                                 }
 
                                 if(imgPhotosList.size() == 0){
-                                    rvListPhotos.setVisibility(View.GONE);
-
+                                    llPhoto.setVisibility(View.GONE);
                                 }else{
-                                    rvListPhotos.setVisibility(View.VISIBLE);
+                                    llPhoto.setVisibility(View.VISIBLE);
                                     adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
                                     rvListPhotos.setAdapter(adapterPhotos);
                                 }
@@ -957,6 +969,7 @@ public class ViewProfilFragment extends Fragment {
                                 //tvRole.setText("Célib");
                                 tvRole.setText(getString(R.string.lbl_celibataire));
                                 makeVisible();
+
                                 tvBalance.setText(String.valueOf(balance));
                                 // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                                 String split_key = ";";
@@ -979,14 +992,11 @@ public class ViewProfilFragment extends Fragment {
 
                                 // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
 
-                                String hobbiesToDisplay="-- ";
                                 for (int i=0; i< hobbiesListUser.length;i++) {
                                     for (int j = 0; j < ListHobbiesComplete.size(); j++) {
                                         String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
-                                        String value = ListHobbiesComplete.get(j).getHo_label();
                                         String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
                                         if (key.equals(hobbiesListUser[i])) {
-                                            hobbiesToDisplay += value + " -- ";
                                             TextView tvAttribute = new TextView(getActivity().getApplicationContext());
                                             tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             tvAttribute.setText(hobbieLabel);
@@ -994,19 +1004,15 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvHobbies.setText(hobbiesToDisplay);
 
                                 // PERSONALITY
                                 String[] personalityListUser = listPersonality.split(split_key);
 
-                                String personalityToDisplay="-- ";
                                 for (int i=0; i< personalityListUser.length;i++) {
                                     for (int j = 0; j < ListPersonalityComplete.size(); j++) {
                                         String key = String.valueOf(ListPersonalityComplete.get(j).getPe_id());
-                                        String value = ListPersonalityComplete.get(j).getPe_label();
                                         String personalityLabel = ListPersonalityComplete.get(j).getPe_label();
                                         if (key.equals(personalityListUser[i])) {
-                                            personalityToDisplay += value + " -- ";
                                             TextView tvAttribute = new TextView(getActivity().getApplicationContext());
                                             tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             tvAttribute.setText(personalityLabel);
@@ -1014,7 +1020,6 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvPersonality.setText(personalityToDisplay);
 
                                 // SPORTS
                                 String[] sportsListUser = listSports.split(split_key);
@@ -1034,7 +1039,6 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvSports.setText(sportsToDisplay);
 
 
                                 // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
@@ -1139,14 +1143,9 @@ public class ViewProfilFragment extends Fragment {
                                     usMatchsRequestFrom     = contenuUser.getUs_matchs_request_from();
                                     usMatchsRequestTo       = contenuUser.getUs_matchs_request_to();
                                     usGodfatherRequestFrom  = contenuUser.getUs_godfather_request_from();
-                                    // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
+                                    // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche rend clickable et on affiche les crayons
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
-
-
-
-                                        //btnUpdateProfil.setVisibility(View.VISIBLE);
-                                        llPresentation.setClickable(true);
-
+                                        makeUpdate();
 
                                         // Sinon on affiche d'autres boutons
                                     }else{
@@ -1224,7 +1223,6 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest.setVisibility(View.GONE);
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
-        btnUpdateProfil.setVisibility(View.GONE);
         btnAcceptNephew.setVisibility(View.GONE);
         btnAcceptGodfather.setVisibility(View.GONE);
 
@@ -1260,10 +1258,64 @@ public class ViewProfilFragment extends Fragment {
         llSmoker.setVisibility(View.VISIBLE);
     }
 
-    public void makeClickable(){
+    public void makeUpdate(){
 
         llPresentation.setClickable(true);
+        llPhoto.setClickable(true);
+        llBalance.setClickable(true);
+        llHobbies.setClickable(true);
+        llPersonality.setClickable(true);
+        llSports.setClickable(true);
+        llEthnicGroup.setClickable(true);
+        llShape.setClickable(true);
+        llEyeColor.setClickable(true);
+        llHairColor.setClickable(true);
+        llHairLength.setClickable(true);
+        llMaritalStatus.setClickable(true);
+        llSexualOrientation.setClickable(true);
+        llSmoker.setClickable(true);
+
+        tvPersonalityEdit.setVisibility(View.VISIBLE);
+        tvSportsEdit.setVisibility(View.VISIBLE);
+        tvHobbiesEdit.setVisibility(View.VISIBLE);
+        tvPresentationEdit.setVisibility(View.VISIBLE);
+        tvEthnicGroupEdit.setVisibility(View.VISIBLE);
+        tvEyeColorEdit.setVisibility(View.VISIBLE);
+        tvHairColorEdit.setVisibility(View.VISIBLE);
+        tvHairLengthEdit.setVisibility(View.VISIBLE);
+        tvSmokerEdit.setVisibility(View.VISIBLE);
+        tvSexualOrientEdit.setVisibility(View.VISIBLE);
+        tvMaritalStatusEdit.setVisibility(View.VISIBLE);
+        tvShapeEdit.setVisibility(View.VISIBLE);
     }
 
+    public void makeNotUpdate(){
 
+        llPresentation.setClickable(false);
+        llPhoto.setClickable(false);
+        llHobbies.setClickable(false);
+        llPersonality.setClickable(false);
+        llSports.setClickable(false);
+        llEthnicGroup.setClickable(false);
+        llShape.setClickable(false);
+        llEyeColor.setClickable(false);
+        llHairColor.setClickable(false);
+        llHairLength.setClickable(false);
+        llMaritalStatus.setClickable(false);
+        llSexualOrientation.setClickable(false);
+        llSmoker.setClickable(false);
+
+        tvPersonalityEdit.setVisibility(View.GONE);
+        tvSportsEdit.setVisibility(View.GONE);
+        tvHobbiesEdit.setVisibility(View.GONE);
+        tvPresentationEdit.setVisibility(View.GONE);
+        tvEthnicGroupEdit.setVisibility(View.GONE);
+        tvEyeColorEdit.setVisibility(View.GONE);
+        tvHairColorEdit.setVisibility(View.GONE);
+        tvHairLengthEdit.setVisibility(View.GONE);
+        tvSmokerEdit.setVisibility(View.GONE);
+        tvSexualOrientEdit.setVisibility(View.GONE);
+        tvMaritalStatusEdit.setVisibility(View.GONE);
+        tvShapeEdit.setVisibility(View.GONE);
+    }
 }
