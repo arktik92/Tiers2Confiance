@@ -36,9 +36,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +45,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,13 +56,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.google.firebase.firestore.Query;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
-import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesAdapter;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
-import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairLength;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHobbies;
@@ -79,11 +73,12 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
-import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.Objects;
 
 public class ViewProfilFragment extends Fragment {
@@ -91,14 +86,28 @@ public class ViewProfilFragment extends Fragment {
     public static final String TAG = "View Profile";
     private static final String TAGAPP = "LOGAPP";
 
-    private TextView tvProfilName, tvRole, tvpresentation, tvProfilCity, tvPersonality, tvSports;
-    private TextView tvHobbies, tvBalance, tvEthnie, tvColorEye, tvColorHair, tvLenghHair, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
+    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity, tvPersonality, tvSports;
+    private TextView tvHobbies, tvBalance, tvEthnicGroup, tvEyeColor, tvHairColor, tvHairLength, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
     private LinearLayout llProfil;
     private RecyclerView rvListPhotos;
     private ViewPhotosAdapter adapterPhotos;
-    private LinearLayout llPresentation, llHobbies, llPersonality, llSports ;
+    private LinearLayout
+            llPresentation
+            , llHobbies
+            , llPersonality
+            , llSports
+            , llEthnicGroup
+            , llShape
+            , llEyeColor
+            , llHairColor
+            , llHairLength
+            , llMaritalStatus
+            , llSexualOrientation
+            , llSmoker;
+
+
 
     /*** BDD ***/
     private FirebaseFirestore db;
@@ -118,24 +127,25 @@ public class ViewProfilFragment extends Fragment {
     String imgPhotos;
     String imgUrlAvatar;
     String description;
-    String  listHobbies;
-    String  listPersonality;
-    String  listSports;
+    String listHobbies;
+    String listPersonality;
+    String listSports;
     String genderUser;
-    Long role;
-    Long balance;
 
-    long ethnie;
-    long colorEye;
-    long colorHair;
-    long lenghHair;
-    long sexualOrient;
-    long maritalStatus;
-    long smoker;
-    long shape;
+    Long   role;
+    Long   balance;
+
+    long ethnicGroupId;
+    long eyeColorId;
+    long hairColorId;
+    long hairLengthId;
+    long sexualOrientationId;
+    long maritalStatusId;
+    long smokerId;
+    long shapeId;
 
 
-    private Long usRole;
+    private Long   usRole;
     private String usNephew;
     private String usGodfather;
     private String usNephewRequestFrom;
@@ -144,6 +154,7 @@ public class ViewProfilFragment extends Fragment {
     private String usMatchsRequestTo;
 
     String upadtedField;
+    String userAge;
 
 
 
@@ -184,30 +195,40 @@ public class ViewProfilFragment extends Fragment {
 
         ivProfilAvatarShape = view.findViewById(R.id.iv_profil_avatar_shape);
         tvProfilName = view.findViewById(R.id.tv_profil_name);
+        tvUserAge   =view.findViewById(R.id.tv_User_Age);
         ivGender = view.findViewById(R.id.iv_gender);
         tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
-        tvpresentation = view.findViewById(R.id.tv_presentation);
+        tvPresentation = view.findViewById(R.id.tv_presentation);
         tvPersonality = view.findViewById(R.id.tv_personnality);
         tvSports = view.findViewById(R.id.tv_sport);
-        ;
+
 
         // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
         llProfil = view.findViewById(R.id.ll_profil);
         llProfil.setVisibility(View.GONE);
-        llHobbies =view.findViewById(R.id.ll_hobbies);
-        llPresentation  = view.findViewById(R.id.ll_presentation);
-        llPersonality   = view.findViewById(R.id.ll_personality);
-        llSports        = view.findViewById(R.id.ll_sports);
+        llHobbies           = view.findViewById(R.id.ll_hobbies);
+        llPresentation      = view.findViewById(R.id.ll_presentation);
+        llPersonality       = view.findViewById(R.id.ll_personality);
+        llSports            = view.findViewById(R.id.ll_sports);
+        llEthnicGroup       = view.findViewById(R.id.ll_ethnic_group);
+        llShape             = view.findViewById(R.id.ll_shape );
+        llEyeColor          = view.findViewById(R.id.ll_eye_color);
+        llHairColor         = view.findViewById(R.id.ll_hair_color);
+        llHairLength        = view.findViewById(R.id.ll_hair_length);
+        llMaritalStatus     = view.findViewById(R.id.ll_marital_status);
+        llSexualOrientation = view.findViewById(R.id.ll_sexual_orientation);
+        llSmoker            = view.findViewById(R.id.ll_smoker);
+
         rvListPhotos = view.findViewById(R.id.rv_list_photos);
         rvListPhotos.setVisibility(view.GONE);
         rvListPhotos.setHasFixedSize(true);
         rvListPhotos.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         tvBalance = view.findViewById(R.id.tv_balance);
-        tvEthnie = view.findViewById(R.id.tv_ethnical_group);
-        tvColorEye = view.findViewById(R.id.tv_eyes_color);
-        tvColorHair= view.findViewById(R.id.tv_hair_color);
-        tvLenghHair= view.findViewById(R.id.tv_hair_length);
+        tvEthnicGroup = view.findViewById(R.id.tv_ethnic_group);
+        tvEyeColor = view.findViewById(R.id.tv_eyes_color);
+        tvHairColor = view.findViewById(R.id.tv_hair_color);
+        tvHairLength = view.findViewById(R.id.tv_hair_length);
         tvSmoker= view.findViewById(R.id.tv_smoker);
         tvSexualOrient = view.findViewById(R.id.tv_sexual_orientation);
         tvShape= view.findViewById(R.id.tv_shape);
@@ -528,9 +549,42 @@ public class ViewProfilFragment extends Fragment {
         InitLlHobbies(v);
         InitLlPersonality(v);
         InitLlSports(v);
+        InitLlEthnicGroup(v);
+        InitLlEyeColor(v);
+        InitLlHairColor(v);
+        InitLlHairLength(v);
+        InitLlMaritalStatus(v);
 
+
+
+        InitLlSmoker(v);
+        InitLlShape(v);
 
     }
+
+
+    private void InitLlPresentation(View v) {
+        tvPresentation = v.findViewById(R.id.tv_presentation);
+        llPresentation = v.findViewById(R.id.ll_presentation);
+
+        llPresentation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String presentation =  tvPresentation.getText().toString();
+
+                Bundle data = new Bundle();
+                data.putString("presentation", presentation);
+                data.putString("userid", userId);
+
+                Fragment myFragment = new UpdatePresentationFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llPresentation.setClickable(false);
+    }
+
 
     private void InitLlHobbies(View v) {
         tvHobbies = v.findViewById(R.id.tvHobbies);
@@ -544,7 +598,7 @@ public class ViewProfilFragment extends Fragment {
                 upadtedField                =   KEY_HOBBIES;
 
                 Bundle data = new Bundle();
-                data.putString("userattributesstring", userattributesstring);//
+                data.putString("userattributesstring", userattributesstring);
                 data.putString("userid", userId);
                 data.putString("upadtedfield", upadtedField);
 
@@ -566,7 +620,7 @@ public class ViewProfilFragment extends Fragment {
                 upadtedField                =   KEY_PERSONALITY;
 
                 Bundle data = new Bundle();
-                data.putString("userattributesstring", userattributesstring);//
+                data.putString("userattributesstring", userattributesstring);
                 data.putString("userid", userId);
                 data.putString("upadtedfield", upadtedField);
 
@@ -589,7 +643,7 @@ public class ViewProfilFragment extends Fragment {
                 upadtedField                =   KEY_SPORTS;
 
                 Bundle data = new Bundle();
-                data.putString("userattributesstring", userattributesstring);//
+                data.putString("userattributesstring", userattributesstring);
                 data.putString("userid", userId);
                 data.putString("upadtedfield", upadtedField);
 
@@ -601,29 +655,189 @@ public class ViewProfilFragment extends Fragment {
 
 
 
-    private void InitLlPresentation(View v) {
-       llPresentation = v.findViewById(R.id.ll_presentation);
 
-        llPresentation.setOnClickListener(new View.OnClickListener() {
+
+    private void InitLlEthnicGroup(View v) {
+        tvEthnicGroup   = v.findViewById(R.id.tv_ethnic_group);
+        llEthnicGroup   = v.findViewById(R.id.ll_ethnic_group);
+
+        llEthnicGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String presentation =  tvpresentation.getText().toString();
+                String Id =  String.valueOf(ethnicGroupId);
+                upadtedField                =   KEY_ETHNIE;
 
                 Bundle data = new Bundle();
-                data.putString("presentation", presentation);//
-                data.putString("userid", userId);// tvDescription.getText().toString());
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
 
-                Fragment myFragment = new UpdatePresentationFragment();
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
 
                 OpenFragment(v, data, myFragment);
             }
         });
-        llPresentation.setClickable(false);
+//        llEthnicGroup.setClickable(false);
+    }
+
+    private void InitLlEyeColor(View v) {
+        tvEyeColor = v.findViewById(R.id.tv_eyes_color);
+        llEyeColor   = v.findViewById(R.id.ll_eye_color);
+
+        llEyeColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(eyeColorId);
+                upadtedField=   KEY_EYE_COLOR;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
+    }
+
+
+    private void InitLlHairColor(View v) {
+        tvHairColor = v.findViewById(R.id.tv_hair_color);
+        llHairColor   = v.findViewById(R.id.ll_hair_color);
+
+        llHairColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(hairColorId);
+                upadtedField=   KEY_HAIR_COLOR;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
+    }
+
+
+    private void InitLlHairLength(View v) {
+        tvHairLength = v.findViewById(R.id.tv_hair_length);
+        llHairLength   = v.findViewById(R.id.ll_hair_length);
+
+        llHairLength.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(hairLengthId);
+                upadtedField=   KEY_HAIR_LENGTH;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
+    }
+
+    private void InitLlMaritalStatus(View v) {
+        tvMaritalStatus = v.findViewById(R.id.tv_marital_status);
+        llMaritalStatus   = v.findViewById(R.id.ll_marital_status);
+
+        llMaritalStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(maritalStatusId);
+                upadtedField=   KEY_MARITAL_STATUS;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
     }
 
 
 
+
+
+    private void InitLlSmoker(View v) {
+        tvSmoker   = v.findViewById(R.id.tv_smoker);
+        llSmoker   = v.findViewById(R.id.ll_smoker);
+
+        llSmoker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(smokerId);
+                upadtedField=   KEY_SMOKE;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
+    }
+
+
+    private void InitLlShape(View v) {
+        tvShape   = v.findViewById(R.id.tv_shape);
+        llShape   = v.findViewById(R.id.ll_shape);
+
+        llShape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(shapeId);
+                upadtedField=   KEY_SHAPE;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+//        llEthnicGroup.setClickable(false);
+    }
 
     private void OpenFragment(View v, Bundle dataBundle, Fragment myFragment) {
 
@@ -637,6 +851,7 @@ public class ViewProfilFragment extends Fragment {
     }
 
 
+
     public void showProfil() {
 
         userDisplayed.get()
@@ -646,6 +861,12 @@ public class ViewProfilFragment extends Fragment {
                         if (documentSnapshotDisplayed.exists()) {
 
                             try {
+                                ModelUsers currentUser = documentSnapshotDisplayed.toObject(ModelUsers.class);
+                                Date userDateOfBirth    = currentUser.getUs_birth_date();
+
+                                String ageStr   =   String.valueOf(currentUser.getUs_age()) + " " + getString(R.string.lbl_ans);
+                                tvUserAge.setText(ageStr);
+
                                 // Variables communes
                                 nickname = documentSnapshotDisplayed.getString(KEY_NICKNAME);
                                 city = documentSnapshotDisplayed.getString(KEY_CITY);
@@ -661,14 +882,14 @@ public class ViewProfilFragment extends Fragment {
                                 listPersonality= documentSnapshotDisplayed.getString(KEY_PERSONALITY);
                                 listSports = documentSnapshotDisplayed.getString(KEY_SPORTS);
 
-                                ethnie = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
-                                colorEye = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
-                                colorHair = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
-                                lenghHair = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
-                                sexualOrient = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
-                                maritalStatus = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
-                                smoker = documentSnapshotDisplayed.getLong(KEY_SMOKE);
-                                shape = documentSnapshotDisplayed.getLong(KEY_SHAPE);
+                                ethnicGroupId = documentSnapshotDisplayed.getLong(KEY_ETHNIE);
+                                eyeColorId = documentSnapshotDisplayed.getLong(KEY_EYE_COLOR);
+                                hairColorId = documentSnapshotDisplayed.getLong(KEY_HAIR_COLOR);
+                                hairLengthId = documentSnapshotDisplayed.getLong(KEY_HAIR_LENGTH);
+                                sexualOrientationId = documentSnapshotDisplayed.getLong(KEY_SEXUAL_ORIENTATION);
+                                maritalStatusId = documentSnapshotDisplayed.getLong(KEY_MARITAL_STATUS);
+                                smokerId = documentSnapshotDisplayed.getLong(KEY_SMOKE);
+                                shapeId = documentSnapshotDisplayed.getLong(KEY_SHAPE);
                                 balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
                             }catch(Exception e){
                                 Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
@@ -697,7 +918,7 @@ public class ViewProfilFragment extends Fragment {
                             }else {
                                 ivGender.setImageResource(R.drawable.ic_transgenre);
                             }
-                            tvpresentation.setText(description);
+                            tvPresentation.setText(description);
                             /** L'avatar : Glide - Add Picture **/
                             Context context = getContext();
                             RequestOptions options = new RequestOptions()
@@ -717,7 +938,9 @@ public class ViewProfilFragment extends Fragment {
 
                             /** ON DIFFERENCIE SELON LE ROLE **/
                             if (role.equals(2L)){
-                                // Si l'utilisateur à afficher est Tiers de confiance (parrain)
+                                // Si l'utilisateur connecté est un celib et donc...
+                                // si l'utilisateur à afficher est Tiers de confiance (parrain)...
+
                                 tvRole.setText("Tiers");
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
@@ -799,7 +1022,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvSports.setVisibility(View.GONE);
+                                tvPersonality.setVisibility(View.GONE);
                                 tvPersonality.setText(personalityToDisplay);
 
 
@@ -833,47 +1056,47 @@ public class ViewProfilFragment extends Fragment {
                                 for (int j = 0; j < ListEthnicComplete.size(); j++) {
                                     long key = ListEthnicComplete.get(j).getEt_id();
                                     String value = ListEthnicComplete.get(j).getEt_label();
-                                    if (key == ethnie) {
+                                    if (key == ethnicGroupId) {
                                         ethnie_val = value;
                                     }
                                 }
-                                tvEthnie.setText(ethnie_val);
+                                tvEthnicGroup.setText(ethnie_val);
 
                                 // COULEUR YEUX : Affichage de de la couleur des yeux avec la liste complète chargée
                                 for (int j = 0; j < ListEyeColorComplete.size(); j++) {
                                     long key = ListEyeColorComplete.get(j).getEy_id();
                                     String value = ListEyeColorComplete.get(j).getEy_label();
-                                    if (key == colorEye) {
+                                    if (key == eyeColorId) {
                                         colorEye_val = value;
                                     }
                                 }
-                                tvColorEye.setText(colorEye_val);
+                                tvEyeColor.setText(colorEye_val);
 
                                 // COULEUR CHEVEUX : Affichage de la couleur des cheveux avec la liste complète chargée
                                 for (int j = 0; j < ListHairColorComplete.size(); j++) {
                                     long key = ListHairColorComplete.get(j).getHc_id();
                                     String value = ListHairColorComplete.get(j).getHc_label();
-                                    if (key == colorHair) {
+                                    if (key == hairColorId) {
                                         colorHair_val = value;
                                     }
                                 }
-                                tvColorHair.setText(colorHair_val);
+                                tvHairColor.setText(colorHair_val);
 
                                 // LONGUEUR CHEVEUX : Affichage de la longeur des cheveux comparaison de la valeur de l'utilisateur avec la liste complète chargée
                                 for (int j = 0; j < ListHairLengthComplete.size(); j++) {
                                     long key = ListHairLengthComplete.get(j).getHl_id();
                                     String value = ListHairLengthComplete.get(j).getHl_label();
-                                    if (key == lenghHair) {
+                                    if (key == hairLengthId) {
                                         lenghHair_val = value;
                                     }
                                 }
-                                tvLenghHair.setText(lenghHair_val);
+                                tvHairLength.setText(lenghHair_val);
 
                                 // STATUS MARITAL : Affichage du statut marital de l'utilisateur avec la liste complète chargée
                                 for (int j = 0; j < ListMaritalStatusComplete.size(); j++) {
                                     long key = ListMaritalStatusComplete.get(j).getMa_id();
                                     String value = ListMaritalStatusComplete.get(j).getMa_label();
-                                    if (key == maritalStatus) {
+                                    if (key == maritalStatusId) {
                                         maritalStatus_val = value;
                                     }
                                 }
@@ -883,7 +1106,7 @@ public class ViewProfilFragment extends Fragment {
                                 for (int j = 0; j < ListSexualOrientationComplete.size(); j++) {
                                     long key = ListSexualOrientationComplete.get(j).getSe_id();
                                     String value = ListSexualOrientationComplete.get(j).getSe_label();
-                                    if (key == sexualOrient) {
+                                    if (key == sexualOrientationId) {
                                         sexualOrient_val = value;
                                     }
                                 }
@@ -893,21 +1116,21 @@ public class ViewProfilFragment extends Fragment {
                                 for (int j = 0; j < ListSmokerComplete.size(); j++) {
                                     long key = ListSmokerComplete.get(j).getSm_id();
                                     String value = ListSmokerComplete.get(j).getSm_label();
-                                    if (key == smoker) {
+                                    if (key == smokerId) {
                                         smoker_val = value;
                                     }
                                 }
                                 tvSmoker.setText(smoker_val);
 
                                 // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
-                              //  for (int j = 0; j < ListSmokerComplete.size(); j++) {
-                              //      long key = ListSmokerComplete.get(j).getSm_id();
-                              //      String value = ListSmokerComplete.get(j).getSm_label();
-                              //      if (key == shape) {
-                              //          shape_val = value;
-                              //      }
-                              //  }
-                              //  tvSmoker.setText(shape_val);
+                                for (int j = 0; j < ListShapeComplete.size(); j++) {
+                                    long key = ListShapeComplete.get(j).getSh_id();
+                                    String value = ListShapeComplete.get(j).getSh_label();
+                                    if (key == shapeId) {
+                                        shape_val = value;
+                                    }
+                                }
+                                tvShape.setText(shape_val);
                             }
 
                         } else {
@@ -924,13 +1147,13 @@ public class ViewProfilFragment extends Fragment {
                                     ModelUsers contenuUser = documentSnapshotConnected.toObject(ModelUsers.class);
                                     assert contenuUser != null;
 
-                                    usRole = contenuUser.getUs_role();
-                                    usNephew = contenuUser.getUs_nephews();
-                                    usNephewRequestFrom = contenuUser.getUs_nephews_request_from();
-                                    usGodfather = contenuUser.getUs_godfather();
-                                    usMatchsRequestFrom = contenuUser.getUs_matchs_request_from();
-                                    usMatchsRequestTo = contenuUser.getUs_matchs_request_to();
-                                    usGodfatherRequestFrom = contenuUser.getUs_godfather_request_from();
+                                    usRole                  = contenuUser.getUs_role();
+                                    usNephew                = contenuUser.getUs_nephews();
+                                    usNephewRequestFrom     = contenuUser.getUs_nephews_request_from();
+                                    usGodfather             = contenuUser.getUs_godfather();
+                                    usMatchsRequestFrom     = contenuUser.getUs_matchs_request_from();
+                                    usMatchsRequestTo       = contenuUser.getUs_matchs_request_to();
+                                    usGodfatherRequestFrom  = contenuUser.getUs_godfather_request_from();
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche le bouton Update simplement
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
 

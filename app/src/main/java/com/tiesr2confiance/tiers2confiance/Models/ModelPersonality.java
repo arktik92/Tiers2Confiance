@@ -30,17 +30,17 @@ public class ModelPersonality {
         return pe_label;
     }
 
-    public int get_id() {
-        return pe_id;
-    }
-
-    public String get_country() {
-        return pe_country;
-    }
-
-    public String get_label() {
-        return pe_label;
-    }
+//    public int get_id() {
+//        return pe_id;
+//    }
+//
+//    public String get_country() {
+//        return pe_country;
+//    }
+//
+//    public String get_label() {
+//        return pe_label;
+//    }
 /*******************************************************************************************/
 /*******************************************************************************************/
 /*******************************************************************************************/
