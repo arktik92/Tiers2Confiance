@@ -554,11 +554,10 @@ public class ViewProfilFragment extends Fragment {
         InitLlHairColor(v);
         InitLlHairLength(v);
         InitLlMaritalStatus(v);
-
-
-
+        InitLlSexualOrientation(v);
         InitLlSmoker(v);
         InitLlShape(v);
+        //TODO HasKids and Gender
 
     }
 
@@ -679,7 +678,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
     private void InitLlEyeColor(View v) {
@@ -704,7 +703,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
 
@@ -730,7 +729,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
 
@@ -756,7 +755,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
     private void InitLlMaritalStatus(View v) {
@@ -781,10 +780,33 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
+    private void InitLlSexualOrientation(View v) {
+        tvSexualOrient = v.findViewById(R.id.tv_sexual_orientation);
+        llSexualOrientation   = v.findViewById(R.id.ll_sexual_orientation);
 
+        llSexualOrientation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(sexualOrientationId);
+                upadtedField=   KEY_SEXUAL_ORIENTATION;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+
+    }
 
 
 

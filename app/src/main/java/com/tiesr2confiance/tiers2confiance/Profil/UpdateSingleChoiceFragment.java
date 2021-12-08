@@ -41,6 +41,7 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairLength;
 import com.tiesr2confiance.tiers2confiance.Models.ModelMaritalStatus;
+import com.tiesr2confiance.tiers2confiance.Models.ModelSexualOrientation;
 import com.tiesr2confiance.tiers2confiance.Models.ModelShapes;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
 import com.tiesr2confiance.tiers2confiance.R;
@@ -201,7 +202,7 @@ public class UpdateSingleChoiceFragment extends Fragment {
 				InitRadioGroupShape();
 				break;
 			case KEY_SEXUAL_ORIENTATION:
-				InitRadioGroupEmpty(v);
+				InitRadioGroupSexualOrientation();
 				break;
 			case KEY_GENDER:
 				InitRadioGroupEmpty(v);
@@ -368,7 +369,34 @@ public class UpdateSingleChoiceFragment extends Fragment {
 	}
 
 
+	private void InitRadioGroupSexualOrientation(){
+		GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
 
+		ArrayList<ModelSexualOrientation> sexualOrientationArray = globalVariables.getArrayListSexualOrientation();
+		Comparator<ModelSexualOrientation> compareByLabelHobbies =
+				(ModelSexualOrientation o1, ModelSexualOrientation o2) -> o1.getSe_label().compareTo( o2.getSe_label() );
+
+		Collections.sort(sexualOrientationArray, compareByLabelHobbies);
+
+		for (int i = 0; i < sexualOrientationArray.size(); i++) {
+			RadioButton radioButton = new RadioButton(getActivity().getApplicationContext());
+			radioButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+			int attributeId = sexualOrientationArray.get(i).getSe_id();
+			String attributeIdText = String.valueOf(sexualOrientationArray.get(i).getSe_id()).trim();
+			String attributeLabel = sexualOrientationArray.get(i).getSe_label();
+//			String attributeLabel = attributeIdText + " - " + ethnicGroupArrayList.get(i).getEt_label();
+			radioButton.setText(attributeLabel);
+			radioButton.setId(attributeId);
+
+			if (attributeIdText.equals(userAttributesString)){
+				radioButton.setChecked(true);
+			}
+
+			radioGroup.addView(radioButton);
+
+		}
+	}
 
 
 
@@ -469,18 +497,23 @@ public class UpdateSingleChoiceFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 
+				try {
 
-//				userAttributesString =  String.valueOf(checkedRadioButtonId);
-//				Long userAttributeLong = Long.parseLong(userAttributesString.trim());
-				Long userAttributeLong = Long.valueOf(checkedRadioButtonId);
-				userConnected.update(updatedField, userAttributeLong);
+	//				userAttributesString =  String.valueOf(checkedRadioButtonId);
+	//				Long userAttributeLong = Long.parseLong(userAttributesString.trim());
+					Long userAttributeLong = Long.valueOf(checkedRadioButtonId);
+					userConnected.update(updatedField, userAttributeLong);
 
-				String msg = updatedField + " updated with : " + userAttributesString;
-				Util.showSnackBar(v, msg);
+					String msg = updatedField + " updated with : " + userAttributesString;
+					Util.showSnackBar(v, msg);
 
-				FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-				fragmentManager.popBackStack();
+					FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+					fragmentManager.popBackStack();
 
+				}catch (Exception e){
+					String msg = updatedField + " tried to update with : " + userAttributesString;
+					Log.e(TAGAPP, "",e);
+				}
 
 
 			}

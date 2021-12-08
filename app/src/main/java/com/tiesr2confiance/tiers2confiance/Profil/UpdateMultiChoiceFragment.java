@@ -195,20 +195,20 @@ public class UpdateMultiChoiceFragment extends Fragment {
 	private void InitPersonality() {
 		GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
 
-		ArrayList<ModelPersonality> arrayListPersonnalityAllPersonality = globalVariables.getArrayListPersonnality();
+		ArrayList<ModelPersonality> arrayListPersonalityAllPersonality = globalVariables.getArrayListPersonnality();
 		Comparator<ModelPersonality> compareByLabelPersonality =
 				(ModelPersonality o1, ModelPersonality o2) -> o1.getPe_label().compareTo( o2.getPe_label() );
 
-		Collections.sort(arrayListPersonnalityAllPersonality, compareByLabelPersonality);
+		Collections.sort(arrayListPersonalityAllPersonality, compareByLabelPersonality);
 
-		for (int i = 0; i < arrayListPersonnalityAllPersonality.size(); i++) {
+		for (int i = 0; i < arrayListPersonalityAllPersonality.size(); i++) {
 			CheckBox checkBox = new CheckBox(getActivity().getApplicationContext());
 			checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			int attributeId = arrayListPersonnalityAllPersonality.get(i).getPe_id();
-			String attributeIdText = String.valueOf(arrayListPersonnalityAllPersonality.get(i).getPe_id()).trim();
+			int attributeId = arrayListPersonalityAllPersonality.get(i).getPe_id();
+			String attributeIdText = String.valueOf(arrayListPersonalityAllPersonality.get(i).getPe_id()).trim();
 //			String attributeIdTextLabel = hobbieIdText + " - " + arrayListHobbiesAllHobbies.get(i).getHo_label();
-			String attributeLabel = arrayListPersonnalityAllPersonality.get(i).getPe_label();
+			String attributeLabel = arrayListPersonalityAllPersonality.get(i).getPe_label();
 			checkBox.setText(attributeLabel);
 			checkBox.setId(attributeId);
 
