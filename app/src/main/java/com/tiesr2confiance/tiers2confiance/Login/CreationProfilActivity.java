@@ -2,6 +2,8 @@ package com.tiesr2confiance.tiers2confiance.Login;
 
 import static android.graphics.Color.TRANSPARENT;
 
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
+
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +61,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.model.DocumentCollections;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.google.firebase.firestore.OnProgressListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -103,6 +106,17 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     private RadioButton rbHomme, rbFemme;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
+    /** ID Document To Displayed **/
+   // private String userId;
+    private DocumentReference userDisplayed;
+
+
+    /** ID Document Connected **/
+    private FirebaseUser currentUser;
+    private DocumentReference userConnected;
+
+
+
     /** Variable du code **/
     private Timestamp currentDate, registeredDate, timestamp;
     public  long role;
@@ -125,7 +139,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             godfatherRequestFrom,
             godfather,
             image,
-            avatar,
             country,
             presentation,
             profession,
@@ -138,7 +151,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             matchRequestTo,
             match;
 
-
+public String avatar;
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
@@ -552,7 +565,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         prDial.dismiss();
                         System.out.println("FILENAME DONE "+fileName);
 
-                     //   uploadProfilFireBase();
+                        uploadProfilFireBase(fileName);
                     }
                 })
 
@@ -731,7 +744,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
                         Log.d(TAG, "FILENAME DONE "+fileName);
-                        //uploadProfilFireBase(new File(fileName));
+                        uploadProfilFireBase(fileName);
                     }
                 })
                 .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -771,5 +784,125 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
 
 
+
+
+    public void uploadProfilFireBase(String fileUri){
+
+        avatar = fileUri;
+
+        System.out.println("FireBase >> "+ fileUri);
+
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
+        System.out.println("currentUser"+currentUser);
+        System.out.println("userConnected"+userConnected);
+
+
+        userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+
+                    System.out.println("Document Snapshot exist");
+
+
+                    // Création d'un objet pour envoyer sur la Database
+                    Map<String, Object> userList = new HashMap<>();
+                    userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+
+                    // Envoi de l'objet sur la Database
+                    docRef.set(userList)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(CreationProfilActivity.this, "Document Exist : Profil Photo crée", Toast.LENGTH_SHORT).show();
+                                    Log.i(TAG, "Document Exist PHOTO profil crée");
+                                  //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+
+                                    System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CreationProfilActivity.this, "Document Exist : Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, "onFailure: ", e );
+                                }
+                            });
+
+
+
+                    /****
+
+                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+                    assert contenuUser != null;
+                    userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                    userDisplayed.get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                    assert celibUser != null;
+                                    String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
+                                    userDisplayed.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
+                                }
+                            });
+
+
+
+                    ***/
+                }else{
+
+                    System.out.println("Document Snapshot doesn't exist");
+
+                    // Création d'un objet pour envoyer sur la Database
+                    Map<String, Object> userList = new HashMap<>();
+                    userList.put("us_avatar", avatar);
+
+                    // Envoi de l'objet sur la Database
+                    docRef.set(userList)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(CreationProfilActivity.this, "Profil Photo crée", Toast.LENGTH_SHORT).show();
+                                    Log.i(TAG, "Profil crée");
+                                    Log.i(TAG, "Avatar"+avatar);
+                                   startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CreationProfilActivity.this, "Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, "onFailure: ", e );
+                                }
+                            });
+
+
+
+                }
+
+
+
+
+
+            }
+        });
+
+
+
+/****
+        // Init des composants Firebase
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userId = user.getUid();
+        db = FirebaseFirestore.getInstance();
+        docRef = db.document("users/" + userId);
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        ***/
+
+    }
 
 }
