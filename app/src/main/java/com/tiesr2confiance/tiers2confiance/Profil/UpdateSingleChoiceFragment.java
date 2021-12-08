@@ -464,7 +464,6 @@ public class UpdateSingleChoiceFragment extends Fragment {
 
 	private void InitOnClickListeners(View v) {
 
-
 		btnSave.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

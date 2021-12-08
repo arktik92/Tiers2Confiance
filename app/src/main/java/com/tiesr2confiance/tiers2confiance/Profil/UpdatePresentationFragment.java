@@ -126,6 +126,7 @@ public class UpdatePresentationFragment extends Fragment {
 		btnSavePresentation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				presentation =   etPresentation.getText().toString();
 				userConnected.update("us_presentation", presentation);
 

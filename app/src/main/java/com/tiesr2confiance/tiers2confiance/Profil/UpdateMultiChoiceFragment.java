@@ -207,7 +207,6 @@ public class UpdateMultiChoiceFragment extends Fragment {
 
 			int attributeId = arrayListPersonnalityAllPersonality.get(i).getPe_id();
 			String attributeIdText = String.valueOf(arrayListPersonnalityAllPersonality.get(i).getPe_id()).trim();
-//			String attributeIdTextLabel = hobbieIdText + " - " + arrayListHobbiesAllHobbies.get(i).getHo_label();
 			String attributeLabel = arrayListPersonnalityAllPersonality.get(i).getPe_label();
 			checkBox.setText(attributeLabel);
 			checkBox.setId(attributeId);

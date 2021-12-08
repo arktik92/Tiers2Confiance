@@ -169,7 +169,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvstylo1"
+                                android:id="@+id/tv_presentation_edit"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_weight="0"
@@ -223,7 +223,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvstylo2"
+                                android:id="@+id/tv_hobbies_edit"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_weight="0"
@@ -267,7 +267,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvstylo3"
+                                android:id="@+id/tv_personnality_edit"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -311,7 +311,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvstylo4"
+                                android:id="@+id/tv_sport_edit"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_weight="0"
@@ -355,7 +355,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvstylo5"
+                                android:id="@+id/tv_shape_edit"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -416,7 +416,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo6"
+                                    android:id="@+id/tv_ethnic_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -460,7 +460,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo7"
+                                    android:id="@+id/tv_eyes_color_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -503,7 +503,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo8"
+                                    android:id="@+id/tv_hair_color_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -548,7 +548,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo9"
+                                    android:id="@+id/tv_hair_length_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -591,7 +591,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo10"
+                                    android:id="@+id/tv_marital_status_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -634,7 +634,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo11"
+                                    android:id="@+id/tv_sexual_orientation_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
@@ -678,7 +678,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/tvstylo12"
+                                    android:id="@+id/tv_smoker_edit"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:foreground="@drawable/ic_baseline_mode_edit_24"
