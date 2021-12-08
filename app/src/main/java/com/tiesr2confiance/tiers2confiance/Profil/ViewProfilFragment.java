@@ -171,6 +171,8 @@ public class ViewProfilFragment extends Fragment {
         String myStrings =bundle.getString("idUser");
         userId = myStrings;
 
+
+
         // userDisplayed, récupération de l'utilisateur à afficher
         db = FirebaseFirestore.getInstance();
         userDisplayed = db.document(KEY_FS_COLLECTION + "/" + userId);
@@ -529,8 +531,10 @@ public class ViewProfilFragment extends Fragment {
         InitLlHairColor(v);
         InitLlHairLength(v);
         InitLlMaritalStatus(v);
+        InitLlSexualOrientation(v);
         InitLlSmoker(v);
         InitLlShape(v);
+        //TODO HasKids and Gender
 
     }
 
@@ -645,7 +649,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
     private void InitLlEyeColor(View v) {
@@ -670,7 +674,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
 
@@ -696,7 +700,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
 
@@ -722,7 +726,7 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
     private void InitLlMaritalStatus(View v) {
@@ -747,10 +751,33 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llEthnicGroup.setClickable(false);
+
     }
 
+    private void InitLlSexualOrientation(View v) {
+        tvSexualOrient = v.findViewById(R.id.tv_sexual_orientation);
+        llSexualOrientation   = v.findViewById(R.id.ll_sexual_orientation);
 
+        llSexualOrientation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Id   =  String.valueOf(sexualOrientationId);
+                upadtedField=   KEY_SEXUAL_ORIENTATION;
+
+                Bundle data = new Bundle();
+                data.putString("userattributesstring", Id);
+                data.putString("userid", userId);
+                data.putString("upadtedfield", upadtedField);
+
+
+                Fragment myFragment = new UpdateSingleChoiceFragment();
+
+                OpenFragment(v, data, myFragment);
+            }
+        });
+
+    }
 
 
 
@@ -907,7 +934,8 @@ public class ViewProfilFragment extends Fragment {
                                 // Si l'utilisateur connecté est un celib et donc...
                                 // si l'utilisateur à afficher est Tiers de confiance (parrain)...
 
-                                tvRole.setText("Tiers");
+//                                tvRole.setText("Tiers");
+                                tvRole.setText(getString(R.string.lbl_tiers));
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
 
@@ -925,9 +953,10 @@ public class ViewProfilFragment extends Fragment {
                                 }
 
 
-                                tvRole.setText("Célib");
-                                makeVisible();
 
+                                //tvRole.setText("Célib");
+                                tvRole.setText(getString(R.string.lbl_celibataire));
+                                makeVisible();
                                 tvBalance.setText(String.valueOf(balance));
                                 // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                                 String split_key = ";";
@@ -1195,6 +1224,7 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest.setVisibility(View.GONE);
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
+        btnUpdateProfil.setVisibility(View.GONE);
         btnAcceptNephew.setVisibility(View.GONE);
         btnAcceptGodfather.setVisibility(View.GONE);
 

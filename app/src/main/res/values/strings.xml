@@ -186,8 +186,19 @@
     <string name="choose_role">Choisi ton rôle :</string>
     <!-- Page creation de profil -->
     <string name="creer_profil">Creer profil</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="lbl_ans">ans</string>
+    <string name="btn_edit_user">Mofidier son profil</string>
+    <string name="btn_credit_nephew">Créditer son filleul</string>
+    <string name="btn_dont_be_his_godfather_anymore">Ne plus être son parrain</string>
+    <string name="btn_send_profile_to_nephew">Envoyer ce profil à mon filleul</string>
+    <string name="btn_accept_being_godfather">Accepter d\'être son parrain</string>
+    <string name="btn_apply_being_godfather">Demander d\'être son parrain</string>
+    <string name="btn_dont_be_nephew_anymore">Ne plus être son filleul</string>
+    <string name="btn_accept_match">Accepter le match</string>
+    <string name="btn_reject_match">Refuser le match</string>
+    <string name="btn_apply_as_nephew">Demander à être son filleul</string>
+    <string name="btn_accept_being_nephew">Accepter d\'être son filleul</string>
 
 </resources>

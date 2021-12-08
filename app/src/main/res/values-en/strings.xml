@@ -140,4 +140,15 @@
     <string name="lbl_genre_homme">Male</string>
     <string name="lbl_genre_femme">Female</string>
     <string name="lbl_ans">yo</string>
+    <string name="btn_edit_user">Edit profile</string>
+    <string name="btn_credit_nephew">Send credit</string>
+    <string name="btn_dont_be_his_godfather_anymore">Stop being third party</string>
+    <string name="btn_send_profile_to_nephew">Send profile</string>
+    <string name="btn_accept_being_godfather">Accept being third party</string>
+    <string name="btn_apply_being_godfather">Apply as third party</string>
+    <string name="btn_dont_be_nephew_anymore">Stop being his/her nephew</string>
+    <string name="btn_accept_match">Match</string>
+    <string name="btn_reject_match">Reject</string>
+    <string name="btn_apply_as_nephew">Apply as nephew</string>
+    <string name="btn_accept_being_nephew">Accept being nephew</string>
 </resources>

@@ -96,7 +96,7 @@ public class MatchCiblesFragment extends Fragment {
      *
      * @return A new instance of fragment MatchCiblesFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static MatchCiblesFragment newInstance() {
         MatchCiblesFragment fragment = new MatchCiblesFragment();
         Bundle args = new Bundle();
