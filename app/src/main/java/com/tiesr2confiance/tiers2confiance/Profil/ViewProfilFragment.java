@@ -90,7 +90,7 @@ public class ViewProfilFragment extends Fragment {
     private TextView tvHobbies, tvBalance, tvEthnicGroup, tvEyeColor, tvHairColor, tvHairLength, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
     private ImageView ivProfilAvatarShape, ivGender;
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
-    private LinearLayout llProfil;
+    private LinearLayout llPhoto;
     private RecyclerView rvListPhotos;
     private ViewPhotosAdapter adapterPhotos;
     private LinearLayout
@@ -105,8 +105,8 @@ public class ViewProfilFragment extends Fragment {
             , llHairLength
             , llMaritalStatus
             , llSexualOrientation
-            , llSmoker;
-
+            , llSmoker
+            , llBalance;
 
 
     /*** BDD ***/
@@ -171,8 +171,6 @@ public class ViewProfilFragment extends Fragment {
         String myStrings =bundle.getString("idUser");
         userId = myStrings;
 
-
-
         // userDisplayed, récupération de l'utilisateur à afficher
         db = FirebaseFirestore.getInstance();
         userDisplayed = db.document(KEY_FS_COLLECTION + "/" + userId);
@@ -204,9 +202,9 @@ public class ViewProfilFragment extends Fragment {
         tvSports = view.findViewById(R.id.tv_sport);
 
 
-        // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
-        llProfil = view.findViewById(R.id.ll_profil);
-        llProfil.setVisibility(View.GONE);
+        // On instancie tous les éléments du layout
+        llPhoto             = view.findViewById(R.id.ll_photo);
+        llBalance           = view.findViewById(R.id.ll_balance);
         llHobbies           = view.findViewById(R.id.ll_hobbies);
         llPresentation      = view.findViewById(R.id.ll_presentation);
         llPersonality       = view.findViewById(R.id.ll_personality);
@@ -234,9 +232,6 @@ public class ViewProfilFragment extends Fragment {
         tvShape= view.findViewById(R.id.tv_shape);
         tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
 
-
-
-
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnAcceptMatch =view.findViewById(R.id.btn_accept_match);
@@ -244,21 +239,15 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest = view.findViewById(R.id.btn_link_request);
         btnLinkSuppTiers = view.findViewById(R.id.btn_link_supp_tier);
         btnLinkRequestTiers= view.findViewById(R.id.btn_link_request_tiers);
-        btnUpdateProfil = view.findViewById(R.id.btn_update_profil);
         btnAcceptNephew = view.findViewById(R.id.btn_accept_nephew);
         btnAcceptGodfather = view.findViewById(R.id.btn_accept_godfather);
 
-        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
-        btnPflCrediter.setVisibility(View.GONE);
-        btnPflEnvoyer.setVisibility(View.GONE);
-        btnAcceptMatch.setVisibility(View.GONE);
-        btnLinkSupp.setVisibility(View.GONE);
-        btnLinkRequest.setVisibility(View.GONE);
-        btnLinkSuppTiers.setVisibility(View.GONE);
-        btnLinkRequestTiers.setVisibility(View.GONE);
-        btnUpdateProfil.setVisibility(View.GONE);
-        btnAcceptNephew.setVisibility(View.GONE);
-        btnAcceptGodfather.setVisibility(View.GONE);
+        // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
+        makeInvisible();
+
+        // On initie les comosants à afficher
+        InitComponents(view);
+
 
 
         // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
@@ -524,25 +513,11 @@ public class ViewProfilFragment extends Fragment {
                 btnAcceptGodfather.setEnabled(false);
             }
         });
-
-
-        // ************************************   ACTIONS BOUTONS _  LES DEUX ROLES = CELIBATAIRE OU PARRAIN *****************************************************
-
-        // L'utilisateur connecté est redirigé vers la modification de son profil
-        btnUpdateProfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new ProfilFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
-        InitComponents(view);
     }
+
+
+    // ************************************   INITIALISATION DES COMPOSANTS ET LE CLICK POUR MODIFICATION *****************************************************
+
 
     private void InitComponents(View v) {
         InitLlPresentation(v);
@@ -554,14 +529,10 @@ public class ViewProfilFragment extends Fragment {
         InitLlHairColor(v);
         InitLlHairLength(v);
         InitLlMaritalStatus(v);
-
-
-
         InitLlSmoker(v);
         InitLlShape(v);
 
     }
-
 
     private void InitLlPresentation(View v) {
         tvPresentation = v.findViewById(R.id.tv_presentation);
@@ -582,7 +553,6 @@ public class ViewProfilFragment extends Fragment {
                 OpenFragment(v, data, myFragment);
             }
         });
-//        llPresentation.setClickable(false);
     }
 
 
@@ -652,10 +622,6 @@ public class ViewProfilFragment extends Fragment {
             }
         });
     }
-
-
-
-
 
     private void InitLlEthnicGroup(View v) {
         tvEthnicGroup   = v.findViewById(R.id.tv_ethnic_group);
@@ -941,8 +907,7 @@ public class ViewProfilFragment extends Fragment {
                                 // Si l'utilisateur connecté est un celib et donc...
                                 // si l'utilisateur à afficher est Tiers de confiance (parrain)...
 
-//                                tvRole.setText("Tiers");
-                                tvRole.setText(getString(R.string.lbl_tiers));
+                                tvRole.setText("Tiers");
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
 
@@ -960,10 +925,9 @@ public class ViewProfilFragment extends Fragment {
                                 }
 
 
+                                tvRole.setText("Célib");
+                                makeVisible();
 
-                                //tvRole.setText("Célib");
-                                tvRole.setText(getString(R.string.lbl_celibataire));
-                                llProfil.setVisibility(View.VISIBLE);
                                 tvBalance.setText(String.valueOf(balance));
                                 // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                                 String split_key = ";";
@@ -1231,11 +1195,11 @@ public class ViewProfilFragment extends Fragment {
         btnLinkRequest.setVisibility(View.GONE);
         btnLinkSuppTiers.setVisibility(View.GONE);
         btnLinkRequestTiers.setVisibility(View.GONE);
-        btnUpdateProfil.setVisibility(View.GONE);
         btnAcceptNephew.setVisibility(View.GONE);
         btnAcceptGodfather.setVisibility(View.GONE);
 
-        llProfil.setVisibility(View.GONE);
+        llPhoto.setVisibility(View.GONE);
+        llBalance.setVisibility(View.GONE);
         llHobbies.setVisibility(View.GONE);
         llPersonality.setVisibility(View.GONE);
         llSports.setVisibility(View.GONE);
@@ -1250,9 +1214,9 @@ public class ViewProfilFragment extends Fragment {
 
     }
 
-
     public void makeVisible(){
-        llProfil.setVisibility(View.VISIBLE);
+        llPhoto.setVisibility(View.VISIBLE);
+        llBalance.setVisibility(View.VISIBLE);
         llHobbies.setVisibility(View.VISIBLE);
         llPersonality.setVisibility(View.VISIBLE);
         llSports.setVisibility(View.VISIBLE);
@@ -1264,6 +1228,11 @@ public class ViewProfilFragment extends Fragment {
         llMaritalStatus.setVisibility(View.VISIBLE);
         llSexualOrientation.setVisibility(View.VISIBLE);
         llSmoker.setVisibility(View.VISIBLE);
+    }
+
+    public void makeClickable(){
+
+        llPresentation.setClickable(true);
     }
 
 
