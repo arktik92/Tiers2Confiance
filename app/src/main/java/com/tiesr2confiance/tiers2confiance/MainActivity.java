@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         String userCountryLanguage = globalVariables.getUserCountryLanguage();
         if (userCountryLanguage == "EN") {
-            String languageToLoad = "en"; // your language
+            String languageToLoad = "en";
             Locale locale = new Locale(languageToLoad);
             Locale.setDefault(locale);
             Configuration config = new Configuration();

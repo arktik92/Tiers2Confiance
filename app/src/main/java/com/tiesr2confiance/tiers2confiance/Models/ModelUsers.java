@@ -1,5 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ModelUsers {
@@ -393,5 +397,28 @@ public class ModelUsers {
     public String getUs_photos() {
         return us_photos;
     }
-    /****************************/
+
+    /**********************************************************************************************/
+    /**********************************************************************************************/
+    /*******************************   Getters Spécifiques ****************************************/
+    /**********************************************************************************************/
+    /**********************************************************************************************/
+    public int getUs_age() {
+
+        Date birthDate  = us_birth_date;
+        Date today = new Date();
+        DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        int birthDateInt = Integer.parseInt(formatter.format(birthDate));
+        int todayInt = Integer.parseInt(formatter.format(today));
+        int age = (todayInt - birthDateInt) / 10000;
+
+//        Log.i(TAGAPP, "CalculateUserAge: " + birthDate);
+
+        return age;
+
+    }
+
+
+
+
 }

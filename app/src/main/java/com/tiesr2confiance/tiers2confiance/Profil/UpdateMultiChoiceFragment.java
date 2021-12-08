@@ -146,7 +146,7 @@ public class UpdateMultiChoiceFragment extends Fragment {
 
 		ArrayList<ModelHobbies> arrayListHobbiesAllHobbies = globalVariables.getArrayListHobbies();
 		Comparator<ModelHobbies> compareByLabelHobbies =
-				(ModelHobbies o1, ModelHobbies o2) -> o1.get_label().compareTo( o2.get_label() );
+				(ModelHobbies o1, ModelHobbies o2) -> o1.getHo_label().compareTo( o2.getHo_label() );
 
 		Collections.sort(arrayListHobbiesAllHobbies, compareByLabelHobbies);
 
@@ -197,7 +197,7 @@ public class UpdateMultiChoiceFragment extends Fragment {
 
 		ArrayList<ModelPersonality> arrayListPersonnalityAllPersonality = globalVariables.getArrayListPersonnality();
 		Comparator<ModelPersonality> compareByLabelPersonality =
-				(ModelPersonality o1, ModelPersonality o2) -> o1.get_label().compareTo( o2.get_label() );
+				(ModelPersonality o1, ModelPersonality o2) -> o1.getPe_label().compareTo( o2.getPe_label() );
 
 		Collections.sort(arrayListPersonnalityAllPersonality, compareByLabelPersonality);
 
@@ -205,10 +205,10 @@ public class UpdateMultiChoiceFragment extends Fragment {
 			CheckBox checkBox = new CheckBox(getActivity().getApplicationContext());
 			checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			int attributeId = arrayListPersonnalityAllPersonality.get(i).get_id();
-			String attributeIdText = String.valueOf(arrayListPersonnalityAllPersonality.get(i).get_id()).trim();
+			int attributeId = arrayListPersonnalityAllPersonality.get(i).getPe_id();
+			String attributeIdText = String.valueOf(arrayListPersonnalityAllPersonality.get(i).getPe_id()).trim();
 //			String attributeIdTextLabel = hobbieIdText + " - " + arrayListHobbiesAllHobbies.get(i).getHo_label();
-			String attributeLabel = arrayListPersonnalityAllPersonality.get(i).get_label();
+			String attributeLabel = arrayListPersonnalityAllPersonality.get(i).getPe_label();
 			checkBox.setText(attributeLabel);
 			checkBox.setId(attributeId);
 
@@ -248,7 +248,7 @@ public class UpdateMultiChoiceFragment extends Fragment {
 
 		ArrayList<ModelSports> arrayListSportsAllSports = globalVariables.getArrayListSports();
 		Comparator<ModelSports> compareByLabelSports =
-				(ModelSports o1, ModelSports o2) -> o1.get_label().compareTo( o2.get_label() );
+				(ModelSports o1, ModelSports o2) -> o1.getSp_label().compareTo( o2.getSp_label() );
 
 		Collections.sort(arrayListSportsAllSports, compareByLabelSports);
 
@@ -256,10 +256,10 @@ public class UpdateMultiChoiceFragment extends Fragment {
 			CheckBox checkBox = new CheckBox(getActivity().getApplicationContext());
 			checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			int attributeId = arrayListSportsAllSports.get(i).get_id();
-			String attributeIdText = String.valueOf(arrayListSportsAllSports.get(i).get_id()).trim();
+			int attributeId = arrayListSportsAllSports.get(i).getSp_id();
+			String attributeIdText = String.valueOf(arrayListSportsAllSports.get(i).getSp_id()).trim();
 //			String attributeIdTextLabel = hobbieIdText + " - " + arrayListHobbiesAllHobbies.get(i).getHo_label();
-			String attributeLabel = arrayListSportsAllSports.get(i).get_label();
+			String attributeLabel = arrayListSportsAllSports.get(i).getSp_label();
 			checkBox.setText(attributeLabel);
 			checkBox.setId(attributeId);
 
