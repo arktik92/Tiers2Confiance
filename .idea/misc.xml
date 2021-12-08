@@ -11,6 +11,7 @@
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_sign_in.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/row_gender.xml" value="0.67" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/drawable/customborder.xml" value="0.321875" />
+        <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/drawable/shape_avatar_profil.xml" value="0.3880208333333333" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/drawable/splash_fg.xml" value="0.225" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/activity_main_celibataire.xml" value="0.3446557971014493" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/activity_main_parrain.xml" value="0.3446557971014493" />
@@ -25,6 +26,10 @@
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/fragment_user.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/fragment_view_profil.xml" value="0.297972972972973" />
         <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/fragment_view_profil_item_recycler.xml" value="0.22760416666666666" />
+        <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/nav_header_celibataire.xml" value="0.32382246376811596" />
+        <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/layout/nav_header_parrain.xml" value="0.32382246376811596" />
+        <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.371875" />
+        <entry key="..\:/Projets/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.371875" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_godfather_nephews.xml" value="0.2359375" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_menu_01_24.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_propositions.xml" value="0.2359375" />

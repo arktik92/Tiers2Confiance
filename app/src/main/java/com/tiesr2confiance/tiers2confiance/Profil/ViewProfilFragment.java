@@ -941,7 +941,8 @@ public class ViewProfilFragment extends Fragment {
                                 // Si l'utilisateur connecté est un celib et donc...
                                 // si l'utilisateur à afficher est Tiers de confiance (parrain)...
 
-                                tvRole.setText("Tiers");
+//                                tvRole.setText("Tiers");
+                                tvRole.setText(getString(R.string.lbl_tiers));
                             }else{
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
 
@@ -960,7 +961,8 @@ public class ViewProfilFragment extends Fragment {
 
 
 
-                                tvRole.setText("Célib");
+                                //tvRole.setText("Célib");
+                                tvRole.setText(getString(R.string.lbl_celibataire));
                                 llProfil.setVisibility(View.VISIBLE);
                                 tvBalance.setText(String.valueOf(balance));
                                 // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)

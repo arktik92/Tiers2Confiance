@@ -15,12 +15,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -49,21 +54,27 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     private static final String TAG = "Main Activity : ";
     private static final String TAGAPP = "LOGAPP";
-    /**
-     * Variables globales
-     **/
+    /**   Variables globales   **/
+    String imgUrlAvatar;
+
+
     /** Variable Firebase Auth **/
+    //********************************* FIREBASE AUTH
+    private FirebaseAuth firebaseAuth;
 
 
     /** Variables Firestore **/
 
-    //********************************* FIREBASE AUTH
-    private FirebaseAuth firebaseAuth;
 
-    // ******************************** MENU
-    Toolbar toolbar;
-    DrawerLayout drawer_layout;
 
+
+    /** Var Firebase **/
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersCollectionRef = db.collection("users");
+    private DocumentReference currentUserDoc;
+    private FirebaseUser currentUser;
+
+    /*********************** Fragments et navigation *************/
     // La gestion des fragments
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -78,16 +89,18 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     // ******************************** NAVIGATION
     private AppBarConfiguration appBarConfiguration;
     private ProfilFragment binding;
+    // ******************************** MENU
+    Toolbar toolbar;
+    DrawerLayout drawer_layout;
 
-    /** Var Firebase **/
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersCollectionRef = db.collection("users");
-    DocumentReference currentUserDoc;
 
-    /********* Gestion du User / Role **********/
-    FirebaseUser currentUser;
+    /********* Variables Globales **********/
     String userId;
     long userRole;
+
+    /*************** Composants ***************/
+    private ImageView ivProfilAvatarShape;
+
 
 
 
@@ -123,6 +136,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         //currentUserDoc   = usersCollectionRef.document(userId);
         currentUserDoc = usersCollectionRef.document(userId);
 
+
         Log.d(TAG, "MainActivity onCreate: USERROLE : " + globalVariables.getUserRole() + "-" + globalVariables.getUserEmail());
 
        // role = 1L;
@@ -152,35 +166,29 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         //
         navigationView.setNavigationItemSelectedListener(this);
 
-//        if(savedInstanceState == null){
-//            addFragment();
-//            // Force l'affichage du 1er fragment au démarrage
-//            navigationView.setCheckedItem(R.id.nav_fragment_1);
-//        }
+
+        // TODO : Affichage de l'avatar de l'utilisateur
+//        /** L'avatar : Glide - Add Picture **/
+//        Context context = getApplicationContext();
+//        RequestOptions options = new RequestOptions()
+//                .centerCrop()
+//                .error(R.mipmap.ic_launcher)
+//                .placeholder(R.mipmap.ic_launcher);
+//        /** Loading Avatar **/
+//        Glide
+//                .with(context)
+//                .load(imgUrlAvatar)
+//                .apply(options)
+//                .fitCenter()
+//                .circleCrop()
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(ivProfilAvatarShape);
 
 
 
     }
 
 
-    private void addFragment() {
-        fragmentManager = getSupportFragmentManager();
-        // Commencer la discussion
-        fragmentTransaction = fragmentManager.beginTransaction();
-        // Appel du nouveau fragment
-        CameraFragment cameraFragment = new CameraFragment();
-        // Ajouter au container de fragment
-        fragmentTransaction.add(R.id.fragment_container, new Fragment());
-        // Finalisation de la création du fragment
-        fragmentTransaction.commit();
-
-
-
-//        getSupportFragmentManager().
-//                beginTransaction().
-//                add(R.id.fragment_container, new Fragment_01()).
-//                commit();
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
