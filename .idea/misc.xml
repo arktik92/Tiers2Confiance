@@ -10,6 +10,7 @@
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_profil.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/activity_sign_in.xml" value="0.20885416666666667" />
         <entry key="..\:/Projets/T2C/app/src/main/res/layout/row_gender.xml" value="0.67" />
+        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/customborder.xml" value="0.15052083333333333" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_godfather_nephews.xml" value="0.2359375" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_menu_01_24.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/drawable/ic_propositions.xml" value="0.2359375" />
@@ -41,6 +42,7 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_second.xml" value="0.2453125" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_user.xml" value="0.2078125" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_view_profil.xml" value="0.22" />
+        <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/fragment_view_profil_item_recycler.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/layout/nav_header.xml" value="0.2453125" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_add_avatar.xml" value="0.2" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />

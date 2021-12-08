@@ -205,8 +205,7 @@ public class ViewProfilFragment extends Fragment {
 
 
         // Par defaut, on masque toute la partie du profil CELIBATAIRE, On affiche seulement si le rôle est 1.
-        llProfil = view.findViewById(R.id.ll_profil);
-        llProfil.setVisibility(View.GONE);
+        llProfil            = view.findViewById(R.id.ll_profil);
         llHobbies           = view.findViewById(R.id.ll_hobbies);
         llPresentation      = view.findViewById(R.id.ll_presentation);
         llPersonality       = view.findViewById(R.id.ll_personality);
@@ -235,8 +234,6 @@ public class ViewProfilFragment extends Fragment {
         tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
 
 
-
-
         btnPflCrediter = view.findViewById(R.id.btn_pfl_crediter);
         btnPflEnvoyer = view.findViewById(R.id.btn_pfl_envoyer);
         btnAcceptMatch =view.findViewById(R.id.btn_accept_match);
@@ -248,18 +245,8 @@ public class ViewProfilFragment extends Fragment {
         btnAcceptNephew = view.findViewById(R.id.btn_accept_nephew);
         btnAcceptGodfather = view.findViewById(R.id.btn_accept_godfather);
 
-        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
-        btnPflCrediter.setVisibility(View.GONE);
-        btnPflEnvoyer.setVisibility(View.GONE);
-        btnAcceptMatch.setVisibility(View.GONE);
-        btnLinkSupp.setVisibility(View.GONE);
-        btnLinkRequest.setVisibility(View.GONE);
-        btnLinkSuppTiers.setVisibility(View.GONE);
-        btnLinkRequestTiers.setVisibility(View.GONE);
-        btnUpdateProfil.setVisibility(View.GONE);
-        btnAcceptNephew.setVisibility(View.GONE);
-        btnAcceptGodfather.setVisibility(View.GONE);
 
+        makeInvisible();
 
         // ************************************   ACTIONS BOUTONS _  ROLE = PARRAIN *****************************************************
 
@@ -959,9 +946,9 @@ public class ViewProfilFragment extends Fragment {
                                 }
 
 
-
                                 tvRole.setText("Célib");
-                                llProfil.setVisibility(View.VISIBLE);
+                                makeVisible();
+
                                 tvBalance.setText(String.valueOf(balance));
                                 // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
                                 String split_key = ";";
@@ -999,10 +986,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvHobbies.setVisibility(View.GONE);
                                 tvHobbies.setText(hobbiesToDisplay);
-
-
 
                                 // PERSONALITY
                                 String[] personalityListUser = listPersonality.split(split_key);
@@ -1022,10 +1006,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvPersonality.setVisibility(View.GONE);
                                 tvPersonality.setText(personalityToDisplay);
-
-
 
                                 // SPORTS
                                 String[] sportsListUser = listSports.split(split_key);
@@ -1045,11 +1026,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvSports.setVisibility(View.GONE);
                                 tvSports.setText(sportsToDisplay);
-
-
-
 
 
                                 // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
@@ -1228,6 +1205,51 @@ public class ViewProfilFragment extends Fragment {
                 });
     }
 
+
+    public void makeInvisible() {
+
+        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
+        btnPflCrediter.setVisibility(View.GONE);
+        btnPflEnvoyer.setVisibility(View.GONE);
+        btnAcceptMatch.setVisibility(View.GONE);
+        btnLinkSupp.setVisibility(View.GONE);
+        btnLinkRequest.setVisibility(View.GONE);
+        btnLinkSuppTiers.setVisibility(View.GONE);
+        btnLinkRequestTiers.setVisibility(View.GONE);
+        btnUpdateProfil.setVisibility(View.GONE);
+        btnAcceptNephew.setVisibility(View.GONE);
+        btnAcceptGodfather.setVisibility(View.GONE);
+
+        llProfil.setVisibility(View.GONE);
+        llHobbies.setVisibility(View.GONE);
+        llPersonality.setVisibility(View.GONE);
+        llSports.setVisibility(View.GONE);
+        llEthnicGroup.setVisibility(View.GONE);
+        llShape.setVisibility(View.GONE);
+        llEyeColor.setVisibility(View.GONE);
+        llHairColor.setVisibility(View.GONE);
+        llHairLength.setVisibility(View.GONE);
+        llMaritalStatus.setVisibility(View.GONE);
+        llSexualOrientation.setVisibility(View.GONE);
+        llSmoker.setVisibility(View.GONE);
+
+    }
+
+
+    public void makeVisible(){
+        llProfil.setVisibility(View.VISIBLE);
+        llHobbies.setVisibility(View.VISIBLE);
+        llPersonality.setVisibility(View.VISIBLE);
+        llSports.setVisibility(View.VISIBLE);
+        llEthnicGroup.setVisibility(View.VISIBLE);
+        llShape.setVisibility(View.VISIBLE);
+        llEyeColor.setVisibility(View.VISIBLE);
+        llHairColor.setVisibility(View.VISIBLE);
+        llHairLength.setVisibility(View.VISIBLE);
+        llMaritalStatus.setVisibility(View.VISIBLE);
+        llSexualOrientation.setVisibility(View.VISIBLE);
+        llSmoker.setVisibility(View.VISIBLE);
+    }
 
 
 }
