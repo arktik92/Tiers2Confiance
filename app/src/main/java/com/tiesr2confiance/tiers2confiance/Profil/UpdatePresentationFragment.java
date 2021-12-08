@@ -63,7 +63,7 @@ public class UpdatePresentationFragment extends Fragment {
 	 * @param param2 Parameter 2.
 	 * @return A new instance of fragment UpdatePresentationFragment.
 	 */
-	// TODO: Rename and change types and number of parameters
+
 	public static UpdatePresentationFragment newInstance(String param1, String param2) {
 		UpdatePresentationFragment fragment = new UpdatePresentationFragment();
 		Bundle args = new Bundle();

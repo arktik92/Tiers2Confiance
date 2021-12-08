@@ -186,7 +186,7 @@
     <string name="choose_role">Choisi ton rôle :</string>
     <!-- Page creation de profil -->
     <string name="creer_profil">Creer profil</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="lbl_ans">ans</string>
     <string name="btn_edit_user">Mofidier son profil</string>
