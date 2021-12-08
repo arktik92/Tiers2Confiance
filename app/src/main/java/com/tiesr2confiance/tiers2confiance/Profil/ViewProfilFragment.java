@@ -826,6 +826,16 @@ public class ViewProfilFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshotDisplayed) {
                         if (documentSnapshotDisplayed.exists()) {
 
+                            String ethnie_val="--";
+                            String colorEye_val="--";
+                            String colorHair_val="--";
+                            String lenghHair_val="--";
+                            String sexualOrient_val="--";
+                            String maritalStatus_val="--";
+                            String smoker_val="--";
+                            String shape_val="--";
+                            balance = 0L;
+
                             try {
                                 ModelUsers currentUser = documentSnapshotDisplayed.toObject(ModelUsers.class);
                                 Date userDateOfBirth    = currentUser.getUs_birth_date();
@@ -860,17 +870,6 @@ public class ViewProfilFragment extends Fragment {
                             }catch(Exception e){
                                 Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
                             }
-
-                            String ethnie_val="--";
-                            String colorEye_val="--";
-                            String colorHair_val="--";
-                            String lenghHair_val="--";
-                            String sexualOrient_val="--";
-                            String maritalStatus_val="--";
-                            String smoker_val="--";
-                            String shape_val="--";
-                            balance = 0L;
-
 
 
                             /** ON AFFICHE LES INFORMATION COMMUNES **/
@@ -909,8 +908,8 @@ public class ViewProfilFragment extends Fragment {
 
                                 tvRole.setText("Tiers");
                             }else{
+                                tvBalance.setText(balance.toString());
                                 ArrayList<String> imgPhotosList = new ArrayList<>();
-
                                 if (imgPhotos != "" & imgPhotos != ";"){
                                     imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
                                 }
@@ -950,14 +949,11 @@ public class ViewProfilFragment extends Fragment {
 
                                 // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
 
-                                String hobbiesToDisplay="-- ";
                                 for (int i=0; i< hobbiesListUser.length;i++) {
                                     for (int j = 0; j < ListHobbiesComplete.size(); j++) {
                                         String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
-                                        String value = ListHobbiesComplete.get(j).getHo_label();
                                         String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
                                         if (key.equals(hobbiesListUser[i])) {
-                                            hobbiesToDisplay += value + " -- ";
                                             TextView tvAttribute = new TextView(getActivity().getApplicationContext());
                                             tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             tvAttribute.setText(hobbieLabel);
@@ -965,19 +961,15 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvHobbies.setText(hobbiesToDisplay);
 
                                 // PERSONALITY
                                 String[] personalityListUser = listPersonality.split(split_key);
 
-                                String personalityToDisplay="-- ";
                                 for (int i=0; i< personalityListUser.length;i++) {
                                     for (int j = 0; j < ListPersonalityComplete.size(); j++) {
                                         String key = String.valueOf(ListPersonalityComplete.get(j).getPe_id());
-                                        String value = ListPersonalityComplete.get(j).getPe_label();
                                         String personalityLabel = ListPersonalityComplete.get(j).getPe_label();
                                         if (key.equals(personalityListUser[i])) {
-                                            personalityToDisplay += value + " -- ";
                                             TextView tvAttribute = new TextView(getActivity().getApplicationContext());
                                             tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             tvAttribute.setText(personalityLabel);
@@ -985,7 +977,6 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvPersonality.setText(personalityToDisplay);
 
                                 // SPORTS
                                 String[] sportsListUser = listSports.split(split_key);
@@ -1005,7 +996,6 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvSports.setText(sportsToDisplay);
 
 
                                 // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
