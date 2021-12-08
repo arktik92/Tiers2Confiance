@@ -783,7 +783,7 @@ public String avatar;
     }
 
 
-
+/****/
 
 
     public void uploadProfilFireBase(String fileUri){
