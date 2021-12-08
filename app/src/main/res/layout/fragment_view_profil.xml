@@ -49,6 +49,8 @@
                         android:id="@+id/ll_header"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
                         android:background="@drawable/customborder"
                         android:orientation="vertical">
 
@@ -63,7 +65,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
+                                android:layout_marginRight="5dp"
                                 android:text="--"
                                 android:textColor="@color/btnCelib"
                                 tools:text="@string/lbl_solde" />
@@ -162,39 +164,36 @@
                             <TextView
                                 android:id="@+id/textView19"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
                                 android:layout_weight="1"
+                                android:gravity="center_vertical"
                                 android:text="@string/lbl_presentation"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv_presentation_edit"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="right"
                                 android:layout_weight="0"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
                                 android:text=" " />
-
                         </LinearLayout>
 
                         <TextView
                             android:id="@+id/tv_presentation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1"
+                            android:gravity="center_vertical"
                             android:text="description" />
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/ll_multi_choice"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_hobbies"
@@ -216,6 +215,7 @@
                                 android:id="@+id/tv_hobbies_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="28dp"
+                                android:layout_marginLeft="10dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:text="@string/lbl_hobbies"
@@ -224,20 +224,13 @@
 
                             <TextView
                                 android:id="@+id/tv_hobbies_edit"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
                                 android:layout_weight="0"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
                                 android:text=" " />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvHobbies"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="--"
-                            tools:text="@string/lbl_hobbies" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -259,6 +252,7 @@
                                 android:id="@+id/textView4"
                                 android:layout_width="324dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
                                 android:layout_marginBottom="2dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
@@ -268,20 +262,13 @@
 
                             <TextView
                                 android:id="@+id/tv_personnality_edit"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
                                 android:text=" " />
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tv_personnality"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="--"
-                            tools:text="@string/lbl_personnalite" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -303,6 +290,7 @@
                                 android:id="@+id/textView18"
                                 android:layout_width="match_parent"
                                 android:layout_height="28dp"
+                                android:layout_marginLeft="10dp"
                                 android:layout_marginBottom="2dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
@@ -312,20 +300,12 @@
 
                             <TextView
                                 android:id="@+id/tv_sport_edit"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
                                 android:layout_weight="0"
                                 android:foreground="@drawable/ic_baseline_mode_edit_24"
                                 android:text=" " />
                         </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tv_sport"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="--"
-                            tools:text="@string/lbl_sports" />
 
                     </LinearLayout>
 
@@ -333,43 +313,41 @@
                         android:id="@+id/ll_shape"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
                         android:layout_weight="1"
                         android:background="@drawable/customborder"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/textView16"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="2dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:text="@string/lbl_silhouette"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tv_shape_edit"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                android:text=" " />
-
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_silhouette"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tv_shape"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
                             android:gravity="top"
                             android:text="--"
                             tools:text="@string/lbl_silhouette" />
+
+                        <TextView
+                            android:id="@+id/tv_shape_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+
 
                     </LinearLayout>
 
@@ -377,6 +355,7 @@
                         android:id="@+id/ll_photo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
                         android:background="@drawable/customborder"
                         android:orientation="vertical">
 
@@ -385,327 +364,299 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="2dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1">
 
                         </androidx.recyclerview.widget.RecyclerView>
 
                     </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/ll_ethnic_group"
-                            android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/ll_ethnic_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_ethnie"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/textView17"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_ethnie"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tv_ethnic_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_ethnic_group"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_ethnie" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_eye_color"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_ethnic_group"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_ethnie" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_ethnic_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
 
-                                <TextView
-                                    android:id="@+id/textView9"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_couleur_yeux"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
+                    </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tv_eyes_color_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-                            </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_eye_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tv_eyes_color"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_couleur_yeux" />
-                        </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/ll_hair_color"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_couleur_yeux"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/textView10"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_couleur_cheveux"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tv_hair_color_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_hair_color"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_couleur_cheveux" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_hair_length"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_eyes_color"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_couleur_yeux" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_eyes_color_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+                    </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/textView122"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_longueur_cheveux"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:id="@+id/ll_hair_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/tv_hair_length_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tv_hair_length"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_longueur_cheveux" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_marital_status"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_couleur_cheveux"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/textView13"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_statut_matrimonial"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tv_marital_status_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_marital_status"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_statut_matrimonial" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_sexual_orientation"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_hair_color"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_couleur_cheveux" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_hair_color_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
 
-                                <TextView
-                                    android:id="@+id/textView14"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_orientation_sexuelle"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
+                    </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tv_sexual_orientation_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-                            </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_hair_length"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tv_sexual_orientation"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_orientation_sexuelle" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_smoker"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/textView122"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/customborder"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_longueur_cheveux"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/textView15"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="28dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/lbl_fumeur"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tv_smoker_edit"
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:foreground="@drawable/ic_baseline_mode_edit_24"
-                                    android:text=" " />
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_smoker"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0"
-                                android:gravity="top"
-                                android:text="--"
-                                tools:text="@string/lbl_fumeur" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_hair_length"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"/>
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_longueur_cheveux" />
+
+                        <TextView
+                            android:id="@+id/tv_hair_length_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_marital_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_statut_matrimonial"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_marital_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_statut_matrimonial" />
+
+                        <TextView
+                            android:id="@+id/tv_marital_status_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_sexual_orientation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_orientation_sexuelle"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_sexual_orientation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_orientation_sexuelle" />
+
+                        <TextView
+                            android:id="@+id/tv_sexual_orientation_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_smoker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/lbl_fumeur"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_smoker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="--"
+                            tools:text="@string/lbl_fumeur" />
+
+                        <TextView
+                            android:id="@+id/tv_smoker_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:foreground="@drawable/ic_baseline_mode_edit_24"
+                            android:text=" " />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" />
 
 
                     <LinearLayout
                         android:id="@+id/ll_third"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
                         android:orientation="vertical">
 
                         <Button
@@ -754,6 +705,7 @@
                         android:id="@+id/ll_single"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
                         android:orientation="vertical">
 
                         <Button

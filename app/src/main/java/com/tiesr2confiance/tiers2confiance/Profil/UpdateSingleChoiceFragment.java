@@ -128,7 +128,6 @@ public class UpdateSingleChoiceFragment extends Fragment {
 
 		db                  = variablesGlobales.getDb();
 		userId              = variablesGlobales.getUserId();
-
 		usersCollectionRef  = db.collection(KEY_USERS_COLLECTION);
 		userConnected       = usersCollectionRef.document(userId);
 	}
@@ -137,18 +136,13 @@ public class UpdateSingleChoiceFragment extends Fragment {
 	private void InitComponents(View v) {
 		llAttributes =   v.findViewById(R.id.ll_attributes);
 		btnSave      =   v.findViewById(R.id.btn_save);
-
-
 		InitRadioGroup(v);
-
-
 	}
 
 	private void InitRadioGroup(View v) {
 		LinearLayout.LayoutParams params =
 				new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		params.setMargins(80, 0, 0, 40);
-
 
 		radioGroup = new RadioGroup(getActivity().getApplicationContext());
 		radioGroup.setLayoutParams(params);
@@ -168,16 +162,10 @@ public class UpdateSingleChoiceFragment extends Fragment {
 				Log.i(TAGAPP, text);
 			}
 		});
-
-
 	}
 
 
-
-
 	private void InitRadioGroupData(View v) {
-
-
 		switch (updatedField) {
 			case KEY_ETHNIE:
 				InitRadioGroupEthnicGroup();
@@ -212,7 +200,6 @@ public class UpdateSingleChoiceFragment extends Fragment {
 			default:
 				InitRadioGroupEmpty(v);
 				break;
-
 		}
 	}
 
@@ -244,8 +231,6 @@ public class UpdateSingleChoiceFragment extends Fragment {
 
 		}
 	}
-
-
 
 	private void InitRadioGroupEyeColor(){
 		GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();

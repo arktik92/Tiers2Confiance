@@ -205,8 +205,6 @@ public class ViewProfilFragment extends Fragment {
         tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
         tvPresentation = view.findViewById(R.id.tv_presentation);
-        tvPersonality = view.findViewById(R.id.tv_personnality);
-        tvSports = view.findViewById(R.id.tv_sport);
 
 
         /** On instancie tous les éléments du layout **/
@@ -578,7 +576,6 @@ public class ViewProfilFragment extends Fragment {
     }
 
     private void InitLlHobbies(View v) {
-        tvHobbies = v.findViewById(R.id.tvHobbies);
         llHobbies =v.findViewById(R.id.ll_hobbies);
 
         llHobbies.setOnClickListener(new View.OnClickListener() {
@@ -601,7 +598,6 @@ public class ViewProfilFragment extends Fragment {
     }
 
     private void InitLlPersonality(View v) {
-        tvPersonality = v.findViewById(R.id.tv_personnality);
         llPersonality =v.findViewById(R.id.ll_personality);
 
         llPersonality.setOnClickListener(new View.OnClickListener() {
@@ -624,7 +620,6 @@ public class ViewProfilFragment extends Fragment {
     }
 
     private void InitLlSports(View v) {
-        tvSports = v.findViewById(R.id.tv_sport);
         llSports = v.findViewById(R.id.ll_sports);
 
         llSports.setOnClickListener(new View.OnClickListener() {
