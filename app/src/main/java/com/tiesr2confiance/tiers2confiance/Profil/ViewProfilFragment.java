@@ -396,7 +396,7 @@ public class ViewProfilFragment extends Fragment {
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            userConnected.update("us_nephews", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
+                                            userConnected.update("us_nephews", userDisplayed.getId());
                                             // Replace
                                             String ListDemands = contenuUser.getUs_nephews_request_from();
                                             String ListDemandsNew = ListDemands.replace(userDisplayed.getId() + ";", "");
