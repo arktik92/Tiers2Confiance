@@ -151,7 +151,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             matchRequestTo,
             match;
 
-public String avatar;
+ private String avatar;
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
@@ -300,7 +300,7 @@ public String avatar;
         smoker = 1;
         personality = "";
         sports = "";
-        avatar = uriPath;
+
         photos = "";
         match = "";
         matchRequestFrom = "";
@@ -666,7 +666,13 @@ public String avatar;
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         prDial.dismiss();
-
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(@NonNull Uri uri) {
+                                Log.d(TAG, "#####################################+" + uri);
+//                                imageUri = uri;
+                            }
+                        });
 
                         imgAvatar.setImageURI(imageUri);
 
@@ -789,6 +795,7 @@ public String avatar;
     public void uploadProfilFireBase(String fileUri){
 
         avatar = fileUri;
+        Log.d(TAG, "++++++++++++++ uploadProfilFireBase: " + avatar);
 
         System.out.println("FireBase >> "+ fileUri);
 
@@ -822,6 +829,9 @@ public String avatar;
                                   //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
 
                                     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+
+
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
