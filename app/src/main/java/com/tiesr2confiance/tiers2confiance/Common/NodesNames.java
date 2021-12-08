@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Common;
 
-import java.security.PublicKey;
 import java.util.Date;
 
 public class NodesNames {
+
 
     // Node des Users
     public static final String KEY_ROLE = "us_role";
@@ -22,11 +22,11 @@ public class NodesNames {
     public static final String KEY_HAIR_COLOR = "us_hair_color";
     public static final String KEY_HAIR_LENGTH = "us_hair_length";
     public static final String KEY_HOBBIES = "us_hobbies";
-    public static final String KEY_PERSONALITY = "us_personality";
-    public static final String KEY_SPORTS = "us_sports";
     public static final String KEY_MARITAL_STATUS = "us_marital_status";
     public static final String KEY_SMOKE ="us_smoker";
     public static final String KEY_SHAPE = "us_shape";
+    public static final String KEY_SPORTS = "us_sports";
+    public static final String KEY_PERSONALITY = "us_personality";
 
     public static final String KEY_HAS_KID = "us_has_kids";
     public static final String KEY_BALANCE = "us_balance";
@@ -41,5 +41,6 @@ public class NodesNames {
 
     public static final String KEY_FS_USER_HOBBIE = "hobbies";
     public static final String KEY_HOBBIES_NAME = "ho_name";
+
 
 }

@@ -1001,10 +1001,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvHobbies.setVisibility(View.GONE);
                                 tvHobbies.setText(hobbiesToDisplay);
-
-
 
                                 // PERSONALITY
                                 String[] personalityListUser = listPersonality.split(split_key);
@@ -1024,10 +1021,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvPersonality.setVisibility(View.GONE);
                                 tvPersonality.setText(personalityToDisplay);
-
-
 
                                 // SPORTS
                                 String[] sportsListUser = listSports.split(split_key);
@@ -1047,11 +1041,7 @@ public class ViewProfilFragment extends Fragment {
                                         }
                                     }
                                 }
-                                tvSports.setVisibility(View.GONE);
                                 tvSports.setText(sportsToDisplay);
-
-
-
 
 
                                 // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
@@ -1230,6 +1220,51 @@ public class ViewProfilFragment extends Fragment {
                 });
     }
 
+
+    public void makeInvisible() {
+
+        // Les boutons n'existent pas dans le Layout à l'initialisation, on les affiche seulement si necessaire
+        btnPflCrediter.setVisibility(View.GONE);
+        btnPflEnvoyer.setVisibility(View.GONE);
+        btnAcceptMatch.setVisibility(View.GONE);
+        btnLinkSupp.setVisibility(View.GONE);
+        btnLinkRequest.setVisibility(View.GONE);
+        btnLinkSuppTiers.setVisibility(View.GONE);
+        btnLinkRequestTiers.setVisibility(View.GONE);
+        btnUpdateProfil.setVisibility(View.GONE);
+        btnAcceptNephew.setVisibility(View.GONE);
+        btnAcceptGodfather.setVisibility(View.GONE);
+
+        llProfil.setVisibility(View.GONE);
+        llHobbies.setVisibility(View.GONE);
+        llPersonality.setVisibility(View.GONE);
+        llSports.setVisibility(View.GONE);
+        llEthnicGroup.setVisibility(View.GONE);
+        llShape.setVisibility(View.GONE);
+        llEyeColor.setVisibility(View.GONE);
+        llHairColor.setVisibility(View.GONE);
+        llHairLength.setVisibility(View.GONE);
+        llMaritalStatus.setVisibility(View.GONE);
+        llSexualOrientation.setVisibility(View.GONE);
+        llSmoker.setVisibility(View.GONE);
+
+    }
+
+
+    public void makeVisible(){
+        llProfil.setVisibility(View.VISIBLE);
+        llHobbies.setVisibility(View.VISIBLE);
+        llPersonality.setVisibility(View.VISIBLE);
+        llSports.setVisibility(View.VISIBLE);
+        llEthnicGroup.setVisibility(View.VISIBLE);
+        llShape.setVisibility(View.VISIBLE);
+        llEyeColor.setVisibility(View.VISIBLE);
+        llHairColor.setVisibility(View.VISIBLE);
+        llHairLength.setVisibility(View.VISIBLE);
+        llMaritalStatus.setVisibility(View.VISIBLE);
+        llSexualOrientation.setVisibility(View.VISIBLE);
+        llSmoker.setVisibility(View.VISIBLE);
+    }
 
 
 }
