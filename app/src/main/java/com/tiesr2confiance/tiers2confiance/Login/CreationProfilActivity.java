@@ -4,22 +4,16 @@ import static android.graphics.Color.TRANSPARENT;
 
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,23 +23,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,39 +41,32 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.internal.InternalAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.model.DocumentCollections;
+import com.google.firebase.storage.StorageMetadata;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
-import com.google.firebase.firestore.OnProgressListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.tiesr2confiance.tiers2confiance.Common.PGO.UserFragment;
-import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
-import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleulFragment;
-import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
-import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
-import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class CreationProfilActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -167,10 +148,12 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     private DocumentReference docRef;
     private CollectionReference collectionReference;
 
+    final String randomKey = UUID.randomUUID().toString();
     /**
      * Initialisation des composants
      **/
     public void init() {
+
 
         imgAvatar = findViewById(R.id.imgAvatar);
         etLastName = findViewById(R.id.et_creation_nom);
@@ -505,7 +488,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
 
 
-    String fileName = "toto.jpg";
+    String fileName = randomKey + ".jpg";
 
     private void uploadCameraPhotoNew() {
 
@@ -524,8 +507,19 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         // Create a reference to file
         // StorageReference mountainsRef = storageRef.child("toto.jpg");
 
+
+
+
         //Create a reference to "images/toto.jpg"
-        StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
+
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
+        StorageReference mountainsImagesRef = storageRef.child(currentUser.getUid()+"/"+fileName);
+
+
+        Log.d(TAG, "uploadCameraPhotoNew:GD "+mountainsImagesRef.getDownloadUrl());
 
 
 
@@ -547,7 +541,9 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
 
+
         byte[] data = baos.toByteArray();
+
 
         UploadTask uploadTask = mountainsImagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -563,9 +559,49 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
+
+                       Task<Uri> downloadUrl = mountainsImagesRef.getDownloadUrl();
+
+                        String getUid = FirebaseAuth.getInstance().getUid();
+
+                        Task<GetTokenResult> FireToken = FirebaseAuth.getInstance().getCurrentUser().getIdToken(false);
+
+                        FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<GetTokenResult> task) {
+
+                              String toto = task.getResult().getToken();
+                                Log.d(TAG, "onComplete: toto >>"+toto);
+
+
+                                /***
+                                InternalAuthProvider authProvider = null;
+                                Task<GetTokenResult> pendingResult = authProvider.getAccessToken(false);
+                                GetTokenResult result =
+                                        Tasks.await(pendingResult, MAXIMUM_TOKEN_WAIT_TIME_MS, TimeUnit.MILLISECONDS);
+                                String token = result.getToken();
+**/
+
+                                String token = task.getResult().getToken();
+                                Log.d(TAG, "onComplete: TOKEN >> "+token);
+
+                                Log.d(TAG, "onComplete: FIRETOKEN >>"+FireToken);
+
+                            }
+                        });
+
+
+                       // boolean b = "true";
+                       // Task<GetTokenResult> token = FirebaseAuth.getInstance().getCurrentUser().getIdToken(b);
+
+
+
+                        System.out.println("getUid "+getUid);
                         System.out.println("FILENAME DONE "+fileName);
 
-                        uploadProfilFireBase(fileName);
+                        System.out.println("downloadUrl "+downloadUrl);
+
+                        uploadProfilFireBase(fileName.toString());
                     }
                 })
 
@@ -651,7 +687,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
 
 
-        final String randomKey = UUID.randomUUID().toString();
+       // final String randomKey = UUID.randomUUID().toString();
 
         // Create the reference to "images/mountain.jpg
 
@@ -666,14 +702,16 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         prDial.dismiss();
+
+
                         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
                             @Override
                             public void onSuccess(@NonNull Uri uri) {
                                 Log.d(TAG, "#####################################+" + uri);
-//                                imageUri = uri;
+                                imageUri = uri;
                             }
                         });
-
                         imgAvatar.setImageURI(imageUri);
 
                         Log.d(TAG, "upload: SUCCESS");
@@ -715,8 +753,8 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         //Create a reference to "images/toto.jpg"
         StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
 
-       urlImage = "gs://tiers2confiance-21525.appspot.com/images/" + fileName;
-        uriPath = Uri.parse(urlImage).toString();
+     //  urlImage = "gs://tiers2confiance-21525.appspot.com/images/" + fileName;
+       // uriPath = Uri.parse(urlImage).toString();
 
 
         // while the file names are the same, the reference poinr to different ilfes
@@ -794,7 +832,11 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
     public void uploadProfilFireBase(String fileUri){
 
-        avatar = fileUri;
+String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid();
+
+
+        avatar = path+"%2F"+fileUri;
+
         Log.d(TAG, "++++++++++++++ uploadProfilFireBase: " + avatar);
 
         System.out.println("FireBase >> "+ fileUri);
@@ -828,7 +870,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                                     Log.i(TAG, "Document Exist PHOTO profil crée");
                                   //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
 
-                                    System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                               //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
 
 
 
@@ -843,33 +885,13 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                             });
 
 
-
-                    /****
-
-                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
-                    assert contenuUser != null;
-                    userConnected.update("us_nephews_request_to", contenuUser.getUs_nephews_request_to() + userDisplayed.getId()+  ";");
-                    userDisplayed.get()
-                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
-                                    assert celibUser != null;
-                                    String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
-                                    userDisplayed.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
-                                }
-                            });
-
-
-
-                    ***/
                 }else{
 
                     System.out.println("Document Snapshot doesn't exist");
 
                     // Création d'un objet pour envoyer sur la Database
                     Map<String, Object> userList = new HashMap<>();
-                    userList.put("us_avatar", avatar);
+                    userList.put("us_avatar", "****https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid()+"/"+avatar);
 
                     // Envoi de l'objet sur la Database
                     docRef.set(userList)
@@ -879,7 +901,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                                     Toast.makeText(CreationProfilActivity.this, "Profil Photo crée", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Profil crée");
                                     Log.i(TAG, "Avatar"+avatar);
-                                   startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                 //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

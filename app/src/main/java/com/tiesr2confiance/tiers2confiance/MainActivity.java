@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         userRole        = globalVariables.getUserRole();
         currentUser     = globalVariables.getUser();
         //currentUserDoc   = usersCollectionRef.document(userId);
-        currentUserDoc = usersCollectionRef.document(userId);
+       // currentUserDoc = usersCollectionRef.document(userId);
 
         Log.d(TAG, "MainActivity onCreate: USERROLE : " + globalVariables.getUserRole() + "-" + globalVariables.getUserEmail());
 
