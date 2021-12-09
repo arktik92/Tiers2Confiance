@@ -44,7 +44,6 @@ public class LierParrainFilleulFragment extends Fragment {
 	private static final String TAG = "Lier Parrain Filleul :";
 	private static final String TAGAPP = "LOGAPP";
 
-
 	public int roleInverse;
 	ArrayList<String> critere = new ArrayList<>();
 
@@ -189,11 +188,11 @@ public class LierParrainFilleulFragment extends Fragment {
 		/** Récupération de la collection Users dans Firestore **/
 		Query query = db.collection("users")
 				.whereEqualTo("us_role", roleInverse)
-				.whereNotIn("us_auth_uid", critere)
-				.orderBy("us_auth_uid")
+				//.whereNotIn("us_auth_uid", critere)
+				//.orderBy("us_auth_uid")
 				.orderBy("us_nickname")
-				.startAt(s);
-				//.endAt(s+"\uf8ff");
+				.startAt(s)
+				.endAt(s+"\uf8ff");
 
 		FirestoreRecyclerOptions<ModelUsers> users =
 				new FirestoreRecyclerOptions.Builder<ModelUsers>()

@@ -1,5 +1,8 @@
 package com.tiesr2confiance.tiers2confiance.LierParrainFilleul;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 
@@ -30,15 +34,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
     private static final String TAG = "Lier P/F ADAPTER :";
     private static final String TAGAPP = "LOGAPP";
-
-    // Initialisation de la base de données, récupérations de la collection Users
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersCollectionRef = db.collection("users");
-
-    //Variables pour stocker l'utilisateur connecté
-    private FirebaseUser currentUser;
-    private DocumentReference userConnected;
-    private DocumentReference userPosition;
 
     // Variable locale
     private OnItemClickListener mOnItemClickListener;
@@ -60,6 +55,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
      */
     public LierParrainFilleulAdapter(@NonNull FirestoreRecyclerOptions<ModelUsers> options) {
         super(options);
+
     }
 
     @NonNull
@@ -89,10 +85,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
         }else{
             holder.ivLink.setImageResource(R.drawable.ic_already_linked);
         }
-
-        // Récupération de l'utilisateur connecté
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        userConnected = usersCollectionRef.document(currentUser.getUid());
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()

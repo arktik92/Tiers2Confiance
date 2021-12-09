@@ -86,9 +86,6 @@ public class MatchCiblesFragment extends Fragment {
     private final CollectionReference usersCollectionRef = db.collection("users");
     private Long usRole;
 
-    public MatchCiblesFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -227,7 +224,11 @@ public class MatchCiblesFragment extends Fragment {
                     .whereGreaterThan("us_birth_date", dateMax)
                     .whereIn("us_auth_uid", critere);
             if (!String.valueOf(ptCodePostal.getText()).equals("")){
-                query = query.whereEqualTo("us_postal_code", codePostalCritere);
+                query = query
+                        //.orderBy("us_postal_code")
+                        .whereEqualTo("us_postal_code", codePostalCritere);
+                        //.startAt(codePostalCritere)
+                        //.endAt(codePostalCritere+"\uf8ff");
             }
 
             Query finalQuery = query;
@@ -273,6 +274,13 @@ public class MatchCiblesFragment extends Fragment {
                     .whereLessThan("us_birth_date",dateMin )
                     .whereGreaterThan("us_birth_date", dateMax);
                     //.whereNotIn("us_auth_uid", critere);
+            if (!String.valueOf(ptCodePostal.getText()).equals("")){
+                query = query
+                        //.orderBy("us_postal_code")
+                        .whereEqualTo("us_postal_code", codePostalCritere);
+                        //.startAt(codePostalCritere)
+                        //.endAt(codePostalCritere+"\uf8ff");
+            }
 
             Query finalQuery1 = query;
             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -346,6 +354,14 @@ public class MatchCiblesFragment extends Fragment {
         sbMax.setProgress((int) 99);
         tvCurrentMax.setText(String.valueOf(99));
 
+        // Click sur le bouton GO pour le code postal
+        btnSearchSingle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDataMatchFromFirestore(view);
+            }
+        });
+
         sbMin.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -353,7 +369,7 @@ public class MatchCiblesFragment extends Fragment {
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                getDataMatchFromFirestore(view);
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -368,18 +384,20 @@ public class MatchCiblesFragment extends Fragment {
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                getDataMatchFromFirestore(view);
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
-        btnSearchSingle.setOnClickListener(new View.OnClickListener() {
+        radioGroupGenre.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 getDataMatchFromFirestore(view);
             }
         });
+
 
     }
 }

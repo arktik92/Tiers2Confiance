@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-
-    <item android:title="Moi (pseudo)">
-        <menu>
+    <group android:id="@+id/group4"
+        android:checkableBehavior="single">
             <item android:title="Mon compte"
                 android:id="@+id/nav_profil"
-                android:icon="@drawable/ic_godfather_nephews"/>
-            <item android:title="Créditer"
+                android:icon="@drawable/ic_account"/>
+    </group>
+    <group android:id="@+id/group3"
+        android:checkableBehavior="single">
+            <item android:title="Créditer mon compte"
                 android:id="@+id/nav_crediter"
-                android:icon="@drawable/ic_search_godfather_nephews"/>
-        </menu>
-    </item>
-
+                android:icon="@drawable/ic_credit"/>
+    </group>
 
     <group android:id="@+id/group1"
         android:checkableBehavior="single">
@@ -22,38 +22,31 @@
             android:id="@+id/nav_cibles"
             android:icon="@drawable/ic_propositions" />
     </group>
-
     <group android:id="@+id/group2"
         android:checkableBehavior="single">
         <item
-            android:title="Chat"
+            android:title="Mes conversations"
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_messages" />
     </group>
 
-
     <item android:title="Mon parrain">
         <menu>
-            <item android:title="Voir"
+            <item android:title="Voir son profil"
                 android:id="@+id/nav_view_profil"
                 android:icon="@drawable/ic_godfather_nephews"/>
-            <item android:title="Chercher"
+            <item android:title="Chercher un parrain"
                 android:id="@+id/nav_search_profil_PF"
                 android:icon="@drawable/ic_search_godfather_nephews"/>
-            <item android:title="Demandes en attente"
+            <item android:title="Parrainages en attente"
                 android:id="@+id/nav_pending_request"
                 android:icon="@drawable/ic_pending"/>
         </menu>
     </item>
 
-
     <group
         android:id="@+id/groupPGO"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_PGO"
-            android:icon="@drawable/ic_messages"
-            android:title="PGO" />
     </group>
     <group
         android:id="@+id/group5"

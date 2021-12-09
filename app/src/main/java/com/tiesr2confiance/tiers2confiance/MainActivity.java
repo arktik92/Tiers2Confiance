@@ -300,12 +300,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
 
-            case R.id.nav_PGO:
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_container, new UserFragment()).
-                        commit();
-                break;
+//            case R.id.nav_PGO:
+//                getSupportFragmentManager().
+//                        beginTransaction().
+//                        replace(R.id.fragment_container, new UserFragment()).
+//                        commit();
+//                break;
             case R.id.nav_deconnexion:
                 firebaseAuth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
