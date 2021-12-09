@@ -913,213 +913,215 @@ public class ViewProfilFragment extends Fragment {
                             }
 
 
-                            /** ON AFFICHE LES INFORMATION COMMUNES **/
-                            tvProfilCity.setText(city);
-                            tvProfilName.setText(nickname);
-                            // Le genre
-                            if (genderUser.equals("1")){
-                                ivGender.setImageResource(R.drawable.ic_male);
-                            }else if (genderUser.equals("2")){
-                                ivGender.setImageResource(R.drawable.ic_female);
-                            }else {
-                                ivGender.setImageResource(R.drawable.ic_transgenre);
-                            }
-                            tvPresentation.setText(description);
-                            /** L'avatar : Glide - Add Picture **/
-                            Context context = getContext();
-                            RequestOptions options = new RequestOptions()
-                                    .centerCrop()
-                                    .error(R.mipmap.ic_launcher)
-                                    .placeholder(R.mipmap.ic_launcher);
-                            /** Loading Avatar **/
-                            Glide
-                                    .with(context)
-                                    .load(imgUrlAvatar)
-                                    .apply(options)
-                                    .fitCenter()
-                                    .circleCrop()
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(ivProfilAvatarShape);
-
-
-                            /** ON DIFFERENCIE SELON LE ROLE **/
-                            if (role.equals(2L)){
-                                // Si l'utilisateur connecté est un celib et donc...
-                                // si l'utilisateur à afficher est Tiers de confiance (parrain)...
-
-//                                tvRole.setText("Tiers");
-                                tvRole.setText(getString(R.string.lbl_tiers));
-                            }else{
-                                tvBalance.setText(balance.toString());
-                                ArrayList<String> imgPhotosList = new ArrayList<>();
-                                if (imgPhotos != "" & imgPhotos != ";"){
-                                    imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
+                            try {
+                                /** ON AFFICHE LES INFORMATION COMMUNES **/
+                                tvProfilCity.setText(city);
+                                tvProfilName.setText(nickname);
+                                // Le genre
+                                if (genderUser.equals("1")) {
+                                    ivGender.setImageResource(R.drawable.ic_male);
+                                } else if (genderUser.equals("2")) {
+                                    ivGender.setImageResource(R.drawable.ic_female);
+                                } else {
+                                    ivGender.setImageResource(R.drawable.ic_transgenre);
                                 }
-
-                                if(imgPhotosList.size() == 0){
-                                    llPhoto.setVisibility(View.GONE);
-                                }else{
-                                    llPhoto.setVisibility(View.VISIBLE);
-                                    adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
-                                    rvListPhotos.setAdapter(adapterPhotos);
-                                }
-
-
-
-                                //tvRole.setText("Célib");
-                                tvRole.setText(getString(R.string.lbl_celibataire));
-                                makeVisible();
-
-                                tvBalance.setText(String.valueOf(balance));
-                                // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
-                                String split_key = ";";
-                                String[] hobbiesListUser = listHobbies.split(split_key);
-
-                                // Appel de la classe global pour charger les listes d'attributs
-                                final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
-                                ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
-                                ArrayList<ModelPersonality> ListPersonalityComplete = globalVariables.getArrayListPersonnality();
-                                ArrayList<ModelSports> ListSportsComplete = globalVariables.getArrayListSports();
-                                ArrayList<ModelEthnicGroup> ListEthnicComplete = globalVariables.getArrayListEthnicGroup();
-                                ArrayList<ModelEyeColor> ListEyeColorComplete = globalVariables.getArrayListEyeColors();
-                                ArrayList<ModelHairColor> ListHairColorComplete = globalVariables.getArrayListHairColor();
-                                ArrayList<ModelHairLength> ListHairLengthComplete = globalVariables.getArrayListHairLength();
-                                ArrayList<ModelMaritalStatus> ListMaritalStatusComplete = globalVariables.getArrayListMaritalStatus();
-                                ArrayList<ModelSexualOrientation> ListSexualOrientationComplete = globalVariables.getArrayListSexualOrientation();
-                                ArrayList<ModelSmoker> ListSmokerComplete = globalVariables.getArrayListSmoker();
-                                ArrayList<ModelShapes> ListShapeComplete = globalVariables.getArrayListShapes();
+                                tvPresentation.setText(description);
+                                /** L'avatar : Glide - Add Picture **/
+                                Context context = getContext();
+                                RequestOptions options = new RequestOptions()
+                                        .centerCrop()
+                                        .error(R.mipmap.ic_launcher)
+                                        .placeholder(R.mipmap.ic_launcher);
+                                /** Loading Avatar **/
+                                Glide
+                                        .with(context)
+                                        .load(imgUrlAvatar)
+                                        .apply(options)
+                                        .fitCenter()
+                                        .circleCrop()
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(ivProfilAvatarShape);
 
 
-                                // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
+                                /** ON DIFFERENCIE SELON LE ROLE **/
+                                if (role.equals(2L)) {
+                                    // Si l'utilisateur connecté est un celib et donc...
+                                    // si l'utilisateur à afficher est Tiers de confiance (parrain)...
 
-                                for (int i=0; i< hobbiesListUser.length;i++) {
-                                    for (int j = 0; j < ListHobbiesComplete.size(); j++) {
-                                        String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
-                                        String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
-                                        if (key.equals(hobbiesListUser[i])) {
-                                            TextView tvAttribute = new TextView(getActivity().getApplicationContext());
-                                            tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                            tvAttribute.setText(hobbieLabel);
-                                            llHobbies.addView(tvAttribute);
+                                    //                                tvRole.setText("Tiers");
+                                    tvRole.setText(getString(R.string.lbl_tiers));
+                                } else {
+                                    tvBalance.setText(balance.toString());
+                                    ArrayList<String> imgPhotosList = new ArrayList<>();
+                                    if (imgPhotos != "" & imgPhotos != ";") {
+                                        imgPhotosList.addAll(Arrays.asList(imgPhotos.split(";")));
+                                    }
+
+                                    if (imgPhotosList.size() == 0) {
+                                        llPhoto.setVisibility(View.GONE);
+                                    } else {
+                                        llPhoto.setVisibility(View.VISIBLE);
+                                        adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
+                                        rvListPhotos.setAdapter(adapterPhotos);
+                                    }
+
+                                    //tvRole.setText("Célib");
+                                    tvRole.setText(getString(R.string.lbl_celibataire));
+                                    makeVisible();
+
+                                    tvBalance.setText(String.valueOf(balance));
+                                    // Ici, on récupère tous les attributs.caractériques de l'utilisateur à afficher (on récupère les ID des valeurs, qu'on va comparer avec les listes complètes chargées par la Class Globale)
+                                    String split_key = ";";
+                                    String[] hobbiesListUser = listHobbies.split(split_key);
+
+                                    // Appel de la classe global pour charger les listes d'attributs
+                                    final GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                    ArrayList<ModelHobbies> ListHobbiesComplete = globalVariables.getArrayListHobbies();
+                                    ArrayList<ModelPersonality> ListPersonalityComplete = globalVariables.getArrayListPersonnality();
+                                    ArrayList<ModelSports> ListSportsComplete = globalVariables.getArrayListSports();
+                                    ArrayList<ModelEthnicGroup> ListEthnicComplete = globalVariables.getArrayListEthnicGroup();
+                                    ArrayList<ModelEyeColor> ListEyeColorComplete = globalVariables.getArrayListEyeColors();
+                                    ArrayList<ModelHairColor> ListHairColorComplete = globalVariables.getArrayListHairColor();
+                                    ArrayList<ModelHairLength> ListHairLengthComplete = globalVariables.getArrayListHairLength();
+                                    ArrayList<ModelMaritalStatus> ListMaritalStatusComplete = globalVariables.getArrayListMaritalStatus();
+                                    ArrayList<ModelSexualOrientation> ListSexualOrientationComplete = globalVariables.getArrayListSexualOrientation();
+                                    ArrayList<ModelSmoker> ListSmokerComplete = globalVariables.getArrayListSmoker();
+                                    ArrayList<ModelShapes> ListShapeComplete = globalVariables.getArrayListShapes();
+
+
+                                    // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
+
+                                    for (int i = 0; i < hobbiesListUser.length; i++) {
+                                        for (int j = 0; j < ListHobbiesComplete.size(); j++) {
+                                            String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
+                                            String hobbieLabel = ListHobbiesComplete.get(j).getHo_label();
+                                            if (key.equals(hobbiesListUser[i])) {
+                                                TextView tvAttribute = new TextView(getActivity().getApplicationContext());
+                                                tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                tvAttribute.setText(hobbieLabel);
+                                                llHobbies.addView(tvAttribute);
+                                            }
                                         }
                                     }
-                                }
 
-                                // PERSONALITY
-                                String[] personalityListUser = listPersonality.split(split_key);
+                                    // PERSONALITY
+                                    String[] personalityListUser = listPersonality.split(split_key);
 
-                                for (int i=0; i< personalityListUser.length;i++) {
-                                    for (int j = 0; j < ListPersonalityComplete.size(); j++) {
-                                        String key = String.valueOf(ListPersonalityComplete.get(j).getPe_id());
-                                        String personalityLabel = ListPersonalityComplete.get(j).getPe_label();
-                                        if (key.equals(personalityListUser[i])) {
-                                            TextView tvAttribute = new TextView(getActivity().getApplicationContext());
-                                            tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                            tvAttribute.setText(personalityLabel);
-                                            llPersonality.addView(tvAttribute);
+                                    for (int i = 0; i < personalityListUser.length; i++) {
+                                        for (int j = 0; j < ListPersonalityComplete.size(); j++) {
+                                            String key = String.valueOf(ListPersonalityComplete.get(j).getPe_id());
+                                            String personalityLabel = ListPersonalityComplete.get(j).getPe_label();
+                                            if (key.equals(personalityListUser[i])) {
+                                                TextView tvAttribute = new TextView(getActivity().getApplicationContext());
+                                                tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                tvAttribute.setText(personalityLabel);
+                                                llPersonality.addView(tvAttribute);
+                                            }
                                         }
                                     }
-                                }
 
-                                // SPORTS
-                                String[] sportsListUser = listSports.split(split_key);
+                                    // SPORTS
+                                    String[] sportsListUser = listSports.split(split_key);
 
-                                String sportsToDisplay="-- ";
-                                for (int i=0; i< sportsListUser.length;i++) {
-                                    for (int j = 0; j < ListSportsComplete.size(); j++) {
-                                        String key = String.valueOf(ListSportsComplete.get(j).getSp_id());
-                                        String value = ListSportsComplete.get(j).getSp_label();
-                                        String sportLabel = ListSportsComplete.get(j).getSp_label();
-                                        if (key.equals(sportsListUser[i])) {
-                                            sportsToDisplay += value + " -- ";
-                                            TextView tvAttribute = new TextView(getActivity().getApplicationContext());
-                                            tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                            tvAttribute.setText(sportLabel);
-                                            llSports.addView(tvAttribute);
+                                    String sportsToDisplay = "-- ";
+                                    for (int i = 0; i < sportsListUser.length; i++) {
+                                        for (int j = 0; j < ListSportsComplete.size(); j++) {
+                                            String key = String.valueOf(ListSportsComplete.get(j).getSp_id());
+                                            String value = ListSportsComplete.get(j).getSp_label();
+                                            String sportLabel = ListSportsComplete.get(j).getSp_label();
+                                            if (key.equals(sportsListUser[i])) {
+                                                sportsToDisplay += value + " -- ";
+                                                TextView tvAttribute = new TextView(getActivity().getApplicationContext());
+                                                tvAttribute.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                tvAttribute.setText(sportLabel);
+                                                llSports.addView(tvAttribute);
+                                            }
                                         }
                                     }
-                                }
 
 
-                                // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListEthnicComplete.size(); j++) {
-                                    long key = ListEthnicComplete.get(j).getEt_id();
-                                    String value = ListEthnicComplete.get(j).getEt_label();
-                                    if (key == ethnicGroupId) {
-                                        ethnie_val = value;
+                                    // ETHNIC : Affichage de l'ethnie, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListEthnicComplete.size(); j++) {
+                                        long key = ListEthnicComplete.get(j).getEt_id();
+                                        String value = ListEthnicComplete.get(j).getEt_label();
+                                        if (key == ethnicGroupId) {
+                                            ethnie_val = value;
+                                        }
                                     }
-                                }
-                                tvEthnicGroup.setText(ethnie_val);
+                                    tvEthnicGroup.setText(ethnie_val);
 
-                                // COULEUR YEUX : Affichage de de la couleur des yeux avec la liste complète chargée
-                                for (int j = 0; j < ListEyeColorComplete.size(); j++) {
-                                    long key = ListEyeColorComplete.get(j).getEy_id();
-                                    String value = ListEyeColorComplete.get(j).getEy_label();
-                                    if (key == eyeColorId) {
-                                        colorEye_val = value;
+                                    // COULEUR YEUX : Affichage de de la couleur des yeux avec la liste complète chargée
+                                    for (int j = 0; j < ListEyeColorComplete.size(); j++) {
+                                        long key = ListEyeColorComplete.get(j).getEy_id();
+                                        String value = ListEyeColorComplete.get(j).getEy_label();
+                                        if (key == eyeColorId) {
+                                            colorEye_val = value;
+                                        }
                                     }
-                                }
-                                tvEyeColor.setText(colorEye_val);
+                                    tvEyeColor.setText(colorEye_val);
 
-                                // COULEUR CHEVEUX : Affichage de la couleur des cheveux avec la liste complète chargée
-                                for (int j = 0; j < ListHairColorComplete.size(); j++) {
-                                    long key = ListHairColorComplete.get(j).getHc_id();
-                                    String value = ListHairColorComplete.get(j).getHc_label();
-                                    if (key == hairColorId) {
-                                        colorHair_val = value;
+                                    // COULEUR CHEVEUX : Affichage de la couleur des cheveux avec la liste complète chargée
+                                    for (int j = 0; j < ListHairColorComplete.size(); j++) {
+                                        long key = ListHairColorComplete.get(j).getHc_id();
+                                        String value = ListHairColorComplete.get(j).getHc_label();
+                                        if (key == hairColorId) {
+                                            colorHair_val = value;
+                                        }
                                     }
-                                }
-                                tvHairColor.setText(colorHair_val);
+                                    tvHairColor.setText(colorHair_val);
 
-                                // LONGUEUR CHEVEUX : Affichage de la longeur des cheveux comparaison de la valeur de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListHairLengthComplete.size(); j++) {
-                                    long key = ListHairLengthComplete.get(j).getHl_id();
-                                    String value = ListHairLengthComplete.get(j).getHl_label();
-                                    if (key == hairLengthId) {
-                                        lenghHair_val = value;
+                                    // LONGUEUR CHEVEUX : Affichage de la longeur des cheveux comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListHairLengthComplete.size(); j++) {
+                                        long key = ListHairLengthComplete.get(j).getHl_id();
+                                        String value = ListHairLengthComplete.get(j).getHl_label();
+                                        if (key == hairLengthId) {
+                                            lenghHair_val = value;
+                                        }
                                     }
-                                }
-                                tvHairLength.setText(lenghHair_val);
+                                    tvHairLength.setText(lenghHair_val);
 
-                                // STATUS MARITAL : Affichage du statut marital de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListMaritalStatusComplete.size(); j++) {
-                                    long key = ListMaritalStatusComplete.get(j).getMa_id();
-                                    String value = ListMaritalStatusComplete.get(j).getMa_label();
-                                    if (key == maritalStatusId) {
-                                        maritalStatus_val = value;
+                                    // STATUS MARITAL : Affichage du statut marital de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListMaritalStatusComplete.size(); j++) {
+                                        long key = ListMaritalStatusComplete.get(j).getMa_id();
+                                        String value = ListMaritalStatusComplete.get(j).getMa_label();
+                                        if (key == maritalStatusId) {
+                                            maritalStatus_val = value;
+                                        }
                                     }
-                                }
-                                tvMaritalStatus.setText(maritalStatus_val);
+                                    tvMaritalStatus.setText(maritalStatus_val);
 
-                                // ORIENTATION SEXUEL : Affichage de l'orientation sexuelle de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListSexualOrientationComplete.size(); j++) {
-                                    long key = ListSexualOrientationComplete.get(j).getSe_id();
-                                    String value = ListSexualOrientationComplete.get(j).getSe_label();
-                                    if (key == sexualOrientationId) {
-                                        sexualOrient_val = value;
+                                    // ORIENTATION SEXUEL : Affichage de l'orientation sexuelle de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListSexualOrientationComplete.size(); j++) {
+                                        long key = ListSexualOrientationComplete.get(j).getSe_id();
+                                        String value = ListSexualOrientationComplete.get(j).getSe_label();
+                                        if (key == sexualOrientationId) {
+                                            sexualOrient_val = value;
+                                        }
                                     }
-                                }
-                                tvSexualOrient.setText(sexualOrient_val);
+                                    tvSexualOrient.setText(sexualOrient_val);
 
-                                // FUMEUR : Affichage du fumeur, comparaison de la valeur de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListSmokerComplete.size(); j++) {
-                                    long key = ListSmokerComplete.get(j).getSm_id();
-                                    String value = ListSmokerComplete.get(j).getSm_label();
-                                    if (key == smokerId) {
-                                        smoker_val = value;
+                                    // FUMEUR : Affichage du fumeur, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListSmokerComplete.size(); j++) {
+                                        long key = ListSmokerComplete.get(j).getSm_id();
+                                        String value = ListSmokerComplete.get(j).getSm_label();
+                                        if (key == smokerId) {
+                                            smoker_val = value;
+                                        }
                                     }
-                                }
-                                tvSmoker.setText(smoker_val);
+                                    tvSmoker.setText(smoker_val);
 
-                                // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
-                                for (int j = 0; j < ListShapeComplete.size(); j++) {
-                                    long key = ListShapeComplete.get(j).getSh_id();
-                                    String value = ListShapeComplete.get(j).getSh_label();
-                                    if (key == shapeId) {
-                                        shape_val = value;
+                                    // SILHOUETTE : Affichage de la silhouette, comparaison de la valeur de l'utilisateur avec la liste complète chargée
+                                    for (int j = 0; j < ListShapeComplete.size(); j++) {
+                                        long key = ListShapeComplete.get(j).getSh_id();
+                                        String value = ListShapeComplete.get(j).getSh_label();
+                                        if (key == shapeId) {
+                                            shape_val = value;
+                                        }
                                     }
+                                    tvShape.setText(shape_val);
                                 }
-                                tvShape.setText(shape_val);
+                            }catch(Exception e){
+                                Log.e(TAGAPP, "Problem when displaying data in profile : "+ currentUser.getUid(), e);
                             }
 
                         } else {
