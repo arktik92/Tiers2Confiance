@@ -65,6 +65,12 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
     }
 
 
+    public PendingRequestsAdapter(@NonNull FirestoreRecyclerOptions<ModelUsers> options, FirebaseUser currentUser) {
+        super(options);
+        this.currentUser = currentUser;
+    }
+
+
     @Override
     protected void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull ModelUsers model) {
 
