@@ -84,6 +84,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -333,6 +334,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_country_lang", country);
         userList.put("us_postal_code", Long.parseLong(zipCode));
         userList.put("us_city", city);
+        userList.put("us_city_lowercase", city.toLowerCase());
         userList.put("us_presentation", presentation);
         userList.put("us_gender", genre);
         userList.put("us_sexual_orientation", sexualOrientation);

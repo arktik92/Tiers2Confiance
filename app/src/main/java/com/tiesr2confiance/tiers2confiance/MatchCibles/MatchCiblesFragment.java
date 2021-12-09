@@ -1,7 +1,5 @@
 package com.tiesr2confiance.tiers2confiance.MatchCibles;
 
-import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
-
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,7 +61,7 @@ public class MatchCiblesFragment extends Fragment {
     private RecyclerView rvListCible;
 
     /** Champs de la recherche Globale **/
-    private EditText ptCodePostalGlobale;
+    private EditText ptCityGlobale;
 
     /** Champs de la recherche détaillée **/
     private SeekBar sbMax, sbMin;
@@ -81,7 +79,7 @@ public class MatchCiblesFragment extends Fragment {
     private Boolean usAlreadyLinked = true;
 
     /** Critère de recherche **/
-    private long codePostalCritereGlobale;
+    private String CityCritereGlobale;
     private long codePostalCritere;
     private long ageMinCritere;
     private long ageMaxCritere;
@@ -145,7 +143,8 @@ public class MatchCiblesFragment extends Fragment {
                         Toast.makeText(getContext(), "Vous devez avoir un filleul pour accéder à ce menu", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    // Appel la fonction qui affiche la liste
+
+                    // Appel la fonction qui affiche la liste avec les paramètres : displayPossibleMatchList
                     if (usRole.equals(1L)) {
                        // Filleul : On affiche les célibataires proposés par son parrain, ou les célibataires d'un autre parrain dont on est la cible
                         ArrayList<String> ListIn = new ArrayList<>();
@@ -192,9 +191,9 @@ public class MatchCiblesFragment extends Fragment {
         critere.add("1");
 
         /** Recherche globale **/
-        // Récupération des attributs indiqué dans la recherche
-        if (!String.valueOf(ptCodePostalGlobale.getText()).equals("")){
-            codePostalCritereGlobale = Long.parseLong(String.valueOf(ptCodePostalGlobale.getText()));
+        // Récupération des attributs indiqués dans la recherche
+        if (!String.valueOf(ptCityGlobale.getText()).equals("")){
+            CityCritereGlobale = String.valueOf(ptCityGlobale.getText());
         }
 
         /** Recherche détaillée **/
@@ -223,11 +222,11 @@ public class MatchCiblesFragment extends Fragment {
 
         if (TypeSearch == "globale"){
             query = db.collection("users");
-            if (!String.valueOf(ptCodePostalGlobale.getText()).equals("")){
+            if (!CityCritereGlobale.equals("")){
                 query = query
-                        .orderBy("us_postal_code")
-                        .startAt(codePostalCritereGlobale)
-                        .endAt(codePostalCritereGlobale+"\uf8ff");
+                        .orderBy("us_city_lowercase")
+                        .startAt(CityCritereGlobale.toLowerCase())
+                        .endAt(CityCritereGlobale.toLowerCase() +"\uf8ff");
             }
             AfficherResultatQuery(query);
         }else{
@@ -313,7 +312,7 @@ public class MatchCiblesFragment extends Fragment {
         rvListCible.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Recherche globale
-        ptCodePostalGlobale = view.findViewById(R.id.pt_code_postal_globale);
+        ptCityGlobale = view.findViewById(R.id.pt_ville_globale);
 
         // Recherche détaillée
         sbMin = view.findViewById(R.id.sb_min);
@@ -354,7 +353,7 @@ public class MatchCiblesFragment extends Fragment {
 
         /**  Recherche Globale sur code postal **/
 
-        ptCodePostalGlobale.addTextChangedListener(new TextWatcher() {
+        ptCityGlobale.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 

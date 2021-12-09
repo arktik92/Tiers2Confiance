@@ -27,18 +27,18 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Code postal"
+                android:text="Ville"
                 android:textColor="#000000"
                 android:textStyle="italic" />
 
             <EditText
-                android:id="@+id/pt_code_postal_globale"
+                android:id="@+id/pt_ville_globale"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Saisir le code postal"
-                android:inputType="number"
+                android:hint="Saisir la ville"
+                android:inputType="text"
                 android:textColor="#0B0A0A"
                 android:textColorHint="#757272"
                 android:textSize="14sp"

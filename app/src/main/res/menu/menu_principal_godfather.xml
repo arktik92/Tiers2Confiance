@@ -35,7 +35,7 @@
     <item android:title="Les Célibataires">
         <menu>
             <item
-                android:title="Recherche par région"
+                android:title="Recherche par ville"
                 android:id="@+id/nav_cibles_globale"
                 android:icon="@drawable/ic_localisation"/>
             <item
