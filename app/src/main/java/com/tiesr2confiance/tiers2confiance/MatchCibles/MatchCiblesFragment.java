@@ -15,13 +15,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -31,7 +34,6 @@ import android.widget.Toast;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -53,21 +55,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MatchCiblesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MatchCiblesFragment extends Fragment {
 
-    private static final String TAG = "Match Cibles Fragment - ";
+    private static final String TAG = "Match Cibles ";
+    private LinearLayout llRechercheDetails, llRechercheGloabale;
     private RecyclerView rvListCible;
+
+    /** Champs de la recherche Globale **/
+    private EditText ptCodePostalGlobale;
+
+    /** Champs de la recherche détaillée **/
     private SeekBar sbMax, sbMin;
     private TextView tvCurrentMin, tvCurrentMax;
     private Button btnSearchSingle;
     private EditText ptCodePostal;
     private RadioGroup radioGroupGenre;
     private RadioButton btnRadioGenre1, btnRadioGenre2, btnRadioGenre3;
+
     private FragmentMatchCiblesBinding binding;
 
     ArrayList<String> critere = new ArrayList<>();
@@ -76,6 +81,7 @@ public class MatchCiblesFragment extends Fragment {
     private Boolean usAlreadyLinked = true;
 
     /** Critère de recherche **/
+    private long codePostalCritereGlobale;
     private long codePostalCritere;
     private long ageMinCritere;
     private long ageMaxCritere;
@@ -86,28 +92,25 @@ public class MatchCiblesFragment extends Fragment {
     private final CollectionReference usersCollectionRef = db.collection("users");
     private Long usRole;
 
+    String TypeSearch;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MatchCiblesFragment.
-     */
 
-    public static MatchCiblesFragment newInstance() {
-        MatchCiblesFragment fragment = new MatchCiblesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // Récupération de l'ID de l'utilisateur à afficher
+        Bundle bundle = getArguments();
+        TypeSearch = bundle.getString("typeSearch");
+
+        Log.e(TAG," TTEEE" + TypeSearch );
+
         View view = inflater.inflate(R.layout.fragment_match_cibles, container, false);
         getDataMatchFromFirestore(view);
         binding = FragmentMatchCiblesBinding.inflate(inflater, container, false);
+
         return view;
     }
 
@@ -188,146 +191,131 @@ public class MatchCiblesFragment extends Fragment {
         critere.clear();
         critere.add("1");
 
+        /** Recherche globale **/
         // Récupération des attributs indiqué dans la recherche
-        Log.e(TAG, "displayPossibleMatchList: " + ptCodePostal.getText() );
+        if (!String.valueOf(ptCodePostalGlobale.getText()).equals("")){
+            codePostalCritereGlobale = Long.parseLong(String.valueOf(ptCodePostalGlobale.getText()));
+        }
+
+        /** Recherche détaillée **/
+        // Récupération des attributs indiqué dans la recherche
         if (!String.valueOf(ptCodePostal.getText()).equals("")){
             codePostalCritere = Long.parseLong(String.valueOf(ptCodePostal.getText()));
         }
         ageMinCritere = sbMin.getProgress();
         ageMaxCritere = sbMax.getProgress();
-
         int choix = radioGroupGenre.getCheckedRadioButtonId();
         if (choix == -1 ){
-          // PAs de choix
+          // Pas de choix
             genreCritere = -1;
         }else{
             genreCritere = choix;
         }
-
         Calendar today =  Calendar.getInstance();
         long Min =  today.get(Calendar.YEAR) - ageMinCritere -1;
         long Max =  today.get(Calendar.YEAR) - ageMaxCritere -1;
-
         String critereAgeMin =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Min;
         String critereAgeMax =  today.get(Calendar.DAY_OF_MONTH) + "/" + today.get(Calendar.MONTH) + "/" + Max;
-
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date dateMax = format.parse(critereAgeMax);
         Date dateMin = format.parse(critereAgeMin);
-        //Célibataire
-        if (usRole.equals(1L)) {
-            critere.addAll(listIn);
-            query = db.collection("users")
-                    .whereEqualTo("us_role", 1)
-                    .whereEqualTo("us_gender", genreCritere)
-                    .whereLessThan("us_birth_date",dateMin )
-                    .whereGreaterThan("us_birth_date", dateMax)
-                    .whereIn("us_auth_uid", critere);
-            if (!String.valueOf(ptCodePostal.getText()).equals("")){
+
+
+        if (TypeSearch == "globale"){
+            query = db.collection("users");
+            if (!String.valueOf(ptCodePostalGlobale.getText()).equals("")){
                 query = query
-                        //.orderBy("us_postal_code")
-                        .whereEqualTo("us_postal_code", codePostalCritere);
-                        //.startAt(codePostalCritere)
-                        //.endAt(codePostalCritere+"\uf8ff");
+                        .orderBy("us_postal_code")
+                        .startAt(codePostalCritereGlobale)
+                        .endAt(codePostalCritereGlobale+"\uf8ff");
             }
-
-            Query finalQuery = query;
-            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                    FirestoreRecyclerOptions<ModelUsers> users =
-                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
-                                    .setQuery(finalQuery, ModelUsers.class)
-                                    .build();
-
-                    adapterUser = new MatchCiblesAdapter(users);
-                    rvListCible.setAdapter(adapterUser);
-                    adapterUser.startListening();
-                    adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(DocumentSnapshot snapshot, int position) {
-                            String idUser = snapshot.getId();
-                            Bundle b = new Bundle();
-                            b.putString("idUser", idUser);
-                            Fragment fragment = new ViewProfilFragment();
-                            fragment.setArguments(b);
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.fragment_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
-                    });
-
-
+            AfficherResultatQuery(query);
+        }else{
+            //Célibataire
+            if (usRole.equals(1L)) {
+                critere.addAll(listIn);
+                query = db.collection("users")
+                        .whereEqualTo("us_role", 1)
+                        .whereEqualTo("us_gender", genreCritere)
+                        .whereLessThan("us_birth_date",dateMin )
+                        .whereGreaterThan("us_birth_date", dateMax)
+                        .whereIn("us_auth_uid", critere);
+                if (!String.valueOf(ptCodePostal.getText()).equals("")){
+                    query = query
+                            //.orderBy("us_postal_code")
+                            .whereEqualTo("us_postal_code", codePostalCritere);
+                    //.startAt(codePostalCritere)
+                    //.endAt(codePostalCritere+"\uf8ff");
+                    AfficherResultatQuery(query);
                 }
-            });
-
-        } else {
-        //Parrain
-            critere.addAll(listNotIn);
-
-            query = db.collection("users")
-                    .whereEqualTo("us_role", 1)
-                    .whereEqualTo("us_gender", genreCritere)
-                    .whereLessThan("us_birth_date",dateMin )
-                    .whereGreaterThan("us_birth_date", dateMax);
-                    //.whereNotIn("us_auth_uid", critere);
-            if (!String.valueOf(ptCodePostal.getText()).equals("")){
-                query = query
-                        //.orderBy("us_postal_code")
-                        .whereEqualTo("us_postal_code", codePostalCritere);
-                        //.startAt(codePostalCritere)
-                        //.endAt(codePostalCritere+"\uf8ff");
+            } else {
+                //Parrain
+                //critere.addAll(listNotIn);
+                query = db.collection("users")
+                        .whereEqualTo("us_role", 1)
+                        .whereEqualTo("us_gender", genreCritere)
+                        .whereLessThan("us_birth_date",dateMin )
+                        .whereGreaterThan("us_birth_date", dateMax);
+                //.whereNotIn("us_auth_uid", critere);
+                if (!String.valueOf(ptCodePostal.getText()).equals("")){
+                    query = query
+                            //.orderBy("us_postal_code")
+                            .whereEqualTo("us_postal_code", codePostalCritere);
+                    //.startAt(codePostalCritere)
+                    //.endAt(codePostalCritere+"\uf8ff");
+                }
+                AfficherResultatQuery(query);
             }
-
-            Query finalQuery1 = query;
-            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                    FirestoreRecyclerOptions<ModelUsers> users =
-                            new FirestoreRecyclerOptions.Builder<ModelUsers>()
-                                    .setQuery(finalQuery1, ModelUsers.class)
-                                    .build();
-
-                    adapterUser = new MatchCiblesAdapter(users);
-                    rvListCible.setAdapter(adapterUser);
-                    adapterUser.startListening();
-                    adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(DocumentSnapshot snapshot, int position) {
-                            String idUser = snapshot.getId();
-                            Bundle b = new Bundle();
-                            b.putString("idUser", idUser);
-                            Fragment fragment = new ViewProfilFragment();
-                            fragment.setArguments(b);
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.fragment_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
-                    });
-
-
-                }
-            });
-
-      //    test = query.whereLessThan("us_birth_date", dateMin).whereGreaterThan("us_birth_date", dateMax);
-
         }
+    }
 
+    private void AfficherResultatQuery(Query query) {
+        Query finalQuery = query;
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                FirestoreRecyclerOptions<ModelUsers> users =
+                        new FirestoreRecyclerOptions.Builder<ModelUsers>()
+                                .setQuery(finalQuery, ModelUsers.class)
+                                .build();
+                adapterUser = new MatchCiblesAdapter(users);
+                rvListCible.setAdapter(adapterUser);
+                adapterUser.startListening();
+                adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(DocumentSnapshot snapshot, int position) {
+                        String idUser = snapshot.getId();
+                        Bundle b = new Bundle();
+                        b.putString("idUser", idUser);
+                        Fragment fragment = new ViewProfilFragment();
+                        fragment.setArguments(b);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        /** On instancie tous les éléments du layout **/
+        llRechercheDetails = view.findViewById(R.id.ll_recherche_details);
+        llRechercheGloabale = view.findViewById(R.id.ll_recherche_globale);
         rvListCible = view.findViewById(R.id.rv_list_cibles);
         rvListCible.setHasFixedSize(true);
         rvListCible.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Recherche globale
+        ptCodePostalGlobale = view.findViewById(R.id.pt_code_postal_globale);
+
+        // Recherche détaillée
         sbMin = view.findViewById(R.id.sb_min);
         tvCurrentMin = view.findViewById(R.id.tv_min);
         sbMax = view.findViewById(R.id.sb_max);
@@ -353,6 +341,37 @@ public class MatchCiblesFragment extends Fragment {
         sbMax.setMax((int) 99);
         sbMax.setProgress((int) 99);
         tvCurrentMax.setText(String.valueOf(99));
+
+        /** On affiche l'espace de recherche en fonction du menu choisi par l'utilisateur **/
+
+        if (TypeSearch == "details"){
+            makeVisibleRechercheDetails();
+            makeInvisibleRechercheGlobale();
+        }else {
+            makeVisibleRechercheGlobale();
+            makeInvisibleRechercheDetails();
+        }
+
+        /**  Recherche Globale sur code postal **/
+
+        ptCodePostalGlobale.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                getDataMatchFromFirestore(view);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        /**  Recherche Détaillé sur code postal COMPLET, l'âge et le genre **/
 
         // Click sur le bouton GO pour le code postal
         btnSearchSingle.setOnClickListener(new View.OnClickListener() {
@@ -400,4 +419,21 @@ public class MatchCiblesFragment extends Fragment {
 
 
     }
+
+    private void makeInvisibleRechercheGlobale() {
+        llRechercheGloabale.setVisibility(View.GONE);
+    }
+
+    private void makeInvisibleRechercheDetails() {
+        llRechercheDetails.setVisibility(View.GONE);
+    }
+
+    private void makeVisibleRechercheGlobale() {
+        llRechercheGloabale.setVisibility(View.VISIBLE);
+    }
+
+    private void makeVisibleRechercheDetails() {
+        llRechercheDetails.setVisibility(View.VISIBLE);
+    }
+
 }
