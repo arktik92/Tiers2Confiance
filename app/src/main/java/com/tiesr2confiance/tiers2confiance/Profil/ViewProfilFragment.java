@@ -94,7 +94,6 @@ public class ViewProfilFragment extends Fragment {
 
     /** Champs Celibataire **/
     private TextView tvPersonality, tvSports,tvHobbies, tvBalance, tvEthnicGroup, tvEyeColor, tvHairColor, tvHairLength, tvSmoker, tvSexualOrient, tvMaritalStatus, tvShape;
-    private LinearLayout llPhoto;
 
      /** Champs Edit (crayon) **/
     private TextView tvPersonalityEdit, tvSportsEdit,tvHobbiesEdit, tvPresentationEdit, tvEthnicGroupEdit, tvEyeColorEdit, tvHairColorEdit, tvHairLengthEdit, tvSmokerEdit, tvSexualOrientEdit, tvMaritalStatusEdit, tvShapeEdit;
@@ -105,7 +104,8 @@ public class ViewProfilFragment extends Fragment {
     private RecyclerView rvListPhotos;
     private ViewPhotosAdapter adapterPhotos;
     private LinearLayout
-            llPresentation
+            llPhoto
+            , llPresentation
             , llHobbies
             , llPersonality
             , llSports
@@ -948,7 +948,6 @@ public class ViewProfilFragment extends Fragment {
                                     // Si l'utilisateur connecté est un celib et donc...
                                     // si l'utilisateur à afficher est Tiers de confiance (parrain)...
 
-                                    //                                tvRole.setText("Tiers");
                                     tvRole.setText(getString(R.string.lbl_tiers));
                                 } else {
                                     tvBalance.setText(balance.toString());
@@ -965,7 +964,6 @@ public class ViewProfilFragment extends Fragment {
                                         rvListPhotos.setAdapter(adapterPhotos);
                                     }
 
-                                    //tvRole.setText("Célib");
                                     tvRole.setText(getString(R.string.lbl_celibataire));
                                     makeVisible();
 
@@ -990,7 +988,6 @@ public class ViewProfilFragment extends Fragment {
 
 
                                     // HOBBIES VALEURS : Affichage des hobbies, comparaison de la liste des hobbies de l'utilisateur avec la liste complète chargée
-
                                     for (int i = 0; i < hobbiesListUser.length; i++) {
                                         for (int j = 0; j < ListHobbiesComplete.size(); j++) {
                                             String key = String.valueOf(ListHobbiesComplete.get(j).getHo_id());
@@ -1148,20 +1145,16 @@ public class ViewProfilFragment extends Fragment {
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche rend clickable et on affiche les crayons
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
                                         makeUpdate();
-
                                         // Sinon on affiche d'autres boutons
                                     }else{
                                         // Si le user connecté est un Parrain, on affiche les boutons qui vont bien
                                         if (usRole.equals(2L)) {
-                                            Log.e(TAG, "onSuccess: " + usNephew );
-                                            Log.e(TAG, "onSuccess: " + documentSnapshotDisplayed.getId() );
                                             // Si le profil consulté est le filleul du parrain,
                                             if (usNephew.equals(documentSnapshotDisplayed.getId())){
                                                 //on peut créditer
                                                 btnPflCrediter.setVisibility(View.VISIBLE);
                                                 // on peut supprimer le lien de parrainage
                                                 btnLinkSupp.setVisibility(View.VISIBLE);
-
                                             }else{
                                                 // Si le profil consulté n'est pas le filleul du parrain
                                                 //on peut envoyer faire un envoi du profil à son filleul (Proposition)

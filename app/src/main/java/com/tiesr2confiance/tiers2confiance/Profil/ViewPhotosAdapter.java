@@ -40,13 +40,11 @@ public class ViewPhotosAdapter extends RecyclerView.Adapter<ViewPhotosAdapter.My
     @Override
     public void onBindViewHolder(@NonNull ViewPhotosAdapter.MyViewHolder holder, int position) {
 
-        Log.e(TAG, "onBindViewHolder: " + photosList.get(position) );
         Uri imageUri = Uri.parse(photosList.get(position));
         Glide.with(context)
                 .load(imageUri)
                 .apply(new RequestOptions().override(1000,1000))
                 .into(holder.mediaContainer);
-        //holder.mediaContainer.setImageURI(imageUri);
     }
 
     @Override
