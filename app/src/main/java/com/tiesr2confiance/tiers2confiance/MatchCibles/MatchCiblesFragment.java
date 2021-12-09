@@ -114,6 +114,9 @@ public class MatchCiblesFragment extends Fragment {
 
     private void getDataMatchFromFirestore(View view) {
 
+        critere.clear();
+        critere.add("1");
+
         // ici on determine le rôle de l'utilisateur connecté et on stock le rôle dans la variable usRole
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -187,9 +190,6 @@ public class MatchCiblesFragment extends Fragment {
     private void displayPossibleMatchList(Long usRole, ArrayList listIn, ArrayList listNotIn, View view) throws ParseException {
         Query query;
 
-        critere.clear();
-        critere.add("1");
-
         /** Recherche globale **/
         // Récupération des attributs indiqués dans la recherche
         if (!String.valueOf(ptCityGlobale.getText()).equals("")){
@@ -232,6 +232,8 @@ public class MatchCiblesFragment extends Fragment {
         }else{
             //Célibataire
             if (usRole.equals(1L)) {
+                critere.clear();
+                critere.add("1");
                 critere.addAll(listIn);
                 query = db.collection("users")
                         .whereEqualTo("us_role", 1)
@@ -240,13 +242,9 @@ public class MatchCiblesFragment extends Fragment {
                         .whereGreaterThan("us_birth_date", dateMax)
                         .whereIn("us_auth_uid", critere);
                 if (!String.valueOf(ptCodePostal.getText()).equals("")){
-                    query = query
-                            //.orderBy("us_postal_code")
-                            .whereEqualTo("us_postal_code", codePostalCritere);
-                    //.startAt(codePostalCritere)
-                    //.endAt(codePostalCritere+"\uf8ff");
-                    AfficherResultatQuery(query);
+                    query = query.whereEqualTo("us_postal_code", codePostalCritere);
                 }
+                AfficherResultatQuery(query);
             } else {
                 //Parrain
                 //critere.addAll(listNotIn);
@@ -280,6 +278,7 @@ public class MatchCiblesFragment extends Fragment {
                 adapterUser = new MatchCiblesAdapter(users);
                 rvListCible.setAdapter(adapterUser);
                 adapterUser.startListening();
+
                 adapterUser.setOnItemCliclListener(new MatchCiblesAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(DocumentSnapshot snapshot, int position) {
