@@ -351,6 +351,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                        return;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -23,22 +23,33 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SPORTS;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +69,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
+import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
@@ -79,12 +91,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ViewProfilFragment extends Fragment {
 
     public static final String TAG = "View Profile";
     private static final String TAGAPP = "LOGAPP";
+
+    private static int REQUEST_IMAGE_CAPTURE = 1;
+    private static int REQUEST_IMAGE_CAMERA_CAPTURE = 100;
 
     /** ---------------- DECLARATION DES VARIABLES ------------------------ **/
 
@@ -97,8 +113,9 @@ public class ViewProfilFragment extends Fragment {
 
      /** Champs Edit (crayon) **/
     private TextView tvPersonalityEdit, tvSportsEdit,tvHobbiesEdit, tvPresentationEdit, tvEthnicGroupEdit, tvEyeColorEdit, tvHairColorEdit, tvHairLengthEdit, tvSmokerEdit, tvSexualOrientEdit, tvMaritalStatusEdit, tvShapeEdit;
+    private Button btnAddPhoto;
 
-    /** Bontons Action   **/
+    /** Boutons Action   **/
     private Button btnPflCrediter, btnPflEnvoyer, btnLinkSupp, btnLinkRequest, btnLinkSuppTiers, btnLinkRequestTiers, btnUpdateProfil, btnAcceptNephew, btnAcceptGodfather, btnAcceptMatch ;
 
     private RecyclerView rvListPhotos;
@@ -236,6 +253,7 @@ public class ViewProfilFragment extends Fragment {
         tvShape= view.findViewById(R.id.tv_shape);
         tvMaritalStatus = view.findViewById(R.id.tv_marital_status);
 
+        btnAddPhoto = view.findViewById(R.id.btn_add_photo);
         tvPersonalityEdit = view.findViewById(R.id.tv_personnality_edit);
         tvSportsEdit = view.findViewById(R.id.tv_sport_edit);
         tvHobbiesEdit = view.findViewById(R.id.tv_hobbies_edit);
@@ -540,6 +558,7 @@ public class ViewProfilFragment extends Fragment {
 
     private void InitComponents(View v) {
         InitLlPresentation(v);
+        InitivPhoto(v);
         InitLlHobbies(v);
         InitLlPersonality(v);
         InitLlSports(v);
@@ -576,6 +595,93 @@ public class ViewProfilFragment extends Fragment {
         });
         llPresentation.setClickable(false);
     }
+
+    private void InitivPhoto(View v) {
+        btnAddPhoto = v.findViewById(R.id.btn_add_photo);
+
+        btnAddPhoto.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               PopupMenu popMenu = new PopupMenu(getContext(), view);
+               MenuInflater menuInflater = popMenu.getMenuInflater();
+
+               // call Inflater Menu
+               menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
+
+               // Add Menu Event
+//         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
+//        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
+
+               popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                   @Override
+                   public boolean onMenuItemClick(MenuItem item) {
+                       int id = item.getItemId();
+
+                       // En fonction du résultat, lancement de l'action appropriée
+                       if (id == R.id.takeCameraPicture) {
+                           getCameraPhotoNew();
+                       } else if (id == R.id.takePicture) {
+                           getImageLibrary();
+                       }
+                       return false;
+
+                   }
+               });
+               // Show Popup menu
+               popMenu.show();
+
+           }
+       });
+    }
+
+    //TODO
+    /** FONCTION CAMERA, REDONDANCE AVEC CREATION PROFIL, A CENTRALISER  **/
+    public void getCameraPhotoNew() {
+        Log.d(TAG, "GET PHOTO STEP");
+
+        // Request for camera runtime permission
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
+                    Manifest.permission.CAMERA
+            }, REQUEST_IMAGE_CAMERA_CAPTURE);
+        }else{
+            Log.d(TAG, "getPhoto: ");
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
+        }
+    }
+    public void getImageLibrary(){
+        System.out.println(">> getImageLibrary");
+
+
+        Log.d(TAG, "***** SelectPicture *******");
+
+        final Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        //  Bundle camerabundle = new Bundle();
+
+        cameraIntent.setType("image/*"); // image/jpg
+
+       /* cameraIntent.putExtra("crop", true);
+        cameraIntent.putExtra("scale", true);
+
+        // Output image dim
+        cameraIntent.putExtra("outputX", 256);
+        cameraIntent.putExtra("outputY", 256);
+*/
+        // Ratio
+        cameraIntent.putExtra("aspectX", 1);
+        cameraIntent.putExtra("aspectY", 1);
+
+        cameraIntent.putExtra("return-data", true);
+
+        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
 
     private void InitLlHobbies(View v) {
         llHobbies =v.findViewById(R.id.ll_hobbies);
@@ -1145,6 +1251,7 @@ public class ViewProfilFragment extends Fragment {
                                     // Si le user connecté est le même que le user à afficher (VOIR MON PROFIL) , on affiche rend clickable et on affiche les crayons
                                     if (documentSnapshotDisplayed.getId().equals(documentSnapshotConnected.getId()) ){
                                         makeUpdate();
+                                        if (usRole.equals(2L)) {btnAddPhoto.setVisibility(View.GONE);}
                                         // Sinon on affiche d'autres boutons
                                     }else{
                                         // Si le user connecté est un Parrain, on affiche les boutons qui vont bien
@@ -1256,7 +1363,6 @@ public class ViewProfilFragment extends Fragment {
     public void makeUpdate(){
 
         llPresentation.setClickable(true);
-        llPhoto.setClickable(true);
         llBalance.setClickable(true);
         llHobbies.setClickable(true);
         llPersonality.setClickable(true);
@@ -1270,6 +1376,7 @@ public class ViewProfilFragment extends Fragment {
         llSexualOrientation.setClickable(true);
         llSmoker.setClickable(true);
 
+        btnAddPhoto.setVisibility(View.VISIBLE);
         tvPersonalityEdit.setVisibility(View.VISIBLE);
         tvSportsEdit.setVisibility(View.VISIBLE);
         tvHobbiesEdit.setVisibility(View.VISIBLE);
@@ -1287,7 +1394,6 @@ public class ViewProfilFragment extends Fragment {
     public void makeNotUpdate(){
 
         llPresentation.setClickable(false);
-        llPhoto.setClickable(false);
         llHobbies.setClickable(false);
         llPersonality.setClickable(false);
         llSports.setClickable(false);
@@ -1300,6 +1406,7 @@ public class ViewProfilFragment extends Fragment {
         llSexualOrientation.setClickable(false);
         llSmoker.setClickable(false);
 
+        btnAddPhoto.setVisibility(View.GONE);
         tvPersonalityEdit.setVisibility(View.GONE);
         tvSportsEdit.setVisibility(View.GONE);
         tvHobbiesEdit.setVisibility(View.GONE);
