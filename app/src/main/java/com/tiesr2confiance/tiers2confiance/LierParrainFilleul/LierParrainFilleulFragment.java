@@ -187,12 +187,16 @@ public class LierParrainFilleulFragment extends Fragment {
 		Log.e(TAG, "searchUsers: " + s );
 		/** Récupération de la collection Users dans Firestore **/
 		Query query = db.collection("users")
-				.whereEqualTo("us_role", roleInverse)
+				.whereEqualTo("us_role", roleInverse);
 				//.whereNotIn("us_auth_uid", critere)
 				//.orderBy("us_auth_uid")
-				.orderBy("us_nickname")
-				.startAt(s)
-				.endAt(s+"\uf8ff");
+		if (!String.valueOf(s).equals("")){
+			query = query
+					.orderBy("us_nickname")
+					.startAt(s)
+					.endAt(s+"\uf8ff");
+		}
+
 
 		FirestoreRecyclerOptions<ModelUsers> users =
 				new FirestoreRecyclerOptions.Builder<ModelUsers>()
