@@ -61,6 +61,7 @@ import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.Reference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -349,6 +350,8 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     public void onSuccess(Void unused) {
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
+
+
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                     }
                 })
@@ -901,7 +904,68 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
                                     Toast.makeText(CreationProfilActivity.this, "Profil Photo crée", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Profil crée");
                                     Log.i(TAG, "Avatar"+avatar);
-                                 //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+
+
+
+                                    /****TODO***/
+/**
+                                    // create an instance of the firebase storage
+                                    val storage = FirebaseStorage.getInstance()
+
+                                    // create a reference to storage
+                                    val storageRef = storage.reference
+
+                                    // create a reference to the featured content image
+                                    val filmRef = storageRef.child("featured/film.jpg")
+
+                                    // place the image metadata in a val - this appears to be working
+                                    val filmMeta = filmRef.metadata
+
+                                    // parse metadata to a string
+                                    // ****** what to do next? ********
+                                    val filmId = filmMeta.customMetadata("id") // <--- this does not work
+
+                                    val metadata = storageMetadata {
+                                        setCustomMetadata("id", "filmId")
+                                    }
+
+                                    filmRef.updateMetadata(metadata).addOnSuccessListener {
+                                        // Updated metadata is in storageMetadata
+                                        val filmId =  it.getCustomMetadata("id")
+                                    }.addOnFailureListener {
+
+                                    }
+
+
+ ///////    https://subscription.packtpub.com/book/web-development/9781788624718/5/ch05lvl1sec34/file-metadata
+
+
+ StorageReference storageRef = storage.getReference();
+
+ StorageReference forestRef = storageRef.child("images/forest.jpg");
+
+ forestRef.getMetadata().addOnSuccessListener(newOnSuccessListener<StorageMetadata>(){
+@Override
+publicvoid onSuccess(StorageMetadata storageMetadata){
+
+}
+}).addOnFailureListener(newOnFailureListener...
+
+ Copy
+
+
+
+ **/
+
+                                    /****/
+
+
+
+
+
+                                    Log.i(TAG, "onSuccess: ");
+
+                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
