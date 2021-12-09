@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tiesr2confiance.tiers2confiance">
 
+
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -13,9 +15,9 @@
     <uses-permission android:name="Android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="Android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
+    <uses-feature   android:name="android.hardware.camera" android:required="true" />
+
+
 
     <application
         android:name=".Common.GlobalClass"
@@ -35,7 +37,7 @@
             android:name=".Common.NoInternetActivity"
             android:exported="false" />
         <activity
-            android:name=".Login.LoginActivity"
+            android:name=".Login.CreationProfilActivity"
             android:exported="false"/>
 
         <activity
@@ -46,7 +48,7 @@
             android:exported="false"/>
 
         <activity
-            android:name=".Login.CreationProfilActivity"
+            android:name=".Login.LoginActivity"
             android:exported="true">
 
         <intent-filter>
@@ -68,6 +70,16 @@
             android:name=".CameraFragment"
             android:exported="false" />
 -->
+
+        <service
+            android:name=".Messaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
 
     </application>
 
