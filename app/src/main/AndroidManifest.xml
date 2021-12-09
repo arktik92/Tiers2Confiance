@@ -36,26 +36,28 @@
             android:exported="false" />
         <activity
             android:name=".Login.LoginActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".Login.RoleChoiceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Login.SignInActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".Login.CreationProfilActivity"
             android:exported="true">
-
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
 
-        </activity>
+    </activity>
+
+        <activity
+            android:name=".Login.RoleChoiceActivity"
+            android:exported="false" />
+
+
+    <activity
+            android:name=".Login.SignInActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".Login.CreationProfilActivity"
+            android:exported="true"/>
+
 
 
 
