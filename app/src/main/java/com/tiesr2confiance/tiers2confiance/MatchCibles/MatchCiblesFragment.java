@@ -222,11 +222,11 @@ public class MatchCiblesFragment extends Fragment {
 
         if (TypeSearch == "globale"){
             query = db.collection("users");
-            if (!CityCritereGlobale.equals("")){
+            if (!String.valueOf(ptCityGlobale.getText()).equals("")){
                 query = query
                         .orderBy("us_city_lowercase")
                         .startAt(CityCritereGlobale.toLowerCase())
-                        .endAt(CityCritereGlobale.toLowerCase() +"\uf8ff");
+                        .endAt(CityCritereGlobale.toLowerCase()+"\uf8ff");
             }
             AfficherResultatQuery(query);
         }else{
