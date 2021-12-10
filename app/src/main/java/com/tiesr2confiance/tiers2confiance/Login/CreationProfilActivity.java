@@ -62,6 +62,8 @@ import com.tiesr2confiance.tiers2confiance.R;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.Reference;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -82,7 +84,8 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     // Variable Widgets
     /** Variable Widgets **/
     private ImageView imgAvatar;
-    public Uri imageUri, imageCameraUri;;
+    public Uri imageUri, imageCameraUri;
+    private URI imageToken;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
@@ -136,7 +139,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
  private String avatar;
     private FirebaseStorage storage;
-    private StorageReference storageReference;
+    private StorageReference storageReference,storageRef;
 
     /**
      * Variable Firebase Auth
@@ -351,6 +354,9 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     public void onSuccess(Void unused) {
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
+
+
+
 
 
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
@@ -572,43 +578,27 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Task<GetTokenResult> FireToken = FirebaseAuth.getInstance().getCurrentUser().getIdToken(false);
 
                         FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<GetTokenResult> task) {
-
-                              String toto = task.getResult().getToken();
-                                Log.d(TAG, "onComplete: toto >>"+toto);
 
 
-                                /***
-                                InternalAuthProvider authProvider = null;
-                                Task<GetTokenResult> pendingResult = authProvider.getAccessToken(false);
-                                GetTokenResult result =
-                                        Tasks.await(pendingResult, MAXIMUM_TOKEN_WAIT_TIME_MS, TimeUnit.MILLISECONDS);
-                                String token = result.getToken();
-**/
+                            /**** TODO ***/
 
-                                String token = task.getResult().getToken();
-                                Log.d(TAG, "onComplete: TOKEN >> "+token);
+                                                                                                            });
 
-                                Log.d(TAG, "onComplete: FIRETOKEN >>"+FireToken);
+                    }
+                })
 
-                            }
-                        });
-
-
-                       // boolean b = "true";
+                            // boolean b = "true";
                        // Task<GetTokenResult> token = FirebaseAuth.getInstance().getCurrentUser().getIdToken(b);
 
 
-
+/***
                         System.out.println("getUid "+getUid);
                         System.out.println("FILENAME DONE "+fileName);
 
                         System.out.println("downloadUrl "+downloadUrl);
 
-                        uploadProfilFireBase(fileName.toString());
-                    }
-                })
+                        uploadProfilFireBase(fileName.toString());**/
+
 
                 .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -862,6 +852,40 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
                     System.out.println("Document Snapshot exist");
 
 
+
+
+                    /****/
+
+
+
+                    // currentUser, récupération de l'utilisateur connecté
+                    currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    String strFileURL = currentUser.getUid()+"/"+fileName;
+
+
+                    StorageReference URIImagesRef = storageRef.child(strFileURL);
+
+                    URIImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(@NonNull Uri uri) {
+                            try{
+
+                               URI imageToken = new URI(uri.toString());
+                                Log.i(TAG, "imageToken "+ imageToken);
+                            }
+                            catch (URISyntaxException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
+
+
+
+/***/
+
                     // Création d'un objet pour envoyer sur la Database
                     Map<String, Object> userList = new HashMap<>();
                     userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
@@ -910,54 +934,8 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
 
 
                                     /****TODO***/
-/**
-                                    // create an instance of the firebase storage
-                                    val storage = FirebaseStorage.getInstance()
-
-                                    // create a reference to storage
-                                    val storageRef = storage.reference
-
-                                    // create a reference to the featured content image
-                                    val filmRef = storageRef.child("featured/film.jpg")
-
-                                    // place the image metadata in a val - this appears to be working
-                                    val filmMeta = filmRef.metadata
-
-                                    // parse metadata to a string
-                                    // ****** what to do next? ********
-                                    val filmId = filmMeta.customMetadata("id") // <--- this does not work
-
-                                    val metadata = storageMetadata {
-                                        setCustomMetadata("id", "filmId")
-                                    }
-
-                                    filmRef.updateMetadata(metadata).addOnSuccessListener {
-                                        // Updated metadata is in storageMetadata
-                                        val filmId =  it.getCustomMetadata("id")
-                                    }.addOnFailureListener {
-
-                                    }
 
 
- ///////    https://subscription.packtpub.com/book/web-development/9781788624718/5/ch05lvl1sec34/file-metadata
-
-
- StorageReference storageRef = storage.getReference();
-
- StorageReference forestRef = storageRef.child("images/forest.jpg");
-
- forestRef.getMetadata().addOnSuccessListener(newOnSuccessListener<StorageMetadata>(){
-@Override
-publicvoid onSuccess(StorageMetadata storageMetadata){
-
-}
-}).addOnFailureListener(newOnFailureListener...
-
- Copy
-
-
-
- **/
 
                                     /****/
 
@@ -967,7 +945,8 @@ publicvoid onSuccess(StorageMetadata storageMetadata){
 
                                     Log.i(TAG, "onSuccess: ");
 
-                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                   //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                    // return;
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
