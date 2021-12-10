@@ -67,6 +67,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
@@ -1037,6 +1039,11 @@ public class ViewProfilFragment extends Fragment {
                                         .centerCrop()
                                         .error(R.mipmap.ic_launcher)
                                         .placeholder(R.mipmap.ic_launcher);
+
+
+                                //StorageReference gsReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://tiers2confiance-21525.appspot.com/41niZRNxf3S2OJI4YuJ338rTBFt2/7113af67-f70d-4d0f-83f8-9530af0219bb.jpg");
+
+                               // Log.e(TAG, "onSuccess: " + gsReference);
                                 /** Loading Avatar **/
                                 Glide
                                         .with(context)
@@ -1047,12 +1054,12 @@ public class ViewProfilFragment extends Fragment {
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(ivProfilAvatarShape);
 
-
                                 /** ON DIFFERENCIE SELON LE ROLE **/
                                 if (role.equals(2L)) {
                                     // Si l'utilisateur connecté est un celib et donc...
                                     // si l'utilisateur à afficher est Tiers de confiance (parrain)...
                                 } else {
+
                                     tvBalance.setText(balance.toString());
                                     ArrayList<String> imgPhotosList = new ArrayList<>();
                                     if (imgPhotos != "" & imgPhotos != ";") {
