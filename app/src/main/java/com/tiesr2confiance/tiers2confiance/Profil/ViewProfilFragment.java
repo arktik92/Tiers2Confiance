@@ -105,7 +105,7 @@ public class ViewProfilFragment extends Fragment {
     /** ---------------- DECLARATION DES VARIABLES ------------------------ **/
 
     /** Champs Commun **/
-    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity;
+    private TextView tvUserAge, tvProfilName, tvPresentation, tvProfilCity;
     private ImageView ivProfilAvatarShape, ivGender;
 
     /** Champs Celibataire **/
@@ -219,7 +219,6 @@ public class ViewProfilFragment extends Fragment {
         tvProfilName = view.findViewById(R.id.tv_profil_name);
         tvUserAge   =view.findViewById(R.id.tv_User_Age);
         ivGender = view.findViewById(R.id.iv_gender);
-        tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
         tvPresentation = view.findViewById(R.id.tv_presentation);
 
@@ -1015,7 +1014,7 @@ public class ViewProfilFragment extends Fragment {
                                 shapeId = documentSnapshotDisplayed.getLong(KEY_SHAPE);
                                 balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
                             }catch(Exception e){
-                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
+                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data (Il manque peut être un champ dasn le document USER) : ", e);
                             }
 
 
@@ -1053,8 +1052,6 @@ public class ViewProfilFragment extends Fragment {
                                 if (role.equals(2L)) {
                                     // Si l'utilisateur connecté est un celib et donc...
                                     // si l'utilisateur à afficher est Tiers de confiance (parrain)...
-
-                                    tvRole.setText(getString(R.string.lbl_tiers));
                                 } else {
                                     tvBalance.setText(balance.toString());
                                     ArrayList<String> imgPhotosList = new ArrayList<>();
@@ -1069,8 +1066,6 @@ public class ViewProfilFragment extends Fragment {
                                         adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
                                         rvListPhotos.setAdapter(adapterPhotos);
                                     }
-
-                                    tvRole.setText(getString(R.string.lbl_celibataire));
                                     makeVisible();
 
                                     tvBalance.setText(String.valueOf(balance));

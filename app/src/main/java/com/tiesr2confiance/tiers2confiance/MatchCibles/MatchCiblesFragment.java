@@ -221,7 +221,7 @@ public class MatchCiblesFragment extends Fragment {
 
 
         if (TypeSearch == "globale"){
-            query = db.collection("users");
+            query = db.collection("users").whereEqualTo("us_role", 1);
             if (!String.valueOf(ptCityGlobale.getText()).equals("")){
                 query = query
                         .orderBy("us_city_lowercase")
