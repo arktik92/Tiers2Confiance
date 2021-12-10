@@ -235,6 +235,7 @@ public class MatchCiblesFragment extends Fragment {
                 critere.clear();
                 critere.add("1");
                 critere.addAll(listIn);
+                Log.e(TAG, "displayPossibleMatchList: " + critere );
                 query = db.collection("users")
                         .whereEqualTo("us_role", 1)
                         .whereEqualTo("us_gender", genreCritere)

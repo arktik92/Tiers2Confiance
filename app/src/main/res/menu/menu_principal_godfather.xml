@@ -44,7 +44,7 @@
                 android:icon="@drawable/ic_cible"/>
             <item
                 android:title="Propositions envoyées"
-                android:id="@+id/nav_cibles_envoyees"
+                android:id="@+id/nav_search_matchs_sended"
                 android:icon="@drawable/ic_envoyees"/>
         </menu>
     </item>
