@@ -67,6 +67,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
@@ -105,7 +107,7 @@ public class ViewProfilFragment extends Fragment {
     /** ---------------- DECLARATION DES VARIABLES ------------------------ **/
 
     /** Champs Commun **/
-    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity;
+    private TextView tvUserAge, tvProfilName, tvPresentation, tvProfilCity;
     private ImageView ivProfilAvatarShape, ivGender;
 
     /** Champs Celibataire **/
@@ -219,7 +221,6 @@ public class ViewProfilFragment extends Fragment {
         tvProfilName = view.findViewById(R.id.tv_profil_name);
         tvUserAge   =view.findViewById(R.id.tv_User_Age);
         ivGender = view.findViewById(R.id.iv_gender);
-        tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
         tvPresentation = view.findViewById(R.id.tv_presentation);
 
@@ -1015,7 +1016,7 @@ public class ViewProfilFragment extends Fragment {
                                 shapeId = documentSnapshotDisplayed.getLong(KEY_SHAPE);
                                 balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
                             }catch(Exception e){
-                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
+                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data (Il manque peut être un champ dasn le document USER) : ", e);
                             }
 
 
@@ -1038,6 +1039,11 @@ public class ViewProfilFragment extends Fragment {
                                         .centerCrop()
                                         .error(R.mipmap.ic_launcher)
                                         .placeholder(R.mipmap.ic_launcher);
+
+
+                                //StorageReference gsReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://tiers2confiance-21525.appspot.com/41niZRNxf3S2OJI4YuJ338rTBFt2/7113af67-f70d-4d0f-83f8-9530af0219bb.jpg");
+
+                               // Log.e(TAG, "onSuccess: " + gsReference);
                                 /** Loading Avatar **/
                                 Glide
                                         .with(context)
@@ -1048,14 +1054,12 @@ public class ViewProfilFragment extends Fragment {
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(ivProfilAvatarShape);
 
-
                                 /** ON DIFFERENCIE SELON LE ROLE **/
                                 if (role.equals(2L)) {
                                     // Si l'utilisateur connecté est un celib et donc...
                                     // si l'utilisateur à afficher est Tiers de confiance (parrain)...
-
-                                    tvRole.setText(getString(R.string.lbl_tiers));
                                 } else {
+
                                     tvBalance.setText(balance.toString());
                                     ArrayList<String> imgPhotosList = new ArrayList<>();
                                     if (imgPhotos != "" & imgPhotos != ";") {
@@ -1069,8 +1073,6 @@ public class ViewProfilFragment extends Fragment {
                                         adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
                                         rvListPhotos.setAdapter(adapterPhotos);
                                     }
-
-                                    tvRole.setText(getString(R.string.lbl_celibataire));
                                     makeVisible();
 
                                     tvBalance.setText(String.valueOf(balance));
