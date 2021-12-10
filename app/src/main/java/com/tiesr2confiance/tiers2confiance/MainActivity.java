@@ -133,8 +133,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         userId          = globalVariables.getUserId();
         userRole        = globalVariables.getUserRole();
         currentUser     = globalVariables.getUser();
-        //currentUserDoc   = usersCollectionRef.document(userId);
-       // currentUserDoc = usersCollectionRef.document(userId);
+        currentUserDoc   = usersCollectionRef.document(userId);
 
         Log.d(TAG, "MainActivity onCreate: USERROLE : " + globalVariables.getUserRole() + "-" + globalVariables.getUserEmail());
 
@@ -193,12 +192,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
-            // MOI (Pseudo)
-        //    case R.id.nav_photos:
-        //        Intent intent = new Intent(MainActivity.this, CameraFragment.class);
-        //        startActivity(intent);
-        //        break;
-
             // CHAT
                 case R.id.nav_chat:
                     Bundle b = new Bundle();
@@ -222,13 +215,24 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
 
+            // Chercher des célibataires PAR LOCALISATION uniquement
+            case R.id.nav_cibles_globale:
+                Bundle r = new Bundle();
+                r.putString("typeSearch", "globale");
+                fragment = new MatchCiblesFragment();
+                fragment.setArguments(r);
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_container, fragment).
+                        commit();
+                break;
             // Chercher des célibataires pour mon filleul, ou consulter les propositions de match
             // reçues de mon parrain , ou de parrains d'autres célibataires
             case R.id.nav_cibles:
-                b = new Bundle();
-                b.putString("idUser", userId);
+                r = new Bundle();
+                r.putString("typeSearch", "details");
                 fragment = new MatchCiblesFragment();
-                fragment.setArguments(b);
+                fragment.setArguments(r);
                 getSupportFragmentManager().
                         beginTransaction().
                         replace(R.id.fragment_container, fragment).
@@ -300,12 +304,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
 
-            case R.id.nav_PGO:
-                getSupportFragmentManager().
-                        beginTransaction().
-                        replace(R.id.fragment_container, new UserFragment()).
-                        commit();
-                break;
+//            case R.id.nav_PGO:
+//                getSupportFragmentManager().
+//                        beginTransaction().
+//                        replace(R.id.fragment_container, new UserFragment()).
+//                        commit();
+//                break;
             case R.id.nav_deconnexion:
                 firebaseAuth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));

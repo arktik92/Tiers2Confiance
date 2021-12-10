@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelGenders;
@@ -34,6 +36,7 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelShapes;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSmoker;
 import com.tiesr2confiance.tiers2confiance.Models.ModelSports;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
+import com.tiesr2confiance.tiers2confiance.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,11 +50,12 @@ public class GlobalClass extends Application {
 
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private String userId;
-    private String userCountryLanguage;// = "EN";
-    private String userNickName;
-    private String userEmail;
-    private long userRole;// = 1L;
+    private String  userId;
+    private String  userCountryLanguage;// = "EN";
+    private String  userNickName;
+    private String  userEmail;
+    private long    userRole;// = 1L;
+    private String  userToken;
 
 
     private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
@@ -719,6 +723,25 @@ public class GlobalClass extends Application {
         Log.i(TAG, "----- GlobalClass getUserDataFromFirestore START -----");
 
 //        loadedUserDataOK    =   0;
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAGAPP, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        userToken = task.getResult();
+
+                        // Log and toast
+                        String msg = "My TOKEN is :"+ userToken;
+                        Log.d(TAGAPP, msg);
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
         try

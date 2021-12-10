@@ -4,46 +4,51 @@
     <group android:id="@+id/group1"
         android:checkableBehavior="single">
         <item
-            android:title="Compte"
+            android:title="Mon compte"
             android:id="@+id/nav_profil"
             android:icon="@drawable/ic_account" />
     </group>
 
-    <group android:id="@+id/group2"
-        android:checkableBehavior="single">
-        <item
-            android:title="Chat"
-            android:id="@+id/nav_phnav_chatotos"
-            android:icon="@drawable/ic_messages"/>
-    </group>
-
-    <group android:id="@+id/group3"
-        android:checkableBehavior="single">
-        <item
-            android:title="Chercher des célibataires"
-            android:id="@+id/nav_cibles"
-            android:icon="@drawable/ic_cible"/>
-    </group>
-
     <item android:title="Mon filleul">
         <menu>
+            <item android:title="Créditer son compte"
+                android:id="@+id/nav_crediter"
+                android:icon="@drawable/ic_credit"/>
             <item android:title="Voir son profil"
                 android:id="@+id/nav_view_profil"
                 android:icon="@drawable/ic_godfather_nephews"/>
-            <item android:title="Créditer"
-                android:id="@+id/nav_crediter"
-                android:icon="@drawable/ic_credit"/>
-            <item android:title="Chercher"
+            <item android:title="Chercher un filleul"
                 android:id="@+id/nav_search_profil_PF"
                 android:icon="@drawable/ic_search_godfather_nephews"/>
-            <item android:title="Demandes en attente"
+            <item android:title="Parainages en attente"
                 android:id="@+id/nav_pending_request"
-                android:icon="@drawable/ic_pending"/>
-            <item android:title="PGO"
-                android:id="@+id/nav_PGO"
                 android:icon="@drawable/ic_pending"/>
         </menu>
     </item>
+    <group android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:title="Mes conversations"
+            android:id="@+id/nav_phnav_chatotos"
+            android:icon="@drawable/ic_messages"/>
+    </group>
+    <item android:title="Les Célibataires">
+        <menu>
+            <item
+                android:title="Recherche par ville"
+                android:id="@+id/nav_cibles_globale"
+                android:icon="@drawable/ic_localisation"/>
+            <item
+                android:title="Recherche détaillée"
+                android:id="@+id/nav_cibles"
+                android:icon="@drawable/ic_cible"/>
+            <item
+                android:title="Propositions envoyées"
+                android:id="@+id/nav_cibles_envoyees"
+                android:icon="@drawable/ic_envoyees"/>
+        </menu>
+    </item>
+
 
     <group android:id="@+id/group5"
         android:checkableBehavior="single">

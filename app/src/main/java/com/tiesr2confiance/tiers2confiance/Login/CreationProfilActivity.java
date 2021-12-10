@@ -67,6 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -129,9 +130,9 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             urlImage,
             photos,
             uriPath,
-            matchRequestFrom,
-            matchRequestTo,
-            match;
+            matchsRequestFrom,
+            matchsRequestTo,
+            matchs;
 
  private String avatar;
     private FirebaseStorage storage;
@@ -286,9 +287,9 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         sports = "";
 
         photos = "";
-        match = "";
-        matchRequestFrom = "";
-        matchRequestTo = "";
+        matchs = "";
+        matchsRequestFrom = "";
+        matchsRequestTo = "";
 
         // Méthode de la date de dernière connection
         if (registeredDate == null) {
@@ -317,6 +318,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_country_lang", country);
         userList.put("us_postal_code", Long.parseLong(zipCode));
         userList.put("us_city", city);
+        userList.put("us_city_lowercase", city.toLowerCase());
         userList.put("us_presentation", presentation);
         userList.put("us_gender", genre);
         userList.put("us_sexual_orientation", sexualOrientation);
@@ -336,10 +338,9 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_avatar", avatar);
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
-        userList.put("us_image", image);
-        userList.put("us_match_request_from", matchRequestFrom);
-        userList.put("us_match_request_to", matchRequestTo);
-        userList.put("us_match", match);
+        userList.put("us_match_request_from", matchsRequestFrom);
+        userList.put("us_match_request_to", matchsRequestTo);
+        userList.put("us_match", matchs);
 
 
 
@@ -353,6 +354,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
 
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                        return;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
