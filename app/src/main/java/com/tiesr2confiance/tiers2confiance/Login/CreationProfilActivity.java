@@ -577,12 +577,12 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
                         Task<GetTokenResult> FireToken = FirebaseAuth.getInstance().getCurrentUser().getIdToken(false);
 
-                        FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                       // FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
 
 
                             /**** TODO ***/
 
-                                                                                                            });
+                         //                                                                                   });
 
                     }
                 })
