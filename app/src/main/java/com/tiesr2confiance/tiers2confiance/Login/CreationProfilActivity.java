@@ -133,6 +133,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             urlImage,
             photos,
             uriPath,
+            chats,
             matchsRequestFrom,
             matchsRequestTo,
             matchs;
@@ -290,6 +291,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         sports = "";
 
         photos = "";
+        chats = "";
         matchs = "";
         matchsRequestFrom = "";
         matchsRequestTo = "";
@@ -344,6 +346,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_match_request_from", matchsRequestFrom);
         userList.put("us_match_request_to", matchsRequestTo);
         userList.put("us_match", matchs);
+        userList.put("us_chats", chats);
 
 
 

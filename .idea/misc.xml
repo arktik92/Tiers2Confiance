@@ -47,6 +47,8 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.25" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.13489583333333333" />
+        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.13489583333333333" />
         <entry key="app/src/main/res/layout/fragment_match_cibles_envoyees.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_view_profil.xml" value="0.11145833333333334" />
         <entry key="app/src/main/res/layout/fragment_view_profil_item_recycler.xml" value="0.11145833333333334" />

@@ -61,6 +61,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -91,7 +92,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class ViewProfilFragment extends Fragment {
@@ -478,6 +481,24 @@ public class ViewProfilFragment extends Fragment {
                                             userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
                                             userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") );
                                             userDisplayed.update("us_matchs_request_from", contenuDisplayedUser.getUs_matchs_request_from().replace(userConnected.getId()+ ";", "") );
+
+                                            // Création d'un objet pour envoyer sur la Database
+                                            Map<String, Object> chat = new HashMap<>();
+                                            chat.put("us_date_creation", Timestamp.now());
+                                            db.collection("chat").add(chat)
+                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                            userConnected.update("us_chats", contenuUser.getUs_chats() + task.getResult().getId() +";" );
+                                                            userDisplayed.update("us_chats", contenuDisplayedUser.getUs_chats() +  task.getResult().getId()  + ";");
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.e(TAG, "onFailure: " + "Erreur à la création du chat" );
+                                                        }
+                                                    });
                                         }
                                     });
                         }
