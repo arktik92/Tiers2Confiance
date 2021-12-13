@@ -518,7 +518,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                                 uploadProfilFireBase(imageUri.toString());
                             }
                         });
-                    });
                     }
                 })
 
@@ -543,9 +542,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
     public void getCameraPhotoNew() {
         Log.d(TAG, "GET PHOTO STEP");
-
-
-
+        
         // Request for camera runtime permission
 
         if (ContextCompat.checkSelfPermission(CreationProfilActivity.this, Manifest.permission.CAMERA)
@@ -707,7 +704,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                                     //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
 
 
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -769,16 +765,11 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                             });
 
 
-
                 }
-
-
-
 
 
             }
         });
 
-
-
+    }
 }
