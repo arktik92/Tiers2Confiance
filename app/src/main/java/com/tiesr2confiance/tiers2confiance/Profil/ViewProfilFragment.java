@@ -484,36 +484,33 @@ public class ViewProfilFragment extends Fragment {
                                                 Log.e(TAG, "onComplete: mon id " + userConnected.getId() );
                                                 userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
                                             } else {
-                                                Log.e(TAG, "onComplete boucle 2: " +  contenuDisplayedUser.getUs_matchs_pending().indexOf((userConnected.getId())) );
-                                                Log.e(TAG, "onComplete: les pending  de l'autre" + contenuDisplayedUser.getUs_matchs_pending() );
-                                                Log.e(TAG, "onComplete: mon id " + userConnected.getId() );
                                                 userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
                                                 userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
                                                 userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
+
+                                                Map<String, Object> chat = new HashMap<>();
+                                                chat.put("us_date_creation", Timestamp.now());
+                                                db.collection("chat").add(chat)
+                                                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                                userConnected.update("us_chats", contenuUser.getUs_chats() + task.getResult().getId() +";" );
+                                                                userDisplayed.update("us_chats", contenuDisplayedUser.getUs_chats() +  task.getResult().getId()  + ";");
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.e(TAG, "onFailure: " + "Erreur à la création du chat" );
+                                                            }
+                                                        });
                                             }
 
                                             // userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending() +  userConnected.getId() + ";");
                                            // userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") )
 
                                             // Création d'un objet pour envoyer sur la Database
-                                            /**
-                                            Map<String, Object> chat = new HashMap<>();
-                                            chat.put("us_date_creation", Timestamp.now());
-                                            db.collection("chat").add(chat)
-                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                            userConnected.update("us_chats", contenuUser.getUs_chats() + task.getResult().getId() +";" );
-                                                            userDisplayed.update("us_chats", contenuDisplayedUser.getUs_chats() +  task.getResult().getId()  + ";");
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.e(TAG, "onFailure: " + "Erreur à la création du chat" );
-                                                        }
-                                                    });
-                                             **/
+
                                         }
                                     });
                         }
