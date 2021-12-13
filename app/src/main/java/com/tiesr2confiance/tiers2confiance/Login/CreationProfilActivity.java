@@ -655,6 +655,11 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
     private void uploadPhoto() {
 
+
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
         Log.d(TAG, " UploadPhoto  ");
 
         final ProgressDialog prDial = new ProgressDialog(this);
@@ -672,7 +677,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         Log.d(TAG, "RandomKey: " + randomKey);
 
 
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
+        StorageReference riversRef = storageReference.child(currentUser.getUid() + "/" + randomKey);
 
         riversRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
