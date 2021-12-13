@@ -136,6 +136,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             chats,
             matchsRequestFrom,
             matchsRequestTo,
+            matchsPending,
             matchs;
 
  private String avatar;
@@ -295,6 +296,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         matchs = "";
         matchsRequestFrom = "";
         matchsRequestTo = "";
+        matchsPending = "";
 
         // Méthode de la date de dernière connection
         if (registeredDate == null) {
@@ -343,9 +345,10 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_avatar", avatar);
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
-        userList.put("us_match_request_from", matchsRequestFrom);
-        userList.put("us_match_request_to", matchsRequestTo);
-        userList.put("us_match", matchs);
+        userList.put("us_matchs_request_from", matchsRequestFrom);
+        userList.put("us_matchs_request_to", matchsRequestTo);
+        userList.put("us_matchs_pending", matchsPending);
+        userList.put("us_matchs", matchs);
         userList.put("us_chats", chats);
 
 
