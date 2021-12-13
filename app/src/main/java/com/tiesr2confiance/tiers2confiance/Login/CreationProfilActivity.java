@@ -561,6 +561,8 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(CreationProfilActivity.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+
+                Log.d("FragmentCreate","Token failed from main thread single "+e.toString());
                 prDial.dismiss();
             }
         })
@@ -578,11 +580,16 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Task<GetTokenResult> FireToken = FirebaseAuth.getInstance().getCurrentUser().getIdToken(false);
 
                         FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                if(task.isSuccessful()){
+
+                                    Log.d("FragmentCreate","Token found from thread1 after expiry "+task.getResult().getToken());
 
 
-                            /**** TODO ***/
-
-                                                                                                            });
+                                }
+                            }
+                        });
 
                     }
                 })
@@ -689,8 +696,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         Log.d(TAG, "RandomKey: " + randomKey);
 
 
-
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
+            StorageReference riversRef = storageReference.child("avatar/" + randomKey);
 
         riversRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -703,8 +709,16 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
                             @Override
                             public void onSuccess(@NonNull Uri uri) {
-                                Log.d(TAG, "#####################################+" + uri);
                                 imageUri = uri;
+                                Log.d(TAG, "#####################################+" + uri);
+
+
+                                avatar = uri.toString();
+
+
+                                Log.d(TAG, "###### avatar ######" + avatar);
+
+
                             }
                         });
                         imgAvatar.setImageURI(imageUri);
@@ -753,7 +767,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
 
         // while the file names are the same, the reference poinr to different ilfes
-        //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
+        //   mountainRef.getName().equals(mountainImagesRef.getName()); // truea
         // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
 
         Toast.makeText(CreationProfilActivity.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
@@ -782,7 +796,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
-                        Log.d(TAG, "FILENAME DONE "+fileName);
+                        Log.d(TAG, "#################################FILENAME DONE "+fileName);
                         uploadProfilFireBase(fileName);
                     }
                 })
@@ -827,7 +841,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
     public void uploadProfilFireBase(String fileUri){
 
-String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid();
+String path ="https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid();
 
 
         avatar = path+"%2F"+fileUri;
@@ -866,6 +880,8 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
 
                     StorageReference URIImagesRef = storageRef.child(strFileURL);
 
+                    Log.i(TAG, "onSuccess: URIImagesRef"+URIImagesRef);
+
                     URIImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(@NonNull Uri uri) {
@@ -888,7 +904,8 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
 
                     // Création d'un objet pour envoyer sur la Database
                     Map<String, Object> userList = new HashMap<>();
-                    userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                  //  userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                    userList.put("us_avatar", "toto/"+fileUri);
 
                     // Envoi de l'objet sur la Database
                     docRef.set(userList)
