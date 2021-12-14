@@ -137,7 +137,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             matchsPending,
             matchs;
 
-    private String avatar;
+    private String avatar = "";
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
@@ -275,17 +275,17 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         balance = 0;
         country = "FR";
         presentation = "";
-        sexualOrientation = 1;
+        sexualOrientation = 0;
         maritalStatus = 1;
         hasKids = 0;
         profession = "";
         height = 0;
-        shape = 1;
-        ethnicGroup = 1;
-        hairColor = 1;
-        hairLength = 1;
-        eyeColor = 1;
-        smoker = 1;
+        shape = 0;
+        ethnicGroup = 0;
+        hairColor = 0;
+        hairLength = 0;
+        eyeColor = 0;
+        smoker = 0;
         personality = "";
         sports = "";
 
