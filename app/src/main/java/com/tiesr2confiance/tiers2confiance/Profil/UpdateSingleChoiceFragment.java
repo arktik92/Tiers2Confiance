@@ -158,7 +158,7 @@ public class UpdateSingleChoiceFragment extends Fragment {
 				text += checkedId;
 				checkedRadioButtonId   =   checkedId;
 
-				Util.showSnackBar(v,text);
+				//Util.showSnackBar(v,text);
 
 				Log.i(TAGAPP, text);
 			}
@@ -489,7 +489,7 @@ public class UpdateSingleChoiceFragment extends Fragment {
 					userConnected.update(updatedField, userAttributeLong);
 
 					String msg = updatedField + " updated with : " + userAttributesString;
-					Util.showSnackBar(v, msg);
+					//Util.showSnackBar(v, msg);
 
 					FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 					fragmentManager.popBackStack();

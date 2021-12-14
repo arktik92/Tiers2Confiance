@@ -307,7 +307,7 @@ public class UpdateMultiChoiceFragment extends Fragment {
 				userConnected.update(updatedField, userAttributesString);
 
 				String msg = updatedField + " updated with : " + userAttributesString;
-				Util.showSnackBar(v, msg);
+				//Util.showSnackBar(v, msg);
 
 				FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 				fragmentManager.popBackStack();
