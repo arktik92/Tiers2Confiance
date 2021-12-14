@@ -80,6 +80,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginEnd="51dp"
             android:layout_marginRight="51dp"
+            android:visibility="gone"
             android:background="@drawable/ic_action_video" />
 
     </RelativeLayout>

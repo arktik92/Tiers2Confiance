@@ -76,6 +76,7 @@ public class MatchCiblesAdapter extends FirestoreRecyclerAdapter<ModelUsers, Mat
                 .load(avatar_match)
                 .apply(options)
                 .fitCenter()
+                .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivPhotoProfilMatch);
 
