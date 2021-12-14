@@ -370,9 +370,9 @@ public class GlobalClass extends Application {
         Log.d(TAGAPP, "----------------");
         for (int i = 0; i < arrayListGenders.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListGenders.get(i).ge_id + " "
-                    + arrayListGenders.get(i).ge_country + " "
-                    + arrayListGenders.get(i).ge_label);
+                    + arrayListGenders.get(i).getGe_id() + " "
+                    + arrayListGenders.get(i).getGe_country() + " "
+                    + arrayListGenders.get(i).getGe_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -393,10 +393,10 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListRoles.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListRoles.get(i).ro_id + " "
-                    + arrayListRoles.get(i).ro_country + " "
-                    + arrayListRoles.get(i).ro_label  + " "
-                    + arrayListRoles.get(i).ro_is_godfather
+                    + arrayListRoles.get(i).getRo_id() + " "
+                    + arrayListRoles.get(i).getRo_country() + " "
+                    + arrayListRoles.get(i).getRo_label()  + " "
+                    + arrayListRoles.get(i).getRo_is_godfather()
             );
         }
         Log.d(TAGAPP, "----------------");
@@ -418,8 +418,8 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListLanguage.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListLanguage.get(i).la_code + " "
-                    + arrayListLanguage.get(i).la_label);
+                    + arrayListLanguage.get(i).getLa_code() + " "
+                    + arrayListLanguage.get(i).getLa_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -439,9 +439,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListEthnicGroup.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListEthnicGroup.get(i).et_country + " "
-                    + arrayListEthnicGroup.get(i).et_id + " "
-                    + arrayListEthnicGroup.get(i).et_label);
+                    + arrayListEthnicGroup.get(i).getEt_country() + " "
+                    + arrayListEthnicGroup.get(i).getEt_id() + " "
+                    + arrayListEthnicGroup.get(i).getEt_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -463,9 +463,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListEyeColors.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListEyeColors.get(i).ey_country + " "
-                    + arrayListEyeColors.get(i).ey_id + " "
-                    + arrayListEyeColors.get(i).ey_label);
+                    + arrayListEyeColors.get(i).getEy_country() + " "
+                    + arrayListEyeColors.get(i).getEy_id() + " "
+                    + arrayListEyeColors.get(i).getEy_label());
         }
         Log.d(TAGAPP, "----------------");
 
@@ -486,9 +486,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListHairColor.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListHairColor.get(i).hc_country + " "
-                    + arrayListHairColor.get(i).hc_id + " "
-                    + arrayListHairColor.get(i).hc_label);
+                    + arrayListHairColor.get(i).getHc_country() + " "
+                    + arrayListHairColor.get(i).getHc_id() + " "
+                    + arrayListHairColor.get(i).getHc_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -507,9 +507,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListHairLength.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListHairLength.get(i).hl_country + " "
-                    + arrayListHairLength.get(i).hl_id + " "
-                    + arrayListHairLength.get(i).hl_label);
+                    + arrayListHairLength.get(i).getHl_country() + " "
+                    + arrayListHairLength.get(i).getHl_id() + " "
+                    + arrayListHairLength.get(i).getHl_id());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -528,9 +528,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListMaritalStatus.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListMaritalStatus.get(i).ma_country + " "
-                    + arrayListMaritalStatus.get(i).ma_id + " "
-                    + arrayListMaritalStatus.get(i).ma_label);
+                    + arrayListMaritalStatus.get(i).getMa_country() + " "
+                    + arrayListMaritalStatus.get(i).getMa_id()+ " "
+                    + arrayListMaritalStatus.get(i).getMa_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -550,9 +550,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListOuiNon.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListOuiNon.get(i).ou_country + " "
-                    + arrayListOuiNon.get(i).ou_id + " "
-                    + arrayListOuiNon.get(i).ou_label);
+                    + arrayListOuiNon.get(i).getOu_country() + " "
+                    + arrayListOuiNon.get(i).getOu_id() + " "
+                    + arrayListOuiNon.get(i).getOu_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -572,9 +572,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListSexualOrientation.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListSexualOrientation.get(i).se_country + " "
-                    + arrayListSexualOrientation.get(i).se_id + " "
-                    + arrayListSexualOrientation.get(i).se_label);
+                    + arrayListSexualOrientation.get(i).getSe_country() + " "
+                    + arrayListSexualOrientation.get(i).getSe_id() + " "
+                    + arrayListSexualOrientation.get(i).getSe_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -594,9 +594,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListShapes.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListShapes.get(i).sh_country + " "
-                    + arrayListShapes.get(i).sh_id + " "
-                    + arrayListShapes.get(i).sh_label);
+                    + arrayListShapes.get(i).getSh_country() + " "
+                    + arrayListShapes.get(i).getSh_id() + " "
+                    + arrayListShapes.get(i).getSh_label() );
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -616,9 +616,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListSmoker.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListSmoker.get(i).sm_country + " "
-                    + arrayListSmoker.get(i).sm_id + " "
-                    + arrayListSmoker.get(i).sm_label);
+                    + arrayListSmoker.get(i).getSm_country() + " "
+                    + arrayListSmoker.get(i).getSm_id() + " "
+                    + arrayListSmoker.get(i).getSm_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -641,9 +641,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListHobbies.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListHobbies.get(i).ho_id + " "
-                    + arrayListHobbies.get(i).ho_country + " "
-                    + arrayListHobbies.get(i).ho_label);
+                    + arrayListHobbies.get(i).getHo_id() + " "
+                    + arrayListHobbies.get(i).getHo_country() + " "
+                    + arrayListHobbies.get(i).getHo_label());
         }
         Log.d(TAGAPP, "----------------");
 
@@ -664,9 +664,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListPersonality.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListPersonality.get(i).pe_country + " "
-                    + arrayListPersonality.get(i).pe_id + " "
-                    + arrayListPersonality.get(i).pe_label);
+                    + arrayListPersonality.get(i).getPe_country() + " "
+                    + arrayListPersonality.get(i).getPe_id()+ " "
+                    + arrayListPersonality.get(i).getPe_label());
         }
         Log.d(TAGAPP, "----------------");
     }
@@ -687,9 +687,9 @@ public class GlobalClass extends Application {
 
         for (int i = 0; i < arrayListSports.size(); i++) {
             Log.d(TAGAPP, ">>"
-                    + arrayListSports.get(i).sp_country + " "
-                    + arrayListSports.get(i).sp_id + " "
-                    + arrayListSports.get(i).sp_label);
+                    + arrayListSports.get(i).getSp_country() + " "
+                    + arrayListSports.get(i).getSp_id() + " "
+                    + arrayListSports.get(i).getSp_label());
         }
         Log.d(TAGAPP, "----------------");
     }

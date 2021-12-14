@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelOuiNon {
-    public int      ou_id;
-    public String   ou_country;
-    public String   ou_label;
+    private int      ou_id;
+    private String   ou_country;
+    private String   ou_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelOuiNon() {

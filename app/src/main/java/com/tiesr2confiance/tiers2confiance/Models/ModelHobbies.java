@@ -3,9 +3,9 @@ package com.tiesr2confiance.tiers2confiance.Models;
 import java.util.Date;
 
 public class ModelHobbies {
-    public int      ho_id;
-    public String   ho_country;
-    public String   ho_label;
+    private int      ho_id;
+    private String   ho_country;
+    private String   ho_label;
 
 
     /****** CONSTRUCTORS ********************/

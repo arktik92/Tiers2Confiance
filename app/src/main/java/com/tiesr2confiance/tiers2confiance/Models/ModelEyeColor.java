@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelEyeColor {
-    public int      ey_id;
-    public String   ey_country;
-    public String   ey_label;
+    private int      ey_id;
+    private String   ey_country;
+    private String   ey_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelEyeColor() {

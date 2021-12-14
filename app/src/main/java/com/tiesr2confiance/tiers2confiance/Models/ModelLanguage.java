@@ -1,8 +1,8 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelLanguage {
-    public String   la_code;
-    public String   la_label;
+    private String   la_code;
+    private String   la_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelLanguage() {

@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelHairColor {
-    public int      hc_id;
-    public String   hc_country;
-    public String   hc_label;
+    private int      hc_id;
+    private String   hc_country;
+    private String   hc_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelHairColor() {

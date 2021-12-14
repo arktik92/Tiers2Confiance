@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelMaritalStatus {
-    public int      ma_id;
-    public String   ma_country;
-    public String   ma_label;
+    private int      ma_id;
+    private String   ma_country;
+    private String   ma_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelMaritalStatus() {

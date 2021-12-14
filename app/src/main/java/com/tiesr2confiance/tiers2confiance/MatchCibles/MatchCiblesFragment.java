@@ -172,8 +172,8 @@ public class MatchCiblesFragment extends Fragment {
                                         ArrayList<String> ListIn = new ArrayList<>();
                                         ArrayList<String> ListNotIn = new ArrayList<>();
                                         try {
-                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
-                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs.split(";")));
+                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.getUs_matchs_request_to().split(";")));
+                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.getUs_matchs().split(";")));
                                             displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
                                         } catch (ParseException e) {
                                             e.printStackTrace();

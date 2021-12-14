@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelHairLength {
-    public int      hl_id;
-    public String   hl_country;
-    public String   hl_label;
+    private int      hl_id;
+    private String   hl_country;
+    private String   hl_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelHairLength() {

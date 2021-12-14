@@ -1,10 +1,10 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelRoles {
-    public int      ro_id;
-    public String   ro_country;
-    public String   ro_label;
-    public long     ro_is_godfather;
+    private int      ro_id;
+    private String   ro_country;
+    private String   ro_label;
+    private long     ro_is_godfather;
 
     /****** CONSTRUCTORS ********************/
     public ModelRoles() {

@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelSmoker {
-    public int      sm_id;
-    public String   sm_country;
-    public String   sm_label;
+    private int      sm_id;
+    private String   sm_country;
+    private String   sm_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelSmoker() {

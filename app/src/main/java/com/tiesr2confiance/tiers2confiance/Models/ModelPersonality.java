@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelPersonality {
-    public int      pe_id;
-    public String   pe_country;
-    public String   pe_label;
+    private int      pe_id;
+    private String   pe_country;
+    private String   pe_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelPersonality() {

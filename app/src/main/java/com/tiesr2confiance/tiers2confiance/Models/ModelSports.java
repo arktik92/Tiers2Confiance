@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelSports {
-    public int      sp_id;
-    public String   sp_country;
-    public String   sp_label;
+    private int      sp_id;
+    private String   sp_country;
+    private String   sp_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelSports() {

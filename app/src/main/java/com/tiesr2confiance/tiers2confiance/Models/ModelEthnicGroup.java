@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelEthnicGroup {
-    public int      et_id;
-    public String   et_country;
-    public String   et_label;
+    private int      et_id;
+    private String   et_country;
+    private String   et_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelEthnicGroup() {

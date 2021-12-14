@@ -63,7 +63,7 @@
     <string name="lbl_email">email</string>
     <string name="lbl_prenom">First name</string>
     <string name="lbl_date_inscription">Registered on</string>
-    <string name="lbl_nom">Laste name</string>
+    <string name="lbl_nom">Last name</string>
     <string name="lbl_date_derniere_connexion">Last connexion</string>
     <string name="lbl_role">Role</string>
     <string name="lbl_solde">Balance</string>

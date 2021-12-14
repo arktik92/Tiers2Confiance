@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelGenders {
-    public int      ge_id;
-    public String   ge_country;
-    public String   ge_label;
+    private int      ge_id;
+    private String   ge_country;
+    private String   ge_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelGenders() {

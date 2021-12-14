@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelShapes {
-    public int      sh_id;
-    public String   sh_country;
-    public String   sh_label;
+    private int      sh_id;
+    private String   sh_country;
+    private String   sh_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelShapes() {

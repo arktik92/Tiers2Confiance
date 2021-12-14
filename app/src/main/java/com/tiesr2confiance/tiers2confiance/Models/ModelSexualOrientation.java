@@ -1,9 +1,9 @@
 package com.tiesr2confiance.tiers2confiance.Models;
 
 public class ModelSexualOrientation {
-    public int      se_id;
-    public String   se_country;
-    public String   se_label;
+    private int      se_id;
+    private String   se_country;
+    private String   se_label;
 
     /****** CONSTRUCTORS ********************/
     public ModelSexualOrientation() {

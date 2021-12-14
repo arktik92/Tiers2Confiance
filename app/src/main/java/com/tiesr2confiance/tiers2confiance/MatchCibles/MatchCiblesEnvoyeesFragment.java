@@ -136,7 +136,7 @@ public class MatchCiblesEnvoyeesFragment extends Fragment {
                                         ArrayList<String> ListIn = new ArrayList<>();
                                         ListIn.add("1");
                                         try {
-                                            ListIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
+                                            ListIn.addAll(Arrays.asList(contenunephewUser.getUs_matchs_request_to().split(";")));
                                             displayPossibleMatchList(usRole, ListIn, view);
                                         } catch (ParseException e) {
                                             e.printStackTrace();
