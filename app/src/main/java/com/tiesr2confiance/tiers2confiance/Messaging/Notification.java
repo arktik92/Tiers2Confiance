@@ -72,7 +72,15 @@ public class Notification {
 		this.toUserId = toUserId;
 	}
 
-/******************* Setters *******************/
+	public Notification(String title, String body, String toUserId, String channel, String avatar) {
+		this.title = title;
+		this.body = body;
+		this.toUserId = toUserId;
+		this.channel = channel;
+		this.avatar = avatar;
+	}
+
+	/******************* Setters *******************/
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -84,7 +92,16 @@ public class Notification {
 	public void setToUserId(String toUserId) {
 		this.toUserId = toUserId;
 	}
-/******************* Getters *******************/
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	/******************* Getters *******************/
 	public String getTitle() {
 		return title;
 	}
@@ -97,6 +114,9 @@ public class Notification {
 		return toUserId;
 	}
 
+	public String getChannel() {return channel;	}
+
+	public String getAvatar() {	return avatar;	}
 
 /****************************************************************************/
 /****************************************************************************/
@@ -164,7 +184,8 @@ private void PrepareJsonToFCM(){
 		JSONObject userData=new JSONObject();
 		userData.put("title",title);
 		userData.put("body",body);
-//		userData.put("channel",channel);
+		userData.put("channel",channel);
+		userData.put("avatar",avatar);
 
 		json.put("data",userData);
 		json.put("to", userToken);
