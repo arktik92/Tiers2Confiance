@@ -252,15 +252,21 @@ public class UserFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 
+				GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
 				String title    =   "MY TITLE FROM FRAGMENT";
 				String body     =   "my body from fragment";
 				String toUserId =   "9ba1i6YdoTdned6eI3WFPBPVZYW2"; // titi@titi.fr sur Nexus
+				String avatar   =   globalVariables.getUserAvatar();
+				String channel  =   "1"; //Channel
+
 
 				Notification myNotification =   new Notification(getContext());
 
 				myNotification.setTitle(title);
 				myNotification.setBody(body);
 				myNotification.setToUserId(toUserId);
+				myNotification.setChannel(channel);
+				myNotification.setAvatar(avatar);
 				myNotification.SendNotification();
 
 			}

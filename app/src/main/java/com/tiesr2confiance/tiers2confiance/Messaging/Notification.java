@@ -50,6 +50,8 @@ public class Notification {
 	private String body;
 	private String toUserId;
 	private Context mContext;
+	private String channel;
+	private String avatar;
 
 /************ Variables ********************/
 	private FirebaseFirestore db;
@@ -70,7 +72,15 @@ public class Notification {
 		this.toUserId = toUserId;
 	}
 
-/******************* Setters *******************/
+	public Notification(String title, String body, String toUserId, String channel, String avatar) {
+		this.title = title;
+		this.body = body;
+		this.toUserId = toUserId;
+		this.channel = channel;
+		this.avatar = avatar;
+	}
+
+	/******************* Setters *******************/
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -82,7 +92,16 @@ public class Notification {
 	public void setToUserId(String toUserId) {
 		this.toUserId = toUserId;
 	}
-/******************* Getters *******************/
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	/******************* Getters *******************/
 	public String getTitle() {
 		return title;
 	}
@@ -95,6 +114,9 @@ public class Notification {
 		return toUserId;
 	}
 
+	public String getChannel() {return channel;	}
+
+	public String getAvatar() {	return avatar;	}
 
 /****************************************************************************/
 /****************************************************************************/
@@ -127,6 +149,8 @@ public class Notification {
 						public void onComplete(@NonNull Task<DocumentSnapshot> task) { //asynchrone
 							ModelUsers user = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
 							userToken =   user.getUs_token();
+
+							PrepareJsonToFCM();
 						}
 					})
 					.addOnFailureListener(new OnFailureListener() {
@@ -140,13 +164,13 @@ public class Notification {
 			Log.e(TAGAPP, "Error when getting userToken from users collection", e);
 		}
 
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				Log.i(TAGAPP, "I am patiently waiting for the request from the server");
-				PrepareJsonToFCM();
-			}
-		}, 4000);
+//		new Handler().postDelayed(new Runnable() {
+//			@Override
+//			public void run() {
+//				Log.i(TAGAPP, "I am patiently waiting for the request from the server");
+//				PrepareJsonToFCM();
+//			}
+//		}, 4000);
 
 
 
@@ -160,10 +184,13 @@ private void PrepareJsonToFCM(){
 		JSONObject userData=new JSONObject();
 		userData.put("title",title);
 		userData.put("body",body);
-
+		userData.put("channel",channel);
+		userData.put("avatar",avatar);
 
 		json.put("data",userData);
 		json.put("to", userToken);
+//		json.put("channel", "mychannel");
+		Log.d(TAGAPP, "JSONObject : "+ json);
 
 	}   catch (JSONException e)
 	{
