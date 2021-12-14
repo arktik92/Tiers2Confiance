@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -102,7 +103,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     /*************** Composants ***************/
     private ImageView ivProfilAvatarShape;
-private ImageView ivImgAvatar;
+    private ImageView ivImgAvatar;
+    private TextView tvMenuNickname;
+
 
 
 
@@ -198,6 +201,18 @@ init();
             public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+
+                    if (!contenuUser.getUs_nickname().equals("")){
+                        try {
+
+                            tvMenuNickname = findViewById(R.id.tvMenuNickname);
+                            tvMenuNickname.setText(contenuUser.getUs_nickname());
+
+                        } catch (Exception e){
+                            Log.e(TAG, "onSuccess: " + e);
+                        }
+                    }
+
 
                     if (!contenuUser.getUs_avatar().equals("")){
                         String imgUrlAvatar = contenuUser.getUs_avatar();
