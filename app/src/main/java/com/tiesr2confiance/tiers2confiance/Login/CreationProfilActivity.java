@@ -257,6 +257,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     /** Méthode de création de l'utilisateur  **/
     public void creationUser(View view) {
 
+
         // Implémentation des variables qui vont etre envoyé sur la Database
         userEmail = user.getEmail().trim();
         city = etCity.getText().toString().trim();
@@ -369,7 +370,15 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Log.e(TAG, "onFailure: ", e );
                     }
                 });
-        startActivity(new Intent(CreationProfilActivity.this, SplashScreenActivity.class));
+        if(role != 0 && genre != 0 && nickName != "" && lastName != "" &&firstName!= "" && zipCode != "" && city != "") {
+            if (avatar != "") {
+                startActivity(new Intent(CreationProfilActivity.this, SplashScreenActivity.class));
+            } else {
+                Toast.makeText(CreationProfilActivity.this, "Veuillez ajouter une photo de profil", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(CreationProfilActivity.this, "Erreur, tout les champs ne sont pas rempli", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
