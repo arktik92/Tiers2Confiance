@@ -596,10 +596,46 @@ public class ViewProfilFragment extends Fragment {
 
                                             if (!celibUser.getUs_matchs_pending().contains(userConnected.getId())){
                                               userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
+
+                                                // Envoi de la notification
+                                                GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                                String title = getString(R.string.lbl_match_pending);
+                                                String body = getString(R.string.lbl_match_pending_body);
+                                                String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                                String avatar = globalVariables.getUserAvatar();
+                                                String channel = "1"; //Channel
+
+                                                Notification myNotification = new Notification(getContext());
+
+                                                myNotification.setTitle(title);
+                                                myNotification.setBody(body);
+                                                myNotification.setToUserId(toUserId);
+                                                myNotification.setChannel(channel);
+                                                myNotification.setAvatar(avatar);
+                                                myNotification.SendNotification();
+
                                             } else {
                                                 userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
                                                 userDisplayed.update("us_matchs", celibUser.getUs_matchs() +  userConnected.getId() + ";");
                                                 userDisplayed.update("us_matchs_pending", celibUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
+
+                                                // Envoi de la notification
+                                                GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                                String title = getString(R.string.lbl_match);
+                                                String body = getString(R.string.lbl_match_body);
+                                                String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                                String avatar = globalVariables.getUserAvatar();
+                                                String channel = "1"; //Channel
+
+                                                Notification myNotification = new Notification(getContext());
+
+                                                myNotification.setTitle(title);
+                                                myNotification.setBody(body);
+                                                myNotification.setToUserId(toUserId);
+                                                myNotification.setChannel(channel);
+                                                myNotification.setAvatar(avatar);
+                                                myNotification.SendNotification();
+
 
                                                 // Upload du message dans la table Chats
                                                 ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "message", false);
@@ -728,7 +764,6 @@ public class ViewProfilFragment extends Fragment {
 
                                             userDisplayed.update("us_nephews",   userConnected.getId());
                                             userDisplayed.update("us_nephews_request_to", "" ); // Replace
-
 
                                             // Envoi de la notification
                                             GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();

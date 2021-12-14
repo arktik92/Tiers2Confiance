@@ -216,5 +216,9 @@
     <string name="lbl_demande_parrainage_envoyee_body">Un célibataire souhaiterait être parrainer par vous</string>
     <string name="lbl_parrainage_accepte">Parrainage accepté</string>
     <string name="lbl_parrainage_accepte_body">" a accepté votre demande de parrainage"</string>
+    <string name="lbl_match">Un Match!</string>
+    <string name="lbl_match_body">Vous avez un match, rendez-vous dans les conversations pour discuter!</string>
+    <string name="lbl_match_pending">Un match en attente!</string>
+    <string name="lbl_match_pending_body">Acceptez la proposition pour entrer en contact</string>
 
 </resources>
