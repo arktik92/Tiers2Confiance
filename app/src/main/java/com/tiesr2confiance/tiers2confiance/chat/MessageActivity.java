@@ -122,8 +122,8 @@ public class MessageActivity extends AppCompatActivity {
                 String msg = text_send.getText().toString();
                 if (!msg.equals("")) {
                     sendMessage(currentUser.getUid(), idParticipantChat, msg);
-                    sendNotification(currentUser.getUid(), msg, token);
-                    createNotificationChannel();
+                    //sendNotification(currentUser.getUid(), msg, token);
+                    //createNotificationChannel();
                 } else {
                     Toast.makeText(MessageActivity.this, "You can't send an empty message", Toast.LENGTH_SHORT).show();
                 }
