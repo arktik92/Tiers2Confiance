@@ -504,15 +504,16 @@ public class ViewProfilFragment extends Fragment {
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            ModelUsers contenuDisplayedUser = documentSnapshot.toObject(ModelUsers.class);
-                                            assert contenuDisplayedUser != null;
+                                            ModelUsers celibUser = Objects.requireNonNull(task.getResult()).toObject(ModelUsers.class);
+                                            assert celibUser != null;
+                                            String usMatchsPending = celibUser.getUs_matchs_pending();
 
-                                            if (contenuDisplayedUser.getUs_matchs_pending().contains(userConnected.getId())){
+                                            if (!celibUser.getUs_matchs_pending().contains(userConnected.getId())){
                                               userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
                                             } else {
                                                 userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
-                                                userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
-                                                userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
+                                                userDisplayed.update("us_matchs", celibUser.getUs_matchs() +  userConnected.getId() + ";");
+                                                userDisplayed.update("us_matchs_pending", celibUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
 
                                                 // Upload du message dans la table Chats
                                                 ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "message", false);
@@ -562,11 +563,6 @@ public class ViewProfilFragment extends Fragment {
 
 
                                             }
-
-                                            // userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending() +  userConnected.getId() + ";");
-                                           // userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") )
-                                            // Création d'un objet pour envoyer sur la Database
-
                                         }
                                     });
                         }
