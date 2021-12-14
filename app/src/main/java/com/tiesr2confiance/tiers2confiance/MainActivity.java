@@ -199,36 +199,32 @@ init();
                 if (documentSnapshot.exists()) {
                     ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
 
-                    String imgUrlAvatar = contenuUser.getUs_avatar();
+                    if (!contenuUser.getUs_avatar().equals("")){
+                        String imgUrlAvatar = contenuUser.getUs_avatar();
+                        Log.i(TAG, "imgUrlAvatar: "+imgUrlAvatar);
+                        ivImgAvatar = findViewById(R.id.ivImgAvatar);
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .error(R.mipmap.ic_launcher)
+                                .placeholder(R.mipmap.ic_launcher);
+                        try {
+                            Glide
+                                    .with(ivImgAvatar.getContext())
+                                    .load(imgUrlAvatar)
+                                    .apply(options)
+                                    .fitCenter()
+                                    .circleCrop()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(ivImgAvatar);
+                        } catch (Exception e){
+                            Log.e(TAG, "onSuccess: " + e);
+                        }
 
-                    Log.i(TAG, "imgUrlAvatar: "+imgUrlAvatar);
-
-                    ivImgAvatar = findViewById(R.id.ivImgAvatar);
-
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .error(R.mipmap.ic_launcher)
-                            .placeholder(R.mipmap.ic_launcher);
-                    Glide
-                            .with(ivImgAvatar.getContext())
-                            .load(imgUrlAvatar)
-                            .apply(options)
-                            .fitCenter()
-                            .circleCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(ivImgAvatar);
-
+                    }
                 }
-
-
             }
         });
-
-
-
-
     }
-
 
 
     @Override
