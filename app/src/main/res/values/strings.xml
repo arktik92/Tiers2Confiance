@@ -3,7 +3,7 @@
 
     <!-- PAGE Lier Parrain/Filleul => Chercher un parrain / Chercher un filleul -->
 
-    <string name="app_name" translatable="false">Tiers2</string>
+    <string name="app_name" translatable="false">Tiers2Confiance</string>
     <string name="Lier_pf_titre_filleul">Chercher son parrain</string>
     <string name="Lier_pf_titre_parrain">Chercher son filleul</string>
     <string name="Lier_pf_pseudo">Saisir son pseudo : </string>
@@ -200,5 +200,7 @@
     <string name="btn_reject_match">Refuser le match</string>
     <string name="btn_apply_as_nephew">Demander à être son filleul</string>
     <string name="btn_accept_being_nephew">Accepter d\'être son filleul</string>
+    <string name="demande_parrainage_recu">Demande de parrainage reçue</string>
+    <string name="demande_parrainage_recu_body">Un célibataire vous de demande de le parrainer</string>
 
 </resources>

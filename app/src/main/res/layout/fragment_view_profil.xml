@@ -144,7 +144,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Créditer son filleul" />
+                            android:text="@string/btn_credit_nephew" />
 
                         <Button
                             android:id="@+id/btn_link_supp"
@@ -152,7 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Ne plus être le parrain" />
+                            android:text="@string/btn_dont_be_his_godfather_anymore" />
 
                         <Button
                             android:id="@+id/btn_pfl_envoyer"
@@ -160,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Envoyer ce profil à mon filleul" />
+                            android:text="@string/btn_send_profile_to_nephew" />
 
                         <Button
                             android:id="@+id/btn_link_request"
@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Demander d'être le parrain" />
+                            android:text="@string/btn_apply_being_godfather" />
 
                         <Button
                             android:id="@+id/btn_accept_nephew"
@@ -176,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Accepter d'être son parrain" />
+                            android:text="@string/btn_accept_being_godfather" />
 
                     </LinearLayout>
 
@@ -193,7 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Ne plus être le filleul" />
+                            android:text="@string/btn_dont_be_nephew_anymore" />
 
                         <Button
                             android:id="@+id/btn_accept_match"
@@ -201,7 +201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Accepter le match" />
+                            android:text="@string/btn_accept_match" />
 
                         <Button
                             android:id="@+id/btn_link_request_tiers"
@@ -209,7 +209,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Demander d'être le filleul" />
+                            android:text="@string/btn_apply_as_nephew" />
 
                         <Button
                             android:id="@+id/btn_accept_godfather"
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/shape_btn_parrain"
-                            android:text="Accepter d'être son filleul" />
+                            android:text="@string/btn_accept_being_nephew" />
 
                     </LinearLayout>
 

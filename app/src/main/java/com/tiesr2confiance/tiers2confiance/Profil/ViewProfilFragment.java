@@ -82,6 +82,7 @@ import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
+import com.tiesr2confiance.tiers2confiance.Messaging.Notification;
 import com.tiesr2confiance.tiers2confiance.Models.ModelChat;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
@@ -420,6 +421,23 @@ public class ViewProfilFragment extends Fragment {
                                             assert celibUser != null;
                                             String usGodfatherRequestFrom = celibUser.getUs_godfather_request_from();
                                             userDisplayed.update("us_godfather_request_from", usGodfatherRequestFrom + userConnected.getId()+  ";");
+
+                                            // Envoi de la notification
+                                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                            String title = getString(R.string.demande_parrainage_recu);
+                                            String body = getString(R.string.demande_parrainage_recu_body);
+                                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                            String avatar = globalVariables.getUserAvatar();
+                                            String channel = "1"; //Channel
+
+                                            Notification myNotification = new Notification(getContext());
+
+                                            myNotification.setTitle(title);
+                                            myNotification.setBody(body);
+                                            myNotification.setToUserId(toUserId);
+                                            myNotification.setChannel(channel);
+                                            myNotification.setAvatar(avatar);
+                                            myNotification.SendNotification();
                                         }
                                     });
                         }

@@ -1,5 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +19,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
@@ -90,14 +99,17 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     DrawerLayout drawer_layout;
 
 
+    ActionBarDrawerToggle toggle;
+
     /********* Variables Globales **********/
     String userId;
     long userRole;
 
     /*************** Composants ***************/
     private ImageView ivProfilAvatarShape;
-
-
+    private ImageView ivImgAvatar;
+    private TextView tvMenuNickname;
+    private ImageView btnCloseMenu;
 
 
     /**
@@ -108,7 +120,42 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
+        btnCloseMenu = findViewById(R.id.btnCloseMenu);
+
+
+
     }
+
+
+    public void CloseMenu(View view) {// Ajout de la gestion des options d'accessibilité
+
+
+        try {
+            initUI();
+            toggle = new ActionBarDrawerToggle(
+                    MainActivity.this, // Le context de l'activité
+                    drawer_layout, // Le layout du MainActivity
+                    toolbar, // La toolbar
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
+
+            // Ajout d'un listener sur le bouton hamburger
+            drawer_layout.addDrawerListener(toggle);
+            // Synchro le bouton hamburger et le menu
+
+            toggle.syncState();
+            //
+            navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +193,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Ajout du support pour la gestio nde la Toolbar
         setSupportActionBar(toolbar);
         // Ajout de la gestion des options d'accessibilité
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, // Le context de l'activité
                 drawer_layout, // Le layout du MainActivity
                 toolbar, // La toolbar
@@ -156,13 +203,17 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Ajout d'un listener sur le bouton hamburger
         drawer_layout.addDrawerListener(toggle);
         // Synchro le bouton hamburger et le menu
+
         toggle.syncState();
         //
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
         // TODO : Affichage de l'avatar de l'utilisateur
 //        /** L'avatar : Glide - Add Picture **/
+
+
 //        Context context = getApplicationContext();
 //        RequestOptions options = new RequestOptions()
 //                .centerCrop()
@@ -178,10 +229,58 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .into(ivProfilAvatarShape);
 
-
+init();
 
     }
 
+
+    public void init(){
+
+        currentUserDoc = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+        currentUserDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+
+                    if (!contenuUser.getUs_nickname().equals("")){
+                        try {
+
+                            tvMenuNickname = findViewById(R.id.tvMenuNickname);
+                            tvMenuNickname.setText(contenuUser.getUs_nickname().toUpperCase(Locale.ROOT));
+
+                        } catch (Exception e){
+                            Log.e(TAG, "onSuccess: " + e);
+                        }
+                    }
+
+
+                    if (!contenuUser.getUs_avatar().equals("")){
+                        String imgUrlAvatar = contenuUser.getUs_avatar();
+                        Log.i(TAG, "imgUrlAvatar: "+imgUrlAvatar);
+                        ivImgAvatar = findViewById(R.id.ivImgAvatar);
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .error(R.mipmap.ic_launcher)
+                                .placeholder(R.mipmap.ic_launcher);
+                        try {
+                            Glide
+                                    .with(ivImgAvatar.getContext())
+                                    .load(imgUrlAvatar)
+                                    .apply(options)
+                                    .fitCenter()
+                                    .circleCrop()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(ivImgAvatar);
+                        } catch (Exception e){
+                            Log.e(TAG, "onSuccess: " + e);
+                        }
+
+                    }
+                }
+            }
+        });
+    }
 
 
     @Override
