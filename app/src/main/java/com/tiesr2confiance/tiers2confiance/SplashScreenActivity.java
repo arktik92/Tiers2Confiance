@@ -42,25 +42,16 @@ public class SplashScreenActivity extends AppCompatActivity {
 				// Ce code s'execute après xxxxx ms
 				// les data de ArrayLists se chargent quand les Data User, notament le Role, sont déjà chargés dans la classe GlobalClass
 				globalVariables.LoadArraysDataFromFirestore();
-			}
-		}, 2000);
 
-
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				// Ce code s'execute après 2000ms, le temps que les Arrays soient chargés dans la clase GlobalClass
-
-				globalVariables.DisplayAttributes();
-				globalVariables.DisplayArraysCount();
+//				globalVariables.DisplayAttributes();
+//				globalVariables.DisplayArraysCount();
 
 				// Start MainActivity
 				Intent myIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
 				startActivity(myIntent);
-
-				// close this activity
-				finish();
 			}
-		}, 2000);
+		}, 4000);
+
+
 	}
 }

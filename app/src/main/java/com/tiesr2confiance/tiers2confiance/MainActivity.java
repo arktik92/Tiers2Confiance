@@ -42,6 +42,7 @@ import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.LierParrainFilleul
 import com.tiesr2confiance.tiers2confiance.LierParrainFilleul.PendingRequestsFragment;
 import com.tiesr2confiance.tiers2confiance.Login.LoginActivity;
 import com.tiesr2confiance.tiers2confiance.MatchCibles.MatchCiblesFragment;
+import com.tiesr2confiance.tiers2confiance.Messaging.PushNotificationService;
 import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.Profil.ProfilFragment;
 import com.tiesr2confiance.tiers2confiance.Profil.ViewProfilFragment;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     /** Variables Firestore **/
 
-
+    /** Variables Firebase Messaging Service (FMC) **/
+    public PushNotificationService notificationService;
 
 
     /** Var Firebase **/
@@ -304,12 +306,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         commit();
                 break;
 
-//            case R.id.nav_PGO:
-//                getSupportFragmentManager().
-//                        beginTransaction().
-//                        replace(R.id.fragment_container, new UserFragment()).
-//                        commit();
-//                break;
+            case R.id.nav_PGO:
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.fragment_container, new UserFragment()).
+                        commit();
+                break;
             case R.id.nav_deconnexion:
                 firebaseAuth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));

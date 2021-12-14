@@ -68,7 +68,7 @@
 -->
 
         <service
-            android:name=".Messaging.MyFirebaseMessagingService"
+            android:name=".Messaging.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
