@@ -133,6 +133,7 @@ public class Notification {
 //		GlobalClass globalVariables = (GlobalClass) mContext;
 //		db      =   globalVariables.getDb();
 //		toUserId    =   "9ba1i6YdoTdned6eI3WFPBPVZYW2"; // titi@titi.fr sur Nexus
+
 		db      = FirebaseFirestore.getInstance();
 
 

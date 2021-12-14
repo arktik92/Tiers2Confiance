@@ -260,7 +260,7 @@ public class UserFragment extends Fragment {
 				String channel  =   "1"; //Channel
 
 
-				Notification myNotification =   new Notification(getContext());
+				Notification myNotification =   new Notification(getActivity().getApplicationContext());
 
 				myNotification.setTitle(title);
 				myNotification.setBody(body);
