@@ -16,13 +16,13 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_godfather_nephews" />
+        app:srcCompat="@drawable/plan_de_travail_1" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SplashScreen"
+        android:text="Tiers de Confiance"
         android:textColor="@color/TextPrimary"
         android:textSize="34sp"
         android:textStyle="bold"
