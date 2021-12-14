@@ -166,6 +166,20 @@
     <!-- String pour la decription pour l'aide aux déficients visuels   -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="demande_parrainage_recu">" Demande de parrainage reçue"</string>
-    <string name="demande_parrainage_recu_body">Un célibataire vous de demande de le parrainer</string>
+
+    <!-- String pour la decription des notifications   -->
+    <string name="lbl_demande_parrainage_recu">Demande de parrainage reçue</string>
+    <string name="lbl_demande_parrainage_recu_body">Un célibataire vous de demande de le parrainer</string>
+    <string name="lbl_parrainage_supprime">Plus de parrain!</string>
+    <string name="lbl_parrainage_supprime_body">Vous n\'avez plus de parrain, trouvez en un autre pour continuer à utiliser l\'application.</string>
+    <string name="lbl_envoi_profil">Un match ?</string>
+    <string name="lbl_envoi_profil_body">Votre parrain vous envoi un profil !</string>
+    <string name="lbl_demande_parrainage_acceptee">Parrain trouvé!</string>
+    <string name="lbl_demande_parrainage_acceptee_body">Votre demande de parrainage a été accepté</string>
+    <string name="lbl_filiation_supprime">Plus de filleul</string>
+    <string name="lbl_filiation_supprime_body">Votre filleul a supprimé votre lien de parrainage</string>
+    <string name="lbl_demande_parrainage_envoyee">Demande de parrainage</string>
+    <string name="lbl_demande_parrainage_envoyee_body">Un célibataire souhaiterait être parrainer par vous</string>
+    <string name="lbl_parrainage_accepte">Parrainage accepté</string>
+    <string name="lbl_parrainage_accepte_body">" a accepté votre demande de parrainage"</string>
 </resources>

@@ -348,6 +348,24 @@ public class ViewProfilFragment extends Fragment {
                             assert contenuUser != null;
                             userDisplayed.update("us_godfather", "" );
                             userConnected.update("us_nephews", "" );
+
+                            // Envoi de la notification
+                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                            String title = getString(R.string.lbl_parrainage_supprime);
+                            String body = getString(R.string.lbl_parrainage_supprime_body);
+                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                            String avatar = globalVariables.getUserAvatar();
+                            String channel = "1"; //Channel
+
+                            Notification myNotification = new Notification(getContext());
+
+                            myNotification.setTitle(title);
+                            myNotification.setBody(body);
+                            myNotification.setToUserId(toUserId);
+                            myNotification.setChannel(channel);
+                            myNotification.setAvatar(avatar);
+                            myNotification.SendNotification();
+
                         }
                     }
                 });
@@ -385,6 +403,23 @@ public class ViewProfilFragment extends Fragment {
                                                             // Ici on ajoute les IDs respectifs des deux célibataires à matcher dans la list des demandes (From ou To selon si le célibataire est la cible ou le filleul d parrain connecté)
                                                             userDisplayed.update("us_matchs_request_from", usMatchRequestFrom + userNephew.getId()+  ";");
                                                             userNephew.update("us_matchs_request_to", usMatchRequestTo + userDisplayed.getId()+  ";");
+
+                                                            // Envoi de la notification
+                                                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                                            String title = getString(R.string.lbl_envoi_profil);
+                                                            String body = getString(R.string.lbl_envoi_profil_body);
+                                                            String toUserId = userNephew.getId(); //titi @titi.fr sur Nexus
+                                                            String avatar = globalVariables.getUserAvatar();
+                                                            String channel = "1"; //Channel
+
+                                                            Notification myNotification = new Notification(getContext());
+
+                                                            myNotification.setTitle(title);
+                                                            myNotification.setBody(body);
+                                                            myNotification.setToUserId(toUserId);
+                                                            myNotification.setChannel(channel);
+                                                            myNotification.setAvatar(avatar);
+                                                            myNotification.SendNotification();
                                                         }
                                                     });
                                         }
@@ -424,8 +459,8 @@ public class ViewProfilFragment extends Fragment {
 
                                             // Envoi de la notification
                                             GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
-                                            String title = getString(R.string.demande_parrainage_recu);
-                                            String body = getString(R.string.demande_parrainage_recu_body);
+                                            String title = getString(R.string.lbl_demande_parrainage_recu);
+                                            String body = getString(R.string.lbl_demande_parrainage_recu_body);
                                             String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
                                             String avatar = globalVariables.getUserAvatar();
                                             String channel = "1"; //Channel
@@ -472,8 +507,23 @@ public class ViewProfilFragment extends Fragment {
 
                                             userDisplayed.update("us_godfather", userConnected.getId() );
                                             userDisplayed.update("us_godfather_request_to", "");
-                                            Log.i(TAG, "LOGPGO Demande du célibataire acceptée par le parrain");
-//                                    Log.e(TAG, "Demande du célibataire acceptée par le parrain");
+
+                                            // Envoi de la notification
+                                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                            String title = getString(R.string.lbl_demande_parrainage_acceptee);
+                                            String body = getString(R.string.lbl_demande_parrainage_acceptee_body);
+                                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                            String avatar = globalVariables.getUserAvatar();
+                                            String channel = "1"; //Channel
+
+                                            Notification myNotification = new Notification(getContext());
+
+                                            myNotification.setTitle(title);
+                                            myNotification.setBody(body);
+                                            myNotification.setToUserId(toUserId);
+                                            myNotification.setChannel(channel);
+                                            myNotification.setAvatar(avatar);
+                                            myNotification.SendNotification();
                                         }
                                     });
                         }
@@ -498,6 +548,24 @@ public class ViewProfilFragment extends Fragment {
                             assert contenuUser != null;
                             userDisplayed.update("us_nephews", "" );
                             userConnected.update("us_godfather", "" );
+
+
+                            // Envoi de la notification
+                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                            String title = getString(R.string.lbl_filiation_supprime);
+                            String body = getString(R.string.lbl_filiation_supprime_body);
+                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                            String avatar = globalVariables.getUserAvatar();
+                            String channel = "1"; //Channel
+
+                            Notification myNotification = new Notification(getContext());
+
+                            myNotification.setTitle(title);
+                            myNotification.setBody(body);
+                            myNotification.setToUserId(toUserId);
+                            myNotification.setChannel(channel);
+                            myNotification.setAvatar(avatar);
+                            myNotification.SendNotification();
                         }
                     }
                 });
@@ -610,6 +678,23 @@ public class ViewProfilFragment extends Fragment {
                                             assert celibUser != null;
                                             String usNephewsRequestFrom = celibUser.getUs_nephews_request_from();
                                             userDisplayed.update("us_nephews_request_from", usNephewsRequestFrom + userConnected.getId()+  ";");
+
+                                            // Envoi de la notification
+                                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                            String title = getString(R.string.lbl_demande_parrainage_envoyee);
+                                            String body = getString(R.string.lbl_demande_parrainage_envoyee_body);
+                                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                            String avatar = globalVariables.getUserAvatar();
+                                            String channel = "1"; //Channel
+
+                                            Notification myNotification = new Notification(getContext());
+
+                                            myNotification.setTitle(title);
+                                            myNotification.setBody(body);
+                                            myNotification.setToUserId(toUserId);
+                                            myNotification.setChannel(channel);
+                                            myNotification.setAvatar(avatar);
+                                            myNotification.SendNotification();
                                         }
                                     });
                         }
@@ -643,7 +728,24 @@ public class ViewProfilFragment extends Fragment {
 
                                             userDisplayed.update("us_nephews",   userConnected.getId());
                                             userDisplayed.update("us_nephews_request_to", "" ); // Replace
-                                            Log.i(TAG, "LOGPGO Demande du parrain acceptée par le célibataire");
+
+
+                                            // Envoi de la notification
+                                            GlobalClass globalVariables = (GlobalClass) getActivity().getApplicationContext();
+                                            String title = getString(R.string.lbl_parrainage_accepte);
+                                            String body = getString(R.string.lbl_parrainage_accepte_body);
+                                            String toUserId = userDisplayed.getId(); //titi @titi.fr sur Nexus
+                                            String avatar = globalVariables.getUserAvatar();
+                                            String channel = "1"; //Channel
+
+                                            Notification myNotification = new Notification(getContext());
+
+                                            myNotification.setTitle(title);
+                                            myNotification.setBody(body);
+                                            myNotification.setToUserId(toUserId);
+                                            myNotification.setChannel(channel);
+                                            myNotification.setAvatar(avatar);
+                                            myNotification.SendNotification();
                                         }
                                     });
                         }
