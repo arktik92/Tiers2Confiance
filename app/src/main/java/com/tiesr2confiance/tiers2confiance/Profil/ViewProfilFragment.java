@@ -648,6 +648,7 @@ public class ViewProfilFragment extends Fragment {
     private void InitComponents(View v) {
         InitLlPresentation(v);
         InitivPhoto(v);
+        InitAvatar(v);
         InitLlHobbies(v);
         InitLlPersonality(v);
         InitLlSports(v);
@@ -662,6 +663,7 @@ public class ViewProfilFragment extends Fragment {
         //TODO HasKids and Gender
 
     }
+
 
     private void InitLlPresentation(View v) {
         tvPresentation = v.findViewById(R.id.tv_presentation);
@@ -685,40 +687,59 @@ public class ViewProfilFragment extends Fragment {
         llPresentation.setClickable(false);
     }
 
+    private void InitAvatar(View v){
+        ivProfilAvatarShape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageType = "imgAvatar";
+                PopupMenu popMenu = new PopupMenu(getContext(), view);
+                MenuInflater menuInflater = popMenu.getMenuInflater();
+                // call Inflater Menu
+                menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
+                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        // En fonction du résultat, lancement de l'action appropriée
+                        if (id == R.id.takeCameraPicture) {
+                            getCameraPhotoNew();
+                        } else if (id == R.id.takePicture) {
+                            getImageLibrary();
+                        }
+                        return false;
+                    }
+                });
+                // Show Popup menu
+                popMenu.show();
+            }
+        });
+    }
+
     private void InitivPhoto(View v) {
         btnAddPhoto = v.findViewById(R.id.btn_add_photo);
-
         btnAddPhoto.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-
-               imageType = "imgAvatar";
-
+               imageType = "imgPhotos";
                PopupMenu popMenu = new PopupMenu(getContext(), view);
                MenuInflater menuInflater = popMenu.getMenuInflater();
-
                // call Inflater Menu
                menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
-
                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                    @Override
                    public boolean onMenuItemClick(MenuItem item) {
                        int id = item.getItemId();
-
                        // En fonction du résultat, lancement de l'action appropriée
-
                        if (id == R.id.takeCameraPicture) {
                            getCameraPhotoNew();
                        } else if (id == R.id.takePicture) {
                            getImageLibrary();
                        }
                        return false;
-
                    }
                });
                // Show Popup menu
                popMenu.show();
-
            }
        });
     }
@@ -726,12 +747,10 @@ public class ViewProfilFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             uploadPhoto();
         }
-
         if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             ivProfilAvatarShape.setImageBitmap(bitmap);
@@ -819,7 +838,6 @@ public class ViewProfilFragment extends Fragment {
         //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
         // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
 
-        Toast.makeText(getContext(), "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
         ivProfilAvatarShape.setDrawingCacheEnabled(true);
         ivProfilAvatarShape.buildDrawingCache();
 
@@ -837,19 +855,13 @@ public class ViewProfilFragment extends Fragment {
                 prDial.dismiss();
             }
         })
-
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getContext(), "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
-
                         StorageReference riversRef = storageReference.child(currentUser.getUid() +"/" + fileName);
-
                         String getUid = FirebaseAuth.getInstance().getUid();
-
                         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-
                             @Override
                             public void onSuccess(@NonNull Uri uri) {
                                 Log.d(TAG, "##########riversRef###################+" + uri);
@@ -859,13 +871,11 @@ public class ViewProfilFragment extends Fragment {
                         });
                     }
                 })
-
                 .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                         double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                         prDial.setMessage("Percentage:" + (int) progressPercent + "%");
-
                     }
                 });
     }
@@ -873,17 +883,13 @@ public class ViewProfilFragment extends Fragment {
     //TODO
     /** FONCTION CAMERA, REDONDANCE AVEC CREATION PROFIL, A CENTRALISER  **/
     public void getCameraPhotoNew() {
-        Log.d(TAG, "GET PHOTO STEP");
-
         // Request for camera runtime permission
-
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_IMAGE_CAMERA_CAPTURE);
         } else {
-            Log.d(TAG, "getPhoto: ");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
         }
@@ -911,31 +917,30 @@ public class ViewProfilFragment extends Fragment {
 
     public void uploadProfilFireBase(String fileUri) {
 
-//        avatar = fileUri;
-//        Log.d(TAG, "++++++++++++++ uploadProfilFireBase: " + avatar);
-//
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
-
         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
 
                 String label = null;
+                String value = null;
                 if (imageType  == "imgAvatar"){
                     label = "us_avatar";
+                    value = fileUri;
                 }else{
                     label = "us_photos";
+                    value = contenuUser.getUs_photos() + fileUri + ";";
                 }
-
                 if (documentSnapshot.exists()) {
                     // Envoi de l'objet sur la Database
-                    userDisplayed.update(label ,  fileUri)
+                    userDisplayed.update(label ,  value)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Photo de profil modifiée", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Photo ajouté", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Document Exist PHOTO profil crée");
                                     //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                                     //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
@@ -950,11 +955,11 @@ public class ViewProfilFragment extends Fragment {
                             });
                 } else {
                     // Envoi de l'objet sur la Database
-                    userDisplayed.update(label ,  fileUri)
+                    userDisplayed.update(label ,  value)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Photo de profil  créée", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Photo ajouté", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Profil crée");
                                     StorageReference riversRef = storageReference.child("images/" + randomKey);
                                     //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
