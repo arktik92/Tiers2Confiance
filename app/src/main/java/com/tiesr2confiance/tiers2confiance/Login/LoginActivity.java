@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /** Méthode init **/
     public void init() {
+
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
@@ -64,11 +65,6 @@ public class LoginActivity extends AppCompatActivity {
         password = etPassword.getText().toString().trim();
 
 
-        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: user : " + globalVariables.getUser());
-        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: userId : " + globalVariables.getUserId());
-        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: UserEmail : " + globalVariables.getUserEmail());
-        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: userCountryLanguage : " + globalVariables.getUserCountryLanguage());
-        Log.i(TAGAPP, "1 LoginActivity : btnLoginClick addOnCompleteListener: UserRole : " + globalVariables.getUserRole());
 
 
         // Vérification du remplissage des champs email et password

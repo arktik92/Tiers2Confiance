@@ -59,6 +59,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
+import com.tiesr2confiance.tiers2confiance.SplashScreenActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.Reference;
@@ -354,11 +355,11 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        //GlobalClass globalVariables = (GlobalClass) getApplicationContext();
+                        //globalVariables.setUserId(userId);
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
 
-                        startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
-                        return;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -368,7 +369,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Log.e(TAG, "onFailure: ", e );
                     }
                 });
-
+        startActivity(new Intent(CreationProfilActivity.this, SplashScreenActivity.class));
     }
 
 
