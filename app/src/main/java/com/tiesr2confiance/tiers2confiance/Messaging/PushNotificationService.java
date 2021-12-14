@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +25,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.tiesr2confiance.tiers2confiance.R;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,9 +44,13 @@ public class PushNotificationService extends FirebaseMessagingService {
 	public PushNotificationService(){};
 
 	// Les vars globales
-	private String CHANNEL_ID = "1";
+//	private String CHANNEL_ID = "1";
 	private String title;
 	private String body;
+	private String avatar= "";
+	private URL userAvatarUrl;
+	private Bitmap userAvatarBitmap;
+	private String channel_id = "1";
 
 
 	@Override
@@ -51,25 +61,46 @@ public class PushNotificationService extends FirebaseMessagingService {
 
 		if (remoteMessage.getData().size() > 0) {
 			Map<String, String> map = remoteMessage.getData();
-			title = map.get("title");
-			body = map.get("body");
+			title           = map.get("title");
+			body            = map.get("body");
+			channel_id      = map.get("channel");
+			avatar          = map.get("avatar");
+//			if (avatar.isEmpty() || avatar == "" || avatar == null)
+//			{
+//				Log.i(TAGAPP, "Avatar is empty");
+//			} else
+//			{
+				try {
 
+					userAvatarUrl = new URL(avatar);
+					userAvatarBitmap    =  BitmapFactory.decodeStream(userAvatarUrl.openConnection().getInputStream());
+				} catch (MalformedURLException e) {
+					Log.e(TAGAPP, "Error Loading avatar", e);
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+//			}
+
+
+//			body    = "avatar:" + avatar;
+//			body    = "channel:" + channel_id + " - body:" + body;
 
 			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
-				createOreoNotification(title, body);
+				createOreoNotification();
 			else
-				createNormalNotification(title, body);
+				createNormalNotification();
 		} else Log.d("TAG", "onMessageReceived: no data ");
 
 		super.onMessageReceived(remoteMessage);
 
 	}
 
-	private void createNormalNotification(String title, String body) {
+	private void createNormalNotification() {
 
 		Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channel_id)
 				.setContentTitle(title)
 				.setContentText(body)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -77,6 +108,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 				.setSmallIcon(R.drawable.ic_chat)
 				.setColor(getResources().getColor(R.color.colorSecondary))
 				.setStyle(new NotificationCompat.BigTextStyle())
+				.setLargeIcon(userAvatarBitmap)
 				.setAutoCancel(true);
 
 		NotificationManager notificationManager = (NotificationManager)	getSystemService(Context.NOTIFICATION_SERVICE);
@@ -87,10 +119,10 @@ public class PushNotificationService extends FirebaseMessagingService {
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.O)
-	private void createOreoNotification(String title, String body) {
+	private void createOreoNotification() {
 
 
-		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Message", NotificationManager.IMPORTANCE_HIGH);
+		NotificationChannel channel = new NotificationChannel(channel_id, "Message", NotificationManager.IMPORTANCE_HIGH);
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);
@@ -99,13 +131,14 @@ public class PushNotificationService extends FirebaseMessagingService {
 		NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		manager.createNotificationChannel(channel);
 
-    	Notification notification = new Notification.Builder(this, CHANNEL_ID)
+    	Notification notification = new Notification.Builder(this, channel_id)
 				.setContentTitle(title)
 				.setContentText(body)
 				.setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
 				.setSmallIcon(R.drawable.ic_launcher_foreground)
 //				.setContentIntent(pendingIntent)
-				.setAutoCancel(true)
+			    .setLargeIcon(userAvatarBitmap)
+			    .setAutoCancel(true)
 				.build();
 		manager.notify(0, notification);
 

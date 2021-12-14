@@ -56,6 +56,7 @@ public class GlobalClass extends Application {
     private String  userEmail;
     private long    userRole;// = 1L;
     private String  userToken;
+    private String  userAvatar;
 
 
     private  ArrayList<ModelGenders> arrayListGenders = new ArrayList<>();
@@ -138,6 +139,14 @@ public class GlobalClass extends Application {
         this.userRole = userRole;
     }
 
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public void setAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
+
     public void setArrayListHobbies(ArrayList<ModelHobbies> arrayListHobbies) {
         this.arrayListHobbies = arrayListHobbies;
     }
@@ -186,6 +195,18 @@ public class GlobalClass extends Application {
         this.arrayListSmoker = arrayListSmoker;
     }
 
+    public void setArrayListShapes(ArrayList<ModelShapes> arrayListShapes) {
+        this.arrayListShapes = arrayListShapes;
+    }
+
+    public void setArrayListPersonality(ArrayList<ModelPersonality> arrayListPersonality) {
+        this.arrayListPersonality = arrayListPersonality;
+    }
+
+    public void setArrayListSports(ArrayList<ModelSports> arrayListSports) {
+        this.arrayListSports = arrayListSports;
+    }
+
     /************************* Getters     ***************/
 
     public static String getTAG() {
@@ -227,6 +248,10 @@ public class GlobalClass extends Application {
     public long getUserRole() {
         return userRole;
     }
+
+    public String getUserToken() {return userToken; }
+
+    public String getUserAvatar() {return userAvatar; }
 
     public ArrayList<ModelHobbies> getArrayListHobbies() {
         return arrayListHobbies;
@@ -285,6 +310,10 @@ public class GlobalClass extends Application {
     }
 
     public ArrayList<ModelShapes> getArrayListShapes() { return arrayListShapes; }
+
+    public ArrayList<ModelPersonality> getArrayListPersonality() {
+        return arrayListPersonality;
+    }
 
     /************************* Displayers for Arrays  (in LOGCAT)   ***************/
     public void DisplayAttributes() {
@@ -787,6 +816,8 @@ public class GlobalClass extends Application {
                             userEmail           = connectedUser.getUs_email();
                             userCountryLanguage = connectedUser.getUs_country_lang();
                             userRole            = connectedUser.getUs_role();
+                            userToken           = connectedUser.getUs_token();
+                            userAvatar          = connectedUser.getUs_avatar();
 
                             loadedUserDataOK    =   1;
 
