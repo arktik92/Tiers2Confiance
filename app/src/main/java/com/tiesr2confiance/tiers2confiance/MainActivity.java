@@ -1,5 +1,7 @@
 package com.tiesr2confiance.tiers2confiance;
 
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_FS_COLLECTION;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     /*************** Composants ***************/
     private ImageView ivProfilAvatarShape;
-
+private ImageView ivImgAvatar;
 
 
 
@@ -163,6 +169,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         // TODO : Affichage de l'avatar de l'utilisateur
 //        /** L'avatar : Glide - Add Picture **/
+
+
 //        Context context = getApplicationContext();
 //        RequestOptions options = new RequestOptions()
 //                .centerCrop()
@@ -177,6 +185,45 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 //                .circleCrop()
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .into(ivProfilAvatarShape);
+
+init();
+
+    }
+
+    public void init(){
+
+        currentUserDoc = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+        currentUserDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+
+                    String imgUrlAvatar = contenuUser.getUs_avatar();
+
+                    Log.i(TAG, "imgUrlAvatar: "+imgUrlAvatar);
+
+                    ivImgAvatar = findViewById(R.id.ivImgAvatar);
+
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .error(R.mipmap.ic_launcher)
+                            .placeholder(R.mipmap.ic_launcher);
+                    Glide
+                            .with(ivImgAvatar.getContext())
+                            .load(imgUrlAvatar)
+                            .apply(options)
+                            .fitCenter()
+                            .circleCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(ivImgAvatar);
+
+                }
+
+
+            }
+        });
+
 
 
 
