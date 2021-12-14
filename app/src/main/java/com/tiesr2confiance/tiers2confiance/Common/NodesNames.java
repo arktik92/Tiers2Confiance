@@ -37,6 +37,9 @@ public class NodesNames {
     public static final String KEY_USERS_COLLECTION = "users";
 
 
+    public static final String NODE_CHATS = "Chats";
+    public static final String NODE_CHATLIST = "ChatList";
+
 
 
     public static final String KEY_FS_USER_HOBBIE = "hobbies";

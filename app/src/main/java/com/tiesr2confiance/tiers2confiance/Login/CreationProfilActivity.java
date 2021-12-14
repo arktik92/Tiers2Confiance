@@ -61,6 +61,9 @@ import com.tiesr2confiance.tiers2confiance.MainActivity;
 import com.tiesr2confiance.tiers2confiance.R;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.Reference;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -81,7 +84,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     // Variable Widgets
     /** Variable Widgets **/
     private ImageView imgAvatar;
-    public Uri imageUri, imageCameraUri;;
+    public Uri imageUri, imageCameraUri;
     private EditText etLastName, etFistName, etNickName, etCity, etZipCode;
     private TextView tvDateOfBirth;
     private RadioGroup radioGroupGenre;
@@ -131,9 +134,10 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             uriPath,
             matchsRequestFrom,
             matchsRequestTo,
+            matchsPending,
             matchs;
 
- private String avatar;
+    private String avatar;
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
@@ -289,6 +293,7 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         matchs = "";
         matchsRequestFrom = "";
         matchsRequestTo = "";
+        matchsPending = "";
 
         // Méthode de la date de dernière connection
         if (registeredDate == null) {
@@ -337,9 +342,10 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         userList.put("us_avatar", avatar);
         userList.put("us_registered_date", registeredDate);
         userList.put("us_last_connexion_date", currentDate);
-        userList.put("us_match_request_from", matchsRequestFrom);
-        userList.put("us_match_request_to", matchsRequestTo);
-        userList.put("us_match", matchs);
+        userList.put("us_matchs_request_from", matchsRequestFrom);
+        userList.put("us_matchs_request_to", matchsRequestTo);
+        userList.put("us_matchs_pending", matchsPending);
+        userList.put("us_matchs", matchs);
 
 
 
@@ -350,6 +356,11 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                     public void onSuccess(Void unused) {
                         Toast.makeText(CreationProfilActivity.this, "Profil crée", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Profil crée");
+
+
+
+
+
                         startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                         return;
                     }
@@ -417,39 +428,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         });
         // Show Popup menu
         popMenu.show();
-
-
-
-
-    }
-
-
-    private void selectPicture() {
-
-        Log.d(TAG, "***** SelectPicture *******");
-
-        Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        //  Bundle camerabundle = new Bundle();
-
-        cameraIntent.setType("image/*"); // image/jpg
-
-       /* cameraIntent.putExtra("crop", true);
-        cameraIntent.putExtra("scale", true);
-
-        // Output image dim
-        cameraIntent.putExtra("outputX", 256);
-        cameraIntent.putExtra("outputY", 256);
-*/
-        // Ratio
-        cameraIntent.putExtra("aspectX", 1);
-        cameraIntent.putExtra("aspectY", 1);
-
-        cameraIntent.putExtra("return-data", true);
-
-        cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
-        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
 
 
@@ -459,93 +437,56 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-
             uploadPhoto();
         }
 
-
-
         if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == RESULT_OK) {
-
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             imgAvatar.setImageBitmap(bitmap);
-
             Log.d(TAG, "REQUEST_IMAGE_CAMERA_CAPTURE >> ");
-
-            imageCameraUri =  data.getData(); // Bitmap  data.getExtras().get("Data");
-
+            imageCameraUri = data.getData(); // Bitmap  data.getExtras().get("Data");
             imgAvatar.setImageURI(imageCameraUri);
-
             //imageCameraUri = data.getData();
-
-            Log.d(TAG, "imageCameraUri >> "+imageCameraUri);
-
-
+            Log.d(TAG, "imageCameraUri >> " + imageCameraUri);
             uploadCameraPhotoNew();
-
-
         }
     }
-
-
-
 
     String fileName = randomKey + ".jpg";
 
     private void uploadCameraPhotoNew() {
 
-
         final ProgressDialog prDial = new ProgressDialog(this);
-
         Log.d(TAG, "***** uploadCameraPhoto ***** ");
-
         prDial.setTitle("Uploading Image...");
         prDial.show();
-
-
         // Create a storage reference from our app
         StorageReference storageRef = storageReference.getStorage().getReference();
-
         // Create a reference to file
         // StorageReference mountainsRef = storageRef.child("toto.jpg");
-
-
-
-
         //Create a reference to "images/toto.jpg"
-
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
 
-        StorageReference mountainsImagesRef = storageRef.child(currentUser.getUid()+"/"+fileName);
+        StorageReference mountainsImagesRef = storageRef.child(currentUser.getUid() + "/" + fileName);
 
-
-        Log.d(TAG, "uploadCameraPhotoNew:GD "+mountainsImagesRef.getDownloadUrl());
-
-
-
+        Log.d(TAG, "uploadCameraPhotoNew:GD " + mountainsImagesRef.getDownloadUrl());
+        Log.d(TAG, "imageCameraUri: " + imageCameraUri);
 
         // while the file names are the same, the reference poinr to different ilfes
         //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
         // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
 
         Toast.makeText(CreationProfilActivity.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
-
-
-
         imgAvatar.setDrawingCacheEnabled(true);
         imgAvatar.buildDrawingCache();
-
 
         Bitmap bitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-
-
         byte[] data = baos.toByteArray();
-
 
         UploadTask uploadTask = mountainsImagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -562,48 +503,19 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                         Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
                         prDial.dismiss();
 
-                       Task<Uri> downloadUrl = mountainsImagesRef.getDownloadUrl();
+                        StorageReference riversRef = storageReference.child(currentUser.getUid() +"/" + fileName);
 
                         String getUid = FirebaseAuth.getInstance().getUid();
 
-                        Task<GetTokenResult> FireToken = FirebaseAuth.getInstance().getCurrentUser().getIdToken(false);
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 
-                        FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                             @Override
-                            public void onComplete(@NonNull Task<GetTokenResult> task) {
-
-                              String toto = task.getResult().getToken();
-                                Log.d(TAG, "onComplete: toto >>"+toto);
-
-
-                                /***
-                                InternalAuthProvider authProvider = null;
-                                Task<GetTokenResult> pendingResult = authProvider.getAccessToken(false);
-                                GetTokenResult result =
-                                        Tasks.await(pendingResult, MAXIMUM_TOKEN_WAIT_TIME_MS, TimeUnit.MILLISECONDS);
-                                String token = result.getToken();
-**/
-
-                                String token = task.getResult().getToken();
-                                Log.d(TAG, "onComplete: TOKEN >> "+token);
-
-                                Log.d(TAG, "onComplete: FIRETOKEN >>"+FireToken);
-
+                            public void onSuccess(@NonNull Uri uri) {
+                                Log.d(TAG, "##########riversRef###################+" + uri);
+                                imageUri = uri;
+                                uploadProfilFireBase(imageUri.toString());
                             }
                         });
-
-
-                       // boolean b = "true";
-                       // Task<GetTokenResult> token = FirebaseAuth.getInstance().getCurrentUser().getIdToken(b);
-
-
-
-                        System.out.println("getUid "+getUid);
-                        System.out.println("FILENAME DONE "+fileName);
-
-                        System.out.println("downloadUrl "+downloadUrl);
-
-                        uploadProfilFireBase(fileName.toString());
                     }
                 })
 
@@ -615,9 +527,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
 
                     }
                 });
-
-
-
     }
 
 //    public void clickCameraButton() {
@@ -632,8 +541,6 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
     public void getCameraPhotoNew() {
         Log.d(TAG, "GET PHOTO STEP");
 
-
-
         // Request for camera runtime permission
 
         if (ContextCompat.checkSelfPermission(CreationProfilActivity.this, Manifest.permission.CAMERA)
@@ -641,27 +548,23 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
             ActivityCompat.requestPermissions(CreationProfilActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_IMAGE_CAMERA_CAPTURE);
-        }else{
+        } else {
             Log.d(TAG, "getPhoto: ");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
         }
     }
-    public void getImageLibrary(){
-        System.out.println(">> getImageLibrary");
 
+    public void getImageLibrary() {
 
         Log.d(TAG, "***** SelectPicture *******");
 
         final Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         //  Bundle camerabundle = new Bundle();
-
         cameraIntent.setType("image/*"); // image/jpg
 
        /* cameraIntent.putExtra("crop", true);
         cameraIntent.putExtra("scale", true);
-
         // Output image dim
         cameraIntent.putExtra("outputX", 256);
         cameraIntent.putExtra("outputY", 256);
@@ -669,53 +572,42 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
         // Ratio
         cameraIntent.putExtra("aspectX", 1);
         cameraIntent.putExtra("aspectY", 1);
-
         cameraIntent.putExtra("return-data", true);
-
         cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
+
     private void uploadPhoto() {
 
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
         Log.d(TAG, " UploadPhoto  ");
-
         final ProgressDialog prDial = new ProgressDialog(this);
 
         Log.d(TAG, " ProgressDialog  ");
-
         prDial.setTitle("Uploading Image...");
         prDial.show();
 
-
-
-       // final String randomKey = UUID.randomUUID().toString();
-
+        // final String randomKey = UUID.randomUUID().toString();
         // Create the reference to "images/mountain.jpg
-
         Log.d(TAG, "RandomKey: " + randomKey);
 
-
-
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
-
+        StorageReference riversRef = storageReference.child(currentUser.getUid() + "/" + randomKey);
         riversRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         prDial.dismiss();
-
-
                         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-
                             @Override
                             public void onSuccess(@NonNull Uri uri) {
-                                Log.d(TAG, "#####################################+" + uri);
                                 imageUri = uri;
+                                Log.d(TAG, "#####################################+" + uri);
+                                uploadProfilFireBase(imageUri.toString());
                             }
                         });
                         imgAvatar.setImageURI(imageUri);
-
                         Log.d(TAG, "upload: SUCCESS");
                     }
                 })
@@ -735,121 +627,30 @@ public class CreationProfilActivity extends AppCompatActivity implements Navigat
                 });
     }
 
-    private void uploadCameraPhoto() {
-
-
-        final ProgressDialog prDial = new ProgressDialog(this);
-
-        Log.d(TAG, " uploadCameraPhoto  ");
-
-        prDial.setTitle("Uploading Image...");
-        prDial.show();
-
-
-        // Create a storage reference from our app
-        StorageReference storageRef = storageReference.getStorage().getReference();
-
-        // Create a reference to file
-        // StorageReference mountainsRef = storageRef.child("toto.jpg");
-
-        //Create a reference to "images/toto.jpg"
-        StorageReference mountainsImagesRef = storageRef.child("camera/"+fileName);
-
-     //  urlImage = "gs://tiers2confiance-21525.appspot.com/images/" + fileName;
-       // uriPath = Uri.parse(urlImage).toString();
-
-
-        // while the file names are the same, the reference poinr to different ilfes
-        //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
-        // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
-
-        Toast.makeText(CreationProfilActivity.this, "uploadCameraPhoto", Toast.LENGTH_SHORT).show();
-        imgAvatar.setDrawingCacheEnabled(true);
-        imgAvatar.buildDrawingCache();
-
-
-        Bitmap bitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = mountainsImagesRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CreationProfilActivity.this, "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
-                prDial.dismiss();
-            }
-        })
-
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(CreationProfilActivity.this, "TaskSnapshot Successful", Toast.LENGTH_SHORT).show();
-                        prDial.dismiss();
-                        Log.d(TAG, "FILENAME DONE "+fileName);
-                        uploadProfilFireBase(fileName);
-                    }
-                })
-                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
-                    }
-                });
-
-
-
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.takePicture:
-               // getImageLibrary();
                 uploadPhoto();
-
                 break;
-
             case R.id.takeCameraPicture:
-//                getCameraPhotoNew();
-                String fileName = "toto.jpg";
-                uploadCameraPhoto();
-
+                uploadCameraPhotoNew();
                 break;
-
         }
-
-
         return true;
     }
 
+    public void uploadProfilFireBase(String fileUri) {
 
-/****/
-
-
-    public void uploadProfilFireBase(String fileUri){
-
-String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid();
-
-
-        avatar = path+"%2F"+fileUri;
-
+        avatar = fileUri;
         Log.d(TAG, "++++++++++++++ uploadProfilFireBase: " + avatar);
-
-        System.out.println("FireBase >> "+ fileUri);
 
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
 
-        System.out.println("currentUser"+currentUser);
-        System.out.println("userConnected"+userConnected);
-
+        System.out.println("currentUser" + currentUser);
+        System.out.println("userConnected" + userConnected);
 
         userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -858,10 +659,9 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
 
                     System.out.println("Document Snapshot exist");
 
-
                     // Création d'un objet pour envoyer sur la Database
                     Map<String, Object> userList = new HashMap<>();
-                    userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                    userList.put("us_avatar", "gs://tiers2confiance-21525.appspot.com/camera/" + fileUri);
 
                     // Envoi de l'objet sur la Database
                     docRef.set(userList)
@@ -870,30 +670,22 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(CreationProfilActivity.this, "Document Exist : Profil Photo crée", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Document Exist PHOTO profil crée");
-                                  //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
-
-                               //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
-
-
-
+                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                    //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(CreationProfilActivity.this, "Document Exist : Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "onFailure: ", e );
+                                    Log.e(TAG, "onFailure: ", e);
                                 }
                             });
-
-
-                }else{
-
-                    System.out.println("Document Snapshot doesn't exist");
+                } else {
 
                     // Création d'un objet pour envoyer sur la Database
                     Map<String, Object> userList = new HashMap<>();
-                    userList.put("us_avatar", "****https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/"+currentUser.getUid()+"/"+avatar);
+                    userList.put("us_avatar", "****https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21525.appspot.com/o/" + currentUser.getUid() + "/" + avatar);
 
                     // Envoi de l'objet sur la Database
                     docRef.set(userList)
@@ -902,41 +694,22 @@ String path ="^^^^https://firebasestorage.googleapis.com/v0/b/tiers2confiance-21
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(CreationProfilActivity.this, "Profil Photo crée", Toast.LENGTH_SHORT).show();
                                     Log.i(TAG, "Profil crée");
-                                    Log.i(TAG, "Avatar"+avatar);
-                                 //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                    StorageReference riversRef = storageReference.child("images/" + randomKey);
+                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(CreationProfilActivity.this, "Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "onFailure: ", e );
+                                    Log.e(TAG, "onFailure: ", e);
                                 }
                             });
-
-
-
                 }
-
-
-
 
 
             }
         });
 
-
-
-/****
-        // Init des composants Firebase
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userId = user.getUid();
-        db = FirebaseFirestore.getInstance();
-        docRef = db.document("users/" + userId);
-        storageReference = FirebaseStorage.getInstance().getReference();
-
-        ***/
-
     }
-
 }

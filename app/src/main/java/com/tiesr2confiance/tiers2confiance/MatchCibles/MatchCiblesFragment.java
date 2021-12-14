@@ -171,9 +171,9 @@ public class MatchCiblesFragment extends Fragment {
                                         assert contenunephewUser != null;
                                         ArrayList<String> ListIn = new ArrayList<>();
                                         ArrayList<String> ListNotIn = new ArrayList<>();
-                                        ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
-                                        ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs.split(";")));
                                         try {
+                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs_request_to.split(";")));
+                                            ListNotIn.addAll(Arrays.asList(contenunephewUser.us_matchs.split(";")));
                                             displayPossibleMatchList(usRole, ListIn, ListNotIn, view);
                                         } catch (ParseException e) {
                                             e.printStackTrace();
@@ -221,7 +221,7 @@ public class MatchCiblesFragment extends Fragment {
 
 
         if (TypeSearch == "globale"){
-            query = db.collection("users");
+            query = db.collection("users").whereEqualTo("us_role", 1);
             if (!String.valueOf(ptCityGlobale.getText()).equals("")){
                 query = query
                         .orderBy("us_city_lowercase")
@@ -235,6 +235,7 @@ public class MatchCiblesFragment extends Fragment {
                 critere.clear();
                 critere.add("1");
                 critere.addAll(listIn);
+                Log.e(TAG, "displayPossibleMatchList: " + critere );
                 query = db.collection("users")
                         .whereEqualTo("us_role", 1)
                         .whereEqualTo("us_gender", genreCritere)

@@ -20,6 +20,8 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SEXUAL_O
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SHAPE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SMOKE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SPORTS;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.NODE_CHATLIST;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.NODE_CHATS;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,10 +35,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -61,15 +67,22 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
+import com.tiesr2confiance.tiers2confiance.Models.ModelChat;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
@@ -85,14 +98,18 @@ import com.tiesr2confiance.tiers2confiance.Models.ModelUsers;
 import com.tiesr2confiance.tiers2confiance.R;
 import com.tiesr2confiance.tiers2confiance.databinding.FragmentViewProfilBinding;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ViewProfilFragment extends Fragment {
 
@@ -105,7 +122,7 @@ public class ViewProfilFragment extends Fragment {
     /** ---------------- DECLARATION DES VARIABLES ------------------------ **/
 
     /** Champs Commun **/
-    private TextView tvUserAge, tvProfilName, tvRole, tvPresentation, tvProfilCity;
+    private TextView tvUserAge, tvProfilName, tvPresentation, tvProfilCity;
     private ImageView ivProfilAvatarShape, ivGender;
 
     /** Champs Celibataire **/
@@ -147,6 +164,17 @@ public class ViewProfilFragment extends Fragment {
     private FirebaseUser currentUser;
     private DocumentReference userConnected;
     private DocumentReference userNephew;
+
+    // Chat
+    private CollectionReference chatCollectionRef;
+    private CollectionReference chatListCollectionRef;
+
+    /** Photos **/
+    StorageReference storageReference;
+    public Uri imageUri, imageCameraUri;
+    final String randomKey = UUID.randomUUID().toString();
+    String fileName = randomKey + ".jpg";
+    String imageType;
 
     /** Variables **/
     String nickname;
@@ -198,10 +226,15 @@ public class ViewProfilFragment extends Fragment {
         // userDisplayed, récupération de l'utilisateur à afficher
         db = FirebaseFirestore.getInstance();
         userDisplayed = db.document(KEY_FS_COLLECTION + "/" + userId);
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
+        // récupération de la collection CHAT
+        chatCollectionRef = db.collection(NODE_CHATS);
+        chatListCollectionRef = db.collection(NODE_CHATLIST);
 
         // Affiche les élèments du profil en fonction du rôle et des liens entre l'utilisateur affiché, et l'utilisateur connecté
         // + Affiche les boutons necessaires
@@ -219,7 +252,6 @@ public class ViewProfilFragment extends Fragment {
         tvProfilName = view.findViewById(R.id.tv_profil_name);
         tvUserAge   =view.findViewById(R.id.tv_User_Age);
         ivGender = view.findViewById(R.id.iv_gender);
-        tvRole = view.findViewById(R.id.tv_role_display);
         tvProfilCity = view.findViewById(R.id.tv_profil_city);
         tvPresentation = view.findViewById(R.id.tv_presentation);
 
@@ -474,10 +506,67 @@ public class ViewProfilFragment extends Fragment {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             ModelUsers contenuDisplayedUser = documentSnapshot.toObject(ModelUsers.class);
                                             assert contenuDisplayedUser != null;
-                                            userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
-                                            userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
-                                            userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") );
-                                            userDisplayed.update("us_matchs_request_from", contenuDisplayedUser.getUs_matchs_request_from().replace(userConnected.getId()+ ";", "") );
+
+                                            if (contenuDisplayedUser.getUs_matchs_pending().contains(userConnected.getId())){
+                                              userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
+                                            } else {
+                                                userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
+                                                userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
+                                                userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
+
+                                                // Upload du message dans la table Chats
+                                                ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "message", false);
+                                                long time = System.currentTimeMillis();
+                                                String docId = String.valueOf(time);
+                                                chatCollectionRef.document(docId).set(newChat)
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.w("TAG", "Error adding document", e);
+                                                            }
+                                                        });
+
+                                                // Upload de la liaison des participants du chat en question dans Chatlist
+                                                HashMap<String, Object> addUserToArrayMapConnected = new HashMap<>();
+                                                HashMap<String, Object> addUserToArrayMapDisplayed = new HashMap<>();
+                                                addUserToArrayMapDisplayed.put("id", FieldValue.arrayUnion(contenuUser.getUs_auth_uid()));
+                                                addUserToArrayMapConnected.put("id", FieldValue.arrayUnion(userDisplayed.getId()));
+
+                                                chatListCollectionRef
+                                                        .document(currentUser.getUid())
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> taskConnected) {
+
+                                                                chatListCollectionRef.document(userDisplayed.getId()).get()
+                                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<DocumentSnapshot> taskDisplayed) {
+                                                                                // Création du chat dans chatList pour le utilisateur connecté
+                                                                                if (!taskConnected.getResult().exists()) {
+                                                                                    chatListCollectionRef.document(currentUser.getUid()).set(addUserToArrayMapConnected);
+                                                                                } else {
+                                                                                    chatListCollectionRef.document(currentUser.getUid()).update(addUserToArrayMapConnected);
+                                                                                }
+                                                                                // Création du chat dans chatList pour l'autre utilisateur
+                                                                                if (!taskDisplayed.getResult().exists()) {
+                                                                                    chatListCollectionRef.document(userDisplayed.getId()).set(addUserToArrayMapDisplayed);
+                                                                                } else {
+                                                                                    chatListCollectionRef.document(userDisplayed.getId()).update(addUserToArrayMapDisplayed);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                            }
+                                                        });
+
+
+                                            }
+
+                                            // userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending() +  userConnected.getId() + ";");
+                                           // userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") )
+                                            // Création d'un objet pour envoyer sur la Database
+
                                         }
                                     });
                         }
@@ -559,6 +648,7 @@ public class ViewProfilFragment extends Fragment {
     private void InitComponents(View v) {
         InitLlPresentation(v);
         InitivPhoto(v);
+        InitAvatar(v);
         InitLlHobbies(v);
         InitLlPersonality(v);
         InitLlSports(v);
@@ -573,6 +663,7 @@ public class ViewProfilFragment extends Fragment {
         //TODO HasKids and Gender
 
     }
+
 
     private void InitLlPresentation(View v) {
         tvPresentation = v.findViewById(R.id.tv_presentation);
@@ -596,27 +687,48 @@ public class ViewProfilFragment extends Fragment {
         llPresentation.setClickable(false);
     }
 
+    private void InitAvatar(View v){
+        ivProfilAvatarShape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageType = "imgAvatar";
+                PopupMenu popMenu = new PopupMenu(getContext(), view);
+                MenuInflater menuInflater = popMenu.getMenuInflater();
+                // call Inflater Menu
+                menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
+                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        // En fonction du résultat, lancement de l'action appropriée
+                        if (id == R.id.takeCameraPicture) {
+                            getCameraPhotoNew();
+                        } else if (id == R.id.takePicture) {
+                            getImageLibrary();
+                        }
+                        return false;
+                    }
+                });
+                // Show Popup menu
+                popMenu.show();
+            }
+        });
+    }
+
     private void InitivPhoto(View v) {
         btnAddPhoto = v.findViewById(R.id.btn_add_photo);
-
         btnAddPhoto.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+               imageType = "imgPhotos";
                PopupMenu popMenu = new PopupMenu(getContext(), view);
                MenuInflater menuInflater = popMenu.getMenuInflater();
-
                // call Inflater Menu
                menuInflater.inflate(R.menu.menu_add_avatar,popMenu.getMenu());
-
-               // Add Menu Event
-//         PopupAddAvatarMenuEventHandle popupAddAvatarMenuEventHandle = new PopupAddAvatarMenuEventHandle(getApplicationContext());
-//        popMenu.setOnMenuItemClickListener(popupAddAvatarMenuEventHandle);
-
                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                    @Override
                    public boolean onMenuItemClick(MenuItem item) {
                        int id = item.getItemId();
-
                        // En fonction du résultat, lancement de l'action appropriée
                        if (id == R.id.takeCameraPicture) {
                            getCameraPhotoNew();
@@ -624,49 +736,173 @@ public class ViewProfilFragment extends Fragment {
                            getImageLibrary();
                        }
                        return false;
-
                    }
                });
                // Show Popup menu
                popMenu.show();
-
            }
        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            uploadPhoto();
+        }
+        if (requestCode == REQUEST_IMAGE_CAMERA_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            ivProfilAvatarShape.setImageBitmap(bitmap);
+            Log.d(TAG, "REQUEST_IMAGE_CAMERA_CAPTURE >> ");
+            imageCameraUri = data.getData(); // Bitmap  data.getExtras().get("Data");
+            ivProfilAvatarShape.setImageURI(imageCameraUri);
+            //imageCameraUri = data.getData();
+            Log.d(TAG, "imageCameraUri >> " + imageCameraUri);
+            uploadCameraPhotoNew();
+        }
+    }
+
+    private void uploadPhoto() {
+
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+        Log.d(TAG, " UploadPhoto  ");
+        final ProgressDialog prDial = new ProgressDialog(getContext());
+
+        Log.d(TAG, " ProgressDialog  ");
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+
+        // final String randomKey = UUID.randomUUID().toString();
+        // Create the reference to "images/mountain.jpg
+        Log.d(TAG, "RandomKey: " + randomKey);
+
+        StorageReference riversRef = storageReference.child(currentUser.getUid() + "/" + randomKey);
+        riversRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        prDial.dismiss();
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(@NonNull Uri uri) {
+                                imageUri = uri;
+                                Log.d(TAG, "#####################################+" + uri);
+                                uploadProfilFireBase(imageUri.toString());
+                            }
+                        });
+                        ivProfilAvatarShape.setImageURI(imageUri);
+                        Log.d(TAG, "upload: SUCCESS");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        prDial.dismiss();
+                        Log.d(TAG, "upload: FAILED");
+                    }
+                })
+                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
+    }
+
+
+    private void uploadCameraPhotoNew() {
+
+        final ProgressDialog prDial = new ProgressDialog(getContext());
+        Log.d(TAG, "***** uploadCameraPhoto ***** ");
+        prDial.setTitle("Uploading Image...");
+        prDial.show();
+        // Create a storage reference from our app
+        StorageReference storageRef = storageReference.getStorage().getReference();
+        // Create a reference to file
+        // StorageReference mountainsRef = storageRef.child("toto.jpg");
+        //Create a reference to "images/toto.jpg"
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
+        StorageReference mountainsImagesRef = storageRef.child(currentUser.getUid() + "/" + fileName);
+
+        Log.d(TAG, "uploadCameraPhotoNew:GD " + mountainsImagesRef.getDownloadUrl());
+        Log.d(TAG, "imageCameraUri: " + imageCameraUri);
+
+        // while the file names are the same, the reference poinr to different ilfes
+        //   mountainRef.getName().equals(mountainImagesRef.getName()); // true
+        // mountainRef.getPath().equals(mountainImagesRef.getPath()); // false
+
+        ivProfilAvatarShape.setDrawingCacheEnabled(true);
+        ivProfilAvatarShape.buildDrawingCache();
+
+        Bitmap bitmap = ((BitmapDrawable) ivProfilAvatarShape.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Handle Unsucessful uploads", Toast.LENGTH_SHORT).show();
+                prDial.dismiss();
+            }
+        })
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        prDial.dismiss();
+                        StorageReference riversRef = storageReference.child(currentUser.getUid() +"/" + fileName);
+                        String getUid = FirebaseAuth.getInstance().getUid();
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(@NonNull Uri uri) {
+                                Log.d(TAG, "##########riversRef###################+" + uri);
+                                imageUri = uri;
+                                uploadProfilFireBase(imageUri.toString());
+                            }
+                        });
+                    }
+                })
+                .addOnProgressListener(new com.google.firebase.storage.OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        prDial.setMessage("Percentage:" + (int) progressPercent + "%");
+                    }
+                });
     }
 
     //TODO
     /** FONCTION CAMERA, REDONDANCE AVEC CREATION PROFIL, A CENTRALISER  **/
     public void getCameraPhotoNew() {
-        Log.d(TAG, "GET PHOTO STEP");
-
         // Request for camera runtime permission
-
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_IMAGE_CAMERA_CAPTURE);
-        }else{
-            Log.d(TAG, "getPhoto: ");
+        } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, REQUEST_IMAGE_CAMERA_CAPTURE);
         }
     }
     public void getImageLibrary(){
-        System.out.println(">> getImageLibrary");
-
-
         Log.d(TAG, "***** SelectPicture *******");
 
         final Intent cameraIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         //  Bundle camerabundle = new Bundle();
-
         cameraIntent.setType("image/*"); // image/jpg
 
        /* cameraIntent.putExtra("crop", true);
         cameraIntent.putExtra("scale", true);
-
         // Output image dim
         cameraIntent.putExtra("outputX", 256);
         cameraIntent.putExtra("outputY", 256);
@@ -674,12 +910,74 @@ public class ViewProfilFragment extends Fragment {
         // Ratio
         cameraIntent.putExtra("aspectX", 1);
         cameraIntent.putExtra("aspectY", 1);
-
         cameraIntent.putExtra("return-data", true);
-
         cameraIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    public void uploadProfilFireBase(String fileUri) {
+
+        // currentUser, récupération de l'utilisateur connecté
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+        userConnected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ModelUsers contenuUser = documentSnapshot.toObject(ModelUsers.class);
+
+                String label = null;
+                String value = null;
+                if (imageType  == "imgAvatar"){
+                    label = "us_avatar";
+                    value = fileUri;
+                }else{
+                    label = "us_photos";
+                    value = contenuUser.getUs_photos() + fileUri + ";";
+                }
+                if (documentSnapshot.exists()) {
+                    // Envoi de l'objet sur la Database
+                    userDisplayed.update(label ,  value)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getContext(), "Photo ajouté", Toast.LENGTH_SHORT).show();
+                                    Log.i(TAG, "Document Exist PHOTO profil crée");
+                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                    //     System.out.println("gs://tiers2confiance-21525.appspot.com/camera/"+fileUri);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Document Exist : Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, "onFailure: ", e);
+                                }
+                            });
+                } else {
+                    // Envoi de l'objet sur la Database
+                    userDisplayed.update(label ,  value)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getContext(), "Photo ajouté", Toast.LENGTH_SHORT).show();
+                                    Log.i(TAG, "Profil crée");
+                                    StorageReference riversRef = storageReference.child("images/" + randomKey);
+                                    //  startActivity(new Intent(CreationProfilActivity.this, MainActivity.class));
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Erreur dans la creation photo profil", Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, "onFailure: ", e);
+                                }
+                            });
+                }
+
+
+            }
+        });
+
     }
 
 
@@ -1015,7 +1313,7 @@ public class ViewProfilFragment extends Fragment {
                                 shapeId = documentSnapshotDisplayed.getLong(KEY_SHAPE);
                                 balance = documentSnapshotDisplayed.getLong(KEY_BALANCE);
                             }catch(Exception e){
-                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data : ", e);
+                                Log.e(TAG, "Error on getting documentSnapshotDisplayed data (Il manque peut être un champ dasn le document USER) : ", e);
                             }
 
 
@@ -1038,6 +1336,11 @@ public class ViewProfilFragment extends Fragment {
                                         .centerCrop()
                                         .error(R.mipmap.ic_launcher)
                                         .placeholder(R.mipmap.ic_launcher);
+
+
+                                //StorageReference gsReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://tiers2confiance-21525.appspot.com/41niZRNxf3S2OJI4YuJ338rTBFt2/7113af67-f70d-4d0f-83f8-9530af0219bb.jpg");
+
+                               // Log.e(TAG, "onSuccess: " + gsReference);
                                 /** Loading Avatar **/
                                 Glide
                                         .with(context)
@@ -1048,14 +1351,12 @@ public class ViewProfilFragment extends Fragment {
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(ivProfilAvatarShape);
 
-
                                 /** ON DIFFERENCIE SELON LE ROLE **/
                                 if (role.equals(2L)) {
                                     // Si l'utilisateur connecté est un celib et donc...
                                     // si l'utilisateur à afficher est Tiers de confiance (parrain)...
-
-                                    tvRole.setText(getString(R.string.lbl_tiers));
                                 } else {
+
                                     tvBalance.setText(balance.toString());
                                     ArrayList<String> imgPhotosList = new ArrayList<>();
                                     if (imgPhotos != "" & imgPhotos != ";") {
@@ -1069,8 +1370,6 @@ public class ViewProfilFragment extends Fragment {
                                         adapterPhotos = new ViewPhotosAdapter(getContext(), imgPhotosList);
                                         rvListPhotos.setAdapter(adapterPhotos);
                                     }
-
-                                    tvRole.setText(getString(R.string.lbl_celibataire));
                                     makeVisible();
 
                                     tvBalance.setText(String.valueOf(balance));

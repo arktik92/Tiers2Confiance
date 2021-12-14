@@ -29,7 +29,7 @@
         android:checkableBehavior="single">
         <item
             android:title="Mes conversations"
-            android:id="@+id/nav_phnav_chatotos"
+            android:id="@+id/nav_chat"
             android:icon="@drawable/ic_messages"/>
     </group>
     <item android:title="Les Célibataires">
@@ -44,7 +44,7 @@
                 android:icon="@drawable/ic_cible"/>
             <item
                 android:title="Propositions envoyées"
-                android:id="@+id/nav_cibles_envoyees"
+                android:id="@+id/nav_search_matchs_sended"
                 android:icon="@drawable/ic_envoyees"/>
         </menu>
     </item>

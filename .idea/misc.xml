@@ -59,6 +59,20 @@
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal.xml" value="0.2265625" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_celibataire.xml" value="0.25" />
         <entry key="..\:/Users/camille/AndroidStudioProjects/Tiers2Confiance/app/src/main/res/menu/menu_principal_godfather.xml" value="0.22" />
+        <entry key="app/src/main/res/drawable/background_left.xml" value="0.1328125" />
+        <entry key="app/src/main/res/drawable/ic_action_video.xml" value="0.1328125" />
+        <entry key="app/src/main/res/drawable/ic_chat.xml" value="0.1328125" />
+        <entry key="app/src/main/res/layout/activity_message.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/chat_item_left.xml" value="0.11666666666666667" />
+        <entry key="app/src/main/res/layout/chat_item_right.xml" value="0.11666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.13489583333333333" />
+        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.13489583333333333" />
+        <entry key="app/src/main/res/layout/fragment_match_cibles_envoyees.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_pending_requests.xml" value="0.13489583333333333" />
+        <entry key="app/src/main/res/layout/fragment_view_profil.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_view_profil_item_recycler.xml" value="0.11145833333333334" />
+        <entry key="app/src/main/res/layout/recycler_view_message_activity.xml" value="0.11666666666666667" />
+        <entry key="app/src/main/res/layout/user_item.xml" value="0.234375" />
       </map>
     </option>
   </component>
