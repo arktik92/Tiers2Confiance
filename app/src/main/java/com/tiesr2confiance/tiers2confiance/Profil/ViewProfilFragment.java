@@ -638,7 +638,7 @@ public class ViewProfilFragment extends Fragment {
 
 
                                                 // Upload du message dans la table Chats
-                                                ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "message", false);
+                                                ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "Commencer la discussion ...", false);
                                                 long time = System.currentTimeMillis();
                                                 String docId = String.valueOf(time);
                                                 chatCollectionRef.document(docId).set(newChat)
