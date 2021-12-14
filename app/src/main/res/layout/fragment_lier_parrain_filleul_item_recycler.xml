@@ -54,13 +54,6 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/iv_link"
-                android:layout_width="30dp"
-                android:layout_height="80dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_already_linked" />
-
         </LinearLayout>
 
     </LinearLayout>
