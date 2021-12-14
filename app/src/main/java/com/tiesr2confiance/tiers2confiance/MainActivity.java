@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -97,6 +99,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     DrawerLayout drawer_layout;
 
 
+    ActionBarDrawerToggle toggle;
+
     /********* Variables Globales **********/
     String userId;
     long userRole;
@@ -105,8 +109,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private ImageView ivProfilAvatarShape;
     private ImageView ivImgAvatar;
     private TextView tvMenuNickname;
-
-
+    private ImageView btnCloseMenu;
 
 
     /**
@@ -117,7 +120,42 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         toolbar = findViewById(R.id.toolbar);
         drawer_layout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_navigationView);
+        btnCloseMenu = findViewById(R.id.btnCloseMenu);
+
+
+
     }
+
+
+    public void CloseMenu(View view) {// Ajout de la gestion des options d'accessibilité
+
+
+        try {
+            initUI();
+            toggle = new ActionBarDrawerToggle(
+                    MainActivity.this, // Le context de l'activité
+                    drawer_layout, // Le layout du MainActivity
+                    toolbar, // La toolbar
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
+
+            // Ajout d'un listener sur le bouton hamburger
+            drawer_layout.addDrawerListener(toggle);
+            // Synchro le bouton hamburger et le menu
+
+            toggle.syncState();
+            //
+            navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +193,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Ajout du support pour la gestio nde la Toolbar
         setSupportActionBar(toolbar);
         // Ajout de la gestion des options d'accessibilité
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, // Le context de l'activité
                 drawer_layout, // Le layout du MainActivity
                 toolbar, // La toolbar
@@ -165,9 +203,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // Ajout d'un listener sur le bouton hamburger
         drawer_layout.addDrawerListener(toggle);
         // Synchro le bouton hamburger et le menu
+
         toggle.syncState();
         //
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
         // TODO : Affichage de l'avatar de l'utilisateur
@@ -193,6 +233,7 @@ init();
 
     }
 
+
     public void init(){
 
         currentUserDoc = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
@@ -206,7 +247,7 @@ init();
                         try {
 
                             tvMenuNickname = findViewById(R.id.tvMenuNickname);
-                            tvMenuNickname.setText(contenuUser.getUs_nickname());
+                            tvMenuNickname.setText(contenuUser.getUs_nickname().toUpperCase(Locale.ROOT));
 
                         } catch (Exception e){
                             Log.e(TAG, "onSuccess: " + e);
