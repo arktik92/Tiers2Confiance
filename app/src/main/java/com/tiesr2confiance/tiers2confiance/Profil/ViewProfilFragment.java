@@ -20,6 +20,8 @@ import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SEXUAL_O
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SHAPE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SMOKE;
 import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.KEY_SPORTS;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.NODE_CHATLIST;
+import static com.tiesr2confiance.tiers2confiance.Common.NodesNames.NODE_CHATS;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,8 +70,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.storage.FirebaseStorage;
@@ -78,6 +82,7 @@ import com.google.firebase.storage.UploadTask;
 import com.tiesr2confiance.tiers2confiance.Common.GlobalClass;
 import com.tiesr2confiance.tiers2confiance.Crediter.CreditFragment;
 import com.tiesr2confiance.tiers2confiance.Login.CreationProfilActivity;
+import com.tiesr2confiance.tiers2confiance.Models.ModelChat;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEthnicGroup;
 import com.tiesr2confiance.tiers2confiance.Models.ModelEyeColor;
 import com.tiesr2confiance.tiers2confiance.Models.ModelHairColor;
@@ -160,6 +165,10 @@ public class ViewProfilFragment extends Fragment {
     private DocumentReference userConnected;
     private DocumentReference userNephew;
 
+    // Chat
+    private CollectionReference chatCollectionRef;
+    private CollectionReference chatListCollectionRef;
+
     /** Photos **/
     StorageReference storageReference;
     public Uri imageUri, imageCameraUri;
@@ -222,6 +231,10 @@ public class ViewProfilFragment extends Fragment {
         // currentUser, récupération de l'utilisateur connecté
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         userConnected = db.collection(KEY_FS_COLLECTION).document(currentUser.getUid());
+
+        // récupération de la collection CHAT
+        chatCollectionRef = db.collection(NODE_CHATS);
+        chatListCollectionRef = db.collection(NODE_CHATLIST);
 
         // Affiche les élèments du profil en fonction du rôle et des liens entre l'utilisateur affiché, et l'utilisateur connecté
         // + Affiche les boutons necessaires
@@ -494,37 +507,64 @@ public class ViewProfilFragment extends Fragment {
                                             ModelUsers contenuDisplayedUser = documentSnapshot.toObject(ModelUsers.class);
                                             assert contenuDisplayedUser != null;
 
-                                            if (contenuDisplayedUser.getUs_matchs_pending().indexOf(userConnected.getId()) == -1){
-                                                Log.e(TAG, "onComplete boucle 1: " +  contenuDisplayedUser.getUs_matchs_pending().indexOf((userConnected.getId())) );
-                                                Log.e(TAG, "onComplete: les pending de l'autre " + contenuDisplayedUser.getUs_matchs_pending());
-                                                Log.e(TAG, "onComplete: mon id " + userConnected.getId() );
-                                                userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
+                                            if (contenuDisplayedUser.getUs_matchs_pending().contains(userConnected.getId())){
+                                              userConnected.update("us_matchs_pending", contenuUser.getUs_matchs_pending() + userDisplayed.getId() +";" );
                                             } else {
                                                 userConnected.update("us_matchs", contenuUser.getUs_matchs() + userDisplayed.getId() +";" );
                                                 userDisplayed.update("us_matchs", contenuDisplayedUser.getUs_matchs() +  userConnected.getId() + ";");
                                                 userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending().replace(userConnected.getId()+ ";", "") );
 
-                                                Map<String, Object> chat = new HashMap<>();
-                                                chat.put("us_date_creation", Timestamp.now());
-                                                db.collection("chat").add(chat)
-                                                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                                userConnected.update("us_chats", contenuUser.getUs_chats() + task.getResult().getId() +";" );
-                                                                userDisplayed.update("us_chats", contenuDisplayedUser.getUs_chats() +  task.getResult().getId()  + ";");
-                                                            }
-                                                        })
+                                                // Upload du message dans la table Chats
+                                                ModelChat newChat = new ModelChat(contenuUser.getUs_auth_uid(), userDisplayed.getId(), "message", false);
+                                                long time = System.currentTimeMillis();
+                                                String docId = String.valueOf(time);
+                                                chatCollectionRef.document(docId).set(newChat)
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Log.e(TAG, "onFailure: " + "Erreur à la création du chat" );
+                                                                Log.w("TAG", "Error adding document", e);
                                                             }
                                                         });
+
+                                                // Upload de la liaison des participants du chat en question dans Chatlist
+                                                HashMap<String, Object> addUserToArrayMapConnected = new HashMap<>();
+                                                HashMap<String, Object> addUserToArrayMapDisplayed = new HashMap<>();
+                                                addUserToArrayMapDisplayed.put("id", FieldValue.arrayUnion(contenuUser.getUs_auth_uid()));
+                                                addUserToArrayMapConnected.put("id", FieldValue.arrayUnion(userDisplayed.getId()));
+
+                                                chatListCollectionRef
+                                                        .document(currentUser.getUid())
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> taskConnected) {
+
+                                                                chatListCollectionRef.document(userDisplayed.getId()).get()
+                                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<DocumentSnapshot> taskDisplayed) {
+                                                                                // Création du chat dans chatList pour le utilisateur connecté
+                                                                                if (!taskConnected.getResult().exists()) {
+                                                                                    chatListCollectionRef.document(currentUser.getUid()).set(addUserToArrayMapConnected);
+                                                                                } else {
+                                                                                    chatListCollectionRef.document(currentUser.getUid()).update(addUserToArrayMapConnected);
+                                                                                }
+                                                                                // Création du chat dans chatList pour l'autre utilisateur
+                                                                                if (!taskDisplayed.getResult().exists()) {
+                                                                                    chatListCollectionRef.document(userDisplayed.getId()).set(addUserToArrayMapDisplayed);
+                                                                                } else {
+                                                                                    chatListCollectionRef.document(userDisplayed.getId()).update(addUserToArrayMapDisplayed);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                            }
+                                                        });
+
+
                                             }
 
                                             // userDisplayed.update("us_matchs_pending", contenuDisplayedUser.getUs_matchs_pending() +  userConnected.getId() + ";");
                                            // userDisplayed.update("us_matchs_request_to", contenuDisplayedUser.getUs_matchs_request_to().replace(userConnected.getId()+ ";", "") )
-
                                             // Création d'un objet pour envoyer sur la Database
 
                                         }

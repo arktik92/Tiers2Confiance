@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiers2Confiance.NoActionBar">
         <activity
+            android:name=".chat.MessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreenActivity"
             android:exported="false" />
         <activity
@@ -37,26 +40,24 @@
         <activity
             android:name=".Login.LoginActivity"
             android:exported="true">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                    <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Login.RoleChoiceActivity"
             android:exported="false" />
         <activity
             android:name=".Login.SignInActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Login.CreationProfilActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
-
     </application>
 
 </manifest>
