@@ -724,24 +724,6 @@ public class GlobalClass extends Application {
 
 //        loadedUserDataOK    =   0;
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAGAPP, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        userToken = task.getResult();
-
-                        // Log and toast
-                        String msg = "My TOKEN is :"+ userToken;
-                        Log.d(TAGAPP, msg);
-//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
         try
@@ -759,6 +741,10 @@ public class GlobalClass extends Application {
         }
 
 
+
+
+
+
         Log.i(TAG, "XXXXXXXX GlobalClass : LoadUserDataFromFirestore(): userId : " + userId);
 
         DocumentReference docRefUserConnected;
@@ -766,6 +752,27 @@ public class GlobalClass extends Application {
         try {
             docRefUserConnected = db.document("users/"+ userId); //bSfRUKasZ7PyHnew1jwqG6jksl03
             //docRefUserConnected = db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03");
+
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w(TAGAPP, "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            userToken = task.getResult();
+
+                            docRefUserConnected.update("us_token", userToken);
+
+                            // Log and toast
+                            String msg = "My TOKEN updated in collection users :"+ userToken;
+                            Log.d(TAGAPP, msg);
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
             docRefUserConnected.get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -2312,69 +2319,69 @@ public void LoadOuiNonDataFromFirestore() {
 
 
 
-
-    /*****************************************************************************************************/
-    public void LoadUserDataWithNoCallback() {
-        final String[] msg = {"Sans Callback : pas de message"};
-        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            msg[0] =   "SansCallback User Trouvé";
-                        } else {
-                            msg[0] =   "SansCallback User n'existe pas";
-                        }
-                    }
-                });
-        Log.w(TAGAPP, msg[0]);
-    }
-
-
-
-    /************************************************************************************************/
-    /************************************************************************************************/
-
-    interface UserDataCallback {
-        void userExist(boolean exist);
-    }
-
-
-    public void LoadUserData(UserDataCallback userDataCallback) {
-
-        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            userDataCallback.userExist(true);
-
-                        } else {
-                            userDataCallback.userExist(false);
-                        }
-                    }
-                });
-
-    }
-
-    public void LoadUserDataWithCallBack(){
-
-        LoadUserData(new UserDataCallback() {
-            @Override
-            public void userExist(boolean exist) {
-                String msg = "Avec Callback : pas de message";
-//                Log.d(TAG, "CallBack");
-                if (exist) {
-                    msg =   "TASK avec CallBack : User exists";
-                    Log.d(TAGAPP, msg);
-                } else {
-                    msg =   "Task CallBack : User does not exist";
-                    Log.d(TAGAPP, msg);
-                }
-            }
-        });
-
-    }
+//
+//    /*****************************************************************************************************/
+//    public void LoadUserDataWithNoCallback() {
+//        final String[] msg = {"Sans Callback : pas de message"};
+//        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            msg[0] =   "SansCallback User Trouvé";
+//                        } else {
+//                            msg[0] =   "SansCallback User n'existe pas";
+//                        }
+//                    }
+//                });
+//        Log.w(TAGAPP, msg[0]);
+//    }
+//
+//
+//
+//    /************************************************************************************************/
+//    /************************************************************************************************/
+//
+//    interface UserDataCallback {
+//        void userExist(boolean exist);
+//    }
+//
+//
+//    public void LoadUserData(UserDataCallback userDataCallback) {
+//
+//        db.document("users/bSfRUKasZ7PyHnew1jwqG6jksl03").get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            userDataCallback.userExist(true);
+//
+//                        } else {
+//                            userDataCallback.userExist(false);
+//                        }
+//                    }
+//                });
+//
+//    }
+//
+//    public void LoadUserDataWithCallBack(){
+//
+//        LoadUserData(new UserDataCallback() {
+//            @Override
+//            public void userExist(boolean exist) {
+//                String msg = "Avec Callback : pas de message";
+////                Log.d(TAG, "CallBack");
+//                if (exist) {
+//                    msg =   "TASK avec CallBack : User exists";
+//                    Log.d(TAGAPP, msg);
+//                } else {
+//                    msg =   "Task CallBack : User does not exist";
+//                    Log.d(TAGAPP, msg);
+//                }
+//            }
+//        });
+//
+//    }
 
 
 /************************************************************************************************/
