@@ -47,6 +47,10 @@
     <group
         android:id="@+id/groupPGO"
         android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_PGO"
+
+            android:title="PGO" />
     </group>
     <group
         android:id="@+id/group5"

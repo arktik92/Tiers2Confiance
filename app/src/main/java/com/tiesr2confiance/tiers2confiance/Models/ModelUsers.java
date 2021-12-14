@@ -50,12 +50,13 @@ public class ModelUsers {
     public String us_hobbies;
     public String us_avatar;
     public String us_photos;
+    public String us_token;
 
     /****** CONSTRUCTORS ********************/
     public ModelUsers() {
     }
 
-    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_nephews_request_from, String us_nephews_request_to,  String us_godfather, String us_godfather_request_from, String us_godfather_request_to, String us_matchs, String us_matchs_pending, String us_matchs_request_to, String us_matchs_request_from,  Date us_birth_date, String us_country_lang, long us_postal_code, String us_city, String us_city_lowercase, String us_presentation, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_avatar, String us_photos) {
+    public ModelUsers(String us_auth_uid, String us_nickname, String us_pwd, String us_email, String us_first_name, String us_last_name, Date us_registered_date, Date us_last_connexion_date, long us_role, long us_balance, String us_nephews, String us_nephews_request_from, String us_nephews_request_to,  String us_godfather, String us_godfather_request_from, String us_godfather_request_to, String us_matchs, String us_matchs_pending, String us_matchs_request_to, String us_matchs_request_from,  Date us_birth_date, String us_country_lang, long us_postal_code, String us_city, String us_city_lowercase, String us_presentation, long us_gender, long us_sexual_orientation, long us_marital_status, long us_has_kids, String us_profession, long us_height, long us_shape, long us_ethnic_group, long us_hair_color, long us_hair_length, long us_eye_color, long us_smoker, String us_personality, String us_sports, String us_hobbies, String us_avatar, String us_photos, String us_token) {
         this.us_auth_uid = us_auth_uid;
         this.us_nickname = us_nickname;
         this.us_pwd = us_pwd;
@@ -99,6 +100,7 @@ public class ModelUsers {
         this.us_hobbies = us_hobbies;
         this.us_avatar = us_avatar;
         this.us_photos = us_photos;
+        this.us_token = us_token;
     }
 
     /******************** SETTERS ************************************/
@@ -255,6 +257,9 @@ public class ModelUsers {
     public void setUs_photos(String us_photos) {
         this.us_photos = us_photos;
     }
+
+    public void setUs_token(String us_token) {this.us_token = us_token; }
+
     /******************** GETTERS ************************************/
     public String getUs_auth_uid() {
         return us_auth_uid;
@@ -409,6 +414,8 @@ public class ModelUsers {
     public String getUs_photos() {
         return us_photos;
     }
+
+    public String getUs_token() { return us_token;}
 
     /**********************************************************************************************/
     /**********************************************************************************************/
