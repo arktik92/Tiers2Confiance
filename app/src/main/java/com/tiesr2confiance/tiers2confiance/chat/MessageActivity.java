@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -50,8 +51,10 @@ import com.tiesr2confiance.tiers2confiance.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.grpc.Context;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -159,20 +162,36 @@ public class MessageActivity extends AppCompatActivity {
 
         // Appel des clics sur les boutons
         btnSend();
-        readMessages(currentUser.getUid(), idParticipantChat, "");
         // Query pour le SnapshotListner
-        Query query = db.collection("Users");
+        Query query = db.collection(KEY_USERS_COLLECTION);
+
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 for (QueryDocumentSnapshot documentSnapshot : value) {
-                    ModelUsers user = documentSnapshot.toObject(ModelUsers.class);
+                    ModelUsers user = Objects.requireNonNull(documentSnapshot.toObject(ModelUsers.class));
                     username.setText(user.getUs_nickname());
-                    if (user.getUs_avatar().equals("default")) {
-                        profile_image.setImageResource(R.mipmap.ic_launcher);
-                    } else {
-                        Glide.with(getApplicationContext()).load(user.getUs_avatar()).into(profile_image);
+
+                    try{
+                        user.getUs_avatar();
+                        if (user.getUs_avatar().isEmpty()) {
+                            Log.e(TAG, "icccccci: " + user.getUs_avatar() );
+                            profile_image.setImageResource(R.mipmap.ic_launcher);
+                        } else {
+                            /** Loading Avatar **/
+                            Log.e(TAG, "làààààààààààààà: " + user.getUs_avatar() );
+                            Glide
+                                    .with(getApplicationContext())
+                                    .load(user.getUs_avatar())
+                                    .fitCenter()
+                                    .circleCrop()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(profile_image);
+                        }
+                    } catch (Exception e){
+                        Log.e(TAG, "onEvent: ERREUR "  );
                     }
+
                     readMessages(currentUser.getUid(), idParticipantChat, user.getUs_avatar());
                 }
             }
@@ -240,10 +259,7 @@ public class MessageActivity extends AppCompatActivity {
 
     // Affichage des messages
     private void readMessages(final String myid, final String userid, final String imageurl) {
-        Log.e(TAG, "readMessages: MYID : " +  myid );
-        Log.e(TAG, "readMessages: l'autre ID : " +  userid );
         mchat = new ArrayList<>();
-
         Query query = db.collection(NODE_CHATS);
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -260,7 +276,6 @@ public class MessageActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     // Création du contenu de la notification Push qui sera envoyée au destinataire

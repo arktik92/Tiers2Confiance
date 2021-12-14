@@ -98,6 +98,7 @@ public class PendingRequestsAdapter extends FirestoreRecyclerAdapter<ModelUsers,
                 .load(avatar_match)
                 .apply(options)
                 .fitCenter()
+                .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.iv_photo_profil_request);
     }

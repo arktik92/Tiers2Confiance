@@ -80,11 +80,6 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         holder.tvNickname.setText(nickname);
         holder.tvCity.setText(city);
-        if (role == 2L && TextUtils.isEmpty(nephew) || role == 1L && TextUtils.isEmpty(godfather) ){
-            holder.ivLink.setImageResource(R.drawable.ic_add_link);
-        }else{
-            holder.ivLink.setImageResource(R.drawable.ic_already_linked);
-        }
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
@@ -96,6 +91,7 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
                 .load(avatar)
                 .apply(options)
                 .fitCenter()
+                .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivPhotoProfil);
     }
@@ -103,16 +99,13 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvNickname, tvCity;
-        public ImageView ivPhotoProfil, ivLink;
-        public CardView cvProfilUser;
+        public ImageView ivPhotoProfil;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNickname = itemView.findViewById(R.id.tv_nickname_match);
             tvCity = itemView.findViewById(R.id.tv_city_match);
             ivPhotoProfil = itemView.findViewById(R.id.iv_photo_profil_match);
-            cvProfilUser = itemView.findViewById(R.id.cv_profil_user_match);
-            ivLink = itemView.findViewById(R.id.iv_link);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
