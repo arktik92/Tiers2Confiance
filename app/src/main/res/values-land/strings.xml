@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="demande_parrainage_recu">" Demande de parrainage reçue"</string>
+    <string name="demande_parrainage_recu_body">Un célibataire vous de demande de le parrainer</string>
+</resources>
