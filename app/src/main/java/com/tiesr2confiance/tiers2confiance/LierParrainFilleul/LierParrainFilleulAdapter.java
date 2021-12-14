@@ -100,14 +100,12 @@ public class LierParrainFilleulAdapter extends FirestoreRecyclerAdapter<ModelUse
 
         public TextView tvNickname, tvCity;
         public ImageView ivPhotoProfil;
-        public CardView cvProfilUser;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNickname = itemView.findViewById(R.id.tv_nickname_match);
             tvCity = itemView.findViewById(R.id.tv_city_match);
             ivPhotoProfil = itemView.findViewById(R.id.iv_photo_profil_match);
-            cvProfilUser = itemView.findViewById(R.id.cv_profil_user_match);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
